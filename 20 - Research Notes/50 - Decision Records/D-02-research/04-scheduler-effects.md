@@ -1,0 +1,39 @@
+---
+type: "research"
+decision: "D-02"
+angle: 4
+---
+
+# Scheduler, Effects, and Enabling Implications
+
+## Current Shape
+
+`priorityDeq` and `roundRobinDeq` are not modeled as one grouped IR node today. Each candidate FIFO gets an individual `FIFOPriorityDeq`, while the API separately stages a `PriorityMux` over FIFO emptiness and the candidate data values. The plain priority overload sets each deq enable to "all earlier FIFOs are empty", deliberately omitting the current FIFO's `!isEmpty` because the comment says adding it "messes up II analysis"; the mux still selects on `!_.isEmpty` (`src/spatial/lang/api/PriorityDeqAPI.scala:14`, `src/spatial/lang/api/PriorityDeqAPI.scala:15`, `src/spatial/lang/api/PriorityDeqAPI.scala:20`). The conditional and round-robin overloads repeat the same split: logical eligibility is in the IR enables, emptiness is used for mux selection, and the dequeue-side emptiness guard is deferred (`src/spatial/lang/api/PriorityDeqAPI.scala:45`, `src/spatial/lang/api/PriorityDeqAPI.scala:46`, `src/spatial/lang/api/PriorityDeqAPI.scala:50`, `src/spatial/lang/api/PriorityDeqAPI.scala:96`, `src/spatial/lang/api/PriorityDeqAPI.scala:101`).
+
+The only group identity is metadata. The original line-based group id is left as a TODO/comment, and the active implementation stores `fifo.head.toString.hashCode()` / `fifos.head.toString.hashCode` into `prDeqGrp` on each staged deq (`src/spatial/lang/api/PriorityDeqAPI.scala:11`, `src/spatial/lang/api/PriorityDeqAPI.scala:16`, `src/spatial/lang/api/PriorityDeqAPI.scala:17`, `src/spatial/lang/api/PriorityDeqAPI.scala:97`). That means compatibility today is a scalar-node contract plus a hash metadata convention, not a grouped operation contract.
+
+## Effects and Scheduling
+
+At the node layer, `FIFOPriorityDeq` is defined next to normal `FIFODeq` and extends the same address-less `Dequeuer[A,A]` trait (`src/spatial/node/FIFO.scala:22`, `src/spatial/node/FIFO.scala:23`, `src/spatial/node/FIFO.scala:24`). A `Dequeuer` is a `DequeuerLike`; `DequeuerLike` is a `Reader`, but overrides effects to `Effects.Writes(mem)` (`src/spatial/node/HierarchyAccess.scala:65`, `src/spatial/node/HierarchyAccess.scala:79`, `src/spatial/node/HierarchyAccess.scala:80`, `src/spatial/node/HierarchyAccess.scala:92`). In other words, each individual priority deq participates both as a local read for access discovery and as a mutating write effect for ordering.
+
+Argon's staging computes effects by propagating writes, adding reads of mutable inputs, and deriving anti-dependencies from read/write hazards (`argon/src/argon/static/Staging.scala:202`, `argon/src/argon/static/Staging.scala:209`, `argon/src/argon/static/Staging.scala:222`, `argon/src/argon/static/Staging.scala:230`). Because the individual deq writes its FIFO effect, existing scheduling barriers and block summaries remain per-FIFO even though the user API is logically grouped.
+
+## Access Analysis and Unrolling
+
+Access analysis treats address-less `Dequeuer` nodes as streaming accesses and synthesizes streaming access patterns from intervening iterators (`src/spatial/traversal/AccessAnalyzer.scala:231`, `src/spatial/traversal/AccessAnalyzer.scala:240`, `src/spatial/traversal/AccessAnalyzer.scala:299`). This applies to `FIFOPriorityDeq` before unrolling because it is just a `Dequeuer`.
+
+Unrolling is where the priority-specific IR appears. `MemoryUnrolling` maps scalar `FIFOPriorityDeq` to `FIFOBankedPriorityDeq`, and separately copies `prDeqGrp` metadata when cloning symbols (`src/spatial/transform/unrolling/MemoryUnrolling.scala:303`, `src/spatial/transform/unrolling/MemoryUnrolling.scala:304`, `src/spatial/transform/unrolling/MemoryUnrolling.scala:523`, `src/spatial/transform/unrolling/MemoryUnrolling.scala:524`). The banked priority node extends `BankedDequeue`, which again writes the memory effect (`src/spatial/node/FIFO.scala:67`, `src/spatial/node/FIFO.scala:71`, `src/spatial/node/HierarchyUnrolled.scala:99`, `src/spatial/node/HierarchyUnrolled.scala:100`).
+
+There is one classification wrinkle: metadata marks only `FIFOBankedPriorityDeq` as `isPriorityDeq`, while `isStreamStageEnabler` lists ordinary FIFO/merge/LIFO/stream deqs but not banked priority deqs (`src/spatial/metadata/access/package.scala:43`, `src/spatial/metadata/access/package.scala:44`, `src/spatial/metadata/access/package.scala:59`, `src/spatial/metadata/access/package.scala:70`). That supports keeping priority behavior out of generic stream-enabler buckets.
+
+## Retiming, II, and Pressure
+
+The API wraps priority and round-robin construction in `ForcedLatency(0.0)` (`src/spatial/lang/api/PriorityDeqAPI.scala:12`, `src/spatial/lang/api/PriorityDeqAPI.scala:28`, `src/spatial/lang/api/PriorityDeqAPI.scala:56`). `ForcedLatency` stores forced latency metadata on staged nodes, and both the latency model and `fullDelay` honor forced latency before normal model metadata (`src/spatial/lang/Latency.scala:7`, `src/spatial/lang/Latency.scala:9`, `src/spatial/targets/LatencyModel.scala:17`, `src/spatial/targets/LatencyModel.scala:19`, `src/spatial/metadata/retiming/package.scala:17`, `src/spatial/metadata/retiming/package.scala:20`). `InitiationAnalyzer` then derives controller latency and II from block latency/interval and iter-diff metadata, so the API comment about `!isEmpty` hurting II is directly relevant to the enable expression visible before codegen (`src/spatial/traversal/InitiationAnalyzer.scala:25`, `src/spatial/traversal/InitiationAnalyzer.scala:37`, `src/spatial/lang/api/PriorityDeqAPI.scala:14`).
+
+The missing emptiness guard is restored in Chisel codegen: ordinary `FIFOBankedDeq` calls `emitRead` directly, while `FIFOBankedPriorityDeq` passes an extra `&& !fifo.empty` enable suffix (`src/spatial/codegen/chiselgen/ChiselGenMem.scala:321`, `src/spatial/codegen/chiselgen/ChiselGenMem.scala:325`). `emitRead` also combines per-access enables with delayed forward pressure and the implicit datapath/II issue enable (`src/spatial/codegen/chiselgen/ChiselGenMem.scala:87`, `src/spatial/codegen/chiselgen/ChiselGenMem.scala:88`, `src/spatial/codegen/chiselgen/ChiselGenMem.scala:89`).
+
+Forward pressure is group-aware only after unrolling. Regular read streams explicitly exclude `FIFOBankedPriorityDeq`; priority read streams are grouped by `prDeqGrp`; and forward pressure ANDs regular interfaces with priority groups where each group ORs its member FIFO availability/active condition (`src/spatial/metadata/control/package.scala:1360`, `src/spatial/metadata/control/package.scala:1362`, `src/spatial/metadata/control/package.scala:1367`, `src/spatial/metadata/control/package.scala:1374`, `src/spatial/codegen/chiselgen/ChiselGenCommon.scala:249`, `src/spatial/codegen/chiselgen/ChiselGenCommon.scala:263`). Back-pressure remains write-stream/fullness based, not priority-group specific (`src/spatial/codegen/chiselgen/ChiselGenCommon.scala:266`, `src/spatial/codegen/chiselgen/ChiselGenCommon.scala:270`).
+
+## D-02 Implication
+
+Preserving hash compatibility minimizes scheduler/access churn because existing passes see ordinary per-FIFO mutating dequeues until the banked priority form. The cost is that correctness of grouped forward pressure depends on fragile metadata rather than IR structure. An explicit grouped-dequeue IR would make grouping auditable, but must preserve per-FIFO `Effects.Writes`, streaming access patterns, forced-latency/II behavior, the codegen-time `!empty` guard, and the current OR-within-group forward-pressure semantics. Also note that the compiler sanity check for delayed dequeue inputs names `FIFODeq` and `FIFOBankedDeq`, but not the priority forms (`src/spatial/traversal/CompilerSanityChecks.scala:78`, `src/spatial/traversal/CompilerSanityChecks.scala:82`); explicit IR should decide whether that omission is intentional compatibility or a latent coverage gap.

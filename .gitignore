@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+
+# Obsidian per-machine state (not vault content)
+.obsidian/workspace*
+.obsidian/cache
+.obsidian/cache.json
+
+# Obsidian trash
+.trash/
+
+# Editor swap/backup
+*.swp
+*.swo
+*~

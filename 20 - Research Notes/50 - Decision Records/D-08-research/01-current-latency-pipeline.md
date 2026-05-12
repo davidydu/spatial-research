@@ -1,0 +1,31 @@
+# D-08 Angle 1: Current Latency Pipeline Source Survey
+
+## Bottom Line
+
+The current HLS DSE latency source is Spatial's generated Scala runtime model, not an HLS report parser or simulator. DSE asks the target for a `cycleAnalyzer`, which is a `LatencyAnalyzer` built from the target latency model (`src/spatial/targets/HardwareTarget.scala:47-49`). Each DSE worker converts design points into runtime-model retuning arguments, calls `cycleAnalyzer.test`, and writes the returned `Cycles` value beside area and validity in the DSE CSV (`src/spatial/dse/DSEThread.scala:109-124`, `src/spatial/dse/DSEThread.scala:130-134`). A later HLS-report or HLS-simulation source would therefore be a new latency source relative to this path (unverified for uninspected downstream synthesis scripts).
+
+## Enabling and Generation
+
+`enableRuntimeModel` defaults off (`src/spatial/SpatialConfig.scala:12-16`). It is turned on automatically by the DSE CLI modes `--tune`, `--bruteforce`, `--heuristic`, `--experiment`, and `--hypermapper`; each also enables architectural DSE (`src/spatial/Spatial.scala:267-272`). It can also be enabled by `--runtime` without enabling DSE (`src/spatial/Spatial.scala:549-551`).
+
+When enabled, the main Spatial pass chain runs retiming analysis, initiation analysis, and the DSE runtime-model generator before the DSE pass (`src/spatial/Spatial.scala:177-183`). This ordering matters: the model is generated after latency/body-latency and II metadata are available, then consumed by DSE. A second `finalRuntimeModelGen` runs later after final schedule/retiming, but that is not the DSE latency source (`src/spatial/Spatial.scala:232-235`).
+
+The generator is `RuntimeModelGenerator(state, version = "dse")` (`src/spatial/Spatial.scala:153-155`). It emits Scala under the `model` language with entry file `model_dse.scala` (`src/spatial/model/RuntimeModelGenerator.scala:18-22`), and the generic codegen path writes entry files into `config.genDir/<lang>/` (`argon/src/argon/codegen/Codegen.scala:12-15`, `argon/src/argon/codegen/Codegen.scala:75-81`). The emitted source imports `models.Runtime`, defines `object AppRuntimeModel_dse extends App`, builds a `ControllerModel`, and later prints total cycles for each run (`src/spatial/model/RuntimeModelGenerator.scala:111-153`). The generator also copies build support into the output: `project/`, `scripts/`, and `build.sbt` from the synth resources (`src/spatial/model/RuntimeModelGenerator.scala:417-421`, `argon/src/argon/codegen/FileDependencies.scala:66-72`).
+
+## Compilation
+
+DSE compilation is explicit and mandatory. `DSEAnalyzer.process` builds the parameter space, prints it, then calls `compileLatencyModel()` before dispatching to disabled, heuristic, brute force, experiment, or HyperMapper modes (`src/spatial/dse/DSEAnalyzer.scala:59-80`). `compileLatencyModel` computes the generated directory, expects `model/model_dse.scala`, and throws if that source is missing (`src/spatial/dse/DSEAnalyzer.scala:90-104`).
+
+Compilation is guarded by a file lock on `model_dse.scala.lock`, then runs `bash scripts/assemble.sh` from the generated directory (`src/spatial/dse/DSEAnalyzer.scala:106-128`). The copied `assemble.sh` runs `sbt ";project model; set mainClass in assembly := Some(\"model.AppRuntimeModel_dse\"); assembly"` (`resources/synth/scripts/assemble.sh:1-3`). The copied SBT project names the subproject `RuntimeModel`, uses `baseDirectory.value` as the model source root, and includes the `models` dependency (`resources/synth/build.sbt:58-68`, `resources/synth/build.sbt:83-84`); the assembly plugin is provided by `resources/synth/project/plugins.sbt:1`. After SBT completes, the lock is released (`src/spatial/dse/DSEAnalyzer.scala:137-145`).
+
+## Invocation, Batching, and Parsing
+
+DSE has two batching layers. First, `threadBasedDSE` creates worker queues and DSE worker threads, with non-HyperMapper modes commonly submitting blocks capped at 500 design points (`src/spatial/dse/DSEAnalyzer.scala:285-320`, `src/spatial/dse/DSEAnalyzer.scala:442-454`). Each `DesignPoint.show` becomes alternating parameter names and values, such as `name, value, name, value` (`src/spatial/dse/DesignPoint.scala:18-20`, `src/spatial/dse/DesignPoint.scala:27-29`).
+
+Second, `LatencyAnalyzer` batches jar calls internally at `batchSize = 1000` (`src/spatial/dse/LatencyAnalyzer.scala:10-15`). It finds the assembly jar by walking `gen_dir/model` and selecting the first file containing `RuntimeModel-assembly` (`src/spatial/dse/LatencyAnalyzer.scala:16-22`, `src/spatial/dse/LatencyAnalyzer.scala:35-37`). For each batch, it creates a command of the form `java -jar <jar> ni tune <params> tune <params> ...`, runs it in `gen_dir`, and captures stdout (`src/spatial/dse/LatencyAnalyzer.scala:37-41`).
+
+The generated model's CLI recognizes `ni`/`noninteractive` for ask-map values and repeated `tune` groups for DSE retuning (`src/spatial/model/RuntimeModelGenerator.scala:125-140`). For each tune map, it sets `tuneParams`, prints structure, executes the controller model, prints detailed results, stores `PreviousAskMap.scala`, and emits `[dse] Total Cycles for App ...` (`src/spatial/model/RuntimeModelGenerator.scala:142-153`). `LatencyAnalyzer` parses only lines containing `Total Cycles for App`, strips everything through the colon, converts to `Long`, and maps negative totals to `Long.MaxValue` (`src/spatial/dse/LatencyAnalyzer.scala:42-46`). Those parsed totals become the `Cycles` column consumed by DSE output and HyperMapper objectives (`src/spatial/dse/DSEAnalyzer.scala:354-360`, `src/spatial/dse/HyperMapperDSE.scala:70-80`, `src/spatial/dse/HyperMapperDSE.scala:127-150`).
+
+## Decision Implications
+
+For D-08, the existing parity baseline is runtime-model parity: DSE latency is whatever the generated Scala `models.Runtime` controller hierarchy computes from Spatial's schedule, II, cchains, tuneable parameters, and ask-map defaults (`models/src/models/RuntimeModel.scala:94-103`, `models/src/models/RuntimeModel.scala:313-347`, `models/src/models/RuntimeModel.scala:404`). Choosing HLS reports/simulation would replace or augment this jar boundary; choosing a new estimator would compete with `LatencyAnalyzer.test` as the source of `totalCycles`.

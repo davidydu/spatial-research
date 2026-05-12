@@ -1,0 +1,28 @@
+---
+type: "research"
+decision: "D-24"
+angle: 3
+topic: "host-transfer-abi-surfaces"
+---
+
+# D-24 Angle 3: Host Transfer And ABI Surfaces
+
+## 1. Scalar Register Boundary
+
+D-24 is not one conversion site; it is the scalar ABI for `ArgIn`, `HostIO`/ArgIO, and `ArgOut`. The queue frames the decision as either matching Cppgen's double approximations or enforcing bit-exact shifted integers (`20 - Research Notes/40 - Decision Queue.md:103-105`). Cppgen first records `ArgInNew`, `HostIONew`, and `ArgOutNew` into ordered buffers, then emits ArgAPI slots as ArgIns, DRAM pointers, ArgIOs, and ArgOuts (`src/spatial/codegen/cppgen/CppGenInterface.scala:20-40`, `:138-147`). For host writes, fractional fixed values are multiplied by `1 << f` and sent as `int64_t`; integer fixed values are sent directly (`src/spatial/codegen/cppgen/CppGenInterface.scala:42-51`). For host reads, Cppgen fetches `getArg`/`getArg64`, sign-extends signed fixed results, then divides by `1 << f` into the host type (`src/spatial/codegen/cppgen/CppGenInterface.scala:64-80`). Recommendation: the register transport ABI should be raw shifted integers, with a labelled `cppgen_approx_value` view only for legacy host source compatibility.
+
+## 2. DRAM, Binary, And CSV Transfers
+
+`SetMem` and `GetMem` are the clearest raw-payload surfaces. Cppgen chooses a raw integer element type from fixed width, rawifies fractional fixed vectors by multiplying each element by `1 << f`, packs subbyte integer lanes LSB-first, rejects fractional subbyte fixed payloads, and otherwise bulk-copies (`src/spatial/codegen/cppgen/CppGenCommon.scala:51-72`; `src/spatial/codegen/cppgen/CppGenInterface.scala:85-131`). Binary FileIO repeats that split: binary reads memcpy raw bytes into `vector<rawtp>` and approximate fixed values with division, while binary writes fixed values by multiplying into `rawtp` before `fstream.write` (`src/spatial/codegen/cppgen/CppGenFileIO.scala:40-68`, `:73-86`). CSV and text token paths are host-language surfaces: CSV tokenization produces strings, and `TextToFix` uses `std::${conv(tp)}` where fractional fixed maps to `stod` (`src/spatial/codegen/cppgen/CppGenFileIO.scala:92-134`; `src/spatial/codegen/cppgen/CppGenDebug.scala:26`; `src/spatial/codegen/cppgen/CppGenCommon.scala:102-119`). Recommendation: DRAM and binary goldens should be raw integers; CSV/text should default to compatibility decimal parsing but allow explicit raw integer columns.
+
+## 3. Frame And Stream Payloads
+
+Streams and frames are ABI surfaces even where Cppgen has little host transport. Cppgen records stream pressure but emits no host transport for `StreamInNew`/`StreamOutNew` (`src/spatial/codegen/cppgen/CppGenInterface.scala:82-83`; `src/spatial/codegen/cppgen/CppGenCommon.scala:122-123`). D-23 already requires streams as manifest entries because `StreamInNew[A](bus)` and `StreamOutNew[A](bus)` carry a bus descriptor and remote-memory role (`D-23-research/05-stream-file-hostio-d22-overlap.md:10-18`). Chisel AXI streams move raw `TDATA` plus sidebands, default sidebands for payload-only streams, and filter reads by `TID`/`TDEST` (`src/spatial/lang/Bus.scala:28-50`; `src/spatial/codegen/chiselgen/ChiselGenStream.scala:81-167`). Frames bind dimensions to a stream, require element bit width divisible by 8, and set packet `last` on the final element (`src/spatial/node/Frame.scala:11-35`; `src/spatial/node/FrameTransmit.scala:60-85`). Recommendation: AXI, DRAM-stream, and frame payloads should be bit-exact raw integers; FileBus or ScalaGen stream text remains compatibility decimal unless the manifest declares raw text.
+
+## 4. Aggregates, Vectors, And CLI Args
+
+Structs and vectors can hide fixed conversion inside a larger payload. Cppgen maps fractional fixed host types to `double`, but `asIntType` is used for raw storage (`src/spatial/codegen/cppgen/CppGenCommon.scala:36-49`, `:75-99`). `SimpleStruct` emits packed C++ structs, stores fields as `asIntType`, setters call `toTrueFix`, `toString` calls `toApproxFix`, and `toRaw` shifts fields by cumulative bit positions (`src/spatial/codegen/cppgen/CppGenArray.scala:153-192`). `DataAsBits` and `DataAsVec` also expose LSB-first raw fixed bits (`src/spatial/codegen/cppgen/CppGenArray.scala:111-151`). CLI args are another text boundary: `main` copies `argv` into `vector<string>`, `InputArguments()` points at that vector, and out-of-range indexing calls `printHelp()` (`src/spatial/codegen/cppgen/CppFileGen.scala:131-143`; `src/spatial/codegen/cppgen/CppGenArray.scala:94-104`). Recommendation: aggregate storage, vector packing, bit views, and manifest schema should be raw; CLI remains decimal compatibility unless an argument is declared `raw_fixpt`.
+
+## 5. Reports, Tests, And Policy
+
+D-23's manifest already proposed `numeric_formats` with signedness, integer bits, fractional bits, total bits, and `host_conversion_policy` (`D-23-research/06-abi-manifest-schema.md:22-27`). Tests prove the ABI is user-visible: existing coverage includes fixed `ArgIn`/`ArgOut`, HostIO loopback, DRAM transfers, small-type packing, float transfers, frames, streams, and FileBus gaps (`D-23-research/07-tests-apps-run-harness.md:14-28`). Reports also print ArgIns/ArgIOs and instrumentation after launch, so mismatches need provenance, not just values (`src/spatial/codegen/cppgen/CppGenAccel.scala:64-89`). Recommendation: every report, golden file, and test fixture should record `conversion_policy`, `raw_hex`, `logical_decimal`, rounding/overflow mode, and whether comparison is raw-exact or Cppgen-compatible approximate. Default new ABI evidence should compare raw integers; compatibility mode should exist only to reproduce legacy Cppgen CLI, CSV, stream text, and pretty-print behavior.

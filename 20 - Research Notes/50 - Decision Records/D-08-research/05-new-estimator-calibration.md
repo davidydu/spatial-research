@@ -1,0 +1,33 @@
+---
+type: "research"
+decision: "D-08"
+angle: 5
+---
+
+# New HLS Estimator And Calibration Strategy
+
+## Estimator Shape
+
+A new HLS estimator should sit above the existing per-node `LatencyModel`, not merely replace one CSV. Today `LatencyModel` answers operation fields such as `LatencyOf`, `LatencyInReduce`, and retiming-register flags (`src/spatial/targets/LatencyModel.scala:17`, `src/spatial/targets/LatencyModel.scala:22`, `src/spatial/targets/LatencyModel.scala:36`, `src/spatial/targets/LatencyModel.scala:46`). The higher-level latency is assembled by `latencyAndInterval`, which computes path latency and cycle-derived interval (`src/spatial/util/modeling.scala:107`, `src/spatial/util/modeling.scala:112`, `src/spatial/util/modeling.scala:123`), then `InitiationAnalyzer` records `bodyLatency`, `II`, and `compilerII` (`src/spatial/traversal/InitiationAnalyzer.scala:25`, `src/spatial/traversal/InitiationAnalyzer.scala:36`, `src/spatial/traversal/InitiationAnalyzer.scala:37`, `src/spatial/traversal/InitiationAnalyzer.scala:40`). The generated DSE model serializes those into `ControllerModel(L, II, ...)` (`src/spatial/model/RuntimeModelGenerator.scala:262`, `src/spatial/model/RuntimeModelGenerator.scala:263`, `src/spatial/model/RuntimeModelGenerator.scala:265`). Therefore an HLS estimator must output controller-level latency, accepted or estimated II, tripcount interpretation, and a total-cycle composition compatible with the runtime tree equations.
+
+## Required Inputs
+
+Accepted-II features are first-class. D-06 already requires `spatial_compiler_ii`, `user_requested_ii`, `hls_requested_ii`, `hls_accepted_ii`, reconciliation status, and dependence evidence (`D-06.md:51`, `D-06.md:56`, `D-06.md:59`, `D-06.md:62`, `D-06.md:65`, `D-06.md:68`, `D-06.md:71`). The estimator should treat accepted II as an observed feature when reports exist, and as unknown otherwise. It should also include HLS-visible loop identity, tripcount bounds, requested pipeline pragma, recurrence/dependence evidence, operator latency class, and memory-port pressure. Claims that vendor HLS schedulers balance dependence, resource, and memory-port constraints are broad tool claims and remain (unverified).
+
+D-07 supplies the memory/resource side of the feature vector. Its `HlsPartitionPlan` fields include logical dimensions, physical duplicates, partition kind/dimension/factor, reshape width, bank depth, port model, binding preference, requested resource class, fallback reason, source evidence, and later tool-accepted partition (`D-07.md:85`, `D-07.md:89`, `D-07.md:90`, `D-07.md:93`, `D-07.md:95`, `D-07.md:97`, `D-07.md:98`, `D-07.md:99`, `D-07.md:100`, `D-07.md:102`, `D-07.md:103`). This matters because HLS latency estimates without the partition plan would silently conflate a true compute recurrence with a memory-port bottleneck (unverified).
+
+## Calibration Loop
+
+Calibration should be report-backed and scoped. Existing Spatial models load target CSVs by operation name and parameters (`src/spatial/targets/SpatialModel.scala:74`, `src/spatial/targets/SpatialModel.scala:87`, `src/spatial/targets/SpatialModel.scala:96`, `src/spatial/targets/SpatialModel.scala:102`), and the latency field schema is fixed at the target level (`src/spatial/targets/HardwareTarget.scala:14`, `src/spatial/targets/HardwareTarget.scala:15`, `src/spatial/targets/HardwareTarget.scala:23`). An HLS estimator needs a richer calibration artifact keyed by backend, tool version, target, kernel/controller signature, loop nest, accepted II, partition plan, binding/resource class, and report source. HLS reports can usually expose per-loop II and latency estimates (unverified), but the parser should still record missing-field and unknown-format states rather than backfilling defaults.
+
+The calibration update should compare predicted versus reported per-loop latency, top latency, and accepted II; store residuals by feature bucket; and expose confidence bands for future DSE points. Reports should be joined to source using stable controller/loop IDs from generated provenance, since current `Ctx` already carries symbol id, source line, source snippet, and IR statement for runtime-model explanations (`models/src/models/RuntimeModel.scala:76`, `models/src/models/RuntimeModel.scala:79`, `models/src/models/RuntimeModel.scala:80`, `models/src/models/RuntimeModel.scala:81`). Simulation can validate representative points, but using it as the hot-loop estimator would likely be too slow for broad DSE (unverified).
+
+## Fallback And Provenance
+
+The fallback path should preserve Spatial runtime-model parity, but label it. The existing runtime equation is useful: inner pipelined control is `(cchainIters - 1) * II + L + startup + shutdown + dpMask` (`models/src/models/RuntimeModel.scala:334`, `models/src/models/RuntimeModel.scala:336`), and DSE already batches many candidate points through a compiled model jar (`src/spatial/dse/LatencyAnalyzer.scala:35`, `src/spatial/dse/LatencyAnalyzer.scala:37`, `src/spatial/dse/LatencyAnalyzer.scala:39`, `src/spatial/dse/LatencyAnalyzer.scala:42`). However, current DSE consumes only scalar runtimes and validity strings (`src/spatial/dse/DSEThread.scala:114`, `src/spatial/dse/DSEThread.scala:120`, `src/spatial/dse/DSEThread.scala:123`), while saved latency metadata is only a `Double` (`src/spatial/metadata/modeling/SavedLatency.scala:5`). A new estimator should return `{cycles, confidence, source, report_id, calibration_id, fallback_reason}` per controller and top kernel, not only a number.
+
+Recommended confidence levels: `report_exact` for parsed post-tool rows, `calibrated_same_signature` for close feature matches, `calibrated_neighbor` for same target/backend but changed partition/resource features, `spatial_parity_fallback` for the current runtime model, and `conservative_unknown` when II, tripcount, or partition data is absent.
+
+## Comparison
+
+Preserving Spatial runtime-model parity is cheapest and keeps DSE throughput. It also keeps known equations, tuneables, and controller hierarchy intact. Its weakness is semantic: `RuntimeModelGenerator` serializes Spatial `bodyLatency` and `lhs.II`, not backend-accepted HLS schedules (`src/spatial/model/RuntimeModelGenerator.scala:282`, `src/spatial/model/RuntimeModelGenerator.scala:283`, `src/spatial/model/RuntimeModelGenerator.scala:284`). A new estimator costs more because it needs D-06 accepted-II fields, D-07 partition/resource fields, report parsers, and calibration storage. But it is the better long-term D-08 option: use Spatial parity as the pre-report baseline, then let report-calibrated HLS estimates and provenance explain when DSE latency is HLS-grounded, estimated, or only a compatibility fallback.

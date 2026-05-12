@@ -1,0 +1,31 @@
+---
+type: "research"
+decision: "D-05"
+angle: 2
+---
+
+# ABI and stream metadata now hidden in Chisel globals
+
+## Current generated surface
+
+The Chisel path emits the same logical manifest into several generated Scala files instead of one artifact. `ChiselGenInterface` writes scalar counts, loopback maps, memory-stream lists, and host DRAM pointer counts into both `Instantiator.scala` and `AccelWrapper` (`src/spatial/codegen/chiselgen/ChiselGenInterface.scala:121-152`). `ChiselCodegen` then combines those values, mutates `globals`, constructs `CustomAccelInterface` from `globals.LOAD_STREAMS`, `globals.AXI_STREAMS_IN`, allocator count, and arg totals, and also passes the local copies into `new AccelUnit(...)` from the instantiator (`src/spatial/codegen/chiselgen/ChiselCodegen.scala:196-217`, `src/spatial/codegen/chiselgen/ChiselCodegen.scala:238-276`). The Rust/HLS replacement should make this an explicit top-level manifest, because the present contract is distributed across generated locals plus mutable Fringe globals.
+
+## Host ABI fields
+
+The host ABI starts with register-class counts: regular scalar inputs, scalar outputs, and bidirectional HostIO registers are emitted as `numArgIns_reg`, `numArgOuts_reg`, and `numArgIOs_reg` (`src/spatial/codegen/chiselgen/ChiselGenInterface.scala:124-130`). Host DRAMs are also ABI inputs: `DRAMHostNew` appends to `hostDrams`, wires a 64-bit value from `accelUnit.io.argIns(api.<name>_ptr)`, and contributes `numArgIns_mem` (`src/spatial/codegen/chiselgen/ChiselGenDRAM.scala:17-23`, `src/spatial/codegen/chiselgen/ChiselGenInterface.scala:138-152`). `ArgAPI.scala` is the clearest ABI layout table: scalar ArgIns keep their own ids, DRAM pointers are offset after ArgIns, ArgIOs after ArgIns plus DRAM pointers, and ArgOuts after ArgIns plus DRAM pointers plus ArgIOs (`src/spatial/codegen/chiselgen/ChiselGenInterface.scala:156-166`).
+
+Instrumentation and breakpoint results are also host ABI, but on the output side. When instrumentation is enabled, `ArgAPI.scala` emits `numCtrls`, per-control instruction-counter ids, and output register ids for cycles/iters plus optional stalled/idle counters when pressure is present (`src/spatial/codegen/chiselgen/ChiselGenInterface.scala:167-181`; counter sizing comes from `instrumentCounterArgs`, `src/spatial/codegen/chiselgen/ChiselGenCommon.scala:49-60`). Early exits become breakpoint output args, with `numArgOuts_breakpts` and `<exit>_exit_arg` constants (`src/spatial/codegen/chiselgen/ChiselGenInterface.scala:183-186`). A manifest should therefore preserve symbolic names, class, direction, width if available, and final host-visible offset, rather than regenerating offsets from incidental traversal order.
+
+## Accelerator IO shape
+
+The accelerator IO shape is the elaborated port inventory, not just the host ABI. `AccelWrapper` computes `io_numArgIns`, `io_numArgOuts`, `io_numArgIOs`, `io_numArgInstrs`, and `io_numArgBreakpts`, padding input and output counts to at least one for Chisel interface construction (`src/spatial/codegen/chiselgen/ChiselCodegen.scala:197-202`). `Instantiator` computes the same totals without the `max(1, ...)` padding and passes them into `AccelUnit`, together with allocator count and all stream metadata (`src/spatial/codegen/chiselgen/ChiselCodegen.scala:239-245`). The manifest should separate logical counts from padded hardware counts so the Rust/HLS backend does not inherit this ambiguity.
+
+Memory stream metadata is accelerator IO shape. Each host DRAM stream connection assigns lanes under `accelUnit.io.memStreams.{loads,stores,gathers,scatters}` and records `StreamParInfo(element_bit_width, parallelism, 0)` in the matching list (`src/spatial/codegen/chiselgen/ChiselGenCommon.scala:416-451`). `ChiselGenInterface` then emits sorted load/store/gather/scatter lists into both instantiation paths (`src/spatial/codegen/chiselgen/ChiselGenInterface.scala:133-151`). AXI stream metadata is similar but non-memory: `ChiselGenStream` records stream-in/out lanes and bus widths, emits `AXI4StreamParameters(width, 8, 32)`, and currently rejects more than one input or output stream (`src/spatial/codegen/chiselgen/ChiselGenStream.scala:13-30`, `src/spatial/codegen/chiselgen/ChiselGenStream.scala:181-196`). These lists drive physical top-level stream ports when copied into globals and passed to `AccelUnit` (`src/spatial/codegen/chiselgen/ChiselCodegen.scala:207-216`, `src/spatial/codegen/chiselgen/ChiselCodegen.scala:269-275`).
+
+## Fringe routing concerns
+
+Some fields are not host ABI, even if they must be in the manifest. `argOutLoopbacks` is documented as information for wiring ArgOuts back to ArgIns in Fringe, is populated when an ArgOut is read in hardware, and is emitted as an instantiation map (`src/spatial/codegen/chiselgen/ChiselGenCommon.scala:34-44`, `src/spatial/codegen/chiselgen/ChiselGenInterface.scala:61-64`, `src/spatial/codegen/chiselgen/ChiselGenInterface.scala:131-146`). Likewise, `outArgMuxMap`, `outStreamMuxMap`, `outBuffMuxMap`, and `inStreamMuxMap` are generated mutable maps for lane assignment inside the wrapper, not values the host should program (`src/spatial/codegen/chiselgen/ChiselGenInterface.scala:153`, `src/spatial/codegen/chiselgen/ChiselCodegen.scala:218-235`). `numAllocators` is a Fringe/runtime routing and IO-shape value: it is derived from accelerator DRAMs, copied into globals, and used in `CustomAccelInterface` construction (`src/spatial/codegen/chiselgen/ChiselGenDRAM.scala:72-82`, `src/spatial/codegen/chiselgen/ChiselCodegen.scala:213-216`).
+
+## Manifest implication
+
+The replacement manifest should have three named sections: `host_abi` for ordered args, DRAM pointer args, ArgIO/ArgOut offsets, instrumentation counters, and breakpoints; `accelerator_io` for padded counts, memory streams, AXI streams, and allocator count; and `fringe_routing` for loopbacks and lane-allocation maps. Keeping these sections separate makes it clear which values are stable host contracts, which are generated HLS top-level ports, and which are implementation routing metadata. The broader claim that Rust/HLS toolchains prefer explicit manifest files over mutable elaboration globals is a design assumption here, not established by this code survey (unverified).

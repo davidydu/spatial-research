@@ -1,0 +1,29 @@
+---
+title: "D-09 Research: Tests and Application Usage of Unbiased Rounding"
+tags:
+  - spatial
+  - D-09
+  - rounding
+---
+
+## Operator Surface
+
+The public fixed-point API exposes four arithmetic forms: `*&`, `/&`, `*&!`, and `/&!`. The comments define the first two as multiplication/division that "probabilistically rounds up or down" after the operation, and the `!` forms as the same plus saturation after rounding (`argon/src/argon/lang/Fix.scala:76-129`). The IR nodes are `UnbMul`, `UnbDiv`, `UnbSatMul`, and `UnbSatDiv`; the nearby TODO asks whether saturating and unbiased math are associative, which matters for reductions and rewrites (`argon/src/argon/node/Fix.scala:398-444`). Casts are a separate surface: `toUnbiased` and `toUnbSat` route through `Cast.unbiased`/`Cast.unbsat`, and Fix-to-Fix casts stage `FixToFixUnb`/`FixToFixUnbSat` (`argon/src/argon/lang/api/Implicits.scala:200-208`, `argon/src/argon/lang/api/Implicits.scala:248-262`). In this survey, I found no checked test/app call sites for `toUnbiased`, `toUnbSat`, `__toFixUnb`, `FixToFixUnb`, or `FixToFixUnbSat`; those are present in API/codegen paths rather than exercised directly by tests/apps.
+
+## Execution Semantics
+
+Scala emulation implements all four operators by forwarding to `FixedPoint.unbiased`; multiplication and division manufacture four extra fractional bits before the probabilistic down-round, and the `!` variants pass `saturate = true` (`emul/src/emul/FixedPoint.scala:52-63`). The unbiased helper shifts off those four bits, computes a `remainder`, calls `scala.util.Random.nextFloat()`, and rounds away from zero when `rand + remainder >= 1`; it then either clamps or saturates (`emul/src/emul/FixedPoint.scala:224-240`). Hardware codegen maps `UnbMul`/`UnbDiv` to Chisel `Math.mul`/`Math.div` with `Unbiased` plus either `Wrapping` or `Saturating`, and maps `FixToFixUnb` to `Math.fix2fix(..., Unbiased, ...)` (`src/spatial/codegen/chiselgen/ChiselGenMath.scala:33-40`, `src/spatial/codegen/chiselgen/ChiselGenMath.scala:75-78`). The Fringe rounding-mode comment says `Unbiased` uses an LFSR (`fringe/src/fringe/templates/math/RoundingMode.scala:3-8`), while the converter actually instantiates a `PRNG` and adds its low bits before shaving fractional bits (`fringe/src/fringe/templates/math/Converter.scala:36-44`).
+
+## Checked Tests
+
+`SpecialMath` is the only focused feature test for stochastic unbiased multiplication. It runs `N = 256` identical unsigned and signed `*&` operations and explicitly comments that the mean should be close to the real product (`test/spatial/tests/feature/math/SpecialMath.scala:36-53`). The check is not bit-exact: it computes the array means, compares each mean against the exact product, and accepts any result within `2^-4` (`test/spatial/tests/feature/math/SpecialMath.scala:74-88`). The same test checks `*&!` only through saturated endpoint equality for unsigned, lower signed, and upper signed products (`test/spatial/tests/feature/math/SpecialMath.scala:59-61`, `test/spatial/tests/feature/math/SpecialMath.scala:81-93`). Its final assertion combines these booleans, and the print notes that subtraction and division still need checking (`test/spatial/tests/feature/math/SpecialMath.scala:94-107`). Conclusion: this checked test depends on statistical unbiasedness and saturation, not on the exact JVM RNG sequence, though it can still be probabilistically flaky.
+
+`SmallTypeTransfers` also uses `*&`, but only for `0.5 * (i % 4)`, which is exactly representable in both target formats. It compares the full output arrays against deterministic non-unbiased multiplication goldens and asserts exact equality (`test/spatial/tests/feature/transfers/SmallTypeTransfers.scala:20-35`, `test/spatial/tests/feature/transfers/SmallTypeTransfers.scala:60-69`). That test verifies transfer/data-path behavior more than stochastic rounding.
+
+## Application Usage
+
+The application tests use unbiased rounding as algorithmic noise-tolerant arithmetic, not as deterministic output. `SGD` uses `*&!` in the prediction reduction and asserts only that final squared distance from `W_gold` is below a threshold (`test/spatial/tests/apps/SGD.scala:137-143`, `test/spatial/tests/apps/SGD.scala:181-198`). `LP_SGD` mirrors this with low-precision weights and the same threshold-style assertion (`test/spatial/tests/apps/LP_SGD.scala:201-207`, `test/spatial/tests/apps/LP_SGD.scala:244-263`). `SVRG` uses several `*&!` sites in full-gradient and per-example updates, then checks convergence distance rather than exact weights (`test/spatial/tests/apps/SVRG.scala:138-179`, `test/spatial/tests/apps/SVRG.scala:219-239`). `LP_SVRG` is the only test/app occurrence I found of `/&`, in a gradient normalization, and also uses `*&!`; its assertion is again distance below threshold (`test/spatial/tests/apps/LP_SVRG.scala:203-208`, `test/spatial/tests/apps/LP_SVRG.scala:238-256`, `test/spatial/tests/apps/LP_SVRG.scala:302-323`). Related comments in low-precision code say statistical rounding is not yet done and Float2Fix is used instead (`src/spatial/lib/LowPrecision.scala:29-31`, `test/spatial/tests/feature/math/Float32ToInt8.scala:33-35`).
+
+## D-09 Implications
+
+Existing checked coverage gives D-09 permission to change RNG implementation details, seed policy, or hardware PRNG shape without preserving the exact JVM `scala.util.Random` sequence, provided the distribution remains unbiased enough for `SpecialMath` and the saturation endpoints remain exact. The gaps are important: `/&!` has API/codegen support but no test/app coverage found; `/&` is only exercised inside an LP convergence app; and Fix-to-Fix unbiased casts are not directly checked. D-09 should add deterministic boundary tests for saturation and sign behavior, plus statistical/property tests for mean behavior across `*&`, `/&`, `*&!`, `/&!`, and `toUnbiased`/`toUnbSat`, ideally with an injectable or seeded RNG for reproducible failures.

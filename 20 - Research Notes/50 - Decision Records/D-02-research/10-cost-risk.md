@@ -1,0 +1,33 @@
+---
+type: "research"
+decision: "D-02"
+angle: 10
+---
+
+## Baseline to Preserve
+
+Today, priority and round-robin dequeues are not a grouped IR operation. The API stages one `FIFOPriorityDeq` per candidate FIFO, assigns each lane the same `prDeqGrp`, then returns a `PriorityMux` over the candidate data (`src/spatial/lang/api/PriorityDeqAPI.scala:15`, `src/spatial/lang/api/PriorityDeqAPI.scala:17`, `src/spatial/lang/api/PriorityDeqAPI.scala:20`, `src/spatial/lang/api/PriorityDeqAPI.scala:96`, `src/spatial/lang/api/PriorityDeqAPI.scala:97`, `src/spatial/lang/api/PriorityDeqAPI.scala:101`). The current group key is the first FIFO's `toString.hashCode`, while the old `ctx.line` id is left unused with a TODO calling it unsafe (`src/spatial/lang/api/PriorityDeqAPI.scala:11`, `src/spatial/lang/api/PriorityDeqAPI.scala:16`, `src/spatial/lang/api/PriorityDeqAPI.scala:17`).
+
+The downstream contract is real. `PriorityDeqGroup` is only an `Int` metadata tag "so we can figure out which PriorityDeqs are grouped together" (`src/spatial/metadata/access/AccessData.scala:37`, `src/spatial/metadata/access/AccessData.scala:43`). Unrolling copies the tag from scalar to banked access and lowers `FIFOPriorityDeq` to `FIFOBankedPriorityDeq` (`src/spatial/transform/unrolling/MemoryUnrolling.scala:303`, `src/spatial/transform/unrolling/MemoryUnrolling.scala:304`, `src/spatial/transform/unrolling/MemoryUnrolling.scala:524`). Control metadata excludes banked priority deqs from ordinary reads, then groups priority input FIFOs by `prDeqGrp.get` (`src/spatial/metadata/control/package.scala:1362`, `src/spatial/metadata/control/package.scala:1374`). Chisel forward pressure ORs FIFO availability within each priority group and ANDs across groups (`src/spatial/codegen/chiselgen/ChiselGenCommon.scala:258`, `src/spatial/codegen/chiselgen/ChiselGenCommon.scala:260`, `src/spatial/codegen/chiselgen/ChiselGenCommon.scala:263`).
+
+## Decision Matrix
+
+| Option | Implementation cost | Migration | Diagnostics | Silent-bug risk | Recommendation |
+|---|---:|---|---|---|---|
+| Preserve current hash metadata | Low | None for existing Scala/Chisel paths; keep `PriorityDeqGroup(Int)`, hash assignment, unrolling copy, and `groupBy(prDeqGrp.get)` unchanged. | Weak: TreeGen can show `prDeq[...]` groups after grouping, but cannot explain why two calls share a hash (`src/spatial/codegen/treegen/TreeGen.scala:159`, `src/spatial/codegen/treegen/TreeGen.scala:165`). | High: a collision or reused first-FIFO hash can merge unrelated groups, weakening forward pressure from `A && B` to `A || B` by the OR-within-group rule. Hash collision behavior is general JVM/Scala knowledge (unverified). | Reject except as a short compatibility bridge. |
+| Deterministic explicit group-id metadata | Medium | Keep the existing per-lane IR and backend consumers, but replace `fifo.head.toString.hashCode` with an API-created group id. Add a legacy reader only if old metadata must be imported. | Moderate: group ids can carry source context, arity, and policy in debug metadata while still lowering to `PriorityDeqGroup(Int)` for existing consumers. | Medium-low: it removes accidental hash merging, but `prDeqGrp.get` still makes missing metadata a hard assumption (`src/spatial/metadata/control/package.scala:1374`). | Best near-term choice. |
+| Explicit grouped-dequeue IR | High | Add a first-class node for FIFO list, conditions, policy, and round-robin iterator; update access discovery, unrolling, scheduling, Chisel, Scala/tree diagnostics, and any HLS lowering. It must still preserve destructive dequeue effects because `FIFOPriorityDeq` is a `Dequeuer` and dequeuers write the FIFO state (`src/spatial/node/FIFO.scala:24`, `src/spatial/node/HierarchyAccess.scala:79`, `src/spatial/node/HierarchyAccess.scala:80`). | Strong: the compiler can report one source-level grouped dequeue with lanes, guards, policy, and generated accesses. | Lowest after migration, because grouping becomes structure rather than side metadata. | Best long-term IR shape, especially for HLS. |
+
+## Migration and Tests
+
+The deterministic-metadata option is the smallest behavior-preserving migration: leave staged lane nodes, `PriorityMux`, unrolling, and Chisel pressure intact; only change group creation and add validation that every lane in one API expansion receives the same group. Tests should cover fixed priority, conditional priority, adjacent groups in one stream body, and round-robin. Existing tests already expose the important hazards: conditional priority must not dequeue an ID lane unless the paired payload queue has data (`test/spatial/tests/feature/dynamic/PriorityDeq.scala:105`), adjacent priority calls can occur back-to-back (`test/spatial/tests/feature/dynamic/PriorityDeq.scala:242`, `test/spatial/tests/feature/dynamic/PriorityDeq.scala:243`), and round-robin uses a dynamic iteration expression (`test/spatial/tests/feature/dynamic/PriorityDeq.scala:387`).
+
+Explicit IR needs a larger test matrix: API expansion equivalence, per-lane write effects, forced-latency/II behavior, banked lowering, forward-pressure OR/AND behavior, missing-metadata diagnostics, and codegen empty guarding. The empty guard matters because the API deliberately omits `!f.isEmpty` from the deq enable to protect II analysis, and Chisel adds `&& !$fifo.empty` during priority-deq emission (`src/spatial/lang/api/PriorityDeqAPI.scala:14`, `src/spatial/codegen/chiselgen/ChiselGenMem.scala:324`, `src/spatial/codegen/chiselgen/ChiselGenMem.scala:325`).
+
+## HLS Friendliness
+
+Preserving hashes is least HLS-friendly: it asks a Rust/HLS port to reproduce JVM string identity and 32-bit hash grouping, which is not a hardware concept (unverified). Deterministic metadata is acceptable for a transitional HLS backend because it gives lowering a stable group token while retaining today's lane accesses. Explicit grouped-dequeue IR is the most HLS-friendly: it can lower directly to an arbiter over `hls::stream`-like emptiness checks and a single result selection (unverified), while still generating legacy banked priority accesses for current Chisel.
+
+## Recommendation
+
+Choose deterministic explicit group-id metadata as the D-02 implementation target, with an explicit grouped-dequeue IR as the follow-on design direction. Do not promise hash-based compatibility beyond accepting legacy `PriorityDeqGroup(Int)` during migration. This preserves the source-backed behavior that matters: one API call creates alternative destructive reads, forward pressure treats alternatives as OR-within-group, Chisel retains the deferred empty guard, and diagnostics can finally name the grouped operation instead of reverse-engineering an integer hash.

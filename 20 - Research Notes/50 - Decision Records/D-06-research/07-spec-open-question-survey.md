@@ -1,0 +1,27 @@
+---
+type: "research"
+decision: "D-06"
+angle: 7
+---
+
+# Spec/Open-Question Survey
+
+## Decision Frame
+
+D-06 is constrained by a real spec split, not just by implementation taste. [[20 - Open Questions]] defines Q-103 as the choice between exact `iterDiff` carryover, diagnostic-only use, or replacement by an HLS dependence/schedule model; it also states the reason for doubt: Spatial computes `iterDiff` and `segmentMapping` from affine matrices, ticks, lane distances, and accumulation cycles, while HLS tools may schedule loop-carried dependencies differently when partitioning or dependence pragmas are involved (unverified) (source: `20 - Research Notes/20 - Open Questions.md:1401-1413`). The compiler-pass spec tags [[60 - Use and Access Analysis]] as `hls_status: rework`, while [[C0 - Retiming]] and [[70 - Timing Model]] are `chisel-specific`, so D-06 sits between reusable analysis intent and backend-specific timing machinery (source: `10 - Spec/40 - Compiler Passes/60 - Use and Access Analysis.md:21-29`; `10 - Spec/40 - Compiler Passes/C0 - Retiming.md:17-23`; `10 - Spec/20 - Semantics/70 - Timing Model.md:17-30`).
+
+## Pipeline Constraints
+
+The pass order makes `iterDiff` an early, shared fact. [[60 - Use and Access Analysis]] groups `IterationDiffAnalyzer` with access, accumulation, initiation, repair, and cleanup passes; it says `IterationDiffAnalyzer` computes loop-carried accumulation distances and segment mappings from `findAccumCycles` plus affine matrices, while `InitiationAnalyzer` computes `II`, `compilerII`, and `bodyLatency` (source: `10 - Spec/40 - Compiler Passes/60 - Use and Access Analysis.md:36-44`). The pass-pipeline deep dive places `IterationDiffAnalyzer` inside `bankingAnalysis`, after `AccessAnalyzer` has produced `accessPattern` and `affineMatrices`, before `MemoryAnalyzer` and `MemoryAllocator` consume memory/banking facts (source: `20 - Research Notes/10 - Deep Dives/pass-pipeline.md:167-176`; `40 - Cross References/pass-pipeline-order.md:88-98`). The final `InitiationAnalyzer` runs much later, after final retiming, broadcast cleanup, and reporting setup (source: `40 - Cross References/pass-pipeline-order.md:125-132`). Therefore, replacing `iterDiff` is not only a scheduler change: it must either supply equivalent segment/dependence facts to banking/partition planning or explicitly move that responsibility into an HLS partition/schedule model.
+
+## Timing/Retiming Tension
+
+[[C0 - Retiming]] creates the sharpest internal tension. Its HLS notes say Chisel `DelayLine(size, data)` insertion has no direct Vitis HLS analogue and that Rust+HLS would skip the retiming trio, relying on HLS pipeline scheduling and register insertion instead (unverified) (source: `10 - Spec/40 - Compiler Passes/C0 - Retiming.md:307-310`). Immediately after, the same note says `IterationDiffAnalyzer` and `InitiationAnalyzer`, including `compilerII = ceil(interval/iterDiff)`, are reusable in HLS because they emit `#pragma HLS pipeline II=<N>` (source: `10 - Spec/40 - Compiler Passes/C0 - Retiming.md:311-313`). [[70 - Timing Model]] softens that claim: II is timing semantics, not mere metadata; `IterationDiffAnalyzer` feeds `compilerII`, but a target-imposed II can differ and Rust should store compiler-requested and backend-accepted values (source: `10 - Spec/20 - Semantics/70 - Timing Model.md:57-65`). Q-149 makes that reconciliation explicit for HLS reporting (source: `20 - Research Notes/20 - Open Questions.md:2116-2126`; `30 - HLS Mapping/40 - Open HLS Questions.md:11-15`).
+
+## Reduction and Accumulation Linkage
+
+The reduction spec makes `iterDiff` correctness-sensitive. [[60 - Reduction and Accumulation]] defines reductions around body shapes, fold/identity behavior, accumulator-cycle legality, enable sets, and first-iteration behavior, not just a backend reduction primitive (source: `10 - Spec/20 - Semantics/60 - Reduction and Accumulation.md:38-48`). It then states that `IterationDiffAnalyzer` sets ordinary `OpReduce` to `iterDiff = 1`, `OpMemReduce` to `iterDiff = 0`, and that `InitiationAnalyzer` turns these facts into `compilerII`, closing the loop from reductions to timing (source: `10 - Spec/20 - Semantics/60 - Reduction and Accumulation.md:56-64`; `10 - Spec/40 - Compiler Passes/C0 - Retiming.md:221-237`). So an HLS-native scheduler cannot treat `iterDiff` as a disposable note unless it also preserves the reduction legality proof and the special first-iteration/touch-and-go cases.
+
+## Open Questions
+
+Q-096 is officially out of scope for v1, but it still constrains D-06: `RetimingAnalyzer` is gated by `enableRetiming`, while `IterationDiffAnalyzer` and `InitiationAnalyzer` have no analogous gate, raising the question of whether `iterDiff` and `ceil(interval/iterDiff)` remain meaningful when `fullDelay` was never computed (source: `20 - Research Notes/20 - Open Questions.md:1300-1313`; `10 - Spec/40 - Compiler Passes/C0 - Retiming.md:315-318`). If HLS skips Chisel retiming, the HLS design should not inherit that ambiguity silently. Q-103 is the direct architectural fork, and Q-149 is its reporting/metadata companion: exact reuse must define how Spatial `compilerII` survives backend disagreement; diagnostic-only use must introduce new authoritative II fields so old metadata names do not smuggle authority; replacement must still expose enough source evidence to explain mismatches between Spatial expectation and HLS achieved II (source: `20 - Research Notes/20 - Open Questions.md:1406-1413`; `20 - Research Notes/20 - Open Questions.md:2121-2126`).

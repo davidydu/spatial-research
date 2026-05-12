@@ -1,0 +1,36 @@
+---
+type: "research"
+decision: "D-07"
+angle: 10
+---
+
+# D-07 Recommendation Matrix
+
+## Decision Frame
+
+D-07 should decide the planner architecture, not just a pruning knob. Spatial's current representation is `ModBanking(N, B, alpha, axes, P)`, whose bank function is `(alpha dot addr / B) % N`; it also carries padding/period information and labels `B == 1` as cyclic and `B != 1` as block-cyclic (`src/spatial/metadata/memory/BankingData.scala:49`, `src/spatial/metadata/memory/BankingData.scala:64`, `src/spatial/metadata/memory/BankingData.scala:67`). Downstream consumers expect a physical-memory plan with `Seq[Banking]`, depth, padding, accumulator type, plus dispatch/port/group metadata (`src/spatial/metadata/memory/BankingData.scala:180`, `src/spatial/traversal/banking/MemoryConfigurer.scala:115`, `src/spatial/traversal/banking/MemoryConfigurer.scala:123`, `src/spatial/traversal/banking/MemoryConfigurer.scala:124`). Ordinary HLS array partitioning is a smaller directive language: dimension, kind, and factor, with complete/block/cyclic-style forms (unverified).
+
+## Compact Matrix
+
+| Strategy | Correctness | Performance / DSE scalability | Tool fit, dependencies, cost |
+|---|---|---|---|
+| Exact Spatial alpha/N/B reuse | Strongest Spatial parity: it preserves `N`, alpha, `B`, `P`, conflict gates, and bank/offset contracts (`src/spatial/traversal/banking/ExhaustiveBanking.scala:392`, `src/spatial/traversal/banking/ExhaustiveBanking.scala:409`, `src/spatial/traversal/banking/ExhaustiveBanking.scala:421`). Weak HLS correctness unless the backend emits custom bank arrays and index rewriting, because arbitrary multi-dimensional alpha formulas are not naturally HLS partition pragmas (unverified). | Worst scalability. The loop nests `N`, alpha vectors, and block sizes, with defaults of two schemes per region and 50,000 alpha attempts (`src/spatial/SpatialConfig.scala:36`, `src/spatial/SpatialConfig.scala:37`; `src/spatial/traversal/banking/ExhaustiveBanking.scala:390`). DSE may find legal Spatial layouts that HLS cannot state. | Low short-term implementation cost, poor tool fit. It depends heavily on D-04 for resource accounting, D-08 for latency, and D-21 for tool feedback because compiler estimates may diverge from HLS results. |
+| Constrained HLS-partition subset of existing search | Safer if limited to hierarchical, one-dimension-at-a-time plans; Spatial already distinguishes flat versus hierarchical views (`src/spatial/metadata/memory/BankingData.scala:510`, `src/spatial/metadata/memory/BankingData.scala:518`, `src/spatial/metadata/memory/BankingData.scala:523`). Risk: filtering after a general search can still admit schemes whose `P`, alpha, or offset semantics are not pragma-shaped. | Better than exact reuse if candidate generation is cut before solving. Still inherits search machinery and cost features based on `B/N/alpha/P` rather than HLS partition estimates (`src/spatial/traversal/banking/MemoryConfigurer.scala:448`, `src/spatial/traversal/banking/MemoryConfigurer.scala:451`, `src/spatial/traversal/banking/MemoryConfigurer.scala:479`). | Moderate implementation cost. Good D-04/D-06 bridge because it preserves metadata, but awkward for D-08/D-21 if the HLS tool changes achieved II or latency. |
+| New HLS partition planner | Best semantic fit. It searches only HLS-lowerable forms, then emits the same compiler contract: duplicates, ports, depth, padding, and dispatch (`src/spatial/traversal/banking/MemoryConfigurer.scala:631`, `src/spatial/traversal/banking/MemoryConfigurer.scala:663`, `src/spatial/traversal/banking/MemoryConfigurer.scala:664`, `src/spatial/traversal/banking/MemoryConfigurer.scala:668`). | Best DSE shape because the search space is `kind x dimension x factor x duplicate/binding`, seeded by useful `NBestGuess` factors rather than relaxed alpha enumeration (`src/spatial/metadata/memory/BankingData.scala:560`, `src/spatial/metadata/memory/BankingData.scala:562`, `src/spatial/metadata/memory/BankingData.scala:631`). | Highest v1 cost. It must reuse grouping/conflict evidence, preserve `segmentMapping` inputs from D-06, consume D-04 storage classes, and leave latency/accepted-II reconciliation to D-08/D-21 (`D-04.md:44`, `D-04.md:80`, `D-06.md:94`, `D-06.md:99`, `D-06.md:102`). |
+| Hybrid / escape hatch | Best practical correctness. Default to HLS-native plans; allow explicit/custom banked fallback only when the backend deliberately lowers array-of-banks/index logic or marks the plan non-portable (unverified). | Keeps the common DSE path small while retaining coverage for benchmarks that need Spatial-style layouts. Tool reports can classify escape-hatch designs separately. | Medium cost. It needs a manifest bit for `hls_partition_plan` versus `custom_banking_escape`, plus diagnostics and report reconciliation. |
+
+## Dependency Posture
+
+D-07 should produce a planner result that is stable before D-08 and D-21, but not pretend to know their answers. D-04 already recommends an HLS storage taxonomy with ordered checked resources and an explicit `AUTO_LOCAL` catch-all, so D-07 should report bank count, bank depth, partition kind, binding preference, and fallback status in that vocabulary (`D-04.md:36`, `D-04.md:70`, `D-04.md:120`). D-06 says the long-term scheduler must know partition choices, memory latencies, emitted pragmas, and backend accepted II; therefore D-07 should provide partition/dependence evidence, not final scheduling authority (`D-06.md:94`, `D-06.md:98`, `D-06.md:99`, `D-06.md:102`). D-08 supplies latency source policy, and D-21 supplies accepted-II reconciliation; D-07 should expose enough facts for both.
+
+## Migration Plan
+
+1. Preserve the `MemoryConfigurer` boundary first: access grouping, reaching-write filtering, buffering depth, ports, duplicates, and dispatch remain the required output contract (`src/spatial/traversal/banking/MemoryConfigurer.scala:610`, `src/spatial/traversal/banking/MemoryConfigurer.scala:631`, `src/spatial/traversal/banking/MemoryConfigurer.scala:668`).
+2. Introduce `HlsPartitionPlan` beside `Seq[Banking]`: `kind`, `dimension`, `factor`, `complete`, `duplicate_count`, `reshape_width`, `binding_preference`, `estimated_ports`, `fallback_reason`, and source evidence.
+3. Implement the HLS planner using current access groups and conflict checks, but generate only lowerable partition candidates. Reuse `NBestGuess` as factor ordering; do not search relaxed alpha vectors by default.
+4. Keep an explicit escape hatch for legacy/custom banking. It must be opt-in, reportable, and excluded from "portable HLS partition" claims.
+5. Wire DSE to pre-HLS estimates plus post-tool reconciliation. The existing DSE validity check compares estimated area to capacity, so HLS report parsing must update, not erase, the original plan (`src/spatial/dse/DSEThread.scala:119`, `src/spatial/dse/DSEThread.scala:120`; `D-06.md:119`, `D-06.md:124`).
+
+## Named Recommendation
+
+**Recommend: HLS-First Partition Planner With Spatial Evidence And Escape Hatch.** It gives HLS codegen a plan it can actually emit, keeps Spatial's proven grouping and conflict analysis, avoids exhaustive alpha/N/B work in the common path, and leaves D-04, D-08, and D-21 with explicit fields to reconcile resources, latency, and accepted II.

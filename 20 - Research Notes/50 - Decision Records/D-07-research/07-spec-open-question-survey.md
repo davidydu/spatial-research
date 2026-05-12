@@ -1,0 +1,27 @@
+---
+type: "research"
+decision: "D-07"
+angle: 7
+---
+
+# Spec and Open-Question Survey
+
+## Decision Frame
+
+Q-112 frames D-07 as a three-way choice: reuse Spatial's alpha/N/B search, constrain it to HLS partition forms, or replace it with a new planner. The immediate pressure is scale: banking search expands views, `N` strictness, alpha strictness, duplication/regrouping, block factors, and `P`, while `NBestGuess.factorize` directly enumerates divisors; larger HLS DSE runs therefore need pruning or memoization before they become practical (source: `20 - Research Notes/20 - Open Questions.md:1516-1526`; `src/spatial/metadata/memory/BankingData.scala:547-563`). The HLS mapping index also promotes Q-112 into the top architectural question list, alongside target-accepted II and runtime-model replacement, so this is not a local optimization decision only (source: `30 - HLS Mapping/40 - Open HLS Questions.md:9-20`).
+
+## Reusable Core
+
+The reusable part is the access and banking algebra. [[30 - Banking Math]] is explicitly `hls_status: clean`; it ties symbolic address expressions, sparse affine matrices, ISL emptiness checks, and `(N, B, alpha, P)` into one conflict-proofing model (source: `10 - Spec/60 - Polyhedral Model/30 - Banking Math.md:1-17`, `10 - Spec/60 - Polyhedral Model/30 - Banking Math.md:22-30`). Its HLS note says to preserve `computeP`, residual-bank enumeration, and direct-vs-crossbar banking while revisiting the exhaustive enumeration bottleneck (source: `10 - Spec/60 - Polyhedral Model/30 - Banking Math.md:52-58`). The source confirms the `ModBanking` contract is not merely a hint: `bankSelect` computes `(alpha dot addr / B) % N`, while `P` participates in offset correction and padding (source: `src/spatial/metadata/memory/BankingData.scala:49-68`; `utils/src/utils/math/package.scala:134-203`).
+
+## HLS Mismatch
+
+The mismatch is that [[70 - Banking]] is `hls_status: rework`, even though the math is clean. Spatial's banking pass owns physical-bank assignment, buffer depth, port numbering, and resource binding; `MemoryConfigurer.bankGroups` constructs the cross product of `bankViews x nStricts x aStricts x dimensionDuplication`, orders the directives, computes buffer depth, calls `BankingStrategy.bankAccesses`, and later picks the cheapest returned scheme (source: `10 - Spec/40 - Compiler Passes/70 - Banking.md:28-31`, `10 - Spec/40 - Compiler Passes/70 - Banking.md:158-166`; `src/spatial/traversal/banking/MemoryConfigurer.scala:610-633`). The HLS note says Vitis-like `array_partition` surfaces are only cyclic, block, and complete partition modes per dimension, and suggests emitting pragmas from a banking choice rather than recreating Spatial's full bank network (unverified; source: `10 - Spec/40 - Compiler Passes/70 - Banking.md:295-298`). That creates the central tension: arbitrary flattened alpha vectors and block-cyclic `P` layouts can be legal Spatial bankings but not necessarily expressible as portable HLS pragmas (unverified).
+
+## Downstream Contracts
+
+[[40 - Memory Semantics]] constrains any replacement planner to preserve observable IR contracts, not just pick partition factors. Duplicates bridge abstract memory to physical memory; finalization writes `mem.duplicates`, per-access `Dispatch`, `Ports`, and `GroupId`, and unused-access markings (source: `10 - Spec/20 - Semantics/40 - Memory Semantics.md:53-59`). Post-unroll emission consumes those facts to create concrete banked read/write/enqueue/dequeue nodes, so planner outputs affect later IR shape (source: `10 - Spec/20 - Semantics/40 - Memory Semantics.md:55-57`). Chisel memory emission is not portable as modules, but its HLS note preserves the canonical parameter set: dimensions, depth, banks, block cycles, `P`s, port counts, mux offsets, cast/broadcast groups, buffer ports, and residual generators (source: `10 - Spec/50 - Code Generation/10 - Chiselgen/30 - Memory Emission.md:129-136`). Thus an HLS planner may simplify the search space, but it still needs an equivalent memory-layout record for simulation, codegen, reports, and comparison against Scala Spatial.
+
+## Open Tensions
+
+Several open questions narrow the acceptable strategy. [[60 - Use and Access Analysis]] says HLS should rederive address matrices against the chosen HLS partitioning model rather than assume Spatial `AccessMatrix`, `Port`, and `Duplicates` metadata are portable facts (source: `10 - Spec/40 - Compiler Passes/60 - Use and Access Analysis.md:74-81`). Q-103 asks whether `iterDiff` and `segmentMapping` survive, because HLS may pipeline loop-carried dependencies differently when arrays are partitioned or dependence pragmas are emitted (unverified; source: `20 - Research Notes/20 - Open Questions.md:1401-1413`). Q-079 requires an HLS memory-resource taxonomy and catch-all behavior before allocation can be trusted, while Q-116 requires a new latency/cycle source for HLS DSE (source: `20 - Research Notes/20 - Open Questions.md:1087-1097`; `20 - Research Notes/20 - Open Questions.md:1565-1575`). Q-149 adds that accepted II may differ from compiler-requested II, so banking and partition planning cannot treat Spatial `compilerII` as final backend truth (source: `20 - Research Notes/20 - Open Questions.md:2116-2126`). The conservative reading is: reuse Spatial's affine evidence and pruning heuristics, but constrain or replace the solver around HLS-expressible partition plans, with unresolved scheduler/resource/report contracts called out explicitly.
