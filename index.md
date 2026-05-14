@@ -15,7 +15,7 @@ A comprehensive, citation-anchored specification of the [Spatial](https://github
 |---|---|
 | **Scope the rewrite — what features must be supported** | [[03-mvp-subset-recommendation\|MVP feature subset]] |
 | Get the lay of the land | [[00 - Index]] |
-| Read the spec | [[Spec Index]] |
+| Read the spec | [[10 - Spec/00 - Spec Index\|Spec Index]] |
 | See which constructs port cleanly to HLS | [[10 - Clean Mappings\|HLS mapping]] |
 | See the open architectural questions | [[20 - Open Questions]] |
 | Understand the research methodology | [[workflow\|Workflow runbook]] |

@@ -2,6 +2,8 @@
 type: moc
 project: spatial-spec
 date_started: 2026-04-23
+aliases:
+  - "10 - Language Surface"
 ---
 
 # Language Surface — Index

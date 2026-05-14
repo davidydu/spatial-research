@@ -6,8 +6,7 @@ status: draft
 sources:
   - "[[01-spatial-user-examples]]"
   - "[[02-ee109-examples]]"
-feeds_spec:
-  - "[[A0 - MVP Subset]]"
+feeds_spec: []
 ---
 
 # MVP Feature Subset — Synthesis & Recommendation
@@ -16,7 +15,7 @@ Distillation of [[01-spatial-user-examples]] (264 Scala files across `apps/`, Ro
 
 ## Why an MVP subset (not the full language)
 
-The full Spatial surface is ~80 IR node types plus dozens of metadata/transform passes ([[Spec Index]] has 96 spec entries). A faithful reimplementation is enormous. But the **observed usage footprint** in real example programs is much smaller:
+The full Spatial surface is ~80 IR node types plus dozens of metadata/transform passes ([[10 - Spec/00 - Spec Index|Spec Index]] has 96 spec entries). A faithful reimplementation is enormous. But the **observed usage footprint** in real example programs is much smaller:
 
 - Of ~30 user-facing language constructs, only ~10 appear in **every** Spatial program (`Accel`, basic arithmetic, etc.).
 - Only ~15 appear in **majority** of programs.
@@ -56,19 +55,19 @@ Every EE109 lab uses these. Without all of them, the rewrite can't compile a sin
 
 | Feature | Category | EE109 use | Spec entry | HLS status |
 |---|---|---|---|---|
-| `@spatial object … extends SpatialApp` | Boilerplate | 3/3 | [[Spatial.scala]] / [[10 - Controllers]] | clean |
-| `Accel { … }` | Controller | 3/3 | [[10 - Controllers]] | clean |
-| `Sequential { … }` | Controller | 3/3 | [[10 - Controllers]] | clean |
-| `Foreach(N by 1){ i => … }` | Controller | 3/3 | [[10 - Controllers]] | clean |
-| `ArgIn[T]`, `ArgOut[T]` | Host I/O memory | 3/3 | [[20 - Memories]] | clean |
+| `@spatial object … extends SpatialApp` | Boilerplate | 3/3 | [[10 - Spec/10 - Language Surface/10 - Controllers|10 - Controllers]] | clean |
+| `Accel { … }` | Controller | 3/3 | [[10 - Spec/10 - Language Surface/10 - Controllers|10 - Controllers]] | clean |
+| `Sequential { … }` | Controller | 3/3 | [[10 - Spec/10 - Language Surface/10 - Controllers|10 - Controllers]] | clean |
+| `Foreach(N by 1){ i => … }` | Controller | 3/3 | [[10 - Spec/10 - Language Surface/10 - Controllers|10 - Controllers]] | clean |
+| `ArgIn[T]`, `ArgOut[T]` | Host I/O memory | 3/3 | [[10 - Spec/10 - Language Surface/20 - Memories|20 - Memories]] | clean |
 | `setArg`, `getArg` | Host transfer | 3/3 | [[60 - Host and IO]] | clean |
-| `DRAM[T](size)` | Off-chip memory | 3/3 | [[20 - Memories]] | clean |
-| `SRAM[T](size)` | On-chip memory | 2/3 (Lab2/3) | [[20 - Memories]] | rework (banking) |
-| `load` / `store` | Tile transfer | 2/3 (Lab3) | [[10 - Language Surface]] | rework (HLS DMA) |
-| `Reduce(Reg[T])(N by 1){ i => … }{_+_}` | Controller | 1/3 (Lab3) | [[10 - Controllers]] | clean |
-| `Reg[T](init)` | Local register | 2/3 | [[20 - Memories]] | clean |
-| `LUT[T](N)(values…)` | Lookup table | 1/3 (Lab2Part4 specifically) | [[20 - Memories]] | rework (HLS arrays) |
-| `FSM` / `StateMachine` | Controller | 1/3 (Lab2Part3 specifically) | [[10 - Controllers]] | rework (HLS state) |
+| `DRAM[T](size)` | Off-chip memory | 3/3 | [[10 - Spec/10 - Language Surface/20 - Memories|20 - Memories]] | clean |
+| `SRAM[T](size)` | On-chip memory | 2/3 (Lab2/3) | [[10 - Spec/10 - Language Surface/20 - Memories|20 - Memories]] | rework (banking) |
+| `load` / `store` | Tile transfer | 2/3 (Lab3) | [[10 - Spec/10 - Language Surface/00 - Language Surface Index|Language Surface]] | rework (HLS DMA) |
+| `Reduce(Reg[T])(N by 1){ i => … }{_+_}` | Controller | 1/3 (Lab3) | [[10 - Spec/10 - Language Surface/10 - Controllers|10 - Controllers]] | clean |
+| `Reg[T](init)` | Local register | 2/3 | [[10 - Spec/10 - Language Surface/20 - Memories|20 - Memories]] | clean |
+| `LUT[T](N)(values…)` | Lookup table | 1/3 (Lab2Part4 specifically) | [[10 - Spec/10 - Language Surface/20 - Memories|20 - Memories]] | rework (HLS arrays) |
+| `FSM` / `StateMachine` | Controller | 1/3 (Lab2Part3 specifically) | [[10 - Spec/10 - Language Surface/10 - Controllers|10 - Controllers]] | rework (HLS state) |
 | `Int`, `FixPt[S,I,F]` | Types | 3/3 | [[30 - Primitives]], [[50 - Data Types]] | clean |
 | `par` annotation on `Foreach`/`Reduce` | Parallelism | 1/3 (Lab3) | various | rework (HLS unroll) |
 | Arithmetic + comparisons | Math | 3/3 | [[50 - Math and Helpers]] | clean |
@@ -83,18 +82,18 @@ These are common in Rosetta benchmarks and `test/spatial/tests/apps/` but not ne
 
 | Feature | Category | Canonical use | Spec entry | HLS status |
 |---|---|---|---|---|
-| `Pipe { … }` (pipelined controller) | Controller | ~25% canonical | [[10 - Controllers]] | clean |
+| `Pipe { … }` (pipelined controller) | Controller | ~25% canonical | [[10 - Spec/10 - Language Surface/10 - Controllers|10 - Controllers]] | clean |
 | `Tup2[A,B]`, `Tup3[A,B,C]` | Types | ~85% (universal — codex flagged Tier 1) | [[50 - Data Types]] | clean |
 | `tabulate { i => … }` | Functional | ~60% | [[60 - Host and IO]] | clean (host-side) |
 | `slice` (range indexing) | Functional | ~60% | [[30 - Primitives]] | clean |
-| `zip`, `reduce` on `Array` | Functional | ~50% | [[A0 - Standard Library]] | clean (host-side) |
+| `zip`, `reduce` on `Array` | Functional | ~50% | [[10 - Spec/10 - Language Surface/A0 - Standard Library/00 - Standard Library Index|Standard Library]] | clean (host-side) |
 | `cond.to[T]` (cast operator) | Special | ~68% (**spec gap — no entry**) | ⚠ none | rework |
 | Conditional `if`/`else` in Accel | Special | ~37% | [[30 - Control Semantics]] | clean |
 | 2D `DRAM[T](rows, cols)`, 2D `SRAM` | Memory | ~50% | [[40 - Memory Semantics]] | rework (HLS pragma) |
 | `getMatrix` (2D readback) | Transfer | ~20% (Rosetta) | [[60 - Host and IO]] | clean |
-| `bound(arg) = N` (DSE bounds) | DSE | GEMM example | [[30 - HLS Mapping]] | unknown |
+| `bound(arg) = N` (DSE bounds) | DSE | GEMM example | [[30 - HLS Mapping/00 - Overview|HLS Mapping]] | unknown |
 | Multi-level parallelism (`par tileM_par, par M_par`) | Parallelism | GEMM example | various | rework |
-| DSE parameter syntax `(16 → 8 → 64)`, `(1,2,4,8)` | DSE | GEMM example | [[70 - Models and DSE]] | unknown |
+| DSE parameter syntax `(16 → 8 → 64)`, `(1,2,4,8)` | DSE | GEMM example | [[10 - Spec/70 - Models and DSE/00 - Models and DSE Index|Models and DSE]] | unknown |
 
 **Tier 1 footprint:** Tier 0 + ~12 more. Implementable as a v0.5.
 
@@ -188,4 +187,4 @@ The most productive 30 minutes with someone who built Spatial would resolve:
 - [[02-ee109-examples]] — EE109 3-file catalog
 - [[10 - Clean Mappings]] — HLS mapping status for each construct
 - [[20 - Open Questions]] — running list of unresolved issues
-- [[Spec Index]] — full spec entry point
+- [[10 - Spec/00 - Spec Index|Spec Index]] — full spec entry point

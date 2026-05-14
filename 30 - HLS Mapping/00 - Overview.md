@@ -2,6 +2,8 @@
 type: hls-mapping-index
 project: spatial-spec
 date_started: 2026-04-21
+aliases:
+  - "30 - HLS Mapping"
 ---
 
 # HLS Mapping — Overview

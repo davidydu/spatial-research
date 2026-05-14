@@ -1,6 +1,8 @@
 ---
 type: spec
 concept: controllers
+aliases:
+  - "10 - Controllers"
 source_files:
   - "src/spatial/lang/control/Control.scala:9-72"
   - "src/spatial/lang/control/CtrlOpt.scala:8-27"

@@ -1,6 +1,8 @@
 ---
 type: spec
 concept: standard-library-index
+aliases:
+  - "A0 - Standard Library"
 source_files:
   - "src/spatial/lib/BLAS.scala:8-210"
   - "src/spatial/lib/LinearAlgebra.scala:7-257"

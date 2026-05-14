@@ -1,6 +1,8 @@
 ---
 type: spec
 concept: memories
+aliases:
+  - "20 - Memories"
 source_files:
   - "src/spatial/lang/types/Mem.scala:1-325"
   - "src/spatial/lang/DRAM.scala:1-217"
