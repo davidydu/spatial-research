@@ -13,12 +13,22 @@ A comprehensive, citation-anchored specification of the [Spatial](https://github
 
 | If you want to… | Go to |
 |---|---|
+| **Scope the rewrite — what features must be supported** | [[03-mvp-subset-recommendation\|MVP feature subset]] |
 | Get the lay of the land | [[00 - Index]] |
 | Read the spec | [[Spec Index]] |
 | See which constructs port cleanly to HLS | [[10 - Clean Mappings\|HLS mapping]] |
 | See the open architectural questions | [[20 - Open Questions]] |
 | Understand the research methodology | [[workflow\|Workflow runbook]] |
 | Review the decision queue | [[40 - Decision Queue]] |
+
+## MVP scope (rewrite starting point)
+
+Rather than reimplement the full Spatial language, the rewrite scope is bounded by **what real user-facing examples actually use**. Two corpora were analyzed:
+
+- **EE109 labs** (3 files, 203 LOC) — pedagogical floor for student-written code. See [[02-ee109-examples]].
+- **Spatial canonical examples** (264 files across `apps/`, Rosetta, feature tests) — broader real-app usage. See [[01-spatial-user-examples]].
+
+The synthesis [[03-mvp-subset-recommendation\|MVP subset recommendation]] defines four tiers (EE109 floor → canonical → common → out-of-scope) with implementation order, milestone gates, and spec coverage gaps. Estimated 60–70% effort reduction vs full-language reimplementation.
 
 ## Status
 
