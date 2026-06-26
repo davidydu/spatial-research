@@ -25,6 +25,7 @@ Every file has a frontmatter block. `type` is required; other fields depend on `
 |---|---|---|
 | `moc` | Top-level / folder-level indexes ([[00 - Index]]) | — |
 | `design` | One-off design docs ([[2026-04-21-spatial-spec-design]]) | `status`, `approved_by` |
+| `plan` | Execution plans under `90 - Meta/plans/` | `status`, `scope`, `date` |
 | `runbook` | Operational session-start docs ([[workflow]]) | `load_priority` |
 | `conventions` | This file — style / frontmatter / citation rules | `date` |
 | `log` | Append-only logs ([[progress-log]]) | — |

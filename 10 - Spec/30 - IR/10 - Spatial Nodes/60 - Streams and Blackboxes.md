@@ -2,8 +2,8 @@
 type: spec
 concept: spatial-ir-streams-blackboxes
 source_files:
-  - "src/spatial/node/StreamIn.scala:1-21"
-  - "src/spatial/node/StreamOut.scala:1-28"
+  - "src/spatial/node/StreamIn.scala:1-20"
+  - "src/spatial/node/StreamOut.scala:1-27"
   - "src/spatial/node/StreamStruct.scala:1-22"
   - "src/spatial/node/Blackbox.scala:1-63"
   - "src/spatial/node/HierarchyControl.scala:7-15"

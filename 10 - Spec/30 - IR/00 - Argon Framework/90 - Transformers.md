@@ -65,7 +65,7 @@ Key members:
 
 ### `SubstTransformer`
 
-Abstract at `argon/src/argon/transform/SubstTransformer.scala:19-177`. Adds:
+Abstract at `argon/src/argon/transform/SubstTransformer.scala:19-176`. Adds:
 
 - `var subst: Map[Sym[_], Substitution]` at `argon/src/argon/transform/SubstTransformer.scala:24`. `Substitution` is one of `DirectSubst(v: Sym[_])` or `FuncSubst(func: () => Sym[_])` (`argon/src/argon/transform/SubstTransformer.scala:6-16`).
 - `var blockSubst: Map[Block[_], Block[_]]` at `argon/src/argon/transform/SubstTransformer.scala:21`.
@@ -255,7 +255,7 @@ Otherwise: `updateNode(rhs)` mutates the op's fields in place, then `restageWith
 
 ### `updateNode` and `mirrorNode` dispatch for `Enabled`
 
-`Enabled[R]` at `argon/src/argon/node/Enabled.scala:6-22` is a trait mixed into nodes with `ens: Set[Bit]` (predicates):
+`Enabled[R]` at `argon/src/argon/node/Enabled.scala:6-21` is a trait mixed into nodes with `ens: Set[Bit]` (predicates):
 ```scala
 trait Enabled[R] { this: Op[R] =>
   var ens: Set[Bit]
@@ -329,7 +329,7 @@ This asymmetry — outer updates in place, inline copies — is easy to miss. A 
 
 ### `Mirrorable`
 
-`trait Mirrorable[A] { type Tx = Transformer; def mirror(f: Tx): A }` at `argon/src/argon/Mirrorable.scala:1-9`. Note the `Tx = Transformer` here is the full `Transformer` class, NOT `TransformerInterface`. This is used for non-Op values that still need to participate in substitution (e.g., lambda carriers, pass-specific data structures). `Transformer.apply` dispatches `Mirrorable` before `Sym`, so the custom rule runs first.
+`trait Mirrorable[A] { type Tx = Transformer; def mirror(f: Tx): A }` at `argon/src/argon/Mirrorable.scala:1-8`. Note the `Tx = Transformer` here is the full `Transformer` class, NOT `TransformerInterface`. This is used for non-Op values that still need to participate in substitution (e.g., lambda carriers, pass-specific data structures). `Transformer.apply` dispatches `Mirrorable` before `Sym`, so the custom rule runs first.
 
 ## Interactions
 
