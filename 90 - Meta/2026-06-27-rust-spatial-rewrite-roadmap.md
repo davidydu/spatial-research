@@ -40,6 +40,12 @@ SRAM tiles, positive static `N`/`TILE` with `N % TILE == 0`, and unit-stride
 tiled load/compute/store. The non-lab `DenseScale64` representative has passed
 local host-C++ and Vitis `csim_design`/`csynth_design`.
 
+`LutLookup v0` is the third reusable supported feature. It covers one 2-D
+integer LUT, scalar bias/row/column inputs, one scalar output, a rectangular
+row-major literal payload, and exactly `out := bias + table[row, col]`. The
+non-lab `LutBiasLookup` representative has passed local host-C++ and Vitis
+`csim_design`/`csynth_design`.
+
 This proves useful local compiler plumbing:
 
 - checked Rust construction
@@ -48,7 +54,7 @@ This proves useful local compiler plumbing:
 - HLS-style C++ emission
 - local host-C++ harness compile/run
 - Vitis C simulation and HLS synthesis for the current adapter baseline,
-  `ScalarExpr v0`, and `Dense1dScalarMul v0`
+  `ScalarExpr v0`, `Dense1dScalarMul v0`, and `LutLookup v0`
 - explicit rejection of unsupported forms
 
 It does not yet prove:
@@ -109,7 +115,7 @@ Use `accepted fixture adapter` for the current `ProgramKind::LabX...` style case
 7. Keep Lab3 convolution explicitly transitional and opaque until reusable local-window/stencil lowering exists.
 8. Add HLS project artifact generation in dry-run mode: top name, part, clock, kernel/harness paths, and `run_hls.tcl`.
 9. Use the EC2 Vitis lane as a regular gate for every promoted supported-feature slice.
-10. Promote LUT behavior from adapters to supported features before claiming Lab3-style performance or synthesis readiness.
+10. Factor shared loop, memory, expression, and control structure before promoting FIFO, reductions, FSM variants, or Lab3-style performance/synthesis readiness.
 
 ## Guardrails
 

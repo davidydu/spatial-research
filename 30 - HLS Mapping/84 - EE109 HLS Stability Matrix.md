@@ -96,6 +96,25 @@ lowering, rank-2 DRAM, dynamic/tail tiles, non-unit strides, extra memories,
 arbitrary expressions, FIFO/streams, reductions, aliasing/in-place claims, and
 non-`Int` element types.
 
+Follow-up LUT supported-feature run:
+
+On 2026-06-27, the Rust rewrite added `LutLookup v0` as the third reusable
+supported feature and re-ran the Vitis lane. The validation list now contains
+the same eight accepted adapters plus `ScalarAffine4`, `DenseScale64`, and
+`LutBiasLookup`, a non-lab representative for 2-D row-major LUT lookup. All
+eleven completed with return code 0, `csim=true`, and `csynth=true`.
+
+Additional repo evidence:
+
+- `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-27-lut-lookup/`
+
+`LutLookup v0` covers one 2-D `Lut<Int>[R, C]`, three scalar `Int` inputs
+ordered as bias, row, and column, one scalar `Int` output, a rectangular
+row-major literal payload, and exactly `out := bias + table[row, col]`. It
+still excludes generic table/memory indexing, DRAM, multiple LUTs, computed
+indices, swapped row/column roles, arbitrary scalar expressions around the
+lookup, runtime bounds checks, dynamic dimensions, and non-`Int` element types.
+
 The `2026-06-27-runner` replay used the repo-local `run-vitis-validation`
 command. It defaults to plan-only sidecar generation and requires `--execute`
 to run Vitis. The EC2 host's system Cargo was 1.75.0, so the copied remote
@@ -156,10 +175,9 @@ Generated-code hygiene:
 
 ## Recommended Next Action
 
-For the Rust rewrite, the next implementation slice should promote LUT
-lookup/indexing from fixture adapters into reusable frontend/HIR/lowering
-support, while continuing to factor shared loop, memory, and expression
-structure out of feature-specific recognizers. LUT support is the natural next
-feature because dense rank-1 scalar multiply has now graduated, and LUTs sit
-before higher-risk FIFO, reductions, LineBuffer, RegFile, or GEMM/stencil
-surfaces.
+For the Rust rewrite, the next implementation slice should factor shared loop,
+memory, expression, and control structure out of feature-specific recognizers
+before promoting FIFO, reductions, FSM variants, or Lab3 local-window/stencil
+surfaces. Scalar expressions, dense rank-1 scalar multiply, and 2-D LUT lookup
+now have non-lab supported-feature representatives with Vitis `csim`/`csynth`
+evidence.
