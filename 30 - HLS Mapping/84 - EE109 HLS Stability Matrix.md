@@ -18,6 +18,43 @@ This note records the local stability state after the first EE109 HLS expansion 
 
 The supported claim is deliberately narrow: the selected EE109 examples compile through the local Spatial `--hls` lane into HLS-style C++, host-compile with the system `c++`, and pass their generated harnesses. This is not yet a Vitis/Vivado synthesis result.
 
+## Rust Rewrite Vendor HLS Update
+
+On 2026-06-27, the Rust rewrite workspace
+`/Users/david/Documents/David_code/spatial-rs` completed a separate Vitis
+validation pass for the current accepted adapter set. This is not a Scala
+Spatial branch result; it is the Rust rewrite's HLS C++ emitter output.
+
+Environment:
+
+- EC2 host: `[ec2-host — see private/ec2-lane.md]`
+- OS: Ubuntu 22.04.5 LTS
+- Vitis/Vivado: 2025.1
+- Target part: `xc7z020-clg400-1`
+- Clock target: 10 ns
+- Rust source bundle on EC2:
+  `/home/ubuntu/spatial-validation/vitis-20260627-1519/spatial-rs`
+- Durable repo evidence:
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-27/`
+
+Rust adapters validated by Vitis `csim_design` and `csynth_design`:
+
+| Adapter | Rust Vitis status | Fmax estimate |
+|---|---|---|
+| `Lab1Part1RegExample` | Pass | 219.68 MHz |
+| `Lab1Part1RegThreeInputExample` | Pass | 156.96 MHz |
+| `Lab1Part2DramSramExample` | Pass | 127.15 MHz |
+| `Lab2Part3BasicCondFSM` | Pass | 136.99 MHz |
+| `Lab2Part4LUT` | Pass | 150.65 MHz |
+| `Lab2Part4LUTNonSquareExample` | Pass | 170.24 MHz |
+| `Lab3Part0MatrixCopyRowMajor` | Pass | 136.99 MHz |
+| `Lab3Part1Convolution` | Pass | 136.99 MHz |
+
+Boundary: this validates exact Rust adapter bundles through Vitis C simulation
+and HLS synthesis. It does not validate board execution, Vivado
+implementation/place-and-route, post-implementation timing closure, or generic
+Spatial feature support beyond these adapter shapes.
+
 ## Stable Positive Examples
 
 | Example | Surface covered | Local HLS status | Scala parity status |
