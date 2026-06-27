@@ -2,8 +2,8 @@
 type: design
 project: spatial-spec
 date: 2026-06-26
-status: approved
-approved_by: user
+status: accepted-framing
+m1_resolution: "[[2026-06-26-rust-ee109-mvp-design]]"
 supersedes:
   - "[[2026-04-21-spatial-spec-design]]"
   - "[[2026-06-25-ee109-hls-mvp-plan]]"
@@ -48,7 +48,7 @@ Use a hybrid Rust architecture:
 | Student accelerator surface | A small `accel! { ... }` DSL island for hardware code. |
 | Host/test surface | Normal Rust host code, with optional Python utilities for golden data. |
 | Compiler core | Rust typed IR, validators, lowering passes, ABI manifest, C++ HLS emitter. |
-| Backend target | Generated Vitis-compatible C++ HLS, not Rust HLS. |
+| Backend target | Generated Vitis-oriented HLS-style C++ pending vendor gates, not Rust HLS. |
 | Verification | Local host-C++ compile/run first; Vitis `csim_design` and `csynth_design` later. |
 
 The macro island exists to prevent Rust details from dominating the teaching surface. Rust closures and builders remain useful internally and for tests, but the student examples should read as hardware:
@@ -215,19 +215,17 @@ Required diagnostic classes:
 
 Rust errors will still exist, but the design should make domain diagnostics the normal path for student mistakes.
 
-## Open Decisions Before Implementation Plan
+## Decisions Resolved For M1
 
-1. Exact `accel!` grammar: how close to Spatial syntax, and how much ordinary Rust expression syntax to admit.
-2. Builder fallback: whether internal tests use only builders or whether users may also write builder-style accelerator code.
-3. Manifest serialization: JSON, YAML, or both.
-4. Project layout: one Cargo workspace with DSL/core/CLI crates, or a single crate for M1.
-5. Vitis flow mode: kernel-flow pragmas versus component/IP-flow pragmas, especially around `offset`.
-6. Python role: golden generator only, or optional integration-test driver.
+`[[2026-06-26-rust-ee109-mvp-design]]` resolves the implementation-cut decisions for the first Rust milestone:
+
+1. `accel!` uses a constrained Spatial-like DSL island captured by `stringify!` for M1.
+2. Internal builders are allowed for tests, but canonical M1 examples must pass through `accel!`.
+3. Manifest serialization is JSON for M1, with exact fields tested before C++ emission.
+4. The workspace starts as core plus HLS crates; CLI is deferred.
+5. HLS output is host-C++ checked and structurally asserted, not Vitis/Vivado proven.
+6. Python is not required for M1; independent oracles live in Rust core.
 
 ## Next Action
 
-Do not start implementation directly from this overlay. The next durable artifact should be a focused implementation design for M1:
-
-`Rust EE109 M1: DSL surface, typed IR, ABI manifest, HLS emitter, and local harness gates.`
-
-That design should be written after one more short syntax decision pass over the `accel!` grammar.
+Implement the M1 plan in `[[2026-06-26-rust-ee109-mvp-implementation-plan]]`, then open a separate post-M1 design record for the next EE109 feature slice.
