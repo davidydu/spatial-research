@@ -24,7 +24,7 @@ Every file has a frontmatter block. `type` is required; other fields depend on `
 | type | Used for | Required extra fields |
 |---|---|---|
 | `moc` | Top-level / folder-level indexes ([[00 - Index]]) | — |
-| `design` | One-off design docs ([[2026-04-21-spatial-spec-design]]) | `status`, `approved_by` |
+| `design` | One-off design docs ([[2026-04-21-spatial-spec-design]]) | `status` |
 | `plan` | Execution plans under `90 - Meta/plans/` | `status`, `scope`, `date` |
 | `runbook` | Operational session-start docs ([[workflow]]) | `load_priority` |
 | `conventions` | This file — style / frontmatter / citation rules | `date` |
@@ -38,6 +38,10 @@ Every file has a frontmatter block. `type` is required; other fields depend on `
 | `cross-ref` | Navigation matrix: directory → concept mapping, pass orders, node↔codegen matrices | — |
 
 If a new type is needed, add it to this table before using it — the schema is the authoritative list.
+
+`approved_by` is optional on design notes. Use it when a design decision has an
+explicit human approval record; omit it for manager-owned active research notes,
+implementation contracts, and prompts.
 
 ## Source code citations
 
@@ -82,6 +86,19 @@ After a re-read confirms a claim, add `verified: <YYYY-MM-DD>` to the entry's fr
 - `rework` — needs HLS-specific design
 - `chisel-specific` — tied to RTL semantics; not portable
 - `unknown` — not yet analyzed
+
+**Rust rewrite HLS planning labels (use in new planning notes when the coarse `hls_status` vocabulary is not precise enough):**
+- `surface-clean` — the hardware idea maps cleanly to the Rust DSL surface
+- `semantic-portable` — the Spatial behavior can be preserved in Rust IR
+- `backend-pending` — HLS lowering still needs design or vendor evidence
+- `reference-only` — useful for legacy understanding, not something to port directly
+
+**Rust support evidence labels:**
+- `accepted fixture adapter` — exact lab-shaped program accepted and host-C++ checked
+- `supported feature` — reusable semantic lowering with non-lab tests and fail-closed negatives
+- `host_cpp_structural_gate` — generated C++ compiled and ran with the local system compiler
+- `vitis_csim_validated` — generated Vitis/Vivado project ran `csim_design`
+- `vitis_csynth_validated` — generated Vitis/Vivado project ran `csynth_design`, with report metadata recorded
 
 ## Progress log format
 

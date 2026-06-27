@@ -15,7 +15,7 @@ load_priority: high
 ## Source of truth
 
 - Spatial code: `/Users/david/Documents/David_code/spatial`
-- Research root (this vault folder): `Spring 2026/Spatial Research/`
+- Research root (this vault folder): `/Users/david/Documents/Spatial Research/`
 - Every algorithmic claim in `10 - Spec/` cites a file + line range from the code tree.
 
 ## Phases
@@ -109,7 +109,7 @@ Every session, repeat the loop:
 2. **Read source directly** — main session. Use subagents only for scoped lookups ("find all callers of X", "list every file that imports Y"). Do not delegate algorithmic understanding.
 3. **Write a deep-dive note** at `20 - Research Notes/10 - Deep Dives/<topic-slug>.md`. Raw findings, direct quotes from source, file:line citations, unresolved questions.
 4. **Distill to a spec entry** at `10 - Spec/…/<concept>.md`. Authoritative prose. Frontmatter points back to the deep-dive note and the source files. Status starts at `draft`.
-5. **HLS-tag** — add a `hls_status` field (`clean` / `rework` / `chisel-specific` / `unknown`). If non-trivial, add an entry to the appropriate `30 - HLS Mapping/` file.
+5. **HLS-tag** — add a `hls_status` field (`clean` / `rework` / `chisel-specific` / `unknown`) for spec entries. In Rust rewrite planning notes, also distinguish `surface-clean`, `semantic-portable`, `backend-pending`, and `reference-only` when the older vocabulary is too coarse. If non-trivial, add an entry to the appropriate `30 - HLS Mapping/` file.
 6. **Log** — append one line to `progress-log.md`: topic, spec file created, open Qs added/resolved.
 
 ### The "notes-first" rule

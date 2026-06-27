@@ -2,7 +2,7 @@
 type: design
 project: spatial-spec
 date: 2026-06-27
-status: active
+status: implemented
 depends_on:
   - "[[2026-06-26-rust-ee109-mvp-design]]"
   - "[[2026-06-26-rust-post-m1-next-slice]]"
@@ -12,13 +12,13 @@ depends_on:
 
 ## Decision
 
-Implement `Lab3Part1Convolution` next as one exact semantic kernel in `spatial-rs`, not as generic lowering for `LineBuffer`, `RegFile`, `Reduce`, `mux`, `abs`, or `par`.
+`Lab3Part1Convolution` was implemented as one exact semantic kernel in `spatial-rs`, not as generic lowering for `LineBuffer`, `RegFile`, `Reduce`, `mux`, `abs`, or `par`.
 
-This is the smallest slice that advances the current research goal: compile the selected EE109 lab examples from a Spatial-like Rust DSL surface to HLS-style C++ with local host-C++ verification. It intentionally proves functional Lab3 convolution behavior before attempting reusable local-window memory lowering.
+This was the smallest slice that advanced the research goal: compile selected EE109 lab examples from a Spatial-like Rust DSL surface to HLS-style C++ with local host-C++ verification. It intentionally proves functional Lab3 convolution behavior before attempting reusable local-window memory lowering.
 
 ## Scope
 
-The Rust parser will accept exactly one whitespace-equivalent canonical source island:
+The Rust parser accepts exactly one whitespace-equivalent canonical source island:
 
 - kernel name: `Lab3Part1Convolution`
 - fixed dimensions: `ROWS = 16`, `COLS = 16`, `KH = 3`, `KW = 3`, `CMAX = 16`, `LB_PAR = 8`
@@ -34,6 +34,12 @@ The direct semantic IR will record only artifacts that are actually lowered in t
 - local SRAM-like row buffer `lineOut[16]` if represented in the manifest
 
 It will not add generic `MemoryKind::LineBuffer`, generic `MemoryKind::RegFile`, or generic `Reduce` statements. Those constructs remain unsupported outside the exact canonical Lab3 source.
+
+## Architecture Debt
+
+No second Lab3-style opaque island may be added for `LineBuffer`, `RegFile`, `Reduce`, or `par` before a reusable local-window/stencil lowering module is designed or explicitly deferred.
+
+For future progress notes, describe this slice as an `accepted fixture adapter`, not as generic support for the Lab3 surface constructs it happens to contain.
 
 ## Semantics
 
@@ -99,4 +105,3 @@ Do not update the broad documentation site or stability matrix during this slice
 
 - `spatial-rs/README.md`, because the repo is now beyond the old M1 wording
 - `90 - Meta/progress-log.md`, with commit hash, verification commands, review evidence, fail-closed boundary, and the host-C++-only limitation
-
