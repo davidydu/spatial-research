@@ -75,6 +75,27 @@ literals, `+`, `*`, and parentheses. It still excludes DRAM, memories, control
 flow, comparisons, muxes, negative literals, subtraction, division, function
 calls, multiple outputs, and multiple statements.
 
+Follow-up dense-memory supported-feature run:
+
+On 2026-06-27, the Rust rewrite added `Dense1dScalarMul v0` as the second
+reusable supported feature and re-ran the Vitis lane. The validation list now
+contains the same eight accepted adapters plus `ScalarAffine4` and
+`DenseScale64`, a non-lab representative for rank-1 tiled DRAM/SRAM
+scalar-multiply. All ten completed with return code 0, `csim=true`, and
+`csynth=true`.
+
+Additional repo evidence:
+
+- `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-27-dense1d/`
+
+`Dense1dScalarMul v0` covers one rank-1 `Dram<Int>[N]` input, one scalar `Int`
+multiplier, one rank-1 `Dram<Int>[N]` output, two rank-1 `Sram<Int>[TILE]`
+tiles, positive static `N`/`TILE` with `N % TILE == 0`, unit-stride load,
+elementwise multiply, and unit-stride store. It still excludes generic memory
+lowering, rank-2 DRAM, dynamic/tail tiles, non-unit strides, extra memories,
+arbitrary expressions, FIFO/streams, reductions, aliasing/in-place claims, and
+non-`Int` element types.
+
 The `2026-06-27-runner` replay used the repo-local `run-vitis-validation`
 command. It defaults to plan-only sidecar generation and requires `--execute`
 to run Vitis. The EC2 host's system Cargo was 1.75.0, so the copied remote
@@ -135,8 +156,10 @@ Generated-code hygiene:
 
 ## Recommended Next Action
 
-For the Rust rewrite, the next implementation slice should promote memory and
-array behavior from fixture adapters into reusable frontend/HIR/lowering
-support. Dense 1-D DRAM/SRAM load-compute-store is the natural next feature
-candidate because it sits directly after scalar expressions and before higher
-risk FIFO, reductions, LineBuffer, RegFile, or GEMM/stencil surfaces.
+For the Rust rewrite, the next implementation slice should promote LUT
+lookup/indexing from fixture adapters into reusable frontend/HIR/lowering
+support, while continuing to factor shared loop, memory, and expression
+structure out of feature-specific recognizers. LUT support is the natural next
+feature because dense rank-1 scalar multiply has now graduated, and LUTs sit
+before higher-risk FIFO, reductions, LineBuffer, RegFile, or GEMM/stencil
+surfaces.

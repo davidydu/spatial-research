@@ -34,6 +34,12 @@ with nonnegative literals, `+`, `*`, and parentheses. The non-lab
 `ScalarAffine4` representative has passed local host-C++ and Vitis
 `csim_design`/`csynth_design`.
 
+`Dense1dScalarMul v0` is the second reusable supported feature. It covers one
+rank-1 DRAM input, one scalar multiplier, one rank-1 DRAM output, two rank-1
+SRAM tiles, positive static `N`/`TILE` with `N % TILE == 0`, and unit-stride
+tiled load/compute/store. The non-lab `DenseScale64` representative has passed
+local host-C++ and Vitis `csim_design`/`csynth_design`.
+
 This proves useful local compiler plumbing:
 
 - checked Rust construction
@@ -41,8 +47,8 @@ This proves useful local compiler plumbing:
 - independent oracles
 - HLS-style C++ emission
 - local host-C++ harness compile/run
-- Vitis C simulation and HLS synthesis for the current adapter baseline and
-  `ScalarExpr v0`
+- Vitis C simulation and HLS synthesis for the current adapter baseline,
+  `ScalarExpr v0`, and `Dense1dScalarMul v0`
 - explicit rejection of unsupported forms
 
 It does not yet prove:
@@ -103,7 +109,7 @@ Use `accepted fixture adapter` for the current `ProgramKind::LabX...` style case
 7. Keep Lab3 convolution explicitly transitional and opaque until reusable local-window/stencil lowering exists.
 8. Add HLS project artifact generation in dry-run mode: top name, part, clock, kernel/harness paths, and `run_hls.tcl`.
 9. Use the EC2 Vitis lane as a regular gate for every promoted supported-feature slice.
-10. Promote dense 1-D DRAM/SRAM and LUT behavior from adapters to supported features before claiming Lab3-style performance or synthesis readiness.
+10. Promote LUT behavior from adapters to supported features before claiming Lab3-style performance or synthesis readiness.
 
 ## Guardrails
 
