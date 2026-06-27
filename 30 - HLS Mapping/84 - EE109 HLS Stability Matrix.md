@@ -36,6 +36,8 @@ Environment:
   `/home/ubuntu/spatial-validation/vitis-20260627-1519/spatial-rs`
 - Durable repo evidence:
   `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-27/`
+- Durable runner replay:
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-27-runner/`
 
 Rust adapters validated by Vitis `csim_design` and `csynth_design`:
 
@@ -54,6 +56,12 @@ Boundary: this validates exact Rust adapter bundles through Vitis C simulation
 and HLS synthesis. It does not validate board execution, Vivado
 implementation/place-and-route, post-implementation timing closure, or generic
 Spatial feature support beyond these adapter shapes.
+
+The `2026-06-27-runner` replay used the repo-local `run-vitis-validation`
+command. It defaults to plan-only sidecar generation and requires `--execute`
+to run Vitis. The EC2 host's system Cargo was 1.75.0, so the copied remote
+bundle used a remote-only lockfile v4-to-v3 downgrade; the local Rust repo
+lockfile was not changed.
 
 ## Stable Positive Examples
 
