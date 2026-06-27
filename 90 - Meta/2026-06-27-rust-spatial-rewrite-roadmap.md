@@ -28,6 +28,12 @@ The current `spatial-rs` work should therefore be treated as a tracer slice:
 
 `spatial-rs` currently has accepted fixture adapters for scalar add, dense 1-D DRAM/SRAM multiply, LUTs, one exact FSM, rank-2 copy groundwork, and one direct Lab3 convolution semantic adapter.
 
+`ScalarExpr v0` is the first reusable supported feature rather than an exact
+fixture adapter. It covers one scalar integer assignment over 1-4 scalar inputs
+with nonnegative literals, `+`, `*`, and parentheses. The non-lab
+`ScalarAffine4` representative has passed local host-C++ and Vitis
+`csim_design`/`csynth_design`.
+
 This proves useful local compiler plumbing:
 
 - checked Rust construction
@@ -35,13 +41,14 @@ This proves useful local compiler plumbing:
 - independent oracles
 - HLS-style C++ emission
 - local host-C++ harness compile/run
+- Vitis C simulation and HLS synthesis for the current adapter baseline and
+  `ScalarExpr v0`
 - explicit rejection of unsupported forms
 
 It does not yet prove:
 
 - general Spatial parsing
 - reusable lowering for `LineBuffer`, `RegFile`, `Reduce`, `par`, FIFO, or GEMM
-- vendor Vitis/Vivado `csim` or `csynth`
 - timing, resource, RTL, or board readiness
 
 ## Architecture Target
@@ -95,8 +102,8 @@ Use `accepted fixture adapter` for the current `ProgramKind::LabX...` style case
 6. Route scalar/LUT/dense accepted adapters through `AST -> HIR -> EE109 subset classifier -> checked Program` while keeping current host-C++ outputs stable.
 7. Keep Lab3 convolution explicitly transitional and opaque until reusable local-window/stencil lowering exists.
 8. Add HLS project artifact generation in dry-run mode: top name, part, clock, kernel/harness paths, and `run_hls.tcl`.
-9. Add optional Vitis/Vivado `csim_design` execution once a machine has the toolchain.
-10. Add `csynth_design` and report parsing for scalar/LUT/dense before claiming Lab3-style performance or synthesis readiness.
+9. Use the EC2 Vitis lane as a regular gate for every promoted supported-feature slice.
+10. Promote dense 1-D DRAM/SRAM and LUT behavior from adapters to supported features before claiming Lab3-style performance or synthesis readiness.
 
 ## Guardrails
 

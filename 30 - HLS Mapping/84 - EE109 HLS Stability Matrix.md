@@ -57,6 +57,24 @@ and HLS synthesis. It does not validate board execution, Vivado
 implementation/place-and-route, post-implementation timing closure, or generic
 Spatial feature support beyond these adapter shapes.
 
+Follow-up supported-feature run:
+
+On 2026-06-27, the Rust rewrite added `ScalarExpr v0` as the first reusable
+supported feature and re-ran the Vitis lane. The validation list now contains
+the same eight accepted adapters plus `ScalarAffine4`, a non-lab representative
+for scalar integer expressions. All nine completed with return code 0,
+`csim=true`, and `csynth=true`.
+
+Additional repo evidence:
+
+- `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-27-scalar-expr/`
+
+`ScalarExpr v0` covers a narrow scalar language: 1-4 scalar `Int` inputs, one
+scalar `Int` output, one assignment, declared-input reads, nonnegative integer
+literals, `+`, `*`, and parentheses. It still excludes DRAM, memories, control
+flow, comparisons, muxes, negative literals, subtraction, division, function
+calls, multiple outputs, and multiple statements.
+
 The `2026-06-27-runner` replay used the repo-local `run-vitis-validation`
 command. It defaults to plan-only sidecar generation and requires `--execute`
 to run Vitis. The EC2 host's system Cargo was 1.75.0, so the copied remote
@@ -117,9 +135,8 @@ Generated-code hygiene:
 
 ## Recommended Next Action
 
-The next implementation slice should be one of:
-
-1. FIFO for Lab1, if the research goal wants to expand breadth across early EE109 examples.
-2. 2-D DRAM and nested-loop memory lowering, if the research goal wants to move toward convolution/GEMM-like Lab3 examples.
-
-Do not implement reductions, LineBuffer, or RegFile next unless a selected EE109 target forces it; those features have higher semantic and scheduling risk.
+For the Rust rewrite, the next implementation slice should promote memory and
+array behavior from fixture adapters into reusable frontend/HIR/lowering
+support. Dense 1-D DRAM/SRAM load-compute-store is the natural next feature
+candidate because it sits directly after scalar expressions and before higher
+risk FIFO, reductions, LineBuffer, RegFile, or GEMM/stencil surfaces.
