@@ -148,12 +148,16 @@ Use `accepted fixture adapter` for the current `ProgramKind::LabX...` style case
 
 ## Near-Term Manager Plan
 
-Post-18 decision: refresh stale docs, then do one behavior-preserving
-classifier/HIR guardrail slice before FIFO v0. FIFO should be the next
-user-visible EE109-facing feature, but only as a narrow local FIFO slice with
-real `hls::stream` emission and fresh 19-program Vitis evidence. GEMM and
-fixed-point should wait until FIFO and the classifier/module boundaries are
-stable.
+Post-FIFO decision: the narrow FIFO v0 slice is complete with fresh
+19-program Vitis evidence, so the next phase is compiler foundation rather
+than another ad hoc feature promotion. The active plan is
+`[[2026-06-28-post-fifo-compiler-foundation-plan]]`: add an explicit
+source-to-HIR-to-checked-`Program` compiler spine, add crate-private HIR facts
+for local memories and effects, use FIFO as the first production consumer of
+those facts, then route parser diagnostics through stage-aware compiler
+errors. Generic FIFO/streams, GEMM, fixed-point, broader reductions, and board
+or timing claims should wait until the HIR facts and future `ResolvedHir`
+boundary are stable.
 
 The already-completed foundation items below remain useful historical context:
 
