@@ -455,3 +455,44 @@ Recommended next slice:
   gap. The likely next feature decision is whether to unblock FIFO/stream
   surfaces or memory reductions first, while continuing to factor shared HIR
   facts out of the monolithic classifier.
+
+## 2026-06-28 — Rust rewrite ResolvedHir design checkpoint
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Design checkpoint prepared:
+- Added `docs/superpowers/specs/2026-06-28-resolved-hir-design.md` as the next
+  compiler-foundation artifact after the explicit compiler spine and HIR facts.
+- The design keeps `ResolvedHir` crate-private and test-first. The first
+  implementation must not call the resolver from `parse_accel`, change
+  `compile_source_detailed`, change classifier dispatch, change HLS output, or
+  change validation membership.
+- The resolver owns semantic facts for symbols, scopes, `Int`/`Usize`/internal
+  `Bool`, memory refs, register refs, loop domains, access/layout, ordered
+  effects, built-in `mux`/`abs` calls, ABI/name hygiene, and direct resolver
+  diagnostics.
+- Diagnostics are deliberately bounded: `spatial:E0300` remains checked-IR
+  validation; `ResolvedHir` reserves only `spatial:E0301` through
+  `spatial:E0310`; public `parse_accel` and `compile_source_detailed`
+  diagnostics must remain `E020x`/`E04xx` compatible until an explicit
+  migration rebaselines tests.
+
+Subagent review:
+- GPT-5.5 xhigh architecture, diagnostics/fail-closed, and HLS-contract
+  reviewers first requested changes.
+- The design was revised to add resolver-local `DeclId`/`StmtId`/`ExprId`
+  facts, sibling-scope reuse, non-indexed `MemReduce`/`MemFold` domains,
+  `RegRef` typing, scope-based local memories, access/layout facts,
+  ABI/name-hygiene facts, ordered effects, and built-in call typing.
+- All three reviewers approved the second pass.
+
+Non-claims:
+- This is a design/documentation checkpoint only.
+- It adds no new accepted syntax, generated HLS surface, validation-program
+  member, Vitis evidence, board evidence, or public diagnostic migration.
+
+Recommended next slice:
+- Implement the first crate-private `hir::resolved` skeleton with focused unit
+  tests only, then run the full behavior-preservation gate before any
+  classifier migration.

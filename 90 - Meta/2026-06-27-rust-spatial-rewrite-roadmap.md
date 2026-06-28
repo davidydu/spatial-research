@@ -159,6 +159,13 @@ errors. Generic FIFO/streams, GEMM, fixed-point, broader reductions, and board
 or timing claims should wait until the HIR facts and future `ResolvedHir`
 boundary are stable.
 
+ResolvedHir update: the reviewed design now lives in the Rust repo as
+`docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
+`Program` as the HLS contract, reserves resolver diagnostics to
+`spatial:E0301` through `spatial:E0310`, and makes the next implementation slice
+crate-private and test-first so HLS output and validation membership stay
+unchanged.
+
 The already-completed foundation items below remain useful historical context:
 
 1. Reword repo docs so they describe the Rust rewrite correctly and stop overclaiming fixture adapters as general support.
