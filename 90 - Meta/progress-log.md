@@ -295,3 +295,47 @@ Subagent review:
 Recommended next slice:
 - Replace the remaining Lab3 compact-source parser island with a narrow frontend/HIR/classifier route for the canonical Lab3 convolution.
 - Do not promote generic `LineBuffer`, `RegFile`, `Reduce`, `par`, `mux`, or `abs` support until non-lab representatives and fresh HLS evidence exist.
+
+## 2026-06-28 — Rust rewrite Stencil2d v0 local and Vitis evidence
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on `David/rust-ee109-mvp`.
+
+Committed local checkpoint:
+- Commit `2ec05e6` — `Promote narrow Stencil2d v0 locally`.
+- Added `ProgramKind::Stencil2d` and checked semantic `Stmt::Stencil2d` payloads.
+- Kept `Lab3Part1Convolution` as an accepted fixture adapter, but routed its body through the shared Stencil2d payload and HLS lowering path.
+- Added non-lab representative `SobelStencil12x20` to the validation lane, bringing the Rust validation set to fourteen programs.
+- Preserved fail-closed behavior for generic `LineBuffer`, `RegFile`, arbitrary reductions, arbitrary `par`, non-3x3 kernels, alternate coefficients, dynamic dimensions, and unsupported border policies.
+- Documented the checked-IR boundary: source classification proves `LineBuffer`/`RegFile` shape before constructing the semantic stencil node, while checked IR v0 does not independently preserve frontend-only local-window memory declarations.
+
+Local verification passed before vendor HLS:
+- `cargo fmt --check`
+- `cargo test --locked`
+- `cargo clippy --all-targets --locked -- -D warnings`
+- `cargo run -p ee109-examples --locked`
+- `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`
+- `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --out target/vitis-validation-stencil2d-v0-plan`
+- `git diff --check`
+- generated-artifact leakage scan for Scala/Chisel/FIRRTL/backend terms returned no matches.
+
+Subagent review:
+- HLS/code-quality review approved with no blocking findings.
+- Spec/fail-closed review approved. Follow-up fixes applied: non-lab Stencil2d no longer requires source accumulator locals named exactly `horz`/`vert`; docs now explicitly describe the source-classifier vs checked-IR memory-provenance boundary; checked-IR tests pin tiny rank-2 copy acceptance and too-small stencil rejection.
+
+EC2 Vitis evidence:
+- Host: `[ec2-host — see private/ec2-lane.md]`
+- Vitis/Vivado: 2025.1
+- Target: `xc7z020-clg400-1`
+- Clock target: 10 ns
+- Remote run directory: `/home/ubuntu/spatial-rs-runs/stencil2d-v0-20260628-0648-2ec05e6/spatial-rs`
+- Command: `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --out target/vitis-validation-stencil2d-v0-20260628-2ec05e6`
+- Result: all fourteen validation programs completed with return code 0, `csim=true`, and `csynth=true`; `SobelStencil12x20` reported estimated Fmax 136.99 MHz.
+- Durable repo evidence: `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-28-stencil2d-v0/`
+- Remote-only compatibility note: EC2 Cargo is 1.75, so the remote copy used a Cargo.lock v4-to-v3 downgrade inside the run directory only. The local Rust repo lockfile was not changed.
+
+Non-claims:
+- This is Vitis C simulation and HLS synthesis evidence only.
+- It does not prove board execution, Vivado implementation, place-and-route, post-implementation timing closure, generic stencil lowering, arbitrary `LineBuffer`/`RegFile`, arbitrary reductions, or optimized line-buffer scheduling.
+
+Recommended next slice:
+- Start the frontend/HIR foundation: factor shared loops, memory/effect shapes, scalar expressions, control, diagnostics, and source provenance out of the current feature-specific recognizers before expanding toward FIFO, reductions, generic FSM variants, or broader Spatial stencil support.

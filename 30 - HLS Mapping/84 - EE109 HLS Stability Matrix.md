@@ -145,6 +145,35 @@ bundle used a remote-only lockfile v4-to-v3 downgrade; the local Rust repo
 lockfile was not changed. The `2026-06-27-dram2d-copy` run used the same
 remote-only lockfile adjustment.
 
+Follow-up control, Lab3 frontend/HIR, and Stencil2d runs:
+
+By 2026-06-28, the Rust rewrite had added three more relevant milestones:
+
+- `ControlFsm v0`, represented by `ControlFsm32`, with evidence in
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-28-control-fsm-v0/`.
+- Lab3 convolution frontend/HIR routing for the fixed adapter, with evidence in
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-28-lab3-frontend-hir/`.
+- `Stencil2d v0`, represented by `SobelStencil12x20`, with fourteen-program
+  Vitis `csim_design` and `csynth_design` evidence in
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-28-stencil2d-v0/`.
+
+The `Stencil2d v0` run was executed from Rust commit `2ec05e6` on branch
+`David/rust-ee109-mvp`, using EC2 host
+`[ec2-host — see private/ec2-lane.md]`, Vitis/Vivado 2025.1, target
+`xc7z020-clg400-1`, and 10 ns clock target. All fourteen validation programs
+completed with return code 0, `csim=true`, and `csynth=true`; the new
+`SobelStencil12x20` representative reported an estimated Fmax of 136.99 MHz.
+The remote run again used a remote-only Cargo.lock v4-to-v3 compatibility
+adjustment for Cargo 1.75; the local Rust repo lockfile was not changed.
+
+`Stencil2d v0` covers a narrow Sobel-like rank-2 `Int` stencil: one input DRAM,
+one matching output DRAM, two static 3x3 Sobel LUTs, one row scratch SRAM,
+Lab3-style local-window source classification, top-left zero border, and
+`abs(first) + abs(second)` arithmetic. It still does not claim generic
+`LineBuffer`, `RegFile`, arbitrary `Reduce`, arbitrary `par`, arbitrary
+coefficients, dynamic dimensions, optimized line-buffer scheduling, board
+execution, Vivado implementation, place-and-route, or timing closure.
+
 ## Stable Positive Examples
 
 | Example | Surface covered | Local HLS status | Scala parity status |
@@ -191,8 +220,10 @@ Generated-code hygiene:
 
 ## Current Limitations
 
-- The HLS gate is still a local host-C++ gate. It does not invoke Vitis/Vivado HLS, synthesize RTL, check timing, or validate board integration.
-- For the Rust rewrite, the selected accepted adapters and four reusable
+- The original Scala Spatial HLS gate remains a local host-C++ gate. It does
+  not invoke Vitis/Vivado HLS, synthesize RTL, check timing, or validate board
+  integration.
+- For the Rust rewrite, the selected accepted adapters plus six reusable
   supported-feature representatives now have Vitis `csim_design` and
   `csynth_design` evidence. Board execution, Vivado implementation, timing
   closure, and broad Spatial coverage remain pending.
@@ -203,9 +234,11 @@ Generated-code hygiene:
 
 ## Recommended Next Action
 
-For the Rust rewrite, the next implementation slice should factor shared loop,
-memory, expression, and control structure out of feature-specific recognizers
-before promoting FIFO, reductions, FSM variants, or Lab3 local-window/stencil
-surfaces. Scalar expressions, dense rank-1 scalar multiply, 2-D LUT lookup, and
-rank-2 row-major DRAM copy now have non-lab supported-feature representatives
-with Vitis `csim`/`csynth` evidence.
+For the Rust rewrite, the next implementation slice should start the
+frontend/HIR foundation: factor shared loop, memory, expression, and control
+structure out of feature-specific recognizers before promoting FIFO,
+reductions, FSM variants, generic stencil support, or broader Spatial language
+coverage. Scalar expressions, dense rank-1 scalar multiply, 2-D LUT lookup,
+rank-2 row-major DRAM copy, fixed control FSMs, and the narrow Stencil2d/Sobel
+slice now have non-lab supported-feature representatives with Vitis
+`csim`/`csynth` evidence.
