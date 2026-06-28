@@ -237,6 +237,27 @@ bodies, rank-2 memory reductions, GEMM, fixed-point arithmetic, banking,
 streams, scheduling, board execution, Vivado implementation, place-and-route,
 or timing closure.
 
+Follow-up FIFO semantic-canary run:
+
+On 2026-06-28, the Rust rewrite added `Fifo1dTileScalarMul v0` and re-ran the
+Vitis lane. The validation list now contains 19 programs, adding
+`FifoTileScale32` to the prior eighteen-program MemReduce/MemFold checkpoint.
+All nineteen completed with return code 0, `csim=true`, and `csynth=true`.
+
+Additional repo evidence:
+
+- `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-28-fifo-v0/`
+
+`Fifo1dTileScalarMul v0` covers a narrow Rust-DSL Lab1 Part4-style tile-scale
+shape: one rank-1 DRAM input, one scalar multiplier, one rank-1 DRAM output,
+two loop-local `FIFO<Int>[TILE]` memories, ordered enqueue/dequeue tile
+scaling, and generated `hls::stream<int>` plus stream-depth pragmas. It does
+not claim original Scala `Lab1Part4FIFOExample` source compatibility, generic
+FIFO/streams, AXI stream ports, LIFO, back-pressure modeling, throughput
+optimization, board execution, Vivado implementation, place-and-route, or
+timing closure. The Scala HLS negative row below remains true for the legacy
+Scala backend/source path.
+
 ## Stable Positive Examples
 
 | Example | Surface covered | Local HLS status | Scala parity status |

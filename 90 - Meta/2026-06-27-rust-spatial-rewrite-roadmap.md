@@ -28,14 +28,15 @@ The current `spatial-rs` work should therefore be treated as a tracer slice:
 
 `spatial-rs` currently has accepted fixture adapters for scalar add, dense 1-D DRAM/SRAM multiply, LUTs, one exact FSM, rank-2 copy groundwork, and one direct Lab3 convolution semantic adapter.
 
-Post-18 update: the latest Rust rewrite Vitis checkpoint is the
-2026-06-28 `MemReduceFill v0` / `MemFoldFill v0` run. It validates 18 programs
-through Vitis 2025.1 `csim_design` and `csynth_design`: the original adapter
-baseline, the reusable scalar/dense/LUT/rank-2-copy/control/stencil/scalar-
-reduction/scalar-fold representatives, and the local all-ones
-`MemReduceOnes16` / `MemFoldOnes16` semantic canaries. The memory-reduction
-canaries are not generic Spatial `MemReduce` or `MemFold`, and the original
-Scala Lab2 memory-reduction sources remain unsupported.
+Post-FIFO update: the latest Rust rewrite Vitis checkpoint is the 2026-06-28
+`Fifo1dTileScalarMul v0` run. It validates 19 programs through Vitis 2025.1
+`csim_design` and `csynth_design`: the original adapter baseline, the reusable
+scalar/dense/LUT/rank-2-copy/control/stencil/scalar-reduction/scalar-fold
+representatives, the local all-ones `MemReduceOnes16` / `MemFoldOnes16`
+semantic canaries, and the new `FifoTileScale32` FIFO tile-scale canary. The
+memory-reduction canaries are not generic Spatial `MemReduce` or `MemFold`;
+`FifoTileScale32` is not generic FIFO/stream support; and the original Scala
+Lab1 FIFO and Lab2 memory-reduction sources remain unsupported.
 
 `ScalarExpr v0` is the first reusable supported feature rather than an exact
 fixture adapter. It covers one scalar integer assignment over 1-4 scalar inputs

@@ -72,6 +72,22 @@ The compiler-foundation slice should preserve the current 18-program behavior.
 No new Vitis evidence is required if generated HLS membership and C++ output do
 not change.
 
+## Outcome
+
+The planned order was followed. The classifier/HIR guardrail slice landed
+without changing Vitis membership, then FIFO v0 landed as the narrow
+`Fifo1dTileScalarMul v0` semantic slice with `FifoTileScale32` as the Rust-DSL
+representative. The follow-up EC2 Vitis checkpoint on 2026-06-28 passed all 19
+validation programs with `csim=true` and `csynth=true`; evidence is recorded in
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-28-fifo-v0/`.
+
+Boundary after outcome: FIFO v0 proves narrow Rust-DSL tile-scale FIFO lowering
+to vendor-accepted HLS C++; it still does not claim original Scala
+`Lab1Part4FIFOExample` source compatibility, generic FIFO/streams, AXI stream
+ports, LIFO, back-pressure modeling, `DATAFLOW`, `PIPELINE`, `UNROLL`,
+arbitrary producer/consumer scheduling, board execution, Vivado implementation,
+place-and-route, timing closure, or generic Spatial language coverage.
+
 ## Rationale
 
 The project goal is a Rust compiler for a Spatial-like DSL that emits HLS C++,
