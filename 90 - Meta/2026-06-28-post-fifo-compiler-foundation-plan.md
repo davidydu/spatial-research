@@ -41,7 +41,9 @@ This slice intentionally claims no new Spatial syntax and no new Vitis evidence.
 
 The stage-aware `parse_accel` route is now complete: parser entry now calls the compiler spine and preserves current fail-closed diagnostics across parse, HIR-lowering, and classification failures.
 
-The remaining next slice is to replace string-based candidate exceptions with HIR-recursive feature signals. Only after that should the project design and implement a larger typed `ResolvedHir` pass with symbol IDs, scoped lookups, expression types, loop-domain facts, memory references, and effect summaries.
+The HIR-recursive feature-signal slice is now complete for classification-stage generic unsupported diagnostics: valid-HIR control, FIFO, reduction, local-window, rank-2 DRAM, and parallel markers are routed structurally instead of through source string candidate gates, while source scanning remains fallback for lexer/parser/HIR-construction failures.
+
+The remaining next slice is to design and implement a larger typed `ResolvedHir` pass with symbol IDs, scoped lookups, expression types, loop-domain facts, memory references, and effect summaries.
 
 Suggested semantic diagnostics for that later pass:
 
