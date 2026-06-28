@@ -54,6 +54,13 @@ DRAM input, one matching rank-2 DRAM output, nested static row/column
 `Lab3Part0MatrixCopyRowMajor` adapter now routes through the
 frontend/HIR/classifier path instead of compact-source equality.
 
+`spatial_rs_core::memory::Access` is the first shared checked memory-access
+primitive. It centralizes rank-1/rank-2 positive-shape validation, index-rank
+matching, and row-major C offset rendering for the rank-2 DRAM copy emitter.
+This is an architectural foundation step only; it does not yet provide generic
+effect scheduling, alias analysis, dense loop unfusing, FSM/control lowering,
+stencil lowering, or broad memory lowering.
+
 This proves useful local compiler plumbing:
 
 - checked Rust construction
@@ -125,7 +132,9 @@ Use `accepted fixture adapter` for the current `ProgramKind::LabX...` style case
 7. Keep Lab3 convolution explicitly transitional and opaque until reusable local-window/stencil lowering exists.
 8. Add HLS project artifact generation in dry-run mode: top name, part, clock, kernel/harness paths, and `run_hls.tcl`.
 9. Use the EC2 Vitis lane as a regular gate for every promoted supported-feature slice.
-10. Factor shared loop, memory, expression, and control structure before promoting FIFO, reductions, FSM variants, or Lab3-style performance/synthesis readiness.
+10. Extend the new memory foundation toward checked `Shape`/effect/layout views
+   shared by validation, manifesting, and HLS lowering.
+11. Factor shared loop, memory, expression, and control structure before promoting FIFO, reductions, FSM variants, or Lab3-style performance/synthesis readiness.
 
 ## Guardrails
 
