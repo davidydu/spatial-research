@@ -40,6 +40,13 @@ SRAM tiles, positive static `N`/`TILE` with `N % TILE == 0`, and unit-stride
 tiled load/compute/store. The non-lab `DenseScale64` representative has passed
 local host-C++ and Vitis `csim_design`/`csynth_design`.
 
+Dense 1-D DRAM/SRAM syntax no longer enters HIR as a fused whole-kernel marker.
+The accepted dense path now parses and lowers through generic
+`SequentialForeach`, loop-local SRAM, load, inner `Foreach`, indexed
+assignment, and store nodes before the classifier reconstructs the same checked
+dense adapter/feature programs. This is a frontend/HIR foundation step, not
+generic loop scheduling or arbitrary memory lowering.
+
 `LutLookup v0` is the third reusable supported feature. It covers one 2-D
 integer LUT, scalar bias/row/column inputs, one scalar output, a rectangular
 row-major literal payload, and exactly `out := bias + table[row, col]`. The
@@ -58,8 +65,8 @@ frontend/HIR/classifier path instead of compact-source equality.
 primitive. It centralizes rank-1/rank-2 positive-shape validation, index-rank
 matching, and row-major C offset rendering for the rank-2 DRAM copy emitter.
 This is an architectural foundation step only; it does not yet provide generic
-effect scheduling, alias analysis, dense loop unfusing, FSM/control lowering,
-stencil lowering, or broad memory lowering.
+effect scheduling, alias analysis, FSM/control lowering, stencil lowering, or
+broad memory lowering.
 
 Rank-2 copy is also the first path lowered through a crate-private
 `HlsKernelPlan` before C++ rendering. The plan uses manifest-derived ABI facts
