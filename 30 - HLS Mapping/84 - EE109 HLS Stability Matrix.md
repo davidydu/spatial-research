@@ -174,6 +174,28 @@ Lab3-style local-window source classification, top-left zero border, and
 coefficients, dynamic dimensions, optimized line-buffer scheduling, board
 execution, Vivado implementation, place-and-route, or timing closure.
 
+Follow-up scalar-reduction supported-feature run:
+
+On 2026-06-28, the Rust rewrite added `ScalarReduce v0` as the seventh reusable
+supported feature and re-ran the Vitis lane. The validation list now contains
+the same eight accepted adapters plus `ScalarAffine4`, `ScalarReduceSum16`,
+`DenseScale64`, `LutBiasLookup`, `MatrixCopy4x6`, `ControlFsm32`, and
+`SobelStencil12x20`. All fifteen completed with return code 0, `csim=true`,
+and `csynth=true`.
+
+Additional repo evidence:
+
+- `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-28-scalar-reduce-v0/`
+
+`ScalarReduce v0` covers exactly one scalar `Int` output assigned by
+`out := reduce i in 0..N par P { i }` with static `1 <= N <= 65536`,
+`P == 1`, no inputs, no DRAM ports, and no local memories. It rejects
+output-name collisions with generated HLS temporaries and overflow-sized `N`.
+It still does not claim generic `Reduce`, `Fold`, `MemReduce`, `MemFold`,
+arbitrary reduce bodies, input-DRAM reductions, non-unit `par`, unbounded `Int`
+accumulation, board execution, Vivado implementation, place-and-route, or
+timing closure.
+
 ## Stable Positive Examples
 
 | Example | Surface covered | Local HLS status | Scala parity status |
