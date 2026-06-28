@@ -234,11 +234,12 @@ Generated-code hygiene:
 
 ## Recommended Next Action
 
-For the Rust rewrite, the next implementation slice should start the
-frontend/HIR foundation: factor shared loop, memory, expression, and control
-structure out of feature-specific recognizers before promoting FIFO,
-reductions, FSM variants, generic stencil support, or broader Spatial language
-coverage. Scalar expressions, dense rank-1 scalar multiply, 2-D LUT lookup,
-rank-2 row-major DRAM copy, fixed control FSMs, and the narrow Stencil2d/Sobel
-slice now have non-lab supported-feature representatives with Vitis
-`csim`/`csynth` evidence.
+For the Rust rewrite, the frontend/HIR foundation seam now exists locally:
+shared HIR query helpers, explicit classifier outcome routing, and Lab3 HIR
+shape regression coverage are committed in `c6469ac`. The next implementation
+slice should either split the classifier into smaller feature modules or add the
+next EE109 feature gap using the new query helpers, while keeping HLS emission
+anchored on checked `Program` values. Scalar expressions, dense rank-1 scalar
+multiply, 2-D LUT lookup, rank-2 row-major DRAM copy, fixed control FSMs, and
+the narrow Stencil2d/Sobel slice remain the current non-lab supported-feature
+representatives with Vitis `csim`/`csynth` evidence.

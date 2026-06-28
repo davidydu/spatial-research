@@ -339,3 +339,56 @@ Non-claims:
 
 Recommended next slice:
 - Start the frontend/HIR foundation: factor shared loops, memory/effect shapes, scalar expressions, control, diagnostics, and source provenance out of the current feature-specific recognizers before expanding toward FIFO, reductions, generic FSM variants, or broader Spatial stencil support.
+
+## 2026-06-28 — Rust rewrite frontend/HIR foundation seam
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on `David/rust-ee109-mvp`.
+
+Committed local checkpoint:
+- Commit `c6469ac` — `Add frontend HIR foundation seam`.
+- Added crate-private `hir::query` helpers for exact-one `usize` constants,
+  source-order const values, integer ports, scalar integer ports, memory lookup,
+  and simple read/int expression predicates.
+- Reworked top-level classifier dispatch through explicit local
+  `ClassifierOutcome` values: accepted program, targeted near miss, or no-match
+  fallthrough.
+- Preserved existing diagnostic priority: scalar adapter `E0401` still wins
+  early; scalar expression near misses still outrank later classifiers; LUT
+  only promotes `E0402` as a targeted near miss.
+- Added HIR regression coverage for Lab3 local-window/stencil lowering shape,
+  query helper duplicate-const behavior, memory lookup, and expression
+  predicates.
+- Updated Rust docs and corrected the frontend/HIR foundation plan snippet so
+  it matches the actual scalar-adapter near-miss behavior.
+
+Subagent review:
+- Spec/fail-closed review found no P0/P1 issues. It flagged the exact-one
+  const helper invariant and plan-doc drift; both were fixed before commit.
+- Code-quality review found no P0/P1 issues. It flagged broad query helper
+  names, direct expression-helper coverage, and the untracked query module; all
+  were fixed before commit.
+
+Local verification passed after review fixes:
+- `cargo fmt --check`
+- `cargo test --locked`
+- `cargo clippy --all-targets --locked -- -D warnings`
+- `cargo run -p ee109-examples --locked`
+- `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`
+- `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --out target/vitis-validation-frontend-hir-foundation`
+- `git diff --check`
+- generated-artifact leakage scan for Scala/Chisel/FIRRTL/backend terms
+  returned no matches.
+
+Non-claims:
+- This slice does not add a new Spatial syntax feature, supported-feature
+  representative, or generated HLS C++ surface.
+- It does not add new EC2/Vitis evidence; the Stencil2d v0 fourteen-program
+  Vitis run remains the latest vendor-HLS evidence.
+- `ClassifierOutcome` is transitional while individual classifiers still return
+  diagnostics; future classifier splits should return outcome-like values
+  directly instead of using diagnostic strings as no-match control flow.
+
+Recommended next slice:
+- Use this foundation to split classifier concerns into smaller modules or add
+  the next EE109 feature gap with the new query helpers, keeping HLS emission
+  anchored on checked `Program` values and preserving fail-closed behavior.
