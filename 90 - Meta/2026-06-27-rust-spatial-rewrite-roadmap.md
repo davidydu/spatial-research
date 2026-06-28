@@ -61,6 +61,11 @@ This is an architectural foundation step only; it does not yet provide generic
 effect scheduling, alias analysis, dense loop unfusing, FSM/control lowering,
 stencil lowering, or broad memory lowering.
 
+Rank-2 copy is also the first path lowered through a crate-private
+`HlsKernelPlan` before C++ rendering. The plan uses manifest-derived ABI facts
+and the shared row-major index expression, but it is not yet a generic HLS MIR
+or scheduler.
+
 This proves useful local compiler plumbing:
 
 - checked Rust construction
@@ -134,7 +139,9 @@ Use `accepted fixture adapter` for the current `ProgramKind::LabX...` style case
 9. Use the EC2 Vitis lane as a regular gate for every promoted supported-feature slice.
 10. Extend the new memory foundation toward checked `Shape`/effect/layout views
    shared by validation, manifesting, and HLS lowering.
-11. Factor shared loop, memory, expression, and control structure before promoting FIFO, reductions, FSM variants, or Lab3-style performance/synthesis readiness.
+11. Extend the new HLS plan seam beyond rank-2 copy to dense/LUT/scalar only
+   after exact output-preservation tests are in place.
+12. Factor shared loop, memory, expression, and control structure before promoting FIFO, reductions, FSM variants, or Lab3-style performance/synthesis readiness.
 
 ## Guardrails
 
