@@ -395,3 +395,55 @@ Recommended next slice:
 - Use this foundation to split classifier concerns into smaller modules or add
   the next EE109 feature gap with the new query helpers, keeping HLS emission
   anchored on checked `Program` values and preserving fail-closed behavior.
+
+## 2026-06-28 — Rust rewrite post-ScalarFold classifier cleanup
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Local checkpoint verified:
+- Rust commit `ed1e970` — `Add post-ScalarFold classifier guardrails`.
+- Added guardrails for malformed ScalarReduce syntax, malformed ScalarFold
+  syntax variants, generic fold/reduce/memreduce/memfold fail-closed behavior,
+  fold/reduce lexer/parser shapes, ScalarReduce reserved HLS temporary-name
+  collisions, ScalarFold manifest metadata, scalar-reduce oracle bounds, and
+  completeness of the latest sixteen-kernel ScalarFold Vitis evidence summary.
+- Verified the two behavior-changing guardrails against the old behavior:
+  malformed ScalarReduce syntax failed with `spatial:E0202` before the parser
+  fix and passes with `spatial:E0002` after it; ScalarReduce outputs named
+  `expected`/`actual`/`test` failed with checked-IR `spatial:E0300` before the
+  classifier fix and pass with targeted `spatial:E0408` after it.
+- Moved only ScalarReduce/ScalarFold classification and their targeted
+  diagnostics into private `classifier::reductions`, leaving
+  `classifier.rs` as the public module root and leaving HLS emission untouched.
+- Tightened the captured ScalarFold Vitis evidence test so the summary must
+  include all sixteen `validation_programs()` kernels in order, each marked
+  passed, with sidecar Tcl, Vitis log, and csynth report files present.
+
+Subagent limitation:
+- A GPT-5.5 xhigh implementation worker started Task 1 but hit the Codex usage
+  limit before returning a final report. Its partial patch was reviewed in the
+  main session, fixed where needed, and verified locally.
+
+Local verification passed:
+- `cargo fmt --all -- --check`
+- `cargo test --locked`
+- `cargo test -p spatial-rs-core --locked`
+- `cargo test -p spatial-rs-hls --locked latest_scalar_fold_vitis_evidence_summary_is_complete`
+- `cargo clippy --all-targets --locked -- -D warnings`
+- `cargo run -p ee109-examples --locked --bin ee109-examples`
+- `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`
+- `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-refactor-plan`
+- `git diff --check`
+
+Non-claims:
+- This slice does not add a new Spatial feature, supported-feature
+  representative, validation-program member, or Vitis run.
+- It does not prove any new HLS behavior beyond the already captured
+  ScalarFold v0 EC2 Vitis 2025.1 `csim_design`/`csynth_design` evidence.
+
+Recommended next slice:
+- Commit the Rust branch and vault note, then choose the next EE109 feature
+  gap. The likely next feature decision is whether to unblock FIFO/stream
+  surfaces or memory reductions first, while continuing to factor shared HIR
+  facts out of the monolithic classifier.
