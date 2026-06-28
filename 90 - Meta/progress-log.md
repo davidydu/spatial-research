@@ -263,3 +263,33 @@ Remaining work for next session:
 - Apply or reject the 17 citation-range corrections listed in `[[30 - Adversarial Review]]`.
 - Resolve top Phase 3 HLS questions, starting with FMA fused/unfused semantics, unbiased rounding determinism, FIFO/LIFO back-pressure, and host ABI replacement.
 - Decide whether to archive per-topic open-question files after updating any links that still target them.
+
+## 2026-06-28 — Rust rewrite Lab3 HLS stencil-plan foundation
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on `David/rust-ee109-mvp`.
+
+Completed a narrow Lab3 backend foundation slice:
+- Added `docs/superpowers/plans/2026-06-28-lab3-stencil-foundation.md`.
+- Kept `Lab3Part1Convolution` as a fixed EE109 fixture adapter, not a generic stencil feature.
+- Added crate-private `Stencil2dSobel` HLS body planning for Lab3: DRAM ports, dimensions, `lineOut`, `kh`/`kv` LUT names and values, and row-major index facts.
+- Routed Lab3 HLS emission through the new plan while preserving the existing emitted C++ byte-for-byte.
+- Added plan extraction, row-major canary, stable kernel snapshot, and full 256-pixel host harness/oracle tests.
+- Updated Rust repo docs to call Lab3 a fixed stencil-plan fixture adapter and to keep generic `LineBuffer`, `RegFile`, `Reduce`, `par`, `mux`, and `abs` support fail-closed.
+
+Local verification passed:
+- `cargo fmt --check`
+- `cargo test --locked`
+- `cargo clippy --all-targets --locked -- -D warnings`
+- `cargo run -p ee109-examples --locked`
+- `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`
+- `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --out target/vitis-validation-lab3-stencil-foundation`
+- `git diff --check`
+- generated C++ leakage scan for legacy Scala/Chisel/backend terms returned no matches.
+
+Subagent review:
+- Spec review: compliant, no gaps or overclaims.
+- Code-quality review: approved. One P3 note remains: current Lab3 row-major expressions are validated as plan canaries while the byte-preserving renderer still emits symbolic `COLS`/`KW` expressions. Next slice should either rename them explicitly as canaries or add byte-preserving symbolic render expressions and consume those directly.
+
+Recommended next slice:
+- Replace the remaining Lab3 compact-source parser island with a narrow frontend/HIR/classifier route for the canonical Lab3 convolution.
+- Do not promote generic `LineBuffer`, `RegFile`, `Reduce`, `par`, `mux`, or `abs` support until non-lab representatives and fresh HLS evidence exist.
