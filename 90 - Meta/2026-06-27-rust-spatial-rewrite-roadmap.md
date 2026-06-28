@@ -46,6 +46,14 @@ row-major literal payload, and exactly `out := bias + table[row, col]`. The
 non-lab `LutBiasLookup` representative has passed local host-C++ and Vitis
 `csim_design`/`csynth_design`.
 
+`Dram2dCopy v0` is the fourth reusable supported feature. It covers one rank-2
+DRAM input, one matching rank-2 DRAM output, nested static row/column
+`foreach` loops, and exactly `out[row, col] := in[row, col]`. The non-lab
+`MatrixCopy4x6` representative has passed local host-C++ and Vitis
+`csim_design`/`csynth_design`, and the original
+`Lab3Part0MatrixCopyRowMajor` adapter now routes through the
+frontend/HIR/classifier path instead of compact-source equality.
+
 This proves useful local compiler plumbing:
 
 - checked Rust construction
@@ -54,13 +62,15 @@ This proves useful local compiler plumbing:
 - HLS-style C++ emission
 - local host-C++ harness compile/run
 - Vitis C simulation and HLS synthesis for the current adapter baseline,
-  `ScalarExpr v0`, `Dense1dScalarMul v0`, and `LutLookup v0`
+  `ScalarExpr v0`, `Dense1dScalarMul v0`, `LutLookup v0`, and `Dram2dCopy v0`
 - explicit rejection of unsupported forms
 
 It does not yet prove:
 
 - general Spatial parsing
 - reusable lowering for `LineBuffer`, `RegFile`, `Reduce`, `par`, FIFO, or GEMM
+- generic memory/effect lowering beyond the selected dense and rank-2 copy
+  shapes
 - timing, resource, RTL, or board readiness
 
 ## Architecture Target
@@ -111,7 +121,7 @@ Use `accepted fixture adapter` for the current `ProgramKind::LabX...` style case
 3. Add a real frontend path: tokenization, AST, source spans, and typed HIR for scalar ports, LUTs, dense 1-D DRAM/SRAM, expressions, loops, loads, and stores.
 4. Add a first-class EE109 subset classifier that consumes HIR and produces checked semantic modules or fixture adapters.
 5. Decouple semantic feature identity from lab kernel names before adding non-lab semantic-equivalent tests.
-6. Route scalar/LUT/dense accepted adapters through `AST -> HIR -> EE109 subset classifier -> checked Program` while keeping current host-C++ outputs stable.
+6. Route scalar/LUT/dense/rank-2 copy accepted adapters through `AST -> HIR -> EE109 subset classifier -> checked Program` while keeping current host-C++ outputs stable.
 7. Keep Lab3 convolution explicitly transitional and opaque until reusable local-window/stencil lowering exists.
 8. Add HLS project artifact generation in dry-run mode: top name, part, clock, kernel/harness paths, and `run_hls.tcl`.
 9. Use the EC2 Vitis lane as a regular gate for every promoted supported-feature slice.

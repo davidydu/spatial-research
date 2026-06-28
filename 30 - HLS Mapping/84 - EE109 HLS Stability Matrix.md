@@ -115,11 +115,35 @@ still excludes generic table/memory indexing, DRAM, multiple LUTs, computed
 indices, swapped row/column roles, arbitrary scalar expressions around the
 lookup, runtime bounds checks, dynamic dimensions, and non-`Int` element types.
 
+Follow-up rank-2 copy supported-feature run:
+
+On 2026-06-27, the Rust rewrite added `Dram2dCopy v0` as the fourth reusable
+supported feature and re-ran the Vitis lane. The validation list now contains
+the same eight accepted adapters plus `ScalarAffine4`, `DenseScale64`,
+`LutBiasLookup`, and `MatrixCopy4x6`, a non-lab representative for rank-2
+row-major DRAM copy. All twelve completed with return code 0, `csim=true`, and
+`csynth=true`.
+
+Additional repo evidence:
+
+- `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-27-dram2d-copy/`
+
+`Dram2dCopy v0` covers one rank-2 `Dram<Int>[ROWS, COLS]` input, one matching
+rank-2 output, nested static `foreach` row/column loops, and exactly
+`out[row, col] := in[row, col]`. It still excludes generic memory/effect
+lowering, rank polymorphism, swapped or computed indices, mismatched shapes,
+extra ports/statements, aliasing/in-place claims, stencils, reductions, `par`,
+dynamic dimensions, and non-`Int` element types. The original
+`Lab3Part0MatrixCopyRowMajor` adapter now routes through the
+frontend/HIR/classifier path; `Lab3Part1Convolution` remains an explicit
+opaque adapter.
+
 The `2026-06-27-runner` replay used the repo-local `run-vitis-validation`
 command. It defaults to plan-only sidecar generation and requires `--execute`
 to run Vitis. The EC2 host's system Cargo was 1.75.0, so the copied remote
 bundle used a remote-only lockfile v4-to-v3 downgrade; the local Rust repo
-lockfile was not changed.
+lockfile was not changed. The `2026-06-27-dram2d-copy` run used the same
+remote-only lockfile adjustment.
 
 ## Stable Positive Examples
 
@@ -168,6 +192,10 @@ Generated-code hygiene:
 ## Current Limitations
 
 - The HLS gate is still a local host-C++ gate. It does not invoke Vitis/Vivado HLS, synthesize RTL, check timing, or validate board integration.
+- For the Rust rewrite, the selected accepted adapters and four reusable
+  supported-feature representatives now have Vitis `csim_design` and
+  `csynth_design` evidence. Board execution, Vivado implementation, timing
+  closure, and broad Spatial coverage remain pending.
 - The Lab1Part2 memory lowering is a narrow structural slice, not a general Spatial memory backend. It accepts the selected fixed shape: `N = 32`, `tileSize = 16`, one input DRAM, one output DRAM, two 16-element SRAM tiles, one scalar integer multiplier, and dense unit-stride transfers.
 - The Lab1Part2 generated harness uses an independent vector oracle, but the source initialization is currently fixed to the selected EE109 shape `src(i) = i % 256`.
 - FIFO, reductions, FSMs, RegFile, LineBuffer, 2-D DRAM shapes, dynamic sizes, non-unit strides, and non-`Int` element types remain unsupported in HLS mode and should stay fail-closed until selected intentionally.
@@ -178,6 +206,6 @@ Generated-code hygiene:
 For the Rust rewrite, the next implementation slice should factor shared loop,
 memory, expression, and control structure out of feature-specific recognizers
 before promoting FIFO, reductions, FSM variants, or Lab3 local-window/stencil
-surfaces. Scalar expressions, dense rank-1 scalar multiply, and 2-D LUT lookup
-now have non-lab supported-feature representatives with Vitis `csim`/`csynth`
-evidence.
+surfaces. Scalar expressions, dense rank-1 scalar multiply, 2-D LUT lookup, and
+rank-2 row-major DRAM copy now have non-lab supported-feature representatives
+with Vitis `csim`/`csynth` evidence.
