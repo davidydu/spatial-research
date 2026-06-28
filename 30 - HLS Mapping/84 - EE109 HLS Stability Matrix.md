@@ -218,6 +218,25 @@ It requires static `1 <= N <= 65536`, `TILE > 0`, `N % TILE == 0`, and
 non-unit `par`, unbounded `Int` accumulation, board execution, Vivado
 implementation, place-and-route, or timing closure.
 
+Follow-up memory-reduction semantic-canary run:
+
+On 2026-06-28, the Rust rewrite added the local all-ones `MemReduceFill v0` and
+`MemFoldFill v0` semantic canaries and re-ran the Vitis lane. The validation
+list now contains 18 programs, adding `MemReduceOnes16` and `MemFoldOnes16` to
+the prior sixteen-program ScalarFold checkpoint. All eighteen completed with
+return code 0, `csim=true`, and `csynth=true`.
+
+Additional repo evidence:
+
+- `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-28-mem-reductions-v0/`
+
+`MemReduceFill v0` and `MemFoldFill v0` cover narrow Rust-DSL all-ones local
+SRAM accumulation shapes for the simple Lab2 memory-reduction behaviors. They
+do not claim original Scala source compatibility, arbitrary reducer/fold
+bodies, rank-2 memory reductions, GEMM, fixed-point arithmetic, banking,
+streams, scheduling, board execution, Vivado implementation, place-and-route,
+or timing closure.
+
 ## Stable Positive Examples
 
 | Example | Surface covered | Local HLS status | Scala parity status |
@@ -267,27 +286,24 @@ Generated-code hygiene:
 - The original Scala Spatial HLS gate remains a local host-C++ gate. It does
   not invoke Vitis/Vivado HLS, synthesize RTL, check timing, or validate board
   integration.
-- For the Rust rewrite, the selected accepted adapters plus eight reusable
-  supported-feature representatives now have Vitis `csim_design` and
-  `csynth_design` evidence. Board execution, Vivado implementation, timing
-  closure, and broad Spatial coverage remain pending.
+- For the Rust rewrite, the selected accepted adapters, eight reusable
+  supported-feature representatives, and two local memory-reduction canary
+  representatives now have Vitis `csim_design` and `csynth_design` evidence.
+  Board execution, Vivado implementation, timing closure, and broad Spatial
+  coverage remain pending.
 - The Lab1Part2 memory lowering is a narrow structural slice, not a general Spatial memory backend. It accepts the selected fixed shape: `N = 32`, `tileSize = 16`, one input DRAM, one output DRAM, two 16-element SRAM tiles, one scalar integer multiplier, and dense unit-stride transfers.
 - The Lab1Part2 generated harness uses an independent vector oracle, but the source initialization is currently fixed to the selected EE109 shape `src(i) = i % 256`.
-- FIFO, generic reductions/folds, memory reductions/folds, generic FSMs,
-  generic RegFile/LineBuffer lowering, dynamic sizes, non-unit strides, and
-  non-`Int` element types remain unsupported in HLS mode and should stay
+- FIFO, generic reductions/folds, generic memory reductions/folds, generic
+  FSMs, generic RegFile/LineBuffer lowering, dynamic sizes, non-unit strides,
+  and non-`Int` element types remain unsupported in HLS mode and should stay
   fail-closed until selected intentionally.
 - The Scala runs still emit the existing `libisl appears to be missing` warning. That warning does not block these local regression results, but it is separate from vendor HLS readiness.
 
 ## Recommended Next Action
 
-For the Rust rewrite, the frontend/HIR foundation seam now exists locally:
-shared HIR query helpers, explicit classifier outcome routing, and Lab3 HIR
-shape regression coverage are committed in `c6469ac`. The next implementation
-slice should split the classifier into smaller feature modules and start
-factoring shared reduction/fold, loop, memory, and expression structure, while
-keeping HLS emission anchored on checked `Program` values. Scalar expressions,
-dense rank-1 scalar multiply, 2-D LUT lookup, rank-2 row-major DRAM copy, fixed
-control FSMs, the narrow Stencil2d/Sobel slice, `ScalarReduce v0`, and
-`ScalarFold v0` remain the current non-lab supported-feature representatives
-with Vitis `csim`/`csynth` evidence.
+For the Rust rewrite, the post-18 next action is one behavior-preserving
+classifier/HIR guardrail slice followed by FIFO v0. The guardrail slice should
+split the classifier into smaller feature modules and factor shared loop,
+memory, and expression structure while preserving the 18-program HLS surface.
+FIFO v0 should then be implemented narrowly with real `hls::stream` emission
+and a fresh 19-program Vitis checkpoint. GEMM/fixed-point should wait.

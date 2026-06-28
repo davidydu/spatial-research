@@ -28,6 +28,15 @@ The current `spatial-rs` work should therefore be treated as a tracer slice:
 
 `spatial-rs` currently has accepted fixture adapters for scalar add, dense 1-D DRAM/SRAM multiply, LUTs, one exact FSM, rank-2 copy groundwork, and one direct Lab3 convolution semantic adapter.
 
+Post-18 update: the latest Rust rewrite Vitis checkpoint is the
+2026-06-28 `MemReduceFill v0` / `MemFoldFill v0` run. It validates 18 programs
+through Vitis 2025.1 `csim_design` and `csynth_design`: the original adapter
+baseline, the reusable scalar/dense/LUT/rank-2-copy/control/stencil/scalar-
+reduction/scalar-fold representatives, and the local all-ones
+`MemReduceOnes16` / `MemFoldOnes16` semantic canaries. The memory-reduction
+canaries are not generic Spatial `MemReduce` or `MemFold`, and the original
+Scala Lab2 memory-reduction sources remain unsupported.
+
 `ScalarExpr v0` is the first reusable supported feature rather than an exact
 fixture adapter. It covers one scalar integer assignment over 1-4 scalar inputs
 with nonnegative literals, `+`, `*`, and parentheses. The non-lab
@@ -80,14 +89,17 @@ This proves useful local compiler plumbing:
 - independent oracles
 - HLS-style C++ emission
 - local host-C++ harness compile/run
-- Vitis C simulation and HLS synthesis for the current adapter baseline,
-  `ScalarExpr v0`, `Dense1dScalarMul v0`, `LutLookup v0`, and `Dram2dCopy v0`
+- Vitis C simulation and HLS synthesis for the original adapter baseline,
+  `ScalarExpr v0`, `Dense1dScalarMul v0`, `LutLookup v0`, `Dram2dCopy v0`,
+  `ControlFsm v0`, `Stencil2d v0`, `ScalarReduce v0`, `ScalarFold v0`, and
+  the local `MemReduceFill v0` / `MemFoldFill v0` canaries
 - explicit rejection of unsupported forms
 
 It does not yet prove:
 
 - general Spatial parsing
-- reusable lowering for `LineBuffer`, `RegFile`, `Reduce`, `par`, FIFO, or GEMM
+- reusable lowering for generic `LineBuffer`, `RegFile`, generic reductions,
+  generic memory folds/reductions, `par`, FIFO/streams, fixed-point, or GEMM
 - generic memory/effect lowering beyond the selected dense and rank-2 copy
   shapes
 - timing, resource, RTL, or board readiness
@@ -134,6 +146,15 @@ Use `accepted fixture adapter` for the current `ProgramKind::LabX...` style case
 10. HLS performance surface: `PIPELINE`, `UNROLL`, `ARRAY_PARTITION`, vector ports, project Tcl, and report parsing.
 
 ## Near-Term Manager Plan
+
+Post-18 decision: refresh stale docs, then do one behavior-preserving
+classifier/HIR guardrail slice before FIFO v0. FIFO should be the next
+user-visible EE109-facing feature, but only as a narrow local FIFO slice with
+real `hls::stream` emission and fresh 19-program Vitis evidence. GEMM and
+fixed-point should wait until FIFO and the classifier/module boundaries are
+stable.
+
+The already-completed foundation items below remain useful historical context:
 
 1. Reword repo docs so they describe the Rust rewrite correctly and stop overclaiming fixture adapters as general support.
 2. Add a source model for `parse_accel(&str)`: source id, byte ranges, line/column lookup, and diagnostic labels. Keep `macro_rules! accel` on `stringify!` until a proc-macro is worth its cost.
