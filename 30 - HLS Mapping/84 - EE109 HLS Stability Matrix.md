@@ -196,6 +196,28 @@ arbitrary reduce bodies, input-DRAM reductions, non-unit `par`, unbounded `Int`
 accumulation, board execution, Vivado implementation, place-and-route, or
 timing closure.
 
+Follow-up scalar-fold supported-feature run:
+
+On 2026-06-28, the Rust rewrite added `ScalarFold v0` as the eighth reusable
+supported feature and re-ran the Vitis lane. The validation list now contains
+the same eight accepted adapters plus `ScalarAffine4`, `ScalarReduceSum16`,
+`ScalarFoldTileSum32`, `DenseScale64`, `LutBiasLookup`, `MatrixCopy4x6`,
+`ControlFsm32`, and `SobelStencil12x20`. All sixteen completed with return
+code 0, `csim=true`, and `csynth=true`.
+
+Additional repo evidence:
+
+- `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-28-scalar-fold-v0/`
+
+`ScalarFold v0` covers exactly one rank-1 `Dram<Int>[N]` input and one scalar
+`Int` output assigned by a tiled fold around a rank-1 indexed reduction:
+`out := fold outer in 0..N step TILE { reduce inner in 0..TILE par P { src[outer + inner] } }`.
+It requires static `1 <= N <= 65536`, `TILE > 0`, `N % TILE == 0`, and
+`P == 1`. It still does not claim generic `Fold`, generic `Reduce`,
+`MemReduce`, `MemFold`, arbitrary bodies, tail tiles, rank-2 inputs,
+non-unit `par`, unbounded `Int` accumulation, board execution, Vivado
+implementation, place-and-route, or timing closure.
+
 ## Stable Positive Examples
 
 | Example | Surface covered | Local HLS status | Scala parity status |
@@ -245,13 +267,16 @@ Generated-code hygiene:
 - The original Scala Spatial HLS gate remains a local host-C++ gate. It does
   not invoke Vitis/Vivado HLS, synthesize RTL, check timing, or validate board
   integration.
-- For the Rust rewrite, the selected accepted adapters plus six reusable
+- For the Rust rewrite, the selected accepted adapters plus eight reusable
   supported-feature representatives now have Vitis `csim_design` and
   `csynth_design` evidence. Board execution, Vivado implementation, timing
   closure, and broad Spatial coverage remain pending.
 - The Lab1Part2 memory lowering is a narrow structural slice, not a general Spatial memory backend. It accepts the selected fixed shape: `N = 32`, `tileSize = 16`, one input DRAM, one output DRAM, two 16-element SRAM tiles, one scalar integer multiplier, and dense unit-stride transfers.
 - The Lab1Part2 generated harness uses an independent vector oracle, but the source initialization is currently fixed to the selected EE109 shape `src(i) = i % 256`.
-- FIFO, reductions, FSMs, RegFile, LineBuffer, 2-D DRAM shapes, dynamic sizes, non-unit strides, and non-`Int` element types remain unsupported in HLS mode and should stay fail-closed until selected intentionally.
+- FIFO, generic reductions/folds, memory reductions/folds, generic FSMs,
+  generic RegFile/LineBuffer lowering, dynamic sizes, non-unit strides, and
+  non-`Int` element types remain unsupported in HLS mode and should stay
+  fail-closed until selected intentionally.
 - The Scala runs still emit the existing `libisl appears to be missing` warning. That warning does not block these local regression results, but it is separate from vendor HLS readiness.
 
 ## Recommended Next Action
@@ -259,9 +284,10 @@ Generated-code hygiene:
 For the Rust rewrite, the frontend/HIR foundation seam now exists locally:
 shared HIR query helpers, explicit classifier outcome routing, and Lab3 HIR
 shape regression coverage are committed in `c6469ac`. The next implementation
-slice should either split the classifier into smaller feature modules or add the
-next EE109 feature gap using the new query helpers, while keeping HLS emission
-anchored on checked `Program` values. Scalar expressions, dense rank-1 scalar
-multiply, 2-D LUT lookup, rank-2 row-major DRAM copy, fixed control FSMs, and
-the narrow Stencil2d/Sobel slice remain the current non-lab supported-feature
-representatives with Vitis `csim`/`csynth` evidence.
+slice should split the classifier into smaller feature modules and start
+factoring shared reduction/fold, loop, memory, and expression structure, while
+keeping HLS emission anchored on checked `Program` values. Scalar expressions,
+dense rank-1 scalar multiply, 2-D LUT lookup, rank-2 row-major DRAM copy, fixed
+control FSMs, the narrow Stencil2d/Sobel slice, `ScalarReduce v0`, and
+`ScalarFold v0` remain the current non-lab supported-feature representatives
+with Vitis `csim`/`csynth` evidence.
