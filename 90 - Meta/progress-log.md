@@ -496,3 +496,61 @@ Recommended next slice:
 - Implement the first crate-private `hir::resolved` skeleton with focused unit
   tests only, then run the full behavior-preservation gate before any
   classifier migration.
+
+## 2026-06-29 — Rust rewrite 20-program EC2 Vitis checkpoint
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Vendor-HLS checkpoint completed:
+- Rust commit under test: `7a16a23` — `Add rank-2 tiled int scale feature`.
+- EC2 host: `[ec2-host — see private/ec2-lane.md]`
+  (`ip-172-31-37-7`), using Vitis/Vivado 2025.1 through
+  `vitis-run --mode hls --tcl`.
+- The current instance exposes `vitis-run`, not a standalone `vitis_hls`
+  binary. This matches the repo runner and the prior smoke-check boundary.
+- Synced the current Rust checkout to
+  `/home/ubuntu/spatial-rs-runs/rank2-tiled-int-scale-20260629/spatial-rs`.
+- Remote plan-only validation built on EC2 and emitted 20 sidecars, including
+  `MatrixTileScale4x6`.
+- Remote execute validation passed all 20 programs with return code 0,
+  `csim=true`, and `csynth=true`.
+- New durable repo evidence:
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-29-rank2-tiled-int-scale/`.
+
+New feature evidence:
+- `MatrixTileScale4x6` is now Vitis-proven as the first
+  `Dense2dTileScalarMul v0` representative.
+- Vitis log evidence: `PASS MatrixTileScale4x6`; estimated Fmax 122.68 MHz.
+- Vitis report evidence: target `xc7z020-clg400-1`, 10 ns clock target,
+  estimated clock 8.151 ns, latency 43 cycles.
+
+Local repo evidence updates:
+- Added README, summary, logs, reports, and sidecar Tcl files for the
+  20-program checkpoint.
+- Added captured-evidence parser/completeness tests for the new directory.
+- Updated repo-local architecture, fixture-matrix, and MVP-plan docs.
+- Updated this vault matrix:
+  `30 - HLS Mapping/84 - EE109 HLS Stability Matrix.md`.
+
+Verification run in this checkpoint:
+- EC2: `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-rank2-tiled-int-scale-20260629-plan`
+- EC2: `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --out target/vitis-validation-rank2-tiled-int-scale-20260629`
+- Local: `cargo test --locked -p spatial-rs-hls rank2_tiled_int_scale`
+- Local: `cargo fmt --all -- --check`
+- Local: `cargo test --locked -p spatial-rs-hls --test vitis_validation`
+- Local: `cargo test --locked`
+- Local: `cargo clippy --all-targets --locked -- -D warnings`
+- Local: `git diff --check`
+
+Non-claims:
+- This proves Vitis C simulation and HLS synthesis only for the exact
+  20-program validation set.
+- It does not claim board execution, Vivado implementation, place-and-route,
+  timing closure, generic rank-2 tiling, GEMM, fixed-point arithmetic, tail
+  tiles, or Scala source compatibility.
+
+Recommended next slice:
+- Build one fixed-shape rank-2 accumulation canary on top of
+  `Dense2dTileScalarMul v0` before attempting fixed-point GEMM or tail-tile
+  generalization.

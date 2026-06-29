@@ -3,7 +3,7 @@ type: hls-mapping
 construct: ee109-hls-stability-matrix
 category: rework
 status: current
-date: 2026-06-25
+date: 2026-06-29
 stage: 1D
 depends_on:
   - "[[80 - Stage1 EE109 HLS Expansion Plan]]"
@@ -258,6 +258,27 @@ optimization, board execution, Vivado implementation, place-and-route, or
 timing closure. The Scala HLS negative row below remains true for the legacy
 Scala backend/source path.
 
+Follow-up rank-2 tiled int scale run:
+
+On 2026-06-29, the Rust rewrite added `Dense2dTileScalarMul v0` and re-ran
+the Vitis lane. The validation list now contains 20 programs, adding
+`MatrixTileScale4x6` to the prior nineteen-program FIFO checkpoint. All twenty
+completed with return code 0, `csim=true`, and `csynth=true`.
+
+Additional repo evidence:
+
+- `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-29-rank2-tiled-int-scale/`
+
+`Dense2dTileScalarMul v0` covers a narrow Rust-DSL rank-2 tiled local-SRAM
+integer scale shape: one rank-2 input DRAM, one scalar multiplier, one matching
+rank-2 output DRAM, two rank-2 SRAM tiles, exact row/column tile loops, and
+load/compute/store phases. The `MatrixTileScale4x6` representative reported
+`PASS MatrixTileScale4x6`, an estimated Fmax of 122.68 MHz, and an estimated
+clock of 8.151 ns. This evidence does not claim GEMM, fixed-point arithmetic,
+tail tiles, generic rank-2 tiling, arbitrary local-memory programs, Scala
+source compatibility, board execution, Vivado implementation, place-and-route,
+or timing closure.
+
 ## Stable Positive Examples
 
 | Example | Surface covered | Local HLS status | Scala parity status |
@@ -307,7 +328,7 @@ Generated-code hygiene:
 - The original Scala Spatial HLS gate remains a local host-C++ gate. It does
   not invoke Vitis/Vivado HLS, synthesize RTL, check timing, or validate board
   integration.
-- For the Rust rewrite, the selected accepted adapters, eight reusable
+- For the Rust rewrite, the selected accepted adapters, ten reusable
   supported-feature representatives, and two local memory-reduction canary
   representatives now have Vitis `csim_design` and `csynth_design` evidence.
   Board execution, Vivado implementation, timing closure, and broad Spatial
@@ -322,9 +343,8 @@ Generated-code hygiene:
 
 ## Recommended Next Action
 
-For the Rust rewrite, the post-18 next action is one behavior-preserving
-classifier/HIR guardrail slice followed by FIFO v0. The guardrail slice should
-split the classifier into smaller feature modules and factor shared loop,
-memory, and expression structure while preserving the 18-program HLS surface.
-FIFO v0 should then be implemented narrowly with real `hls::stream` emission
-and a fresh 19-program Vitis checkpoint. GEMM/fixed-point should wait.
+For the Rust rewrite, the next action is to choose the next GEMM precursor on
+top of `Dense2dTileScalarMul v0`: a fixed-shape rank-2 accumulation canary
+before fixed-point, tail tiles, or broad GEMM source compatibility. Keep FIFO,
+reduction, and stencil surfaces as regression anchors, and rerun Vitis only
+when generated HLS C++ or validation membership changes.
