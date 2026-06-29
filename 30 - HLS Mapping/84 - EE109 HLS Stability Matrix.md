@@ -304,6 +304,26 @@ arithmetic, tail/min bounds, K tiling, buffered `MemFold`, `par`, generic
 GEMM, board execution, Vivado implementation, place-and-route, or timing
 closure.
 
+Follow-up rank-2 tiled MemFold-style local checkpoint:
+
+On 2026-06-29, the Rust rewrite added `Dense2dTileMemFold v0` as a fixed-shape
+Rust-DSL `Int` source-shape GEMM precursor. The validation list now contains
+22 programs, adding `MatrixTileMemFold4x6x5` to the prior twenty-one-program
+rank-2 dot-accum checkpoint. This checkpoint has local host-C++ harness
+coverage and Vitis dry-run/plan-only sidecar coverage, but it has not yet been
+run through EC2 Vitis execution.
+
+`Dense2dTileMemFold v0` covers three rank-2 input DRAMs `lhs[ROWS,K]`,
+`rhs[K,COLS]`, and `cin[ROWS,COLS]`, one output DRAM `out[ROWS,COLS]`, four
+SRAM tiles, C preload into `c_tile`, a `partial_tile = lhs_tile * rhs_tile`
+phase, `c_tile += partial_tile` over one static K loop, and row-major flattened
+HLS offsets. This moves closer to the EE109 Lab2 GEMM `tileC_sram.buffer` /
+`MemFold` lifecycle, but it does not claim original Scala `Lab2Part5GEMM` or
+`Lab2Part6GEMM` source compatibility, generic Spatial `MemFold`, fixed-point
+arithmetic, tail/min bounds, K tiling, `par`, banking, performance scheduling,
+EC2 Vitis `csim_design`/`csynth_design`, board execution, Vivado
+implementation, place-and-route, or timing closure.
+
 ## Stable Positive Examples
 
 | Example | Surface covered | Local HLS status | Scala parity status |
@@ -355,9 +375,11 @@ Generated-code hygiene:
   integration.
 - For the Rust rewrite, the selected accepted adapters, eleven reusable
   supported-feature representatives, and two local memory-reduction canary
-  representatives now have Vitis `csim_design` and `csynth_design` evidence.
-  Board execution, Vivado implementation, timing closure, and broad Spatial
-  coverage remain pending.
+  representatives have Vitis `csim_design` and `csynth_design` evidence through
+  the 21-program dot-accum checkpoint. The newer `Dense2dTileMemFold v0`
+  representative is local host-C++ and Vitis plan-only pending fresh EC2 Vitis
+  execution. Board execution, Vivado implementation, timing closure, and broad
+  Spatial coverage remain pending.
 - The Lab1Part2 memory lowering is a narrow structural slice, not a general Spatial memory backend. It accepts the selected fixed shape: `N = 32`, `tileSize = 16`, one input DRAM, one output DRAM, two 16-element SRAM tiles, one scalar integer multiplier, and dense unit-stride transfers.
 - The Lab1Part2 generated harness uses an independent vector oracle, but the source initialization is currently fixed to the selected EE109 shape `src(i) = i % 256`.
 - FIFO, generic reductions/folds, generic memory reductions/folds, generic
@@ -368,9 +390,8 @@ Generated-code hygiene:
 
 ## Recommended Next Action
 
-For the Rust rewrite, the next action is to choose the next GEMM precursor on
-top of `Dense2dTileDotAccum v0`: fixed-point arithmetic, tail/min bounds, a
-narrow buffered `MemFold` tile, or a controlled `par` variant. Keep FIFO,
-reduction, stencil, rank-2 tile-scale, and dot-accum surfaces as regression
-anchors, and rerun Vitis only when generated HLS C++ or validation membership
-changes.
+For the Rust rewrite, the next action is to verify the new
+`Dense2dTileMemFold v0` checkpoint locally and, if desired, promote it with a
+fresh 22-program EC2 Vitis run. After that, the next GEMM feature slice should
+be narrow `FixPt[TRUE,_24,_8]` support on top of the fixed-shape C-preload /
+partial-tile fold path. Tail/min bounds and controlled `par` should follow.
