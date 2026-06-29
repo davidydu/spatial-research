@@ -304,14 +304,15 @@ arithmetic, tail/min bounds, K tiling, buffered `MemFold`, `par`, generic
 GEMM, board execution, Vivado implementation, place-and-route, or timing
 closure.
 
-Follow-up rank-2 tiled MemFold-style local checkpoint:
+Follow-up rank-2 tiled MemFold-style checkpoint:
 
 On 2026-06-29, the Rust rewrite added `Dense2dTileMemFold v0` as a fixed-shape
 Rust-DSL `Int` source-shape GEMM precursor. The validation list now contains
 22 programs, adding `MatrixTileMemFold4x6x5` to the prior twenty-one-program
 rank-2 dot-accum checkpoint. This checkpoint has local host-C++ harness
-coverage and Vitis dry-run/plan-only sidecar coverage, but it has not yet been
-run through EC2 Vitis execution.
+coverage and was later included in the 23-program EC2 Vitis execution run
+recorded under
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-29-fixpt-memfold/`.
 
 `Dense2dTileMemFold v0` covers three rank-2 input DRAMs `lhs[ROWS,K]`,
 `rhs[K,COLS]`, and `cin[ROWS,COLS]`, one output DRAM `out[ROWS,COLS]`, four
@@ -320,9 +321,38 @@ phase, `c_tile += partial_tile` over one static K loop, and row-major flattened
 HLS offsets. This moves closer to the EE109 Lab2 GEMM `tileC_sram.buffer` /
 `MemFold` lifecycle, but it does not claim original Scala `Lab2Part5GEMM` or
 `Lab2Part6GEMM` source compatibility, generic Spatial `MemFold`, fixed-point
-arithmetic, tail/min bounds, K tiling, `par`, banking, performance scheduling,
-EC2 Vitis `csim_design`/`csynth_design`, board execution, Vivado
-implementation, place-and-route, or timing closure.
+arithmetic beyond the exact canary below, tail/min bounds, K tiling, `par`,
+banking, performance scheduling, board execution, Vivado implementation,
+place-and-route, or timing closure.
+
+Follow-up exact fixed-point MemFold canary checkpoint:
+
+On 2026-06-29, the Rust rewrite added exact `FixPt[TRUE,_24,_8]` support for
+the same fixed-shape `Dense2dTileMemFold v0` GEMM precursor. The validation
+list now contains 23 programs, adding `MatrixTileMemFoldFixPt4x6x5` after the
+`Int` MemFold representative. This checkpoint has local Rust tests, local
+host-C++ harness coverage through a host-only `ap_fixed` shim, Vitis
+dry-run/plan-only sidecar coverage, and EC2 Vitis 2025.1 `csim_design` plus
+`csynth_design` evidence.
+
+The 23-program EC2 run completed with return code 0 on
+`[ec2-host — see private/ec2-lane.md]` using
+`/tools/Xilinx/2025.1/Vitis/settings64.sh`; every validation program reported
+`csim=true` and `csynth=true`. `MatrixTileMemFoldFixPt4x6x5` passed C
+simulation with `PASS MatrixTileMemFoldFixPt4x6x5`, finished synthesis, and
+reported estimated Fmax 121.61 MHz, estimated clock 8.223 ns, latency 84
+cycles, interval 60 cycles, and utilization estimate 6 BRAM_18K, 8 DSP, 6457
+FF, and 5919 LUT.
+
+The fixed-point slice widens the Rust frontend/HIR/IR/manifest/HLS type spine
+by one concrete type only. All DRAM ports and local SRAM tiles in the accepted
+MemFold GEMM canary must use the same element type, either `Int` or exact
+`FixPt[TRUE,_24,_8]`; the HLS emitter lowers the latter to `ap_fixed<32, 24>`
+with a stable local alias. This evidence does not claim generic fixed-point
+widths, decimal fixed-point values, mixed `Int`/`FixPt` GEMM, original Scala
+`Lab2Part5GEMM` or `Lab2Part6GEMM` source compatibility, generic Spatial
+`MemFold`, tail/min bounds, K tiling, `par`, banking, performance scheduling,
+board execution, Vivado implementation, place-and-route, or timing closure.
 
 ## Stable Positive Examples
 
@@ -373,25 +403,25 @@ Generated-code hygiene:
 - The original Scala Spatial HLS gate remains a local host-C++ gate. It does
   not invoke Vitis/Vivado HLS, synthesize RTL, check timing, or validate board
   integration.
-- For the Rust rewrite, the selected accepted adapters, eleven reusable
+- For the Rust rewrite, the selected accepted adapters, twelve reusable
   supported-feature representatives, and two local memory-reduction canary
   representatives have Vitis `csim_design` and `csynth_design` evidence through
-  the 21-program dot-accum checkpoint. The newer `Dense2dTileMemFold v0`
-  representative is local host-C++ and Vitis plan-only pending fresh EC2 Vitis
-  execution. Board execution, Vivado implementation, timing closure, and broad
+  the 23-program `Dense2dTileMemFold v0` / exact `FixPt[TRUE,_24,_8]`
+  checkpoint. Board execution, Vivado implementation, timing closure, and broad
   Spatial coverage remain pending.
 - The Lab1Part2 memory lowering is a narrow structural slice, not a general Spatial memory backend. It accepts the selected fixed shape: `N = 32`, `tileSize = 16`, one input DRAM, one output DRAM, two 16-element SRAM tiles, one scalar integer multiplier, and dense unit-stride transfers.
 - The Lab1Part2 generated harness uses an independent vector oracle, but the source initialization is currently fixed to the selected EE109 shape `src(i) = i % 256`.
 - FIFO, generic reductions/folds, generic memory reductions/folds, generic
   FSMs, generic RegFile/LineBuffer lowering, dynamic sizes, non-unit strides,
-  and non-`Int` element types remain unsupported in HLS mode and should stay
-  fail-closed until selected intentionally.
+  and non-`Int` element types beyond the exact Rust
+  `FixPt[TRUE,_24,_8]` MemFold canary remain unsupported in HLS mode and should
+  stay fail-closed until selected intentionally.
 - The Scala runs still emit the existing `libisl appears to be missing` warning. That warning does not block these local regression results, but it is separate from vendor HLS readiness.
 
 ## Recommended Next Action
 
-For the Rust rewrite, the next action is to verify the new
-`Dense2dTileMemFold v0` checkpoint locally and, if desired, promote it with a
-fresh 22-program EC2 Vitis run. After that, the next GEMM feature slice should
-be narrow `FixPt[TRUE,_24,_8]` support on top of the fixed-shape C-preload /
-partial-tile fold path. Tail/min bounds and controlled `par` should follow.
+For the Rust rewrite, the next action is to start the next GEMM compiler slice
+from the Vitis-proven `Dense2dTileMemFold v0` checkpoint. Tail/min bounds are
+the preferred first gap because they reduce dependence on exact problem sizes;
+a more source-compatible MemFold spelling should follow after that. Controlled
+`par` should follow only after the serial fixed-shape path is stable.
