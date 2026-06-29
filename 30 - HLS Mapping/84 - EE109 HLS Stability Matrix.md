@@ -279,6 +279,31 @@ tail tiles, generic rank-2 tiling, arbitrary local-memory programs, Scala
 source compatibility, board execution, Vivado implementation, place-and-route,
 or timing closure.
 
+Follow-up rank-2 tiled dot-accum run:
+
+On 2026-06-29, the Rust rewrite added `Dense2dTileDotAccum v0` and re-ran the
+Vitis lane. The validation list now contains 21 programs, adding
+`MatrixTileAccum4x6x5` to the prior twenty-program rank-2 tile-scale
+checkpoint. All twenty-one completed with return code 0, `csim=true`, and
+`csynth=true`.
+
+Additional repo evidence:
+
+- `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-29-rank2-tiled-dot-accum/`
+
+`Dense2dTileDotAccum v0` covers a fixed-shape Rust-DSL rank-2 tiled `Int`
+dot-accumulation canary: two rank-2 input DRAMs `lhs[ROWS,K]` and
+`rhs[K,COLS]`, one matching rank-2 output DRAM `out[ROWS,COLS]`, three SRAM
+tiles, explicit accumulator zero-init, one static K reduction loop, and
+row-major flattened HLS offsets. The `MatrixTileAccum4x6x5` representative
+reported `PASS MatrixTileAccum4x6x5`, an estimated Fmax of 121.61 MHz, an
+estimated clock of 8.223 ns, latency 84 cycles, and utilization estimate 4
+BRAM_18K, 6 DSP, 5013 FF, and 4537 LUT. This evidence does not claim original
+Scala `Lab2Part5GEMM`/`Lab2Part6GEMM` source compatibility, fixed-point
+arithmetic, tail/min bounds, K tiling, buffered `MemFold`, `par`, generic
+GEMM, board execution, Vivado implementation, place-and-route, or timing
+closure.
+
 ## Stable Positive Examples
 
 | Example | Surface covered | Local HLS status | Scala parity status |
@@ -328,7 +353,7 @@ Generated-code hygiene:
 - The original Scala Spatial HLS gate remains a local host-C++ gate. It does
   not invoke Vitis/Vivado HLS, synthesize RTL, check timing, or validate board
   integration.
-- For the Rust rewrite, the selected accepted adapters, ten reusable
+- For the Rust rewrite, the selected accepted adapters, eleven reusable
   supported-feature representatives, and two local memory-reduction canary
   representatives now have Vitis `csim_design` and `csynth_design` evidence.
   Board execution, Vivado implementation, timing closure, and broad Spatial
@@ -344,7 +369,8 @@ Generated-code hygiene:
 ## Recommended Next Action
 
 For the Rust rewrite, the next action is to choose the next GEMM precursor on
-top of `Dense2dTileScalarMul v0`: a fixed-shape rank-2 accumulation canary
-before fixed-point, tail tiles, or broad GEMM source compatibility. Keep FIFO,
-reduction, and stencil surfaces as regression anchors, and rerun Vitis only
-when generated HLS C++ or validation membership changes.
+top of `Dense2dTileDotAccum v0`: fixed-point arithmetic, tail/min bounds, a
+narrow buffered `MemFold` tile, or a controlled `par` variant. Keep FIFO,
+reduction, stencil, rank-2 tile-scale, and dot-accum surfaces as regression
+anchors, and rerun Vitis only when generated HLS C++ or validation membership
+changes.
