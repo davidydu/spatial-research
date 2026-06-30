@@ -3,7 +3,7 @@ type: hls-mapping
 construct: ee109-hls-stability-matrix
 category: rework
 status: current
-date: 2026-06-29
+date: 2026-06-30
 stage: 1D
 depends_on:
   - "[[80 - Stage1 EE109 HLS Expansion Plan]]"
@@ -404,12 +404,13 @@ Generated-code hygiene:
   not invoke Vitis/Vivado HLS, synthesize RTL, check timing, or validate board
   integration.
 - For the Rust rewrite, the selected accepted adapters, twelve reusable
-  supported-feature representatives, two local memory-reduction canaries, and
-  the Int tail/min `Dense2dTileMemFold v0` canary have Vitis `csim_design` and
-  `csynth_design` evidence through the 24-program
-  `docs/vitis-validation/2026-06-29-tail-min-memfold/` checkpoint. Board
-  execution, Vivado implementation, timing closure, and broad Spatial coverage
-  remain pending.
+  supported-feature representatives, two local memory-reduction canaries, the
+  Int tail/min `Dense2dTileMemFold v0` canary, and the explicit-inout
+  fixed-point in-place C MemFold canary have Vitis `csim_design` and
+  `csynth_design` evidence through the 25-program
+  `docs/vitis-validation/2026-06-30-inplace-c-memfold/` checkpoint. Board
+  execution, Vivado implementation, timing closure, Scala source compatibility,
+  and broad Spatial coverage remain pending.
 - The Lab1Part2 memory lowering is a narrow structural slice, not a general Spatial memory backend. It accepts the selected fixed shape: `N = 32`, `tileSize = 16`, one input DRAM, one output DRAM, two 16-element SRAM tiles, one scalar integer multiplier, and dense unit-stride transfers.
 - The Lab1Part2 generated harness uses an independent vector oracle, but the source initialization is currently fixed to the selected EE109 shape `src(i) = i % 256`.
 - FIFO, generic reductions/folds, generic memory reductions/folds, generic
@@ -580,13 +581,40 @@ Evidence:
   `cargo test -p spatial-rs-hls --locked --test m1_codegen memfold`.
 
 Evidence boundary:
-- No EC2/Vitis `csim_design` or `csynth_design` run has been captured yet for
-  the 25-program lane.
-- The prior `2026-06-30-infix-tile-io` EC2 evidence remains a 24-program
-  checkpoint and must not be read as covering
-  `MatrixTileMemFoldInPlaceFixPt4x6x5`.
+- At the initial local checkpoint this had host-C++ and Vitis plan-only
+  evidence only. The follow-up EC2/Vitis checkpoint below covers the
+  25-program lane including `MatrixTileMemFoldInPlaceFixPt4x6x5`.
 - `Lab2Part5GEMM` and `Lab2Part6GEMM` remain rejected. This canary does not
   claim original Scala source compatibility, `ArgIn`/`setMem`, source-level
   Part5/Part6 shell extraction, outer K tiling, `numel_k`, Part6 `par`, banking,
   generic Spatial `MemFold`, generic DMA, board execution, Vivado
+  implementation, or timing closure.
+
+## 2026-06-30 Rust Rewrite In-Place C MemFold EC2 Vitis Validation
+
+The explicit-inout C MemFold canary now has EC2 Vitis 2025.1 execution
+evidence at Rust commit `79d1b67`.
+
+Command:
+- `/home/ubuntu/.cargo/bin/cargo run --manifest-path /home/ubuntu/spatial-rs-runs/inplace-c-memfold-20260630-79d1b67/spatial-rs/Cargo.toml -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --settings /tools/Xilinx/2025.1/Vitis/settings64.sh --out /home/ubuntu/spatial-rs-runs/inplace-c-memfold-20260630-79d1b67/spatial-rs/target/vitis-validation-inplace-c-memfold-20260630`
+
+Result:
+- All 25 validation programs completed with return code 0, `csim=true`, and
+  `csynth=true`.
+- `MatrixTileMemFoldInPlaceFixPt4x6x5` passed C simulation with
+  `PASS MatrixTileMemFoldInPlaceFixPt4x6x5` and completed HLS synthesis.
+- The in-place FixPt canary reported estimated Fmax 123.77 MHz, estimated
+  clock 8.080 ns, latency 111 cycles, interval 96 cycles, and utilization
+  estimate 6 BRAM_18K, 8 DSP, 5496 FF, and 5072 LUT.
+- Compact evidence is captured in
+  `docs/vitis-validation/2026-06-30-inplace-c-memfold/`.
+
+Scope:
+- This evidence validates the exact Rust-subset explicit-inout C path with
+  `inputs { a, b } inouts { c }`, one mutable HLS pointer `c`, preload from
+  `c`, and store back to `c`.
+- It does not promote `Lab2Part5GEMM` or `Lab2Part6GEMM`, does not prove
+  original Scala source compatibility, and does not claim source-level
+  Part5/Part6 shell extraction, outer K tiling, `numel_k`, Part6 `par`,
+  banking, generic Spatial `MemFold`, generic DMA, board execution, Vivado
   implementation, or timing closure.

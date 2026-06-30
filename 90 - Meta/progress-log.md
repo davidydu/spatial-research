@@ -736,6 +736,37 @@ Boundary:
   tiles, board execution, Vivado implementation/place-and-route, or
   timing-closure evidence.
 
+## 2026-06-30 — EC2 Vitis validation for narrow in-place C MemFold canary
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial` at commit `79d1b67`.
+
+Vendor-HLS evidence checkpoint:
+- Ran EC2 Vitis 2025.1 on
+  `[ec2-host — see private/ec2-lane.md]` using:
+  `/home/ubuntu/.cargo/bin/cargo run --manifest-path /home/ubuntu/spatial-rs-runs/inplace-c-memfold-20260630-79d1b67/spatial-rs/Cargo.toml -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --settings /tools/Xilinx/2025.1/Vitis/settings64.sh --out /home/ubuntu/spatial-rs-runs/inplace-c-memfold-20260630-79d1b67/spatial-rs/target/vitis-validation-inplace-c-memfold-20260630`.
+- The command returned 0 and completed all 25 validation programs with
+  `csim=true` and `csynth=true`.
+- `MatrixTileMemFoldInPlaceFixPt4x6x5` passed C simulation with
+  `PASS MatrixTileMemFoldInPlaceFixPt4x6x5` and completed `csynth_design`.
+- The in-place FixPt canary reported estimated Fmax 123.77 MHz, estimated
+  clock 8.080 ns, latency 111 cycles, interval 96 cycles, and utilization
+  estimate 6 BRAM_18K, 8 DSP, 5496 FF, and 5072 LUT.
+- Compact evidence is captured in the Rust repo under
+  `docs/vitis-validation/2026-06-30-inplace-c-memfold/` with README,
+  `summary-both.{md,json}`, sidecar Tcl, Vitis logs, and csynth reports.
+
+Boundary:
+- This proves Vitis C simulation and HLS synthesis for the exact 25-program
+  validation set at commit `79d1b67`, including the explicit Rust-subset
+  in-place C MemFold canary with `inputs { a, b } inouts { c }`.
+- This still does not accept original Scala Lab2 Part 5/6 source, raw Scala
+  `@spatial` wrappers, host `ArgIn`/`setMem`, source-level Part5/Part6 shell
+  extraction, outer K tiling, `numel_k` MemFold bounds, Part6 `par`, banking,
+  generic Spatial `MemFold`, generic DMA, broader fixed-point widths, FixPt
+  tail tiles, board execution, Vivado implementation/place-and-route, or
+  timing-closure evidence.
+
 ## 2026-06-30 — Rust rewrite narrow in-place C MemFold canary
 
 Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
@@ -767,9 +798,9 @@ Local proof added so far:
   `cargo test -p spatial-rs-hls --locked --test m1_codegen memfold`.
 
 Boundary:
-- This is local host-C++ harness and Vitis plan-only evidence only.
-- No EC2/Vitis `csim_design` or `csynth_design` evidence has been captured yet
-  for `MatrixTileMemFoldInPlaceFixPt4x6x5`.
+- At the initial local checkpoint, this was local host-C++ harness and Vitis
+  plan-only evidence only; the follow-up EC2/Vitis evidence is recorded in the
+  checkpoint above.
 - `Lab2Part5GEMM` and `Lab2Part6GEMM` remain rejected. This still does not
   accept original Scala Lab2 Part 5/6 source, raw Scala `@spatial` wrappers,
   host `ArgIn`/`setMem`, source-level Part5/Part6 shell extraction, outer K
