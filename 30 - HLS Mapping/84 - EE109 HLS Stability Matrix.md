@@ -404,11 +404,12 @@ Generated-code hygiene:
   not invoke Vitis/Vivado HLS, synthesize RTL, check timing, or validate board
   integration.
 - For the Rust rewrite, the selected accepted adapters, twelve reusable
-  supported-feature representatives, and two local memory-reduction canary
-  representatives have Vitis `csim_design` and `csynth_design` evidence through
-  the 23-program `Dense2dTileMemFold v0` / exact `FixPt[TRUE,_24,_8]`
-  checkpoint. Board execution, Vivado implementation, timing closure, and broad
-  Spatial coverage remain pending.
+  supported-feature representatives, two local memory-reduction canaries, and
+  the Int tail/min `Dense2dTileMemFold v0` canary have Vitis `csim_design` and
+  `csynth_design` evidence through the 24-program
+  `docs/vitis-validation/2026-06-29-tail-min-memfold/` checkpoint. Board
+  execution, Vivado implementation, timing closure, and broad Spatial coverage
+  remain pending.
 - The Lab1Part2 memory lowering is a narrow structural slice, not a general Spatial memory backend. It accepts the selected fixed shape: `N = 32`, `tileSize = 16`, one input DRAM, one output DRAM, two 16-element SRAM tiles, one scalar integer multiplier, and dense unit-stride transfers.
 - The Lab1Part2 generated harness uses an independent vector oracle, but the source initialization is currently fixed to the selected EE109 shape `src(i) = i % 256`.
 - FIFO, generic reductions/folds, generic memory reductions/folds, generic
@@ -420,8 +421,10 @@ Generated-code hygiene:
 
 ## Recommended Next Action
 
-For the Rust rewrite, the next action is to start the next GEMM compiler slice
-from the Vitis-proven `Dense2dTileMemFold v0` checkpoint. Tail/min bounds are
-the preferred first gap because they reduce dependence on exact problem sizes;
-a more source-compatible MemFold spelling should follow after that. Controlled
-`par` should follow only after the serial fixed-shape path is stable.
+For the Rust rewrite, the next action is to continue from the first local
+source-spelling MemFold bridge: parser-only sugar for `memfold c_tile with
+partial_tile over kk in 0..K { ... };` now normalizes to the Vitis-proven
+`MatrixTileMemFoldTail5x7x5` checked payload without changing generated HLS or
+validation membership. The remaining GEMM gaps are original Scala Lab2 Part 5/6
+source compatibility, generic Spatial `MemFold`, controlled `par`, banking, K
+tiling, and broader fixed-point/tail semantics.
