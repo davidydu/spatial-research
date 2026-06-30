@@ -735,3 +735,44 @@ Boundary:
   Spatial `MemFold`, generic DMA, broader fixed-point widths, FixPt tail
   tiles, board execution, Vivado implementation/place-and-route, or
   timing-closure evidence.
+
+## 2026-06-30 — Rust rewrite narrow in-place C MemFold canary
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Frontend/IR/HLS checkpoint:
+- Added first-class `inouts { c: Dram<...>[ROWS, COLS] }` support for the
+  narrow rank-2 `Dense2dTileMemFold` canary.
+- Added a separate validation example,
+  `MatrixTileMemFoldInPlaceFixPt4x6x5`, rather than replacing the existing
+  Vitis-proven `MatrixTileMemFoldFixPt4x6x5`.
+- The new canary uses `inputs { a, b } inouts { c }`, preloads
+  `tileC_sram` from `c(...)`, performs the existing fixed-shape
+  `MemFold(tileC_sram)(0 until K by 1)` body, and stores back to the same
+  `c(...)` DRAM.
+- The manifest now emits a single mutable `host_kernel_inout` DRAM buffer for
+  `c`, and the HLS emitter generates one mutable pointer parameter instead of
+  split `cin`/`out` pointers.
+- The parser keeps generated/shell column lanes as `jj` in this bridge so the
+  HLS pointer named `c` is not shadowed by a C++ loop variable named `c`.
+- Local validation membership is now 25 programs.
+
+Local proof added so far:
+- Focused HLS/codegen/harness test:
+  `lab2_inplace_c_memfold_emits_single_mutable_c_pointer_and_harness`.
+- Fixture/plan-only coverage:
+  `cargo test -p ee109-examples --locked`.
+- Focused MemFold HLS regression:
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen memfold`.
+
+Boundary:
+- This is local host-C++ harness and Vitis plan-only evidence only.
+- No EC2/Vitis `csim_design` or `csynth_design` evidence has been captured yet
+  for `MatrixTileMemFoldInPlaceFixPt4x6x5`.
+- `Lab2Part5GEMM` and `Lab2Part6GEMM` remain rejected. This still does not
+  accept original Scala Lab2 Part 5/6 source, raw Scala `@spatial` wrappers,
+  host `ArgIn`/`setMem`, source-level Part5/Part6 shell extraction, outer K
+  tiling, `numel_k` MemFold bounds, Part6 `par`, banking, generic Spatial
+  `MemFold`, generic DMA, broader fixed-point widths, FixPt tail tiles, board
+  execution, Vivado implementation/place-and-route, or timing-closure evidence.

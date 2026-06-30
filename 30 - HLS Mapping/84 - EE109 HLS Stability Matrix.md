@@ -549,3 +549,44 @@ Scope:
   original Scala source compatibility, and does not claim in-place `c`, outer K
   tiling, `numel_k`, Part6 `par`, banking, generic Spatial `MemFold`, generic
   DMA, board execution, Vivado implementation, or timing closure.
+
+## 2026-06-30 Rust Rewrite In-Place C MemFold Canary
+
+The Rust rewrite now has a separate narrow in-place `c` canary for the
+fixed-shape FixPt `Dense2dTileMemFold` path:
+
+- `inputs { a: Dram<FixPt[TRUE,_24,_8]>[ROWS,K], b: Dram<FixPt[TRUE,_24,_8]>[K,COLS] }`
+- `inouts { c: Dram<FixPt[TRUE,_24,_8]>[ROWS,COLS] }`
+- `tileC_sram load c(row_base :: row_base + TILE_R, col_base :: col_base + TILE_C)`
+- `c(row_base :: row_base + TILE_R, col_base :: col_base + TILE_C) store tileC_sram`
+
+Status:
+- The parser, HIR, checked IR, manifest, HLS plan, C++ emitter, and host
+  harness now model a single mutable `c` DRAM port for this canary.
+- The manifest direction is `host_kernel_inout`, and generated HLS has a single
+  mutable pointer parameter `spatial_fixpt_true_24_8_t *c`.
+- The host harness seeds `actual` from the input `c` values before invoking the
+  kernel and checks the mutated `c` buffer against the GEMM oracle.
+- The local validation-program list is now 25 programs, with
+  `MatrixTileMemFoldInPlaceFixPt4x6x5` added after the existing split
+  `MatrixTileMemFoldFixPt4x6x5` canary.
+
+Evidence:
+- Local HLS/codegen/harness:
+  `lab2_inplace_c_memfold_emits_single_mutable_c_pointer_and_harness`.
+- Local fixture and plan-only lane:
+  `cargo test -p ee109-examples --locked`.
+- Local MemFold HLS regression:
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen memfold`.
+
+Evidence boundary:
+- No EC2/Vitis `csim_design` or `csynth_design` run has been captured yet for
+  the 25-program lane.
+- The prior `2026-06-30-infix-tile-io` EC2 evidence remains a 24-program
+  checkpoint and must not be read as covering
+  `MatrixTileMemFoldInPlaceFixPt4x6x5`.
+- `Lab2Part5GEMM` and `Lab2Part6GEMM` remain rejected. This canary does not
+  claim original Scala source compatibility, `ArgIn`/`setMem`, source-level
+  Part5/Part6 shell extraction, outer K tiling, `numel_k`, Part6 `par`, banking,
+  generic Spatial `MemFold`, generic DMA, board execution, Vivado
+  implementation, or timing closure.
