@@ -522,3 +522,30 @@ Evidence boundary:
   Part6 `par`, banking, generic Spatial `MemFold`, generic DMA, broader
   fixed-point widths, FixPt tail tiles, board execution, or timing-closure
   claim is made.
+
+## 2026-06-30 Rust Rewrite Infix Tile IO EC2 Vitis Validation
+
+The parser-only infix tile IO checkpoint above now has fresh EC2 Vitis 2025.1
+execution evidence at Rust commit `1756d4d`.
+
+Command:
+- `/home/ubuntu/.cargo/bin/cargo run --manifest-path /home/ubuntu/spatial-rs-runs/infix-tile-io-20260630-1756d4d/spatial-rs/Cargo.toml -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --settings /tools/Xilinx/2025.1/Vitis/settings64.sh --out /home/ubuntu/spatial-rs-runs/infix-tile-io-20260630-1756d4d/spatial-rs/target/vitis-validation-infix-tile-io-20260630`
+
+Result:
+- All 24 validation programs completed with return code 0, `csim=true`, and
+  `csynth=true`.
+- `MatrixTileMemFoldFixPt4x6x5` passed C simulation with
+  `PASS MatrixTileMemFoldFixPt4x6x5` and completed HLS synthesis.
+- The FixPt canary reported estimated Fmax 121.61 MHz, estimated clock
+  8.223 ns, latency 84 cycles, interval 60 cycles, and utilization estimate
+  6 BRAM_18K, 8 DSP, 6457 FF, and 5919 LUT.
+- Compact evidence is captured in
+  `docs/vitis-validation/2026-06-30-infix-tile-io/`.
+
+Scope:
+- This evidence validates the current checked HLS payload after the source
+  fixture moved to the narrow infix tile IO bridge.
+- It does not promote `Lab2Part5GEMM` or `Lab2Part6GEMM`, does not prove
+  original Scala source compatibility, and does not claim in-place `c`, outer K
+  tiling, `numel_k`, Part6 `par`, banking, generic Spatial `MemFold`, generic
+  DMA, board execution, Vivado implementation, or timing closure.

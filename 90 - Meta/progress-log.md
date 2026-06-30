@@ -703,3 +703,35 @@ Non-claims:
   `numel_k` MemFold bounds, Part6 `par`, banking, generic Spatial `MemFold`,
   generic DMA, broader fixed-point widths, FixPt tail tiles, board execution,
   or timing-closure evidence.
+
+## 2026-06-30 — EC2 Vitis validation for Lab2 GEMM infix tile IO checkpoint
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial` at commit `1756d4d`.
+
+Vendor-HLS evidence checkpoint:
+- Ran EC2 Vitis 2025.1 on
+  `[ec2-host — see private/ec2-lane.md]` using:
+  `/home/ubuntu/.cargo/bin/cargo run --manifest-path /home/ubuntu/spatial-rs-runs/infix-tile-io-20260630-1756d4d/spatial-rs/Cargo.toml -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --settings /tools/Xilinx/2025.1/Vitis/settings64.sh --out /home/ubuntu/spatial-rs-runs/infix-tile-io-20260630-1756d4d/spatial-rs/target/vitis-validation-infix-tile-io-20260630`.
+- The command returned 0 and completed all 24 validation programs with
+  `csim=true` and `csynth=true`.
+- `MatrixTileMemFoldFixPt4x6x5`, whose source fixture now exercises the infix
+  tile IO bridge, passed C simulation with `PASS MatrixTileMemFoldFixPt4x6x5`
+  and completed `csynth_design`.
+- The FixPt canary reported estimated Fmax 121.61 MHz, estimated clock
+  8.223 ns, latency 84 cycles, interval 60 cycles, and utilization estimate
+  6 BRAM_18K, 8 DSP, 6457 FF, and 5919 LUT.
+- Compact evidence is captured in the Rust repo under
+  `docs/vitis-validation/2026-06-30-infix-tile-io/` with README,
+  `summary-both.{md,json}`, sidecar Tcl, Vitis logs, and csynth reports.
+
+Boundary:
+- This proves Vitis C simulation and HLS synthesis for the exact 24-program
+  validation set at commit `1756d4d`, including the fixed-shape FixPt MemFold
+  canary with parser-only infix tile IO spelling.
+- This still does not accept original Scala Lab2 Part 5/6 source, raw Scala
+  `@spatial` wrappers, host `ArgIn`/`setMem`, in-place `c(...) store`,
+  outer K tiling, `numel_k` MemFold bounds, Part6 `par`, banking, generic
+  Spatial `MemFold`, generic DMA, broader fixed-point widths, FixPt tail
+  tiles, board execution, Vivado implementation/place-and-route, or
+  timing-closure evidence.
