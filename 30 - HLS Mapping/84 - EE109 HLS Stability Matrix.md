@@ -425,6 +425,9 @@ For the Rust rewrite, the MemFold source-spelling bridge is now a parser-only
 bridge series: `memfold c_tile with partial_tile over kk in 0..K { ... };` and
 `memfold c_tile with partial_tile over kk in 0..K { ... partial_tile }{_+_};`
 plus `MemFold(c_tile)(0 until K by 1) { kk => ... partial_tile }{_+_};`.
+The Spatial-ish call form can also begin with a body-local canonical
+`let partial_tile = Sram<...>[...];`, which the parser hoists into the existing
+checked payload; renamed partial temps remain unsupported in this bridge.
 All accepted bridge spellings normalize to existing checked
 `Dense2dTileMemFold` payloads without changing generated HLS or validation
 membership. The remaining GEMM gaps are original Scala Lab2 Part 5/6 source
