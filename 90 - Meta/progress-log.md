@@ -571,3 +571,45 @@ Recommended next slice:
 - Build one fixed-shape rank-2 accumulation canary on top of
   `Dense2dTileScalarMul v0` before attempting fixed-point GEMM or tail-tile
   generalization.
+
+## 2026-06-30 — Rust rewrite bulk rank-2 tile IO source-spelling bridge
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Frontend compatibility checkpoint:
+- Added a parser-only source-spelling bridge for canonical GEMM rank-2 tile
+  load/preload/store forms:
+  `load lhs_tile <- lhs[row_base..row_base + row_limit, 0..K];`,
+  `load rhs_tile <- rhs[0..K, col_base..col_base + col_limit];`,
+  `load c_tile <- cin[row_base..row_base + row_limit, col_base..col_base + col_limit];`,
+  and `store out[row_base..row_base + row_limit, col_base..col_base + col_limit] <- c_tile;`.
+- The bridge desugars immediately to existing nested `foreach` plus
+  indexed-assignment AST nodes. It adds no new AST/HIR/IR node, checked
+  payload, generated HLS behavior, validation-program member, generic DMA
+  model, or Vitis evidence claim.
+- The existing exact `MatrixTileMemFoldFixPt4x6x5` EE109 validation example now
+  exercises the bulk IO spelling together with the body-local
+  `partial_tile` MemFold spelling, while preserving the same checked
+  `Dense2dTileMemFold` payload.
+
+Local proof added:
+- Parser equivalence: expanded exact FixPt and Int-tail canaries equal the new
+  bulk-IO source spellings after `parse_accel`.
+- Fail-closed coverage: raw Scala/FixPt policy, missing C preload, wrong store
+  source, swapped lhs role, nonzero K lower bound, `par`, reserved Lab2 names,
+  and FIFO diagnostic priority.
+- HLS/manifest equality: generated `kernel.cpp` and manifest JSON are bytewise
+  identical between expanded and bulk-IO spellings for exact FixPt and Int-tail
+  MemFold canaries.
+
+Non-claims:
+- This still does not accept original Scala Lab2 Part 5/6 source, raw Scala
+  `::` ranges, `SRAM[T](...)`, `val`, generic Spatial `MemFold`, `par`,
+  banking, K tiling, FixPt tail tiles, board execution, or new vendor-HLS
+  evidence.
+
+Recommended next slice:
+- Choose whether to bridge the remaining real Lab2 body-shell spellings
+  (`val partial_c = SRAM[T](...)`, tile aliases such as `tileA_sram`, and
+  `.buffer`) or to introduce a new semantic slice for K tiling/Part6 `par`.

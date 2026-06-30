@@ -433,3 +433,27 @@ All accepted bridge spellings normalize to existing checked
 membership. The remaining GEMM gaps are original Scala Lab2 Part 5/6 source
 compatibility, `MemFold(SRAM[T](...))`, generic Spatial `MemFold`, controlled
 `par`, banking, K tiling, and broader fixed-point/tail semantics.
+
+## 2026-06-30 Rust Rewrite Bulk Tile IO Bridge
+
+The Rust rewrite now has a parser-only source-spelling bridge for canonical
+rank-2 GEMM tile IO:
+
+- `load lhs_tile <- lhs[row_base..row_base + row_limit, 0..K];`
+- `load rhs_tile <- rhs[0..K, col_base..col_base + col_limit];`
+- `load c_tile <- cin[row_base..row_base + row_limit, col_base..col_base + col_limit];`
+- `store out[row_base..row_base + row_limit, col_base..col_base + col_limit] <- c_tile;`
+
+Status:
+- Local parser equivalence tests prove the bulk spelling normalizes to the
+  existing expanded `Dense2dTileMemFold` exact FixPt and Int-tail payloads.
+- Local HLS/manifest equality tests prove generated C++ and manifest JSON are
+  unchanged for those canaries.
+- The exact `MatrixTileMemFoldFixPt4x6x5` validation example now exercises the
+  bulk IO spelling plus body-local `partial_tile` spelling without changing
+  validation-program membership.
+
+Evidence boundary:
+- No new Vitis run is claimed for this bridge.
+- No generic DMA, raw Scala `::` ranges, `SRAM[T](...)`, `val`, `par`, banking,
+  K tiling, FixPt tail, board, or timing-closure claim is made.
