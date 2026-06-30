@@ -659,3 +659,47 @@ Non-claims:
   MemFold bounds, Part6 `par`, banking, generic Spatial `MemFold`, generic
   DMA, broader fixed-point widths, FixPt tail tiles, board execution, or new
   vendor-HLS evidence.
+
+## 2026-06-30 — Rust rewrite Lab2 GEMM infix tile IO parser bridge
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Frontend compatibility checkpoint:
+- Added a parser-only bridge for exact Spatial-style infix rank-2 GEMM tile IO
+  around the existing `Dense2dTileMemFold` payload:
+  `tileA_sram load a(row_base :: row_base + row_limit, 0 :: K);`,
+  `tileB_sram load b(0 :: K, col_base :: col_base + col_limit);`,
+  `tileC_sram load c(row_base :: row_base + row_limit, col_base :: col_base + col_limit);`,
+  and `out(row_base :: row_base + row_limit, col_base :: col_base + col_limit) store tileC_sram;`.
+- The parser treats `::` as private to this infix tile IO bridge and
+  immediately desugars the ranges to the same nested copy-loop AST used by the
+  prefix bulk IO bridge.
+- The exact `MatrixTileMemFoldFixPt4x6x5` validation example now exercises the
+  infix tile IO spelling together with shell aliases/body-local `partial_c`,
+  while preserving the existing checked payload and validation membership.
+- Tightened the Lab2 shell-alias gate so comments or longer identifiers
+  containing names like `partial_c` or `tileA_sram` do not accidentally enable
+  alias canonicalization.
+
+Local proof added so far:
+- Lexer boundary test:
+  `lexes_infix_range_without_breaking_assignment_colons`.
+- Parser equivalence:
+  `parse_accel_lab2_infix_tile_io_matches_shell_alias_fixpt_canary` and
+  `parse_accel_lab2_infix_tile_io_matches_tail_bulk_canary`.
+- Fail-closed coverage for reserved `Lab2Part5GEMM`/`Lab2Part6GEMM`, in-place
+  `c(...) store`, Part6 `par`, wrong load target tile, nonzero K lower bound,
+  and raw Scala `@spatial` class shell.
+- HLS/manifest equality:
+  `lab2_infix_tile_io_preserves_exact_hls_and_manifest`.
+- EE109 fixture check:
+  `dense2d_tile_memfold_fixpt_example_uses_spatialish_bridge_without_new_feature_kind`.
+
+Non-claims:
+- No new Vitis run is claimed for this bridge.
+- This still does not accept original Scala Lab2 Part 5/6 source, raw Scala
+  `@spatial` wrappers, host `ArgIn`/`setMem`, in-place `c`, outer K tiling,
+  `numel_k` MemFold bounds, Part6 `par`, banking, generic Spatial `MemFold`,
+  generic DMA, broader fixed-point widths, FixPt tail tiles, board execution,
+  or timing-closure evidence.

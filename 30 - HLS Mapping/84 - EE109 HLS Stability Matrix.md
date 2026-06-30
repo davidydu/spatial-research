@@ -455,10 +455,11 @@ Status:
 
 Evidence boundary:
 - No new Vitis run is claimed for this bridge.
-- No generic DMA, raw Scala `::` ranges, `SRAM[T](...)`, `val`, `par`, banking,
-  K tiling, FixPt tail, board, or timing-closure claim was made at this bulk
-  IO checkpoint; the later shell-alias bridge below narrows exact `SRAM[T]`
-  and `val` support without changing the HLS evidence boundary.
+- No generic DMA, raw Scala `::` ranges outside the later narrow infix tile-IO
+  bridge, `SRAM[T](...)`, `val`, `par`, banking, K tiling, FixPt tail, board,
+  or timing-closure claim was made at this bulk IO checkpoint; the later
+  shell-alias bridge below narrows exact `SRAM[T]` and `val` support without
+  changing the HLS evidence boundary.
 
 ## 2026-06-30 Rust Rewrite Lab2 Shell-Alias Buffer Bridge
 
@@ -486,7 +487,38 @@ Status:
 
 Evidence boundary:
 - No new Vitis run is claimed for this bridge.
-- No raw Scala `@spatial` source, raw Scala `::` ranges, in-place `c`,
-  `ArgIn`/`setMem`, outer K tiling, `numel_k` MemFold bounds, Part6 `par`,
-  banking, generic Spatial `MemFold`, generic DMA, broader fixed-point widths,
-  FixPt tail tiles, board execution, or timing-closure claim is made.
+- No raw Scala `@spatial` source, generic/raw Scala `::` ranges outside the
+  later narrow infix tile-IO bridge, in-place `c`, `ArgIn`/`setMem`, outer K
+  tiling, `numel_k` MemFold bounds, Part6 `par`, banking, generic Spatial
+  `MemFold`, generic DMA, broader fixed-point widths, FixPt tail tiles, board
+  execution, or timing-closure claim is made.
+
+## 2026-06-30 Rust Rewrite Infix Tile IO Bridge
+
+The Rust rewrite now has a parser-only source-spelling bridge for exact infix
+rank-2 tile IO around the existing `Dense2dTileMemFold` canaries:
+
+- `tileA_sram load a(row_base :: row_base + row_limit, 0 :: K)`
+- `tileB_sram load b(0 :: K, col_base :: col_base + col_limit)`
+- `tileC_sram load c(row_base :: row_base + row_limit, col_base :: col_base + col_limit)`
+- `out(row_base :: row_base + row_limit, col_base :: col_base + col_limit) store tileC_sram`
+
+Status:
+- `::` is accepted only inside this infix tile IO parser bridge.
+- The parser canonicalizes Lab2 shell aliases to the existing internal roles
+  and desugars the IO ranges to the same nested copy loops used by prefix bulk
+  IO before HIR/classification.
+- Local parser equivalence proves the infix spelling normalizes to the
+  existing exact FixPt and Int-tail `Dense2dTileMemFold` payloads.
+- Local HLS/manifest equality proves generated C++ and manifest JSON are
+  unchanged for `MatrixTileMemFoldFixPt4x6x5`.
+- The validation-program list remains at 24 programs, and
+  `Lab2Part5GEMM`/`Lab2Part6GEMM` remain absent.
+
+Evidence boundary:
+- No new Vitis run is claimed for this bridge.
+- No raw Scala `@spatial` source, generic `::` ranges, in-place
+  `c(...) store`, `ArgIn`/`setMem`, outer K tiling, `numel_k` MemFold bounds,
+  Part6 `par`, banking, generic Spatial `MemFold`, generic DMA, broader
+  fixed-point widths, FixPt tail tiles, board execution, or timing-closure
+  claim is made.
