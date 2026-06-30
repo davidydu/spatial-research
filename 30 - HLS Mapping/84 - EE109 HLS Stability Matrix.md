@@ -421,10 +421,10 @@ Generated-code hygiene:
 
 ## Recommended Next Action
 
-For the Rust rewrite, the next action is to continue from the first local
-source-spelling MemFold bridge: parser-only sugar for `memfold c_tile with
-partial_tile over kk in 0..K { ... };` now normalizes to the Vitis-proven
-`MatrixTileMemFoldTail5x7x5` checked payload without changing generated HLS or
-validation membership. The remaining GEMM gaps are original Scala Lab2 Part 5/6
-source compatibility, generic Spatial `MemFold`, controlled `par`, banking, K
-tiling, and broader fixed-point/tail semantics.
+For the Rust rewrite, the MemFold source-spelling bridge is now a parser-only
+bridge series: `memfold c_tile with partial_tile over kk in 0..K { ... };` and
+`memfold c_tile with partial_tile over kk in 0..K { ... partial_tile }{_+_};`
+both normalize to existing checked `Dense2dTileMemFold` payloads without
+changing generated HLS or validation membership. The remaining GEMM gaps are
+original Scala Lab2 Part 5/6 source compatibility, generic Spatial `MemFold`,
+controlled `par`, banking, K tiling, and broader fixed-point/tail semantics.
