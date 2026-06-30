@@ -424,7 +424,9 @@ Generated-code hygiene:
 For the Rust rewrite, the MemFold source-spelling bridge is now a parser-only
 bridge series: `memfold c_tile with partial_tile over kk in 0..K { ... };` and
 `memfold c_tile with partial_tile over kk in 0..K { ... partial_tile }{_+_};`
-both normalize to existing checked `Dense2dTileMemFold` payloads without
-changing generated HLS or validation membership. The remaining GEMM gaps are
-original Scala Lab2 Part 5/6 source compatibility, generic Spatial `MemFold`,
-controlled `par`, banking, K tiling, and broader fixed-point/tail semantics.
+plus `MemFold(c_tile)(0 until K by 1) { kk => ... partial_tile }{_+_};`.
+All accepted bridge spellings normalize to existing checked
+`Dense2dTileMemFold` payloads without changing generated HLS or validation
+membership. The remaining GEMM gaps are original Scala Lab2 Part 5/6 source
+compatibility, `MemFold(SRAM[T](...))`, generic Spatial `MemFold`, controlled
+`par`, banking, K tiling, and broader fixed-point/tail semantics.
