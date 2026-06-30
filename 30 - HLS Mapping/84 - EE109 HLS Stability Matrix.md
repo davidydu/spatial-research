@@ -456,4 +456,37 @@ Status:
 Evidence boundary:
 - No new Vitis run is claimed for this bridge.
 - No generic DMA, raw Scala `::` ranges, `SRAM[T](...)`, `val`, `par`, banking,
-  K tiling, FixPt tail, board, or timing-closure claim is made.
+  K tiling, FixPt tail, board, or timing-closure claim was made at this bulk
+  IO checkpoint; the later shell-alias bridge below narrows exact `SRAM[T]`
+  and `val` support without changing the HLS evidence boundary.
+
+## 2026-06-30 Rust Rewrite Lab2 Shell-Alias Buffer Bridge
+
+The Rust rewrite now has a parser-only source-spelling bridge for the exact
+FixPt `Dense2dTileMemFold` canary using selected Lab2-like shell names:
+
+- input aliases `a`, `b`, and `c`
+- local tile aliases `tileA_sram`, `tileB_sram`, and `tileC_sram`
+- `.buffer` only on `tileC_sram`
+- body-local `val partial_c = SRAM[T](TILE_R, TILE_C)`
+- Scala-call `Foreach(end by 1) { idx => ... }`
+- paren indexing/assignment such as
+  `partial_c(ii, jj) = tileA_sram(ii, k_idx) * tileB_sram(k_idx, jj)`
+
+Status:
+- The parser canonicalizes those aliases to `lhs`, `rhs`, `cin`,
+  `lhs_tile`, `rhs_tile`, `c_tile`, `partial_tile`, `r`, `c`, and `kk` before
+  HIR/classification.
+- Local parser equivalence proves the shell spelling normalizes to the
+  existing expanded exact FixPt `Dense2dTileMemFold` payload.
+- Local HLS/manifest equality proves generated C++ and manifest JSON are
+  unchanged for `MatrixTileMemFoldFixPt4x6x5`.
+- The validation-program list remains at 24 programs, and
+  `Lab2Part5GEMM`/`Lab2Part6GEMM` remain absent.
+
+Evidence boundary:
+- No new Vitis run is claimed for this bridge.
+- No raw Scala `@spatial` source, raw Scala `::` ranges, in-place `c`,
+  `ArgIn`/`setMem`, outer K tiling, `numel_k` MemFold bounds, Part6 `par`,
+  banking, generic Spatial `MemFold`, generic DMA, broader fixed-point widths,
+  FixPt tail tiles, board execution, or timing-closure claim is made.

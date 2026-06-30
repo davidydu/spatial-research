@@ -613,3 +613,49 @@ Recommended next slice:
 - Choose whether to bridge the remaining real Lab2 body-shell spellings
   (`val partial_c = SRAM[T](...)`, tile aliases such as `tileA_sram`, and
   `.buffer`) or to introduce a new semantic slice for K tiling/Part6 `par`.
+
+## 2026-06-30 — Rust rewrite Lab2 GEMM shell-alias/buffer parser bridge
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Frontend compatibility checkpoint:
+- Added a parser-only bridge for exact Lab2-like GEMM shell spellings around
+  the existing `Dense2dTileMemFold` FixPt canary:
+  input aliases `a/b/c`, local aliases
+  `tileA_sram/tileB_sram/tileC_sram`, `.buffer` only on `tileC_sram`,
+  body-local `val partial_c = SRAM[T](...)`, Scala-call
+  `Foreach(end by 1) { idx => ... }`, paren assignment/index reads, and loop
+  aliases `ii/jj/k_idx`.
+- These aliases canonicalize to `lhs/rhs/cin`,
+  `lhs_tile/rhs_tile/c_tile`, `partial_tile`, and `r/c/kk` before
+  HIR/classification. No new AST/HIR/IR node, checked payload, generated HLS
+  behavior, validation-program member, allocation model, buffering semantics,
+  or Vitis evidence claim was added.
+- The exact `MatrixTileMemFoldFixPt4x6x5` validation example now exercises
+  this shell spelling while preserving the existing validation list and
+  generated-HLS identity.
+
+Local proof added:
+- Red/green parser equivalence test:
+  `parse_accel_lab2_shell_alias_buffer_matches_expanded_fixpt_canary`.
+- Fail-closed coverage for reserved `Lab2Part5GEMM`/`Lab2Part6GEMM`, Part6
+  `par`, `.buffer` on the wrong tile, wrong body temp alias, and raw Scala
+  `@spatial` class shell.
+- HLS/manifest equality test:
+  `lab2_shell_alias_buffer_preserves_exact_hls_and_manifest`.
+- EE109 membership tests still show 24 validation programs and no
+  `Lab2Part5GEMM`/`Lab2Part6GEMM` promotion.
+
+Verification run in this checkpoint:
+- `cargo test -p spatial-rs-core --locked lab2_shell_alias_buffer`
+- `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_shell_alias_buffer`
+- `cargo test -p ee109-examples --locked validation_programs_include_supported_features_after_adapter_baseline`
+- `cargo test -p ee109-examples --locked dense2d_tile_memfold_fixpt_example_uses_spatialish_bridge_without_new_feature_kind`
+
+Non-claims:
+- This still does not accept original Scala Lab2 Part 5/6 source, raw Scala
+  `::` ranges, in-place `c`, `ArgIn`/`setMem`, outer K tiling, `numel_k`
+  MemFold bounds, Part6 `par`, banking, generic Spatial `MemFold`, generic
+  DMA, broader fixed-point widths, FixPt tail tiles, board execution, or new
+  vendor-HLS evidence.
