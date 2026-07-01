@@ -687,7 +687,9 @@ static exact outer-K canary:
   same offset-loop proof
 - the exact fixed raw `@spatial class Lab2Part5GEMM` wrapper when `runtimeArgs`
   prove `M=N=K=32`, `tileM/tileN/tileK` are all `16`, the type alias is
-  `FixPt[TRUE,_24,_8]`, and there is one matching `Accel` body
+  `FixPt[TRUE,_24,_8]`, and there is one matching `Accel` body. This raw-wrapper
+  check is token-stream exact: comments and ordinary whitespace between tokens
+  are allowed, while token-split identifiers/operators remain rejected.
 
 Status:
 - This is parser/source-spelling coverage only. It canonicalizes to the
@@ -708,8 +710,9 @@ Evidence boundary:
 - Non-exact raw Scala `Lab2Part5GEMM` and all `Lab2Part6GEMM` forms still fail
   closed. The bridge also keeps full-K MemFold bounds, undeclared or mismatched
   `numel_k`, malformed or dynamic `numel_k = min(...)` variants, non-exact
-  offset-loop steps, dynamic/tail K tiling, hoisted B/C/fold/store phases, Part6
-  `par`, banking, generic Spatial `MemFold`, board execution, Vivado
+  offset-loop steps, token-split identifiers/operators, dynamic/tail K tiling, hoisted
+  B/C/fold/store phases, Part6 `par`, banking, generic Spatial `MemFold`, board
+  execution, Vivado
   implementation, and timing closure unsupported.
 
 ## 2026-06-30 Rust Rewrite Lab2 `numel_m`/`numel_n` Parser Bridge
