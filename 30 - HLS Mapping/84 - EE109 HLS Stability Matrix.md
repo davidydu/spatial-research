@@ -682,6 +682,8 @@ static exact outer-K canary:
 - `MemFold(tileC_sram)(0 until TILE_K by 1) { k_idx => ... }{_+_}`
 - a declared static `numel_k` alias equal to `TILE_K` inside K tile ranges and
   the MemFold bound
+- exact static `val numel_k = min(TILE_K.to[Int], K - kk);` spelling under the
+  same offset-loop proof
 
 Status:
 - This is parser/source-spelling coverage only. It canonicalizes to the
@@ -699,9 +701,10 @@ Evidence boundary:
   `cargo test -p spatial-rs-hls --locked lab2_outer_k -- --nocapture`.
 - Reserved raw Scala `Lab2Part5GEMM` and `Lab2Part6GEMM` names still fail
   closed. The bridge also keeps full-K MemFold bounds, undeclared or mismatched
-  `numel_k`, non-exact offset-loop steps, dynamic/tail K tiling, hoisted
-  B/C/fold/store phases, Part6 `par`, banking, generic Spatial `MemFold`, board
-  execution, Vivado implementation, and timing closure unsupported.
+  `numel_k`, malformed or dynamic `numel_k = min(...)` variants, non-exact
+  offset-loop steps, dynamic/tail K tiling, hoisted B/C/fold/store phases, Part6
+  `par`, banking, generic Spatial `MemFold`, board execution, Vivado
+  implementation, and timing closure unsupported.
 
 ## 2026-06-30 Rust Rewrite Lab2 `numel_m`/`numel_n` Parser Bridge
 
