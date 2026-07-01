@@ -715,6 +715,39 @@ Evidence boundary:
   execution, Vivado
   implementation, and timing closure unsupported.
 
+## 2026-07-01 Rust Rewrite Current-HEAD EC2 Vitis Refresh
+
+After the tokenized raw Part5 wrapper bridge and shared frontend nested block
+comment support, the Rust rewrite re-ran the exact 26-program Vitis lane at
+source commit `a16401b` on `David/HLS-spatial`.
+
+Evidence:
+- Remote host: `[ec2-host — see private/ec2-lane.md]`
+  (`ip-172-31-37-7`)
+- Remote run directory:
+  `/home/ubuntu/spatial-rs-runs/block-comments-a16401b/spatial-rs`
+- Command:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --settings /tools/Xilinx/2025.1/Vitis/settings64.sh --out target/vitis-validation-block-comments-a16401b`
+- Durable evidence:
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-01-block-comments-refresh/`
+- Result: all 26 programs reported `returncode=0`, `csim=true`, and
+  `csynth=true`.
+- `MatrixTileMemFoldOuterKInPlaceFixPt32x32x32` result: estimated Fmax
+  136.99 MHz, estimated clock 7.300 ns, latency 41053 cycles, interval 41054
+  cycles, and utilization estimate 41 BRAM_18K, 64 DSP, 8120 FF, and 5896 LUT.
+
+Evidence boundary:
+- This refresh proves Vitis C simulation and HLS synthesis for the exact
+  current 26-program validation set only.
+- It also confirms that frontend block-comment support did not perturb the
+  generated validation kernels.
+- It does not claim board execution, Vivado implementation/place-and-route,
+  post-implementation timing closure, broad Scala source compatibility,
+  structured Scala wrapper parsing, `Lab2Part6GEMM`, Part6 `par`,
+  dynamic/tail K tiling, generic Spatial `MemFold`, banking, generic DMA,
+  generic in-place alias analysis, FixPt tail tiles, or broader Spatial
+  language coverage.
+
 ## 2026-06-30 Rust Rewrite Lab2 `numel_m`/`numel_n` Parser Bridge
 
 The Rust rewrite now accepts one more Lab2 source-spelling detail in the
