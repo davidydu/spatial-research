@@ -252,11 +252,14 @@ Additional repo evidence:
 shape: one rank-1 DRAM input, one scalar multiplier, one rank-1 DRAM output,
 two loop-local `FIFO<Int>[TILE]` memories, ordered enqueue/dequeue tile
 scaling, and generated `hls::stream<int>` plus stream-depth pragmas. It does
-not claim original Scala `Lab1Part4FIFOExample` source compatibility, generic
-FIFO/streams, AXI stream ports, LIFO, back-pressure modeling, throughput
-optimization, board execution, Vivado implementation, place-and-route, or
-timing closure. The Scala HLS negative row below remains true for the legacy
-Scala backend/source path.
+not claim generic Scala FIFO source compatibility, generic FIFO/streams, AXI
+stream ports, LIFO, back-pressure modeling, throughput optimization, board
+execution, Vivado implementation, place-and-route, or timing closure. A later
+exact raw `Lab1Part4FIFOExample` wrapper now token-matches only the known fixed
+Lab1 Part4 source and canonicalizes to this same `FifoTileScale32` payload with
+HLS/manifest equality; it is not new Vitis evidence and does not broaden the
+historical FIFO Vitis checkpoint. The Scala HLS negative row below remains true
+for the legacy Scala backend/source path.
 
 Follow-up rank-2 tiled int scale run:
 
@@ -415,7 +418,8 @@ Generated-code hygiene:
   remain pending.
 - The Lab1Part2 memory lowering is a narrow structural slice, not a general Spatial memory backend. It accepts the selected fixed shape: `N = 32`, `tileSize = 16`, one input DRAM, one output DRAM, two 16-element SRAM tiles, one scalar integer multiplier, and dense unit-stride transfers.
 - The Lab1Part2 generated harness uses an independent vector oracle, but the source initialization is currently fixed to the selected EE109 shape `src(i) = i % 256`.
-- FIFO, generic reductions/folds, generic memory reductions/folds, generic
+- FIFO outside the exact raw Lab1 Part4 wrapper / `FifoTileScale32` semantic
+  shape, generic reductions/folds, generic memory reductions/folds, generic
   FSMs, generic RegFile/LineBuffer lowering, dynamic sizes, non-unit strides,
   and non-`Int` element types beyond the exact Rust
   `FixPt[TRUE,_24,_8]` MemFold canary remain unsupported in HLS mode and should
