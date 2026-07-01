@@ -764,6 +764,30 @@ Evidence boundary:
   generic in-place alias analysis, FixPt tail tiles, or broader Spatial
   language coverage.
 
+## 2026-07-01 Rust Rewrite Lab1 Part6 SRAM-Tile Fold Local Checkpoint
+
+The Rust rewrite added `ScalarSramTileFold v0` and the non-lab
+`SramTileFoldSum32` validation canary after the refreshed 26-program Vitis
+checkpoint.
+
+Status:
+- The local validation list now contains 27 programs.
+- `SramTileFoldSum32` covers one rank-1 `Dram<Int>[32]` input, one scalar
+  output, one local `Sram<Int>[16]` tile, an explicit DRAM-to-SRAM tile load,
+  an inner tile sum, and scalar accumulator writeback.
+- The exact raw `Lab1Part6ReduceExample` token stream canonicalizes to
+  `SramTileFoldSum32` with generated HLS/manifest equality.
+- Local host-C++ harness, Vitis dry-run, and plan-only sidecar coverage are in
+  place.
+
+Evidence boundary:
+- No EC2/Vitis `csim_design`/`csynth_design` evidence is claimed yet for the
+  new 27-program lane.
+- Generic Spatial `Fold`, arbitrary nested folds, arbitrary local-memory
+  effects, tail tiles, dynamic bounds, non-`Int`, scheduling, banking, board
+  execution, Vivado implementation, timing closure, and broad Scala source
+  compatibility remain unsupported.
+
 ## 2026-06-30 Rust Rewrite Lab2 `numel_m`/`numel_n` Parser Bridge
 
 The Rust rewrite now accepts one more Lab2 source-spelling detail in the

@@ -41,7 +41,7 @@ This is the manager synthesis for the selected EE109 HLS MVP. The detailed evide
 | `Foreach` | Stage 1 | Structured `for` loops in source counter order. | `UNROLL factor=P` only when static `par` lanes require it. | Non-affine bounds that cannot become HLS loops. |
 | `Sequential.Foreach` | Stage 4 | Ordered non-pipelined `for` loops. | No default `PIPELINE`; nested `par` can still unroll. | `stopWhen` and starvation policies. |
 | `Pipe` | Stage 4 | Ordered statement block for unit `Pipe`; pipelined loop when selected source uses `Pipe.Foreach`. | `PIPELINE II=n` only when explicitly requested or selected as safe. | Stream, MOP/POM replication, and `ParallelPipe`. |
-| `Reduce` | Stage 4 | Explicit accumulator scalar plus deterministic lane combination. | `UNROLL factor=P` for static `par`; memory port demand handed to partition planner. | `Fold`, `MemReduce`, side-effecting map lambdas, non-integer reductions. |
+| `Reduce` | Stage 4 | Explicit accumulator scalar plus deterministic lane combination. | `UNROLL factor=P` only after a selected static-`par` slice; current scalar reductions stay unit-lane. | Generic `Fold`, generic `MemReduce`, side-effecting map lambdas, non-integer reductions. |
 | `FSM` | Stage 3 | Structured `for` or `while` with explicit state update. | Optional `LOOP_TRIPCOUNT` for known bounds. | Multiple-state and back-pressure-driven FSMs. |
 | `Reg[Int]` | Stage 3 | Local scalar initialized from reset value. | Guard assignments with enables. | FIFOReg semantics. |
 | `SRAM[Int]` | Stage 1 | Local C++ array with static dimensions. | Optional `ARRAY_PARTITION` from observed `par`. | Explicit `.bank`, `.forcebank`, arbitrary banking hints. |
@@ -73,7 +73,7 @@ The Wave 1 artifacts reduce the active blocker set to five local policies:
 | Blackboxes, BigIP optional arithmetic | "Blackbox or BigIP lowering is deferred for the EE109 MVP." |
 | Floating point, custom fixed point, unbiased rounding, FMA policy | "Non-integer numeric policy is deferred; selected EE109 path supports integer kernels first." |
 | FIFO/LIFO | "FIFO/LIFO lowering is conditional on selecting the Lab 1 FIFO example." |
-| `Fold` or `MemReduce` | "Fold/MemReduce lowering is conditional on selecting the Lab 1 reduction example." |
+| Generic `Fold` or `MemReduce` | "Only the exact Lab1 Part6 SRAM-tile fold canary and simple Lab2 all-ones MemReduce/MemFold canaries are supported; broader reduction lowering remains conditional on a selected source shape." |
 | Sparse gather/scatter | "Only dense contiguous transfers are supported in the EE109 MVP." |
 | Explicit banking hints | "Explicit banking hints are deferred; the MVP uses rule-derived HLS partitions." |
 | DSE/runtime latency model | "Functional HLS generation does not depend on Spatial runtime-model parity." |

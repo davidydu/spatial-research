@@ -28,7 +28,7 @@ The current `spatial-rs` work should therefore be treated as a tracer slice:
 
 `spatial-rs` currently has accepted fixture adapters for scalar add, dense 1-D DRAM/SRAM multiply, LUTs, one exact FSM, rank-2 copy groundwork, and one direct Lab3 convolution semantic adapter.
 
-Current Vitis status: the latest Rust rewrite Vitis checkpoint is the
+Current Vitis status: the latest Rust rewrite Vitis checkpoint is still the
 2026-07-01 refreshed 26-program lane through `Dense2dTileKMemFold v0`. It
 validates the original adapter baseline plus the reusable
 scalar/dense/LUT/rank-2-copy/control/stencil/scalar-reduction/scalar-fold
@@ -37,11 +37,15 @@ canaries, `FifoTileScale32`, rank-2 tiled GEMM precursors, fixed-point MemFold,
 tail/min MemFold, explicit-inout C MemFold, and the static exact outer-K
 in-place C canary through Vitis 2025.1 `csim_design` and `csynth_design`.
 Exact raw wrappers now exist for Lab1 Part4 FIFO, Lab2 Part1/Part2
-MemReduce/MemFold, and fixed Lab2 Part5, but they canonicalize to existing
-canaries and do not add validation-program membership or new Vitis evidence.
-These wrappers are not generic Spatial `FIFO`, `MemReduce`, `MemFold`, GEMM,
-`par`, scheduling, banking, board execution, timing closure, or broad Scala
-source compatibility.
+MemReduce/MemFold, and fixed Lab2 Part5, and those canonicalize to existing
+canaries without adding validation-program membership or new Vitis evidence.
+The exact raw Lab1 Part6 wrapper is different: it canonicalizes to the new
+`SramTileFoldSum32` / `ScalarSramTileFold v0` structural canary, so the local
+validation list is now 27 programs with host-C++ and plan-only coverage. EC2
+Vitis for that 27-program lane is pending.
+These wrappers are not generic Spatial `FIFO`, `Fold`, `MemReduce`, `MemFold`,
+GEMM, `par`, scheduling, banking, board execution, timing closure, or broad
+Scala source compatibility.
 
 `ScalarExpr v0` is the first reusable supported feature rather than an exact
 fixture adapter. It covers one scalar integer assignment over 1-4 scalar inputs
