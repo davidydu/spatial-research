@@ -237,6 +237,18 @@ bodies, rank-2 memory reductions, GEMM, fixed-point arithmetic, banking,
 streams, scheduling, board execution, Vivado implementation, place-and-route,
 or timing closure.
 
+Later exact raw-wrapper update:
+
+On 2026-07-01, the Rust rewrite added token-stream source adapters for the
+known local `Lab2Part1SimpleMemReduce` and `Lab2Part2SimpleMemFold` lab
+classes. These wrappers canonicalize to the existing `MemReduceOnes16` and
+`MemFoldOnes16` payloads and local tests prove generated HLS/manifest equality.
+This is not new Vitis evidence and does not broaden the historical
+MemReduce/MemFold Vitis checkpoint. Generic Spatial `MemReduce`/`MemFold`,
+arbitrary reducer/fold bodies, dynamic bounds, rank-2 reductions, scheduling,
+banking, broad Scala source compatibility, board execution, Vivado
+implementation, place-and-route, and timing closure remain unsupported.
+
 Follow-up FIFO semantic-canary run:
 
 On 2026-06-28, the Rust rewrite added `Fifo1dTileScalarMul v0` and re-ran the
