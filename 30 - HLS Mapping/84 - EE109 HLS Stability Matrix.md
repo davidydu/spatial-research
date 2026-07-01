@@ -254,6 +254,18 @@ reductions, scheduling, banking, broad Scala source compatibility, board
 execution, Vivado implementation, place-and-route, and timing closure remain
 unsupported.
 
+On 2026-07-01, the Rust rewrite also added an exact raw source adapter for the
+known local teaching `Lab3Part1Convolution` wrapper from
+`/Users/david/Documents/David_code/lab-3-accelerator-bandits/src/test/scala/Lab3.scala`.
+It canonicalizes to the existing fixed `Lab3Part1Convolution` / `Stencil2d`
+payload and local tests prove parser equality plus generated HLS/manifest
+equality. This is not new Vitis evidence and does not broaden the historical
+Lab3 Vitis checkpoint. Changed dimensions, changed accelerator shape, generic
+Scala `LineBuffer`, `RegFile`, `Reduce`, generalized rotated-kernel handling,
+dynamic dimensions, optimized line-buffer scheduling, broad source
+compatibility, board execution, Vivado implementation, place-and-route, and
+timing closure remain unsupported.
+
 Follow-up FIFO semantic-canary run:
 
 On 2026-06-28, the Rust rewrite added `Fifo1dTileScalarMul v0` and re-ran the
@@ -440,22 +452,23 @@ Generated-code hygiene:
   and non-`Int` element types beyond the exact Rust
   `FixPt[TRUE,_24,_8]` MemFold canary remain unsupported in HLS mode and should
   stay fail-closed until selected intentionally.
+- The exact local Lab3 teaching raw wrapper is a source-compatibility adapter
+  only. It preserves the existing Vitis-proven `Lab3Part1Convolution` payload
+  locally, but has not been included in a fresh EC2/Vitis run as a distinct
+  evidence checkpoint.
 - The Scala runs still emit the existing `libisl appears to be missing` warning. That warning does not block these local regression results, but it is separate from vendor HLS readiness.
 
 ## Recommended Next Action
 
-For the Rust rewrite, the MemFold source-spelling bridge is now a parser-only
-bridge series: `memfold c_tile with partial_tile over kk in 0..K { ... };` and
-`memfold c_tile with partial_tile over kk in 0..K { ... partial_tile }{_+_};`
-plus `MemFold(c_tile)(0 until K by 1) { kk => ... partial_tile }{_+_};`.
-The Spatial-ish call form can also begin with a body-local canonical
-`let partial_tile = Sram<...>[...];`, which the parser hoists into the existing
-checked payload; renamed partial temps remain unsupported in this bridge.
-All accepted bridge spellings normalize to existing checked
-`Dense2dTileMemFold` payloads without changing generated HLS or validation
-membership. The remaining GEMM gaps are original Scala Lab2 Part 5/6 source
-compatibility, `MemFold(SRAM[T](...))`, generic Spatial `MemFold`, controlled
-`par`, banking, K tiling, and broader fixed-point/tail semantics.
+For the Rust rewrite, take a clean EC2/Vitis checkpoint for the current
+`David/HLS-spatial` head if we want a single vendor-HLS evidence boundary that
+includes all behavior-preserving source-adapter work since the 27-program
+`2026-07-01-lab1-part6-sram-hir-refactor` run. Otherwise, keep the next local
+implementation slice fail-closed and driven by one concrete lab source shape at
+a time. The main remaining EE109 gaps are original Scala Lab2 Part 6 source
+compatibility, controlled `par`, generic Spatial `MemFold`/`Fold`,
+dynamic/tail K tiling, broader fixed-point/tail semantics, and generic Lab3
+local-window/stencil lowering beyond the exact local raw wrapper.
 
 ## 2026-06-30 Rust Rewrite Bulk Tile IO Bridge
 
