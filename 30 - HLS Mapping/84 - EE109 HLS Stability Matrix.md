@@ -618,3 +618,32 @@ Scope:
   Part5/Part6 shell extraction, outer K tiling, `numel_k`, Part6 `par`,
   banking, generic Spatial `MemFold`, generic DMA, board execution, Vivado
   implementation, or timing closure.
+
+## 2026-06-30 Rust Rewrite Lab2 `numel_m`/`numel_n` Parser Bridge
+
+The Rust rewrite now accepts one more Lab2 source-spelling detail in the
+existing parser-only MemFold shell/infix bridge:
+
+- `numel_m` may stand for the row tile extent.
+- `numel_n` may stand for the column tile extent.
+- Exact tile spellings normalize those names to the existing `TILE_R` and
+  `TILE_C` extents.
+- Tail spellings normalize those names to the existing `row_limit` and
+  `col_limit` checked-payload names.
+
+Status:
+- This is a frontend canonicalization only. The checked IR payload remains the
+  existing `Dense2dTileMemFold` payload.
+- The validation-program list remains the same 25 programs.
+- No generated HLS, manifest, harness, or Vitis evidence changed for this
+  parser bridge.
+- A new fail-closed parser guard keeps `numel_k` K tiling unsupported.
+
+Evidence boundary:
+- Local proof is parser regression only:
+  `cargo test -p spatial-rs-core --locked lab2_infix_tile_io -- --nocapture`.
+- This does not promote `Lab2Part5GEMM` or `Lab2Part6GEMM`, does not prove
+  original Scala source compatibility, and does not claim source-level
+  Part5/Part6 shell extraction, outer K tiling, `numel_k`, Part6 `par`,
+  banking, generic Spatial `MemFold`, generic DMA, board execution, Vivado
+  implementation, or timing closure.

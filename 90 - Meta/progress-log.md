@@ -807,3 +807,35 @@ Boundary:
   tiling, `numel_k` MemFold bounds, Part6 `par`, banking, generic Spatial
   `MemFold`, generic DMA, broader fixed-point widths, FixPt tail tiles, board
   execution, Vivado implementation/place-and-route, or timing-closure evidence.
+
+## 2026-06-30 — Rust rewrite Lab2 `numel_m`/`numel_n` parser bridge
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Parser checkpoint:
+- Added a narrow frontend bridge for Lab2 row/column extent aliases
+  `numel_m` and `numel_n` inside the existing shell-alias/infix tile-IO
+  MemFold path.
+- Exact tile spellings canonicalize `numel_m`/`numel_n` to the existing
+  `TILE_R`/`TILE_C` extents before HIR/classification.
+- Tail spellings that declare `numel_m`/`numel_n` canonicalize to the existing
+  `row_limit`/`col_limit` checked-payload names before HIR/classification.
+- Added a fail-closed guard that keeps `numel_k` K-tiling syntax rejected.
+
+Local proof added so far:
+- Red/green focused parser test:
+  `cargo test -p spatial-rs-core --locked parse_accel_lab2_infix_tile_io_accepts_numel_m_numel_n -- --nocapture`.
+- Focused Lab2 infix regression:
+  `cargo test -p spatial-rs-core --locked lab2_infix_tile_io -- --nocapture`.
+
+Boundary:
+- This is parser/source-spelling coverage only. It does not add a validation
+  program, does not change generated HLS, and does not create new Vitis
+  evidence.
+- `Lab2Part5GEMM` and `Lab2Part6GEMM` remain rejected. This still does not
+  accept original Scala Lab2 source, raw Scala `@spatial` wrappers, host
+  `ArgIn`/`setMem`, source-level Part5/Part6 shell extraction, outer K tiling,
+  `numel_k`, Part6 `par`, banking, generic Spatial `MemFold`, generic DMA,
+  broader fixed-point widths, FixPt tail tiles, board execution, Vivado
+  implementation/place-and-route, or timing-closure evidence.
