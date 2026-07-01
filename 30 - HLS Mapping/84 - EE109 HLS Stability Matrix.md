@@ -405,15 +405,14 @@ Generated-code hygiene:
   integration.
 - For the Rust rewrite, the selected accepted adapters, twelve reusable
   supported-feature representatives, two local memory-reduction canaries, the
-  Int tail/min `Dense2dTileMemFold v0` canary, and the explicit-inout
-  fixed-point in-place C MemFold canary have Vitis `csim_design` and
-  `csynth_design` evidence through the 25-program
-  `docs/vitis-validation/2026-06-30-inplace-c-memfold/` checkpoint. The new
-  static exact outer-K in-place C `Dense2dTileKMemFold v0` canary is present in
-  the 26-program local lane with host-C++ and Vitis plan-only evidence, but its
-  EC2/Vitis execution remains pending. Board execution, Vivado implementation,
-  timing closure, Scala source compatibility, dynamic/tail K tiling, `numel_k`,
-  Part6 `par`, and broad Spatial coverage remain pending.
+  Int tail/min `Dense2dTileMemFold v0` canary, the explicit-inout fixed-point
+  in-place C MemFold canary, and the static exact outer-K in-place C
+  `Dense2dTileKMemFold v0` canary have Vitis `csim_design` and
+  `csynth_design` evidence through the 26-program
+  `docs/vitis-validation/2026-07-01-outer-k-memfold/` checkpoint. Board
+  execution, Vivado implementation, timing closure, Scala source compatibility,
+  dynamic/tail K tiling, `numel_k`, Part6 `par`, and broad Spatial coverage
+  remain pending.
 - The Lab1Part2 memory lowering is a narrow structural slice, not a general Spatial memory backend. It accepts the selected fixed shape: `N = 32`, `tileSize = 16`, one input DRAM, one output DRAM, two 16-element SRAM tiles, one scalar integer multiplier, and dense unit-stride transfers.
 - The Lab1Part2 generated harness uses an independent vector oracle, but the source initialization is currently fixed to the selected EE109 shape `src(i) = i % 256`.
 - FIFO, generic reductions/folds, generic memory reductions/folds, generic
@@ -643,6 +642,8 @@ Status:
 - The host-C++ harness seeds `actual` from `c`, mutates `c` in place, and
   checks against the existing `C + A*B` oracle.
 - Vitis dry-run/plan-only sidecars include the new canary.
+- EC2 Vitis 2025.1 `csim_design` and `csynth_design` now pass for all 26
+  validation programs, including this canary.
 
 Evidence:
 - `cargo test -p spatial-rs-core --locked outer_k -- --nocapture`
@@ -650,10 +651,16 @@ Evidence:
 - `cargo test -p ee109-examples --locked validation_programs_include_supported_features_after_adapter_baseline -- --nocapture`
 - `cargo test -p ee109-examples --locked emit_vitis_dry_run_binary_generates_m1_frontend_bundles -- --nocapture`
 - `cargo test -p ee109-examples --locked run_vitis_validation_plan_only_writes_sidecar_tcl_for_all_examples -- --nocapture`
+- EC2 command:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --settings /tools/Xilinx/2025.1/Vitis/settings64.sh --out target/vitis-validation-outer-k-run`
+- Durable evidence:
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-01-outer-k-memfold/`
+- New canary Vitis result:
+  `returncode=0`, `csim=true`, `csynth=true`, estimated Fmax 136.99 MHz.
 
 Evidence boundary:
-- No EC2/Vitis `csim_design` or `csynth_design` result is claimed yet for the
-  26-program lane.
+- EC2/Vitis `csim_design` and `csynth_design` are claimed for the exact
+  26-program validation lane only.
 - This is not raw Scala `Lab2Part5GEMM` or `Lab2Part6GEMM` source
   compatibility.
 - Dynamic `ArgIn` dimensions, `numel_k`, K tails, generic/source-compatible
