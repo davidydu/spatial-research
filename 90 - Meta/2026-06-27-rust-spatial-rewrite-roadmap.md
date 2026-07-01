@@ -29,9 +29,9 @@ The current `spatial-rs` work should therefore be treated as a tracer slice:
 `spatial-rs` currently has accepted fixture adapters for scalar add, dense 1-D DRAM/SRAM multiply, LUTs, one exact FSM, rank-2 copy groundwork, and one direct Lab3 convolution semantic adapter.
 
 Current Vitis status: the latest Rust rewrite Vitis checkpoint is the
-2026-07-01 27-program lane through `ScalarSramTileFold v0`; the prior refreshed
-26-program lane remains the block-comment/raw-Part5 checkpoint. It validates
-the original adapter baseline plus the reusable
+2026-07-01 post-refactor 27-program lane through `ScalarSramTileFold v0`; the
+prior refreshed 26-program lane remains the block-comment/raw-Part5 checkpoint.
+It validates the original adapter baseline plus the reusable
 scalar/dense/LUT/rank-2-copy/control/stencil/scalar-reduction/scalar-fold
 representatives, the local all-ones `MemReduceOnes16` / `MemFoldOnes16`
 canaries, `FifoTileScale32`, rank-2 tiled GEMM precursors, fixed-point MemFold,
@@ -43,9 +43,10 @@ MemReduce/MemFold, and fixed Lab2 Part5, and those canonicalize to existing
 canaries without adding validation-program membership or new Vitis evidence.
 The exact raw Lab1 Part6 wrapper is different: it canonicalizes to the new
 `SramTileFoldSum32` / `ScalarSramTileFold v0` structural canary, so the local
-validation list is now 27 programs with host-C++, plan-only coverage, and
-EC2 Vitis `csim_design`/`csynth_design` evidence captured in
-`docs/vitis-validation/2026-07-01-lab1-part6-sram/`.
+validation list is now 27 programs with host-C++, plan-only coverage, and fresh
+post-frontend/HIR-refactor EC2 Vitis `csim_design`/`csynth_design` evidence
+captured in
+`docs/vitis-validation/2026-07-01-lab1-part6-sram-hir-refactor/`.
 These wrappers are not generic Spatial `FIFO`, `Fold`, `MemReduce`, `MemFold`,
 GEMM, `par`, scheduling, banking, board execution, timing closure, or broad
 Scala source compatibility.

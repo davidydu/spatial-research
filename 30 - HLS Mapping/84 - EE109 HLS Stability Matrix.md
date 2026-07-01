@@ -421,9 +421,10 @@ Generated-code hygiene:
 - For the Rust rewrite, the explicitly listed accepted adapters,
   supported-feature representatives, and canaries through `ScalarSramTileFold
   v0` have Vitis `csim_design` and `csynth_design` evidence through the
-  27-program `docs/vitis-validation/2026-07-01-lab1-part6-sram/` checkpoint.
-  Board execution, Vivado implementation, timing closure, generic Spatial
-  `Fold`, arbitrary local-memory folds/effects, dynamic/tail K tiling,
+  post-refactor 27-program
+  `docs/vitis-validation/2026-07-01-lab1-part6-sram-hir-refactor/`
+  checkpoint. Board execution, Vivado implementation, timing closure, generic
+  Spatial `Fold`, arbitrary local-memory folds/effects, dynamic/tail K tiling,
   `numel_k`, Part6 `par`, Scala source compatibility, and broad Spatial
   coverage remain pending.
 - The Lab1Part2 memory lowering is a narrow structural slice, not a general Spatial memory backend. It accepts the selected fixed shape: `N = 32`, `tileSize = 16`, one input DRAM, one output DRAM, two 16-element SRAM tiles, one scalar integer multiplier, and dense unit-stride transfers.
@@ -782,8 +783,8 @@ Status:
 
 Evidence boundary:
 - Durable evidence is captured in
-  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-01-lab1-part6-sram/`
-  at source commit `6a83cd2247258ec47f034f9b0f41bf0c131281b9`.
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-01-lab1-part6-sram-hir-refactor/`
+  at source commit `f0f3cb4ee03461fefacfeebc21dd8e4db38b8c51`.
 - Generic Spatial `Fold`, arbitrary nested folds, arbitrary local-memory
   effects, tail tiles, dynamic bounds, non-`Int`, scheduling, banking, board
   execution, Vivado implementation, timing closure, and broad Scala source
