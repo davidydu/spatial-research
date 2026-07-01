@@ -408,9 +408,12 @@ Generated-code hygiene:
   Int tail/min `Dense2dTileMemFold v0` canary, and the explicit-inout
   fixed-point in-place C MemFold canary have Vitis `csim_design` and
   `csynth_design` evidence through the 25-program
-  `docs/vitis-validation/2026-06-30-inplace-c-memfold/` checkpoint. Board
-  execution, Vivado implementation, timing closure, Scala source compatibility,
-  and broad Spatial coverage remain pending.
+  `docs/vitis-validation/2026-06-30-inplace-c-memfold/` checkpoint. The new
+  static exact outer-K in-place C `Dense2dTileKMemFold v0` canary is present in
+  the 26-program local lane with host-C++ and Vitis plan-only evidence, but its
+  EC2/Vitis execution remains pending. Board execution, Vivado implementation,
+  timing closure, Scala source compatibility, dynamic/tail K tiling, `numel_k`,
+  Part6 `par`, and broad Spatial coverage remain pending.
 - The Lab1Part2 memory lowering is a narrow structural slice, not a general Spatial memory backend. It accepts the selected fixed shape: `N = 32`, `tileSize = 16`, one input DRAM, one output DRAM, two 16-element SRAM tiles, one scalar integer multiplier, and dense unit-stride transfers.
 - The Lab1Part2 generated harness uses an independent vector oracle, but the source initialization is currently fixed to the selected EE109 shape `src(i) = i % 256`.
 - FIFO, generic reductions/folds, generic memory reductions/folds, generic
@@ -618,6 +621,44 @@ Scope:
   Part5/Part6 shell extraction, outer K tiling, `numel_k`, Part6 `par`,
   banking, generic Spatial `MemFold`, generic DMA, board execution, Vivado
   implementation, or timing closure.
+
+## 2026-06-30 Rust Rewrite Static Outer-K In-Place C MemFold Canary
+
+The Rust rewrite now has one static exact outer-K in-place C canary for the
+Lab2 Part5 GEMM direction:
+
+- `MatrixTileMemFoldOuterKInPlaceFixPt32x32x32`
+- `ProgramKind::Dense2dTileKMemFold`
+- `K_TILES = 2`, `TILE_K = 16`, `K = 32`
+- local A/B SRAMs are `[TILE_R,TILE_K]` and `[TILE_K,TILE_C]`
+- global K DRAM indexing is `kk_tile*TILE_K + k_idx`
+- `c` is one explicit `DramInOut`/mutable HLS pointer
+
+Status:
+- The local validation-program list is now 26 programs.
+- Parser/classifier support is separate from the old full-K
+  `Dense2dTileMemFold v0` payload.
+- HLS codegen emits a real outer `kk_tile` loop and `TILE_K`-sized local
+  A/B arrays.
+- The host-C++ harness seeds `actual` from `c`, mutates `c` in place, and
+  checks against the existing `C + A*B` oracle.
+- Vitis dry-run/plan-only sidecars include the new canary.
+
+Evidence:
+- `cargo test -p spatial-rs-core --locked outer_k -- --nocapture`
+- `cargo test -p spatial-rs-hls --locked lab2_outer_k_inplace_c_memfold_emits_static_k_tile_loops_and_harness -- --nocapture`
+- `cargo test -p ee109-examples --locked validation_programs_include_supported_features_after_adapter_baseline -- --nocapture`
+- `cargo test -p ee109-examples --locked emit_vitis_dry_run_binary_generates_m1_frontend_bundles -- --nocapture`
+- `cargo test -p ee109-examples --locked run_vitis_validation_plan_only_writes_sidecar_tcl_for_all_examples -- --nocapture`
+
+Evidence boundary:
+- No EC2/Vitis `csim_design` or `csynth_design` result is claimed yet for the
+  26-program lane.
+- This is not raw Scala `Lab2Part5GEMM` or `Lab2Part6GEMM` source
+  compatibility.
+- Dynamic `ArgIn` dimensions, `numel_k`, K tails, generic/source-compatible
+  Spatial `MemFold`, Part6 `par`, banking, board execution, Vivado
+  implementation, and timing closure remain unsupported.
 
 ## 2026-06-30 Rust Rewrite Lab2 `numel_m`/`numel_n` Parser Bridge
 
