@@ -259,10 +259,14 @@ known local teaching `Lab3Part1Convolution` wrapper from
 `/Users/david/Documents/David_code/lab-3-accelerator-bandits/src/test/scala/Lab3.scala`.
 It canonicalizes to the existing fixed `Lab3Part1Convolution` / `Stencil2d`
 payload and local tests prove parser equality plus generated HLS/manifest
-equality. This is not new Vitis evidence and does not broaden the historical
-Lab3 Vitis checkpoint. Changed dimensions, changed accelerator shape, generic
-Scala `LineBuffer`, `RegFile`, `Reduce`, generalized rotated-kernel handling,
-dynamic dimensions, optimized line-buffer scheduling, broad source
+equality. A fresh current-head 27-program EC2/Vitis run now also proves the
+canonical Lab3 payload still passes `csim_design` and `csynth_design` with this
+adapter code present; evidence is captured in
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-01-lab3-local-raw-wrapper/`.
+This does not add a separate raw-wrapper validation program or broaden the
+historical Lab3 payload claim. Changed dimensions, changed accelerator shape,
+generic Scala `LineBuffer`, `RegFile`, `Reduce`, generalized rotated-kernel
+handling, dynamic dimensions, optimized line-buffer scheduling, broad source
 compatibility, board execution, Vivado implementation, place-and-route, and
 timing closure remain unsupported.
 
@@ -438,12 +442,13 @@ Generated-code hygiene:
 - For the Rust rewrite, the explicitly listed accepted adapters,
   supported-feature representatives, and canaries through `ScalarSramTileFold
   v0` have Vitis `csim_design` and `csynth_design` evidence through the
-  post-refactor 27-program
-  `docs/vitis-validation/2026-07-01-lab1-part6-sram-hir-refactor/`
-  checkpoint. Board execution, Vivado implementation, timing closure, generic
-  Spatial `Fold`, arbitrary local-memory folds/effects, dynamic/tail K tiling,
-  `numel_k`, Part6 `par`, Scala source compatibility, and broad Spatial
-  coverage remain pending.
+  current-head 27-program
+  `docs/vitis-validation/2026-07-01-lab3-local-raw-wrapper/` checkpoint. The
+  previous post-refactor SRAM-tile fold boundary remains preserved under
+  `docs/vitis-validation/2026-07-01-lab1-part6-sram-hir-refactor/`. Board
+  execution, Vivado implementation, timing closure, generic Spatial `Fold`,
+  arbitrary local-memory folds/effects, dynamic/tail K tiling, `numel_k`, Part6
+  `par`, Scala source compatibility, and broad Spatial coverage remain pending.
 - The Lab1Part2 memory lowering is a narrow structural slice, not a general Spatial memory backend. It accepts the selected fixed shape: `N = 32`, `tileSize = 16`, one input DRAM, one output DRAM, two 16-element SRAM tiles, one scalar integer multiplier, and dense unit-stride transfers.
 - The Lab1Part2 generated harness uses an independent vector oracle, but the source initialization is currently fixed to the selected EE109 shape `src(i) = i % 256`.
 - FIFO outside the exact raw Lab1 Part4 wrapper / `FifoTileScale32` semantic
@@ -454,21 +459,19 @@ Generated-code hygiene:
   stay fail-closed until selected intentionally.
 - The exact local Lab3 teaching raw wrapper is a source-compatibility adapter
   only. It preserves the existing Vitis-proven `Lab3Part1Convolution` payload
-  locally, but has not been included in a fresh EC2/Vitis run as a distinct
-  evidence checkpoint.
+  locally; the fresh current-head EC2/Vitis run proves the canonical payload
+  with this adapter code present, not a distinct raw-wrapper validation program.
 - The Scala runs still emit the existing `libisl appears to be missing` warning. That warning does not block these local regression results, but it is separate from vendor HLS readiness.
 
 ## Recommended Next Action
 
-For the Rust rewrite, take a clean EC2/Vitis checkpoint for the current
-`David/HLS-spatial` head if we want a single vendor-HLS evidence boundary that
-includes all behavior-preserving source-adapter work since the 27-program
-`2026-07-01-lab1-part6-sram-hir-refactor` run. Otherwise, keep the next local
-implementation slice fail-closed and driven by one concrete lab source shape at
-a time. The main remaining EE109 gaps are original Scala Lab2 Part 6 source
-compatibility, controlled `par`, generic Spatial `MemFold`/`Fold`,
-dynamic/tail K tiling, broader fixed-point/tail semantics, and generic Lab3
-local-window/stencil lowering beyond the exact local raw wrapper.
+For the Rust rewrite, the clean current-head EC2/Vitis checkpoint has now been
+taken. The next implementation slice should stay fail-closed and be driven by
+one concrete lab source shape at a time. The main remaining EE109 gaps are
+original Scala Lab2 Part 6 source compatibility, controlled `par`, generic
+Spatial `MemFold`/`Fold`, dynamic/tail K tiling, broader fixed-point/tail
+semantics, and generic Lab3 local-window/stencil lowering beyond the exact
+local raw wrapper.
 
 ## 2026-06-30 Rust Rewrite Bulk Tile IO Bridge
 
