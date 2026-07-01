@@ -731,11 +731,12 @@ Evidence boundary:
   execution, Vivado
   implementation, and timing closure unsupported.
 
-## 2026-07-01 Rust Rewrite Current-HEAD EC2 Vitis Refresh
+## 2026-07-01 Rust Rewrite `a16401b9` EC2 Vitis Refresh
 
 After the tokenized raw Part5 wrapper bridge and shared frontend nested block
 comment support, the Rust rewrite re-ran the exact 26-program Vitis lane at
-source commit `a16401b` on `David/HLS-spatial`.
+source commit `a16401b9c1699d8f92d7ec0a93b04ae608d90617` on
+`David/HLS-spatial`.
 
 Evidence:
 - Remote host: `[ec2-host — see private/ec2-lane.md]`
@@ -754,7 +755,7 @@ Evidence:
 
 Evidence boundary:
 - This refresh proves Vitis C simulation and HLS synthesis for the exact
-  current 26-program validation set only.
+  `a16401b9` 26-program validation set only.
 - It also confirms that frontend block-comment support did not perturb the
   generated validation kernels.
 - It does not claim board execution, Vivado implementation/place-and-route,
