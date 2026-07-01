@@ -3,7 +3,7 @@ type: hls-mapping
 construct: ee109-hls-stability-matrix
 category: rework
 status: current
-date: 2026-06-30
+date: 2026-07-01
 stage: 1D
 depends_on:
   - "[[80 - Stage1 EE109 HLS Expansion Plan]]"
@@ -666,6 +666,38 @@ Evidence boundary:
 - Dynamic `ArgIn` dimensions, `numel_k`, K tails, generic/source-compatible
   Spatial `MemFold`, Part6 `par`, banking, board execution, Vivado
   implementation, and timing closure remain unsupported.
+
+## 2026-07-01 Rust Rewrite Lab2-Like Outer-K Parser Bridge
+
+The Rust rewrite now accepts a Lab2-like shell/infix spelling for the same
+static exact outer-K canary:
+
+- `inputs { a, b } inouts { c }`
+- `tileA_sram`, `tileB_sram`, and `tileC_sram.buffer`
+- outer tile loops spelled as `kk`, `mm`, and `nn`
+- a hoisted A-tile load before the column tile loop
+- infix rank-2 tile loads/stores using `::` ranges
+- `MemFold(tileC_sram)(0 until TILE_K by 1) { k_idx => ... }{_+_}`
+
+Status:
+- This is parser/source-spelling coverage only. It canonicalizes to the
+  existing `Dense2dTileKMemFold` checked payload for
+  `MatrixTileMemFoldOuterKInPlaceFixPt32x32x32`.
+- The generated HLS and manifest match the expanded static outer-K canary
+  exactly.
+- The validation-program list remains 26 programs.
+- No new EC2/Vitis evidence is claimed for this bridge because it does not
+  change emitted HLS or validation membership.
+
+Evidence boundary:
+- Local proof is parser/classifier equivalence plus HLS/manifest equality:
+  `cargo test -p spatial-rs-core --locked lab2_outer_k -- --nocapture` and
+  `cargo test -p spatial-rs-hls --locked lab2_outer_k -- --nocapture`.
+- Reserved raw Scala `Lab2Part5GEMM` and `Lab2Part6GEMM` names still fail
+  closed. The bridge also keeps full-K MemFold bounds, `numel_k`, hoisted
+  B/C/fold/store phases, dynamic/tail K tiling, Part6 `par`, banking, generic
+  Spatial `MemFold`, board execution, Vivado implementation, and timing closure
+  unsupported.
 
 ## 2026-06-30 Rust Rewrite Lab2 `numel_m`/`numel_n` Parser Bridge
 
