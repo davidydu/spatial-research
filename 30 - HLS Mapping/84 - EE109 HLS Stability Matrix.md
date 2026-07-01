@@ -661,8 +661,9 @@ Evidence:
 Evidence boundary:
 - EC2/Vitis `csim_design` and `csynth_design` are claimed for the exact
   26-program validation lane only.
-- This is not raw Scala `Lab2Part5GEMM` or `Lab2Part6GEMM` source
-  compatibility.
+- The EC2/Vitis run itself is not raw Scala `Lab2Part5GEMM` or
+  `Lab2Part6GEMM` source compatibility. Exact fixed Part5 raw-wrapper support
+  is tracked below as a local parser/HLS-equality bridge over the same canary.
 - Dynamic `ArgIn` dimensions, dynamic/tail `numel_k`, K tails,
   generic/source-compatible Spatial `MemFold`, Part6 `par`, banking, board execution, Vivado
   implementation, and timing closure remain unsupported.
@@ -684,6 +685,9 @@ static exact outer-K canary:
   the MemFold bound
 - exact static `val numel_k = min(TILE_K.to[Int], K - kk);` spelling under the
   same offset-loop proof
+- the exact fixed raw `@spatial class Lab2Part5GEMM` wrapper when `runtimeArgs`
+  prove `M=N=K=32`, `tileM/tileN/tileK` are all `16`, the type alias is
+  `FixPt[TRUE,_24,_8]`, and there is one matching `Accel` body
 
 Status:
 - This is parser/source-spelling coverage only. It canonicalizes to the
@@ -697,9 +701,11 @@ Status:
 
 Evidence boundary:
 - Local proof is parser/classifier equivalence plus HLS/manifest equality:
-  `cargo test -p spatial-rs-core --locked lab2_outer_k -- --nocapture` and
-  `cargo test -p spatial-rs-hls --locked lab2_outer_k -- --nocapture`.
-- Reserved raw Scala `Lab2Part5GEMM` and `Lab2Part6GEMM` names still fail
+  `cargo test -p spatial-rs-core --locked lab2_outer_k -- --nocapture`,
+  `cargo test -p spatial-rs-core --locked raw_lab2_part5 -- --nocapture`, and
+  `cargo test -p spatial-rs-hls --locked lab2_outer_k -- --nocapture`, plus
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_raw_part5 -- --nocapture`.
+- Non-exact raw Scala `Lab2Part5GEMM` and all `Lab2Part6GEMM` forms still fail
   closed. The bridge also keeps full-K MemFold bounds, undeclared or mismatched
   `numel_k`, malformed or dynamic `numel_k = min(...)` variants, non-exact
   offset-loop steps, dynamic/tail K tiling, hoisted B/C/fold/store phases, Part6
