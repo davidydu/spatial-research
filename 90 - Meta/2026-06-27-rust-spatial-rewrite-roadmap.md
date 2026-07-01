@@ -28,14 +28,16 @@ The current `spatial-rs` work should therefore be treated as a tracer slice:
 
 `spatial-rs` currently has accepted fixture adapters for scalar add, dense 1-D DRAM/SRAM multiply, LUTs, one exact FSM, rank-2 copy groundwork, and one direct Lab3 convolution semantic adapter.
 
-Current Vitis status: the latest Rust rewrite Vitis checkpoint is still the
-2026-07-01 refreshed 26-program lane through `Dense2dTileKMemFold v0`. It
-validates the original adapter baseline plus the reusable
+Current Vitis status: the latest Rust rewrite Vitis checkpoint is the
+2026-07-01 27-program lane through `ScalarSramTileFold v0`; the prior refreshed
+26-program lane remains the block-comment/raw-Part5 checkpoint. It validates
+the original adapter baseline plus the reusable
 scalar/dense/LUT/rank-2-copy/control/stencil/scalar-reduction/scalar-fold
 representatives, the local all-ones `MemReduceOnes16` / `MemFoldOnes16`
 canaries, `FifoTileScale32`, rank-2 tiled GEMM precursors, fixed-point MemFold,
 tail/min MemFold, explicit-inout C MemFold, and the static exact outer-K
-in-place C canary through Vitis 2025.1 `csim_design` and `csynth_design`.
+in-place C canary, plus the Lab1 Part6 `SramTileFoldSum32` SRAM-tile fold
+canary through Vitis 2025.1 `csim_design` and `csynth_design`.
 Exact raw wrappers now exist for Lab1 Part4 FIFO, Lab2 Part1/Part2
 MemReduce/MemFold, and fixed Lab2 Part5, and those canonicalize to existing
 canaries without adding validation-program membership or new Vitis evidence.

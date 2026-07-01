@@ -418,16 +418,14 @@ Generated-code hygiene:
 - The original Scala Spatial HLS gate remains a local host-C++ gate. It does
   not invoke Vitis/Vivado HLS, synthesize RTL, check timing, or validate board
   integration.
-- For the Rust rewrite, the selected accepted adapters, twelve reusable
-  supported-feature representatives, two local memory-reduction canaries, the
-  Int tail/min `Dense2dTileMemFold v0` canary, the explicit-inout fixed-point
-  in-place C MemFold canary, and the static exact outer-K in-place C
-  `Dense2dTileKMemFold v0` canary have Vitis `csim_design` and
-  `csynth_design` evidence through the 26-program
-  `docs/vitis-validation/2026-07-01-outer-k-memfold/` checkpoint. Board
-  execution, Vivado implementation, timing closure, Scala source compatibility,
-  dynamic/tail K tiling, `numel_k`, Part6 `par`, and broad Spatial coverage
-  remain pending.
+- For the Rust rewrite, the explicitly listed accepted adapters,
+  supported-feature representatives, and canaries through `ScalarSramTileFold
+  v0` have Vitis `csim_design` and `csynth_design` evidence through the
+  27-program `docs/vitis-validation/2026-07-01-lab1-part6-sram/` checkpoint.
+  Board execution, Vivado implementation, timing closure, generic Spatial
+  `Fold`, arbitrary local-memory folds/effects, dynamic/tail K tiling,
+  `numel_k`, Part6 `par`, Scala source compatibility, and broad Spatial
+  coverage remain pending.
 - The Lab1Part2 memory lowering is a narrow structural slice, not a general Spatial memory backend. It accepts the selected fixed shape: `N = 32`, `tileSize = 16`, one input DRAM, one output DRAM, two 16-element SRAM tiles, one scalar integer multiplier, and dense unit-stride transfers.
 - The Lab1Part2 generated harness uses an independent vector oracle, but the source initialization is currently fixed to the selected EE109 shape `src(i) = i % 256`.
 - FIFO outside the exact raw Lab1 Part4 wrapper / `FifoTileScale32` semantic
