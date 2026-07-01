@@ -663,8 +663,8 @@ Evidence boundary:
   26-program validation lane only.
 - This is not raw Scala `Lab2Part5GEMM` or `Lab2Part6GEMM` source
   compatibility.
-- Dynamic `ArgIn` dimensions, `numel_k`, K tails, generic/source-compatible
-  Spatial `MemFold`, Part6 `par`, banking, board execution, Vivado
+- Dynamic `ArgIn` dimensions, dynamic/tail `numel_k`, K tails,
+  generic/source-compatible Spatial `MemFold`, Part6 `par`, banking, board execution, Vivado
   implementation, and timing closure remain unsupported.
 
 ## 2026-07-01 Rust Rewrite Lab2-Like Outer-K Parser Bridge
@@ -678,6 +678,8 @@ static exact outer-K canary:
 - a hoisted A-tile load before the column tile loop
 - infix rank-2 tile loads/stores using `::` ranges
 - `MemFold(tileC_sram)(0 until TILE_K by 1) { k_idx => ... }{_+_}`
+- a declared static `numel_k` alias equal to `TILE_K` inside K tile ranges and
+  the MemFold bound
 
 Status:
 - This is parser/source-spelling coverage only. It canonicalizes to the
@@ -694,10 +696,10 @@ Evidence boundary:
   `cargo test -p spatial-rs-core --locked lab2_outer_k -- --nocapture` and
   `cargo test -p spatial-rs-hls --locked lab2_outer_k -- --nocapture`.
 - Reserved raw Scala `Lab2Part5GEMM` and `Lab2Part6GEMM` names still fail
-  closed. The bridge also keeps full-K MemFold bounds, `numel_k`, hoisted
-  B/C/fold/store phases, dynamic/tail K tiling, Part6 `par`, banking, generic
-  Spatial `MemFold`, board execution, Vivado implementation, and timing closure
-  unsupported.
+  closed. The bridge also keeps full-K MemFold bounds, undeclared or mismatched
+  `numel_k`, dynamic/tail K tiling, hoisted B/C/fold/store phases, Part6 `par`,
+  banking, generic Spatial `MemFold`, board execution, Vivado implementation,
+  and timing closure unsupported.
 
 ## 2026-06-30 Rust Rewrite Lab2 `numel_m`/`numel_n` Parser Bridge
 
