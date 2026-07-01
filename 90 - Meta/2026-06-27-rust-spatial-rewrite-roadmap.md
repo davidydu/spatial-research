@@ -41,8 +41,9 @@ MemReduce/MemFold, and fixed Lab2 Part5, and those canonicalize to existing
 canaries without adding validation-program membership or new Vitis evidence.
 The exact raw Lab1 Part6 wrapper is different: it canonicalizes to the new
 `SramTileFoldSum32` / `ScalarSramTileFold v0` structural canary, so the local
-validation list is now 27 programs with host-C++ and plan-only coverage. EC2
-Vitis for that 27-program lane is pending.
+validation list is now 27 programs with host-C++, plan-only coverage, and
+EC2 Vitis `csim_design`/`csynth_design` evidence captured in
+`docs/vitis-validation/2026-07-01-lab1-part6-sram/`.
 These wrappers are not generic Spatial `FIFO`, `Fold`, `MemReduce`, `MemFold`,
 GEMM, `par`, scheduling, banking, board execution, timing closure, or broad
 Scala source compatibility.

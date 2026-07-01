@@ -765,25 +765,27 @@ Evidence boundary:
   generic in-place alias analysis, FixPt tail tiles, or broader Spatial
   language coverage.
 
-## 2026-07-01 Rust Rewrite Lab1 Part6 SRAM-Tile Fold Local Checkpoint
+## 2026-07-01 Rust Rewrite Lab1 Part6 SRAM-Tile Fold Vitis Checkpoint
 
 The Rust rewrite added `ScalarSramTileFold v0` and the non-lab
 `SramTileFoldSum32` validation canary after the refreshed 26-program Vitis
 checkpoint.
 
 Status:
-- The local validation list now contains 27 programs.
+- The validation list now contains 27 programs and all 27 passed EC2/Vitis
+  `csim_design` and `csynth_design`.
 - `SramTileFoldSum32` covers one rank-1 `Dram<Int>[32]` input, one scalar
   output, one local `Sram<Int>[16]` tile, an explicit DRAM-to-SRAM tile load,
   an inner tile sum, and scalar accumulator writeback.
 - The exact raw `Lab1Part6ReduceExample` token stream canonicalizes to
   `SramTileFoldSum32` with generated HLS/manifest equality.
-- Local host-C++ harness, Vitis dry-run, and plan-only sidecar coverage are in
-  place.
+- Local host-C++ harness, Vitis dry-run/plan coverage, and durable EC2/Vitis
+  evidence are in place.
 
 Evidence boundary:
-- No EC2/Vitis `csim_design`/`csynth_design` evidence is claimed yet for the
-  new 27-program lane.
+- Durable evidence is captured in
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-01-lab1-part6-sram/`
+  at source commit `6a83cd2247258ec47f034f9b0f41bf0c131281b9`.
 - Generic Spatial `Fold`, arbitrary nested folds, arbitrary local-memory
   effects, tail tiles, dynamic bounds, non-`Int`, scheduling, banking, board
   execution, Vivado implementation, timing closure, and broad Scala source
