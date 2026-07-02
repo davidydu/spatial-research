@@ -213,10 +213,10 @@ exists, `ResolvedHir` now carries loop/effect/affine/index facts, and the
 Tile-K LHS/RHS loads, C-preload, final-store, partial-product, and
 C-accumulation submatchers consume those facts. Broader Tile-K phase recognition
 remains structural. These fact-consumption slices do not change generated
-HLS/manifest output, validation membership, or vendor-HLS evidence. The current
-vendor-HLS anchor remains the 28-program
-`docs/vitis-validation/2026-07-02-partition-helper-current-head/` run until a
-fresh current-HEAD Vitis refresh is captured.
+HLS/manifest output or validation membership. The current vendor-HLS anchor is
+the fresh 28-program
+`docs/vitis-validation/2026-07-02-tile-k-facts-current-head/` current-head
+refresh after Tile-K fact consumption and same-span loop-symbol cleanup.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
