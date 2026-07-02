@@ -59,9 +59,9 @@ As the next compiler-foundation slice, `ResolvedHir` now carries loop
 schedule/identity/nesting facts and resolver-owned affine/index-use facts for
 memory accesses, including access occurrence ids, parent-statement joins, and
 const-backed affine stride provenance. These facts are observational and
-crate-private. The Tile-K LHS-load matcher now consumes those facts as the
-first narrow classifier-internal migration while retaining the old syntax guard
-and exact access/parent-statement checks. RHS load, C preload, fold/store, and
+crate-private. The Tile-K LHS-load and RHS-load matchers now consume those
+facts as narrow classifier-internal migrations while retaining the old syntax
+guards and exact access/parent-statement checks. C preload, fold/store, and
 broader Tile-K phase recognition still keep their private structural matchers
 until separate explicit migrations move them onto resolver-owned facts.
 The exact raw Lab1 Part6 wrapper is different: it canonicalizes to the new
