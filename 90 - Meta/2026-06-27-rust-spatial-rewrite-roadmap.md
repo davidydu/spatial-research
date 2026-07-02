@@ -61,9 +61,10 @@ across foreach, sequential foreach, reduce/fold, and MemReduce/MemFold shapes.
 Those facts are observational and resolved from the enclosing scope. Loop
 domains now also carry resolver-local identity, source spans, parent blocks,
 parent-loop links, and nesting depth, including MemReduce/MemFold bodies. The
-tile-K classifiers still keep their private structural matchers until
-resolver-facing child/root queries, effect/access loop joins, and affine
-index-use facts exist.
+resolver also exposes loop tree queries and joins access/effect facts to
+innermost enclosing loop domains. The tile-K classifiers still keep their
+private structural matchers until affine index-use facts and an explicit
+classifier migration consume these resolver-owned loop paths.
 The exact raw Lab1 Part6 wrapper is different: it canonicalizes to the new
 `SramTileFoldSum32` / `ScalarSramTileFold v0` structural canary, so the local
 validation list is now 28 programs with host-C++, plan-only coverage, and fresh
