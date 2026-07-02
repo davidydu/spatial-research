@@ -59,11 +59,14 @@ As the next compiler-foundation slice, `ResolvedHir` now carries loop
 schedule/identity/nesting facts and resolver-owned affine/index-use facts for
 memory accesses, including access occurrence ids, parent-statement joins, and
 const-backed affine stride provenance. These facts are observational and
-crate-private. The Tile-K LHS-load and RHS-load matchers now consume those
-facts as narrow classifier-internal migrations while retaining the old syntax
-guards and exact access/parent-statement checks. C preload, fold/store, and
-broader Tile-K phase recognition still keep their private structural matchers
-until separate explicit migrations move them onto resolver-owned facts.
+crate-private. The Tile-K LHS-load, RHS-load, and C-preload classifier
+submatchers now consume those facts as narrow classifier-internal migrations
+while retaining the existing syntax guards and exact access/parent-statement
+checks. The C-preload migration is limited to the inout-C copy into `c_tile`,
+proving `c_tile[ii, jj] := c[tile_r*TILE_R + ii, tile_c*TILE_C + jj]` through
+local/global rank-2 access facts, loop-symbol identity, and const-backed
+`TILE_R`/`TILE_C` coefficient-symbol provenance. Fold/store and broader Tile-K
+phase recognition still keep their private structural matchers.
 The exact raw Lab1 Part6 wrapper is different: it canonicalizes to the new
 `SramTileFoldSum32` / `ScalarSramTileFold v0` structural canary, so the local
 validation list is now 28 programs with host-C++, plan-only coverage, and fresh
