@@ -49,6 +49,10 @@ MemReduce/MemFold, fixed Lab2 Part5, fixed Lab2 Part6, and the local Lab3
 convolution teaching source. The Lab2 Part1/Part2 memory-reduction wrappers
 now generate bounded Rust frontend source for `MemReduceOnes16` /
 `MemFoldOnes16` and compile through the existing frontend/HIR/classifier path.
+The Rust-subset `MemReduceFill v0` / `MemFoldFill v0` frontend now also
+accepts literal fill `2` for local `MemReduceTwos16` / `MemFoldTwos16`
+canaries with generated HLS C++ and host-harness coverage, while the raw Lab2
+wrappers and vendor-proven validation lane remain the exact all-ones shape.
 Except for wrappers that introduced or rode a new canonical validation payload,
 these adapters route to existing canaries without adding validation-program
 membership or new Vitis evidence. The fixed Lab2
@@ -160,7 +164,8 @@ This proves useful local compiler plumbing:
   `ScalarExpr v0`, `Dense1dScalarMul v0`, `LutLookup v0`, `Dram2dCopy v0`,
   `ControlFsm v0`, `Stencil2d v0`, `ScalarReduce v0`, `ScalarFold v0`,
   `Fifo1dTileScalarMul v0`, `ScalarSramTileFold v0`, the local
-  `MemReduceFill v0` / `MemFoldFill v0` canaries, and the exact scheduled
+  `MemReduceFill v0` / `MemFoldFill v0` canaries, including local literal-`2`
+  host-HLS canaries outside the Vitis validation lane, and the exact scheduled
   Lab2 Part6 HLS canary
 - explicit rejection of unsupported forms
 
