@@ -55,6 +55,12 @@ wrapper now canonicalizes to
 `MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32`, preserving the
 exact `par 2` / `par 16` source shape as checked schedule metadata and emitting
 the corresponding HLS `PIPELINE`, `UNROLL`, and local-array partition pragmas.
+As the next compiler-foundation slice, `ResolvedHir::LoopDomain` now carries a
+crate-private schedule-fact seed for loop bounds, steps, and parallel factors
+across foreach, sequential foreach, reduce/fold, and MemReduce/MemFold shapes.
+Those facts are observational and resolved from the enclosing scope; they do not
+yet include loop nesting, phase identity, or affine index-use facts, so the
+tile-K classifiers still keep their private structural matchers.
 The exact raw Lab1 Part6 wrapper is different: it canonicalizes to the new
 `SramTileFoldSum32` / `ScalarSramTileFold v0` structural canary, so the local
 validation list is now 28 programs with host-C++, plan-only coverage, and fresh
