@@ -59,11 +59,11 @@ As the next compiler-foundation slice, `ResolvedHir` now carries loop
 schedule/identity/nesting facts and resolver-owned affine/index-use facts for
 memory accesses, including access occurrence ids, parent-statement joins, and
 const-backed affine stride provenance. These facts are observational and
-crate-private. The Tile-K LHS-load, RHS-load, C-preload, final-store, and
-partial-product classifier submatchers now consume those facts as narrow
-classifier-internal migrations while retaining the existing syntax guards and
-exact access/parent-statement checks. The C-preload migration is limited to the
-inout-C copy into `c_tile`, proving
+crate-private. The Tile-K LHS-load, RHS-load, C-preload, final-store,
+partial-product, and C-accumulation classifier submatchers now consume those
+facts as narrow classifier-internal migrations while retaining the existing
+syntax guards and exact access/parent-statement checks. The C-preload migration
+is limited to the inout-C copy into `c_tile`, proving
 `c_tile[ii, jj] := c[tile_r*TILE_R + ii, tile_c*TILE_C + jj]` through
 local/global rank-2 access facts, loop-symbol identity, and const-backed
 `TILE_R`/`TILE_C` coefficient-symbol provenance. The final-store migration is
@@ -74,8 +74,13 @@ coefficient-symbol provenance. The partial-product migration is limited to
 `partial_tile[ii, jj] := lhs_tile[ii, k_idx] * rhs_tile[k_idx, jj]`, proving the
 partial write, LHS read, and RHS read through resolver-owned access grouping,
 same parent statement, and row/column/K lane symbol identity while retaining the
-existing AST operator guard. C accumulation/fold update and broader Tile-K phase
-recognition still keep their private structural matchers.
+existing AST operator guard. The C-accumulation migration is limited to
+`c_tile[ii, jj] := c_tile[ii, jj] + partial_tile[ii, jj]`, proving the C-tile
+write, C-tile read, and partial-tile read through resolver-owned access grouping,
+same parent statement, and row/column lane symbol identity while preserving the
+existing AST operator guard and accepting the Lab2 MemFold sugar's same-span
+sibling loop symbols. Broader Tile-K phase recognition still keeps its private
+structural matcher.
 The exact raw Lab1 Part6 wrapper is different: it canonicalizes to the new
 `SramTileFoldSum32` / `ScalarSramTileFold v0` structural canary, so the local
 validation list is now 28 programs with host-C++, plan-only coverage, and fresh
