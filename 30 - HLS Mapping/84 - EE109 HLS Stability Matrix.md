@@ -282,6 +282,15 @@ reductions, scheduling, banking, broad Scala source compatibility, board
 execution, Vivado implementation, place-and-route, and timing closure remain
 unsupported.
 
+On 2026-07-02, the Rust-subset `MemReduceFill v0` / `MemFoldFill v0`
+classifier was hardened to consume resolved HIR loop/symbol facts for the same
+narrow rank-1 `Int` shape. Equivalent static length/step aliases are now
+accepted in the Rust-subset source, while the raw Lab2 wrappers remain exact
+all-ones adapters to `MemReduceOnes16` / `MemFoldOnes16`. This is a local
+classifier/frontend-HIR foundation cleanup only: checked payloads, generated
+HLS, manifests, validation membership, and existing Vitis evidence are
+unchanged.
+
 On 2026-07-01, the Rust rewrite also added an exact raw source adapter for the
 known local teaching `Lab3Part1Convolution` wrapper from
 `/Users/david/Documents/David_code/lab-3-accelerator-bandits/src/test/scala/Lab3.scala`.

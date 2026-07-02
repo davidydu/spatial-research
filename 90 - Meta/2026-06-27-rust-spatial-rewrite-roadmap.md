@@ -53,6 +53,11 @@ The Rust-subset `MemReduceFill v0` / `MemFoldFill v0` frontend now also
 accepts literal fill `2` for local `MemReduceTwos16` / `MemFoldTwos16`
 canaries with generated HLS C++ and host-harness coverage, while the raw Lab2
 wrappers and vendor-proven validation lane remain the exact all-ones shape.
+The classifier now also proves the same narrow rank-1 memory-reduction shape
+through resolved HIR loop/symbol facts, so equivalent Rust-subset static
+length/step aliases are accepted without changing raw Lab2 wrapper matching,
+checked payloads, generated HLS, manifests, validation membership, or Vitis
+evidence.
 The serial Tile-K MemFold path now has a named local K-tail canary,
 `MatrixTileMemFoldOuterKTailInPlaceFixPt32x32x34`: the Lab2-like offset-loop
 `numel_k = min(TILE_K.to[Int], K - kk)` spelling is preserved as checked

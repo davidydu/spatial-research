@@ -11,6 +11,22 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ## 2026-07-02 — Rust rewrite Lab2 Part6 and serial K-tail
 
+- Hardened the Lab2 Part1/Part2 memory-reduction classifier in
+  `/Users/david/Documents/David_code/spatial-rs` on branch
+  `David/HLS-spatial`: `MemReduceFill v0` / `MemFoldFill v0` now consume
+  resolver-owned loop/symbol facts for the narrow rank-1 `Int` reduction
+  shape, allowing equivalent Rust-subset static length/step aliases while
+  keeping the exact raw Lab2 wrappers mapped only to `MemReduceOnes16` /
+  `MemFoldOnes16`. Local verification passed the new alias and shadow
+  fail-closed tests, `memreduce`, `memfold`, `memory_reduction`, raw Lab2
+  wrapper tests, HLS m1 codegen/manifest tests, validation membership, and
+  captured-evidence parser checks. Boundary: checked payloads, generated HLS,
+  manifests, validation membership, and existing Vitis evidence are unchanged;
+  no EC2/Vitis rerun was performed for this local classifier hardening slice,
+  and this is still not generic Spatial `MemReduce`/`MemFold`, arbitrary
+  bodies, dynamic bounds, rank-2 reductions, scheduling, banking, board
+  execution, Vivado implementation, timing closure, or broad Scala source
+  compatibility.
 - Extracted the Lab2 GEMM bridge profile in
   `/Users/david/Documents/David_code/spatial-rs` on branch
   `David/HLS-spatial`: parser-private `frontend/lab2_gemm_bridge.rs` now owns
