@@ -239,6 +239,16 @@ or timing closure.
 
 Later raw-wrapper source-adapter updates:
 
+On 2026-07-02, the Rust rewrite added an exact source adapter for the known
+local `Lab2Part6GEMM` lab class. It canonicalizes the fixed `32x32x32`,
+tile-16, `FixPt[TRUE,_24,_8]`, single-`Accel` token stream with exact
+`par 2` / `par 16` partial-tile loops to the existing
+`MatrixTileMemFoldOuterKInPlaceFixPt32x32x32` payload. Local parser and HLS
+tests prove checked-program equality plus generated HLS/manifest equality and
+assert no scheduling pragmas are emitted. This is not new Vitis evidence and
+does not add real `par` scheduling, HLS unroll/banking policy, generic Spatial
+`MemFold`, dynamic/tail K, or broad Scala source compatibility.
+
 On 2026-07-01, the Rust rewrite added source adapters for the
 known local `Lab2Part1SimpleMemReduce` and `Lab2Part2SimpleMemFold` lab
 classes. These wrappers canonicalize to the existing `MemReduceOnes16` and

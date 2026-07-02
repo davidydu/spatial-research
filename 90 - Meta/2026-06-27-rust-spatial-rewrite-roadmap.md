@@ -29,8 +29,11 @@ The current `spatial-rs` work should therefore be treated as a tracer slice:
 `spatial-rs` currently has accepted fixture adapters for scalar add, dense 1-D DRAM/SRAM multiply, LUTs, one exact FSM, rank-2 copy groundwork, and one direct Lab3 convolution semantic adapter.
 
 Current Vitis status: the latest Rust rewrite Vitis checkpoint is the
-2026-07-01 post-refactor 27-program lane through `ScalarSramTileFold v0`; the
-prior refreshed 26-program lane remains the block-comment/raw-Part5 checkpoint.
+2026-07-01 current-head 27-program lane captured after the exact local
+`Lab3Part1Convolution` raw-wrapper adapter. The prior 27-program
+post-refactor lane through `ScalarSramTileFold v0` and the refreshed
+26-program block-comment/raw-Part5 checkpoint remain historical evidence
+anchors.
 It validates the original adapter baseline plus the reusable
 scalar/dense/LUT/rank-2-copy/control/stencil/scalar-reduction/scalar-fold
 representatives, the local all-ones `MemReduceOnes16` / `MemFoldOnes16`
@@ -39,8 +42,12 @@ tail/min MemFold, explicit-inout C MemFold, and the static exact outer-K
 in-place C canary, plus the Lab1 Part6 `SramTileFoldSum32` SRAM-tile fold
 canary through Vitis 2025.1 `csim_design` and `csynth_design`.
 Exact raw wrappers now exist for Lab1 Part4 FIFO, Lab2 Part1/Part2
-MemReduce/MemFold, and fixed Lab2 Part5, and those canonicalize to existing
-canaries without adding validation-program membership or new Vitis evidence.
+MemReduce/MemFold, fixed Lab2 Part5, fixed Lab2 Part6, and the local Lab3
+convolution teaching source. Except for wrappers that introduced or rode a new
+canonical validation payload, these canonicalize to existing canaries without
+adding validation-program membership or new Vitis evidence. The fixed Lab2
+Part6 adapter accepts the exact `par 2` / `par 16` source spelling only as
+source compatibility and emits the same serial HLS as the outer-K canary.
 The exact raw Lab1 Part6 wrapper is different: it canonicalizes to the new
 `SramTileFoldSum32` / `ScalarSramTileFold v0` structural canary, so the local
 validation list is now 27 programs with host-C++, plan-only coverage, and fresh
@@ -48,8 +55,8 @@ post-frontend/HIR-refactor EC2 Vitis `csim_design`/`csynth_design` evidence
 captured in
 `docs/vitis-validation/2026-07-01-lab1-part6-sram-hir-refactor/`.
 These wrappers are not generic Spatial `FIFO`, `Fold`, `MemReduce`, `MemFold`,
-GEMM, `par`, scheduling, banking, board execution, timing closure, or broad
-Scala source compatibility.
+GEMM, `par`, real Part6 scheduling, banking, board execution, timing closure,
+or broad Scala source compatibility.
 
 `ScalarExpr v0` is the first reusable supported feature rather than an exact
 fixture adapter. It covers one scalar integer assignment over 1-4 scalar inputs
