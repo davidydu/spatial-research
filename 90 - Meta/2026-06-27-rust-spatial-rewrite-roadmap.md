@@ -64,8 +64,12 @@ const-backed affine stride provenance. These facts are observational and
 crate-private. The Tile-K LHS-load, RHS-load, C-preload, final-store,
 partial-product, and C-accumulation classifier submatchers now consume those
 facts as narrow classifier-internal migrations while retaining the existing
-syntax guards and exact access/parent-statement checks. The C-preload migration
-is limited to the inout-C copy into `c_tile`, proving
+syntax guards and exact access/parent-statement checks. The fixed Tile-K
+phase-spine guard also cross-checks the recovered `kk_tile -> tile_r -> tile_c`
+loop-domain chain, canonical schedule-bound symbols, hoisted or non-hoisted LHS
+placement, and fold assignment ancestry through resolver-owned loop/effect
+facts, while structural statement recovery remains private and fail-closed. The
+C-preload migration is limited to the inout-C copy into `c_tile`, proving
 `c_tile[ii, jj] := c[tile_r*TILE_R + ii, tile_c*TILE_C + jj]` through
 local/global rank-2 access facts, loop-symbol identity, and const-backed
 `TILE_R`/`TILE_C` coefficient-symbol provenance. The final-store migration is
@@ -81,8 +85,8 @@ existing AST operator guard. The C-accumulation migration is limited to
 write, C-tile read, and partial-tile read through resolver-owned access grouping,
 same parent statement, and row/column lane symbol identity while preserving the
 existing AST operator guard and accepting the Lab2 MemFold sugar's same-span
-sibling loop symbols. Broader Tile-K phase recognition still keeps its private
-structural matcher.
+sibling loop symbols. The fixed Tile-K phase spine is resolver-guarded, while
+broader Tile-K phase recognition beyond that spine still remains unsupported.
 The exact raw Lab1 Part6 wrapper is different: it canonicalizes to the new
 `SramTileFoldSum32` / `ScalarSramTileFold v0` structural canary, the 27th local
 validation member. The local validation list is 28 programs after the separate
@@ -211,10 +215,11 @@ fresh 19-program Vitis evidence, the next phase became compiler foundation
 rather than another ad hoc feature promotion. Current status: the compiler spine
 exists, `ResolvedHir` now carries loop/effect/affine/index facts, and the
 Tile-K LHS/RHS loads, C-preload, final-store, partial-product, and
-C-accumulation submatchers consume those facts. Broader Tile-K phase recognition
-remains structural. These fact-consumption slices do not change generated
-HLS/manifest output or validation membership. The current vendor-HLS anchor is
-the fresh 28-program
+C-accumulation submatchers consume those facts. The fixed Tile-K phase spine has
+a resolver-backed guard, while broader phase recognition and structural
+statement recovery remain fail-closed/private. These fact-consumption slices do
+not change generated HLS/manifest output or validation membership. The current
+vendor-HLS anchor is the fresh 28-program
 `docs/vitis-validation/2026-07-02-tile-k-facts-current-head/` current-head
 refresh after Tile-K fact consumption and same-span loop-symbol cleanup.
 

@@ -484,15 +484,17 @@ Generated-code hygiene:
 
 For the Rust rewrite, the clean current-head EC2/Vitis checkpoint has now been
 refreshed after Tile-K fact consumption and same-span loop-symbol cleanup. The
-next implementation slice should stay fail-closed and be driven by one concrete
-lab source shape at a time. The best GEMM-facing next steps are either a
-resolver-backed Tile-K phase-spine guard that keeps structural statement
-recovery, or a structural Part6 scheduled core through frontend/HIR before
-widening raw Scala shell support. The main remaining EE109 gaps are generic
-Spatial `MemFold`/`Fold`, dynamic/tail K tiling, K tails, broader
-fixed-point/tail semantics, generic `par` and banking inference beyond the
-fixed Part6 schedule, and generic Lab3 local-window/stencil lowering beyond the
-exact local raw wrapper.
+fixed Tile-K phase-spine guard is also complete as local fail-closed classifier
+hardening, with structural statement recovery still private and checked
+payloads/HLS output/validation membership unchanged. The next implementation
+slice should stay fail-closed and be driven by one concrete lab source shape at a
+time. The best GEMM-facing next step is now a structural Part6 scheduled core
+through frontend/HIR before widening raw Scala shell support, or another
+explicit canary. The main remaining EE109 gaps are generic Spatial
+`MemFold`/`Fold`, dynamic/tail K tiling, K tails, broader fixed-point/tail
+semantics, generic `par` and banking inference beyond the fixed Part6 schedule,
+and generic Lab3 local-window/stencil lowering beyond the exact local raw
+wrapper.
 
 ## 2026-06-30 Rust Rewrite Bulk Tile IO Bridge
 
