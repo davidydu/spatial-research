@@ -495,10 +495,11 @@ Generated-code hygiene:
 ## Recommended Next Action
 
 For the Rust rewrite, the clean current-head EC2/Vitis checkpoint is now the
-29-program named serial K-tail run. The fixed Tile-K phase-spine guard and the
-explicit-zero raw Part5/Part6 fold-range bridge are local fail-closed
-classifier/source-adapter hardening slices whose checked payloads and emitted
-HLS stay unchanged, so they do not require separate vendor-HLS reruns. The next
+29-program named serial K-tail run. The fixed Tile-K phase-spine guard, the
+explicit-zero raw Part5/Part6 fold-range bridge, and the raw Part5/Part6
+frontend-routing cleanup are local fail-closed classifier/source-adapter
+hardening slices whose checked payloads and emitted HLS stay unchanged, so they
+do not require separate vendor-HLS reruns. The next
 implementation slice should stay fail-closed and either choose another explicit
 GEMM canary/source shape or deliberately widen one named syntax surface under
 the same equality discipline before attempting broad Scala shell support. The
@@ -766,6 +767,9 @@ static exact outer-K canary:
   `MemFold(tileC_sram)(0 until numel_k by 1)` for fixed Part5/Part6 wrappers,
   treated as equivalent to the fixture's implicit-zero
   `MemFold(tileC_sram)(numel_k by 1)` spelling. Nonzero starts remain rejected.
+- accepted fixed Part5/Part6 wrappers now emit bounded Lab2-like frontend
+  source using the existing shell/infix bridge before HIR/classification,
+  rather than returning expanded canonical source text directly.
 
 Status:
 - This is parser/source-spelling coverage only. It canonicalizes to the
@@ -773,6 +777,8 @@ Status:
   `MatrixTileMemFoldOuterKInPlaceFixPt32x32x32`.
 - The generated HLS and manifest match the expanded static outer-K canary
   exactly.
+- The accepted raw Part5/Part6 wrappers now reuse this bounded frontend/HIR path
+  after their fixed token-stream quarantine succeeds.
 - The validation-program list remains 26 programs.
 - No new EC2/Vitis evidence is claimed for this bridge because it does not
   change emitted HLS or validation membership.

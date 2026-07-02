@@ -11,6 +11,20 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ## 2026-07-02 — Rust rewrite Lab2 Part6 and serial K-tail
 
+- Routed fixed raw Lab2 GEMM wrappers through bounded frontend/HIR source in
+  `/Users/david/Documents/David_code/spatial-rs` on branch
+  `David/HLS-spatial`: after exact token-stream quarantine,
+  `Lab2Part5GEMM`/`Lab2Part6GEMM` now emit Lab2-like frontend source using
+  `a/b/c`, tile SRAM aliases, static offset loops, infix tile IO,
+  `numel_k = min(...)`, explicit-zero MemFold range, and Part6 literal
+  `par 2`/`par 16` where applicable, then compile through the existing
+  frontend/HIR/classifier bridge instead of returning expanded canonical kernel
+  text directly. Local equality tests preserve checked payloads, generated HLS,
+  manifests, validation membership, and the Vitis evidence boundary. No
+  EC2/Vitis rerun is required. Boundary: not a broad Scala parser/source
+  compatibility claim, no new GEMM shapes, dynamic dimensions, generic
+  `MemFold`, generic `par`/banking, arbitrary K tails, board execution, timing
+  closure, or HLS output change claim.
 - Added a narrow explicit-zero raw Lab2 GEMM fold-range bridge in
   `/Users/david/Documents/David_code/spatial-rs` on branch
   `David/HLS-spatial`: fixed raw `Lab2Part5GEMM` and `Lab2Part6GEMM` wrappers
