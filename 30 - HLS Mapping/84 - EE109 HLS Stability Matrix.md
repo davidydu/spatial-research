@@ -497,9 +497,10 @@ Generated-code hygiene:
 For the Rust rewrite, the clean current-head EC2/Vitis checkpoint is now the
 29-program named serial K-tail run. The fixed Tile-K phase-spine guard, the
 explicit-zero raw Part5/Part6 fold-range bridge, and the raw Part5/Part6
-frontend-routing cleanup are local fail-closed classifier/source-adapter
-hardening slices whose checked payloads and emitted HLS stay unchanged, so they
-do not require separate vendor-HLS reruns. The next
+frontend-routing cleanup plus Lab2 GEMM bridge-profile extraction are local
+fail-closed classifier/source-adapter hardening slices whose checked payloads
+and emitted HLS stay unchanged, so they do not require separate vendor-HLS
+reruns. The next
 implementation slice should stay fail-closed and either choose another explicit
 GEMM canary/source shape or deliberately widen one named syntax surface under
 the same equality discipline before attempting broad Scala shell support. The

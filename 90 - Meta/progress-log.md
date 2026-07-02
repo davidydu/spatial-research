@@ -11,6 +11,20 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ## 2026-07-02 — Rust rewrite Lab2 Part6 and serial K-tail
 
+- Extracted the Lab2 GEMM bridge profile in
+  `/Users/david/Documents/David_code/spatial-rs` on branch
+  `David/HLS-spatial`: parser-private `frontend/lab2_gemm_bridge.rs` now owns
+  Lab2 GEMM shell-alias detection, in-place C state, offset-loop aliases,
+  `numel_*` policy, and partial-par bridge state, while `parse.rs` keeps token
+  consumption, diagnostics, and AST construction. This is behavior-preserving
+  maintainability work over the fixed Part5/Part6 frontend-routing path:
+  exact raw-wrapper admission, generated Lab2-like frontend source, checked
+  payloads, generated HLS, manifests, validation membership, and Vitis evidence
+  boundary remain unchanged. No EC2/Vitis rerun is required. Boundary: no new
+  Scala source compatibility, generic `MemFold`, generic `par`, inferred
+  banking, broad GEMM, dynamic dimensions, arbitrary K tails, emitted-HLS
+  surface, validation member, board execution, timing closure, or performance
+  claim.
 - Routed fixed raw Lab2 GEMM wrappers through bounded frontend/HIR source in
   `/Users/david/Documents/David_code/spatial-rs` on branch
   `David/HLS-spatial`: after exact token-stream quarantine,
