@@ -3,7 +3,7 @@ type: hls-mapping
 construct: ee109-hls-stability-matrix
 category: rework
 status: current
-date: 2026-07-01
+date: 2026-07-02
 stage: 1D
 depends_on:
   - "[[80 - Stage1 EE109 HLS Expansion Plan]]"
@@ -255,6 +255,16 @@ This proves the exact Part6 scheduled canary through `csim_design` and
 inference, generic Spatial `MemFold`, dynamic/tail K, K tails, or broad Scala
 source compatibility.
 
+Later on 2026-07-02, the Rust rewrite added a local structural source bridge
+for that same scheduled Part6 payload. The Lab2-like outer-K frontend/HIR path
+now accepts infix tile IO, static offset-loop spelling, and the exact static
+`numel_k = min(TILE_K.to[Int], K - kk)` spelling when the kernel name is the
+scheduled Part6 canary and the partial-tile fill loops carry literal `par 2`
+and `par 16`. Local parser/HIR/classifier tests prove equality with the raw
+Part6 scheduled payload, and HLS tests prove generated C++ and manifest
+identity. This bridge does not add validation-program membership or fresh
+EC2/Vitis evidence because the emitted HLS surface is unchanged.
+
 On 2026-07-01, the Rust rewrite added source adapters for the
 known local `Lab2Part1SimpleMemReduce` and `Lab2Part2SimpleMemFold` lab
 classes. These wrappers canonicalize to the existing `MemReduceOnes16` and
@@ -486,11 +496,12 @@ For the Rust rewrite, the clean current-head EC2/Vitis checkpoint has now been
 refreshed after Tile-K fact consumption and same-span loop-symbol cleanup. The
 fixed Tile-K phase-spine guard is also complete as local fail-closed classifier
 hardening, with structural statement recovery still private and checked
-payloads/HLS output/validation membership unchanged. The next implementation
-slice should stay fail-closed and be driven by one concrete lab source shape at a
-time. The best GEMM-facing next step is now a structural Part6 scheduled core
-through frontend/HIR before widening raw Scala shell support, or another
-explicit canary. The main remaining EE109 gaps are generic Spatial
+payloads/HLS output/validation membership unchanged. The structural Part6
+scheduled core is now complete locally, so the next implementation slice should
+stay fail-closed and either choose another explicit GEMM canary/source shape or
+deliberately widen one named syntax surface under the same equality discipline
+before attempting broad Scala shell support. The main remaining EE109 gaps are
+generic Spatial
 `MemFold`/`Fold`, dynamic/tail K tiling, K tails, broader fixed-point/tail
 semantics, generic `par` and banking inference beyond the fixed Part6 schedule,
 and generic Lab3 local-window/stencil lowering beyond the exact local raw

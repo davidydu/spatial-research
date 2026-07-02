@@ -57,6 +57,11 @@ wrapper now canonicalizes to
 `MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32`, preserving the
 exact `par 2` / `par 16` source shape as checked schedule metadata and emitting
 the corresponding HLS `PIPELINE`, `UNROLL`, and local-array partition pragmas.
+The structural Lab2-like outer-K bridge now reaches that same scheduled Part6
+payload for infix tile IO, static offset-loop, and exact static
+`numel_k = min(TILE_K.to[Int], K - kk)` source shapes when the partial-tile fill
+loops carry literal `par 2` / `par 16`; this is local HLS/manifest equality
+only, not broader `par` scheduling or fresh vendor-HLS evidence.
 As the next compiler-foundation slice, `ResolvedHir` now carries loop
 schedule/identity/nesting facts and resolver-owned affine/index-use facts for
 memory accesses, including access occurrence ids, parent-statement joins, and
@@ -221,7 +226,9 @@ statement recovery remain fail-closed/private. These fact-consumption slices do
 not change generated HLS/manifest output or validation membership. The current
 vendor-HLS anchor is the fresh 28-program
 `docs/vitis-validation/2026-07-02-tile-k-facts-current-head/` current-head
-refresh after Tile-K fact consumption and same-span loop-symbol cleanup.
+refresh after Tile-K fact consumption and same-span loop-symbol cleanup. The
+structural Part6 source bridge is a later local equivalence slice over the same
+scheduled HLS surface and does not supersede that vendor-HLS anchor.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
