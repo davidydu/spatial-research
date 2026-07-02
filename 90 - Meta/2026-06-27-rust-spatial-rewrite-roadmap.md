@@ -58,9 +58,12 @@ the corresponding HLS `PIPELINE`, `UNROLL`, and local-array partition pragmas.
 As the next compiler-foundation slice, `ResolvedHir::LoopDomain` now carries a
 crate-private schedule-fact seed for loop bounds, steps, and parallel factors
 across foreach, sequential foreach, reduce/fold, and MemReduce/MemFold shapes.
-Those facts are observational and resolved from the enclosing scope; they do not
-yet include loop nesting, phase identity, or affine index-use facts, so the
-tile-K classifiers still keep their private structural matchers.
+Those facts are observational and resolved from the enclosing scope. Loop
+domains now also carry resolver-local identity, source spans, parent blocks,
+parent-loop links, and nesting depth, including MemReduce/MemFold bodies. The
+tile-K classifiers still keep their private structural matchers until
+resolver-facing child/root queries, effect/access loop joins, and affine
+index-use facts exist.
 The exact raw Lab1 Part6 wrapper is different: it canonicalizes to the new
 `SramTileFoldSum32` / `ScalarSramTileFold v0` structural canary, so the local
 validation list is now 28 programs with host-C++, plan-only coverage, and fresh
