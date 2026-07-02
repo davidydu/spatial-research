@@ -262,8 +262,10 @@ now accepts infix tile IO, static offset-loop spelling, and the exact static
 scheduled Part6 canary and the partial-tile fill loops carry literal `par 2`
 and `par 16`. Local parser/HIR/classifier tests prove equality with the raw
 Part6 scheduled payload, and HLS tests prove generated C++ and manifest
-identity. This bridge does not add validation-program membership or fresh
-EC2/Vitis evidence because the emitted HLS surface is unchanged.
+identity. This bridge does not add validation-program membership or a new
+emitted HLS surface, but the exact bridge commit was rerun through the full
+28-program EC2/Vitis lane; compact evidence is captured in
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-02-part6-structural-408e21c/`.
 
 On 2026-07-01, the Rust rewrite added source adapters for the
 known local `Lab2Part1SimpleMemReduce` and `Lab2Part2SimpleMemFold` lab
@@ -497,10 +499,11 @@ refreshed after Tile-K fact consumption and same-span loop-symbol cleanup. The
 fixed Tile-K phase-spine guard is also complete as local fail-closed classifier
 hardening, with structural statement recovery still private and checked
 payloads/HLS output/validation membership unchanged. The structural Part6
-scheduled core is now complete locally, so the next implementation slice should
-stay fail-closed and either choose another explicit GEMM canary/source shape or
-deliberately widen one named syntax surface under the same equality discipline
-before attempting broad Scala shell support. The main remaining EE109 gaps are
+scheduled core is now complete locally and has exact-commit EC2/Vitis evidence,
+so the next implementation slice should stay fail-closed and either choose
+another explicit GEMM canary/source shape or deliberately widen one named syntax
+surface under the same equality discipline before attempting broad Scala shell
+support. The main remaining EE109 gaps are
 generic Spatial
 `MemFold`/`Fold`, dynamic/tail K tiling, K tails, broader fixed-point/tail
 semantics, generic `par` and banking inference beyond the fixed Part6 schedule,

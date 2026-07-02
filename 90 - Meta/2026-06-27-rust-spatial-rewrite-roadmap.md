@@ -60,8 +60,10 @@ the corresponding HLS `PIPELINE`, `UNROLL`, and local-array partition pragmas.
 The structural Lab2-like outer-K bridge now reaches that same scheduled Part6
 payload for infix tile IO, static offset-loop, and exact static
 `numel_k = min(TILE_K.to[Int], K - kk)` source shapes when the partial-tile fill
-loops carry literal `par 2` / `par 16`; this is local HLS/manifest equality
-only, not broader `par` scheduling or fresh vendor-HLS evidence.
+loops carry literal `par 2` / `par 16`. This remains an equality bridge with no
+new validation-program member or emitted-HLS surface, but the exact bridge
+commit now has a full 28-program EC2/Vitis refresh in
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-02-part6-structural-408e21c/`.
 As the next compiler-foundation slice, `ResolvedHir` now carries loop
 schedule/identity/nesting facts and resolver-owned affine/index-use facts for
 memory accesses, including access occurrence ids, parent-statement joins, and
@@ -224,11 +226,12 @@ C-accumulation submatchers consume those facts. The fixed Tile-K phase spine has
 a resolver-backed guard, while broader phase recognition and structural
 statement recovery remain fail-closed/private. These fact-consumption slices do
 not change generated HLS/manifest output or validation membership. The current
-vendor-HLS anchor is the fresh 28-program
+vendor-HLS anchor for the fact-migration line is the fresh 28-program
 `docs/vitis-validation/2026-07-02-tile-k-facts-current-head/` current-head
 refresh after Tile-K fact consumption and same-span loop-symbol cleanup. The
-structural Part6 source bridge is a later local equivalence slice over the same
-scheduled HLS surface and does not supersede that vendor-HLS anchor.
+structural Part6 source bridge is a later equivalence slice over the same
+scheduled HLS surface, and its exact commit has its own 28-program vendor-HLS
+refresh in `docs/vitis-validation/2026-07-02-part6-structural-408e21c/`.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
