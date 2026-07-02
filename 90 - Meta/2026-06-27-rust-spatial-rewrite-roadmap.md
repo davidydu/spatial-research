@@ -29,34 +29,36 @@ The current `spatial-rs` work should therefore be treated as a tracer slice:
 `spatial-rs` currently has accepted fixture adapters for scalar add, dense 1-D DRAM/SRAM multiply, LUTs, one exact FSM, rank-2 copy groundwork, and one direct Lab3 convolution semantic adapter.
 
 Current Vitis status: the latest Rust rewrite Vitis checkpoint is the
-2026-07-01 current-head 27-program lane captured after the exact local
-`Lab3Part1Convolution` raw-wrapper adapter. The prior 27-program
-post-refactor lane through `ScalarSramTileFold v0` and the refreshed
-26-program block-comment/raw-Part5 checkpoint remain historical evidence
-anchors.
+2026-07-02 current-head 28-program lane captured after the exact scheduled
+Lab2 Part6 canary. The prior 27-program current-head Lab3 raw-wrapper lane,
+the post-refactor `ScalarSramTileFold v0` lane, and the refreshed 26-program
+block-comment/raw-Part5 checkpoint remain historical evidence anchors.
 It validates the original adapter baseline plus the reusable
 scalar/dense/LUT/rank-2-copy/control/stencil/scalar-reduction/scalar-fold
 representatives, the local all-ones `MemReduceOnes16` / `MemFoldOnes16`
 canaries, `FifoTileScale32`, rank-2 tiled GEMM precursors, fixed-point MemFold,
 tail/min MemFold, explicit-inout C MemFold, and the static exact outer-K
-in-place C canary, plus the Lab1 Part6 `SramTileFoldSum32` SRAM-tile fold
-canary through Vitis 2025.1 `csim_design` and `csynth_design`.
+in-place C canary, the new exact scheduled Part6 outer-K canary, plus the
+Lab1 Part6 `SramTileFoldSum32` SRAM-tile fold canary through Vitis 2025.1
+`csim_design` and `csynth_design`.
 Exact raw wrappers now exist for Lab1 Part4 FIFO, Lab2 Part1/Part2
 MemReduce/MemFold, fixed Lab2 Part5, fixed Lab2 Part6, and the local Lab3
 convolution teaching source. Except for wrappers that introduced or rode a new
 canonical validation payload, these canonicalize to existing canaries without
 adding validation-program membership or new Vitis evidence. The fixed Lab2
-Part6 adapter accepts the exact `par 2` / `par 16` source spelling only as
-source compatibility and emits the same serial HLS as the outer-K canary.
+Part5 wrapper canonicalizes to the serial outer-K canary. The fixed Lab2 Part6
+wrapper now canonicalizes to
+`MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32`, preserving the
+exact `par 2` / `par 16` source shape as checked schedule metadata and emitting
+the corresponding HLS `PIPELINE`, `UNROLL`, and local-array partition pragmas.
 The exact raw Lab1 Part6 wrapper is different: it canonicalizes to the new
 `SramTileFoldSum32` / `ScalarSramTileFold v0` structural canary, so the local
-validation list is now 27 programs with host-C++, plan-only coverage, and fresh
-post-frontend/HIR-refactor EC2 Vitis `csim_design`/`csynth_design` evidence
-captured in
-`docs/vitis-validation/2026-07-01-lab1-part6-sram-hir-refactor/`.
+validation list is now 28 programs with host-C++, plan-only coverage, and fresh
+current-head EC2 Vitis `csim_design`/`csynth_design` evidence captured in
+`docs/vitis-validation/2026-07-02-lab2-part6-scheduled/`.
 These wrappers are not generic Spatial `FIFO`, `Fold`, `MemReduce`, `MemFold`,
-GEMM, `par`, real Part6 scheduling, banking, board execution, timing closure,
-or broad Scala source compatibility.
+GEMM, generic `par`, automatic banking inference, board execution, timing
+closure, or broad Scala source compatibility.
 
 `ScalarExpr v0` is the first reusable supported feature rather than an exact
 fixture adapter. It covers one scalar integer assignment over 1-4 scalar inputs
@@ -112,15 +114,18 @@ This proves useful local compiler plumbing:
 - local host-C++ harness compile/run
 - Vitis C simulation and HLS synthesis for the original adapter baseline,
   `ScalarExpr v0`, `Dense1dScalarMul v0`, `LutLookup v0`, `Dram2dCopy v0`,
-  `ControlFsm v0`, `Stencil2d v0`, `ScalarReduce v0`, `ScalarFold v0`, and
-  the local `MemReduceFill v0` / `MemFoldFill v0` canaries
+  `ControlFsm v0`, `Stencil2d v0`, `ScalarReduce v0`, `ScalarFold v0`,
+  `Fifo1dTileScalarMul v0`, `ScalarSramTileFold v0`, the local
+  `MemReduceFill v0` / `MemFoldFill v0` canaries, and the exact scheduled
+  Lab2 Part6 HLS canary
 - explicit rejection of unsupported forms
 
 It does not yet prove:
 
 - general Spatial parsing
 - reusable lowering for generic `LineBuffer`, `RegFile`, generic reductions,
-  generic memory folds/reductions, `par`, FIFO/streams, fixed-point, or GEMM
+  generic memory folds/reductions, generic `par`, FIFO/streams, fixed-point,
+  or GEMM
 - generic memory/effect lowering beyond the selected dense and rank-2 copy
   shapes
 - timing, resource, RTL, or board readiness

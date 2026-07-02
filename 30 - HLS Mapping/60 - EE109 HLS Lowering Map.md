@@ -53,7 +53,7 @@ This is the manager synthesis for the selected EE109 HLS MVP. The detailed evide
 | Comparisons and Boolean ops | Stage 3 | C++ boolean expressions. | Normalize `>` and `>=` as needed. | Mixed-type comparisons not normalized by staging. |
 | `mux` and scalar conditionals | Stage 3, Stage 4 | C++ ternary for side-effect-free values, structured `if` otherwise. | Preserve branch order when effects exist. | `OneHotMux` and priority mux policies. |
 | `abs` | Stage 4 | Signed integer ternary `(x < 0) ? -x : x`. | Use unsigned identity only when type evidence says unsigned. | Floating-point or rounding-sensitive absolute value. |
-| `par` | Stage 4 | Controller lane unrolling plus memory partition request. | Rule-based partitioning from observed lane count. | Full Spatial alpha/N/B banking search and DSE parameter search. |
+| `par` | Stage 4 | Exact selected Part6 partial-tile loops lower to controller lane unrolling plus local-array partition pragmas. Other `par` sites remain fail-closed. | Rule-based partitioning from the checked lane count; current proven Part6 shape uses row `par 2` and column `par 16`. | Full Spatial alpha/N/B banking search, generic schedule inference, dynamic lane counts, and DSE parameter search. |
 
 ## Blocking Decisions Already Resolved For The MVP
 
@@ -71,11 +71,11 @@ The Wave 1 artifacts reduce the active blocker set to five local policies:
 |---|---|
 | Streams, external buses, `Accel(*)` | "Streams are outside the selected EE109 HLS subset." |
 | Blackboxes, BigIP optional arithmetic | "Blackbox or BigIP lowering is deferred for the EE109 MVP." |
-| Floating point, custom fixed point, unbiased rounding, FMA policy | "Non-integer numeric policy is deferred; selected EE109 path supports integer kernels first." |
+| Floating point, arbitrary custom fixed point, unbiased rounding, FMA policy | "Only the exact `FixPt[TRUE,_24,_8]` MemFold/GEMM canaries are supported; broader numeric policy is deferred." |
 | FIFO/LIFO | "FIFO/LIFO lowering is conditional on selecting the Lab 1 FIFO example." |
 | Generic `Fold` or `MemReduce` | "Only the exact Lab1 Part6 SRAM-tile fold canary and simple Lab2 all-ones MemReduce/MemFold canaries are supported; broader reduction lowering remains conditional on a selected source shape." |
 | Sparse gather/scatter | "Only dense contiguous transfers are supported in the EE109 MVP." |
-| Explicit banking hints | "Explicit banking hints are deferred; the MVP uses rule-derived HLS partitions." |
+| Explicit banking hints | "Explicit banking hints are deferred; the MVP uses rule-derived HLS partitions only for selected shapes such as the exact scheduled Part6 canary." |
 | DSE/runtime latency model | "Functional HLS generation does not depend on Spatial runtime-model parity." |
 
 ## Next Build Cut
