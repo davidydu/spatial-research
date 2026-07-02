@@ -468,16 +468,16 @@ Generated-code hygiene:
   not invoke Vitis/Vivado HLS, synthesize RTL, check timing, or validate board
   integration.
 - For the Rust rewrite, the explicitly listed accepted adapters,
-  supported-feature representatives, and canaries through the exact scheduled
-  Lab2 Part6 canary have Vitis `csim_design` and `csynth_design` evidence
-  through the current-head 28-program
-  `docs/vitis-validation/2026-07-02-tile-k-facts-current-head/` checkpoint. The
-  previous scheduled Part6, post-refactor SRAM-tile fold, and Lab3 raw-wrapper
-  boundaries remain preserved under their earlier evidence folders. Board
-  execution, Vivado implementation, timing closure, generic Spatial `Fold`,
-  arbitrary local-memory folds/effects, dynamic/tail K tiling, K tails, generic
-  `par`, broad Scala source compatibility, and broad Spatial coverage remain
-  pending.
+  supported-feature representatives, and canaries through the named serial
+  K-tail canary have Vitis `csim_design` and `csynth_design` evidence through
+  the current-head 29-program
+  `docs/vitis-validation/2026-07-02-k-tail-29-program/` checkpoint. The
+  previous scheduled Part6, Tile-K facts, post-refactor SRAM-tile fold, and
+  Lab3 raw-wrapper boundaries remain preserved under their earlier evidence
+  folders. Board execution, Vivado implementation, timing closure, generic
+  Spatial `Fold`, arbitrary local-memory folds/effects, arbitrary K-tail shapes
+  beyond the named serial canary, generic `par`, broad Scala source
+  compatibility, and broad Spatial coverage remain pending.
 - The Lab1Part2 memory lowering is a narrow structural slice, not a general Spatial memory backend. It accepts the selected fixed shape: `N = 32`, `tileSize = 16`, one input DRAM, one output DRAM, two 16-element SRAM tiles, one scalar integer multiplier, and dense unit-stride transfers.
 - The Lab1Part2 generated harness uses an independent vector oracle, but the source initialization is currently fixed to the selected EE109 shape `src(i) = i % 256`.
 - FIFO outside the exact raw Lab1 Part4 wrapper / `FifoTileScale32` semantic
@@ -494,18 +494,16 @@ Generated-code hygiene:
 
 ## Recommended Next Action
 
-For the Rust rewrite, the clean current-head EC2/Vitis checkpoint has now been
-refreshed after Tile-K fact consumption and same-span loop-symbol cleanup. The
-fixed Tile-K phase-spine guard is also complete as local fail-closed classifier
-hardening, with structural statement recovery still private and checked
-payloads/HLS output/validation membership unchanged. The structural Part6
-scheduled core is now complete locally and has exact-commit EC2/Vitis evidence,
-so the next implementation slice should stay fail-closed and either choose
-another explicit GEMM canary/source shape or deliberately widen one named syntax
-surface under the same equality discipline before attempting broad Scala shell
-support. The main remaining EE109 gaps are
-generic Spatial
-`MemFold`/`Fold`, dynamic/tail K tiling, K tails, broader fixed-point/tail
+For the Rust rewrite, the clean current-head EC2/Vitis checkpoint is now the
+29-program named serial K-tail run. The fixed Tile-K phase-spine guard and the
+explicit-zero raw Part5/Part6 fold-range bridge are local fail-closed
+classifier/source-adapter hardening slices whose checked payloads and emitted
+HLS stay unchanged, so they do not require separate vendor-HLS reruns. The next
+implementation slice should stay fail-closed and either choose another explicit
+GEMM canary/source shape or deliberately widen one named syntax surface under
+the same equality discipline before attempting broad Scala shell support. The
+main remaining EE109 gaps are generic Spatial `MemFold`/`Fold`, arbitrary
+K-tail shapes beyond the named serial canary, broader fixed-point/tail
 semantics, generic `par` and banking inference beyond the fixed Part6 schedule,
 and generic Lab3 local-window/stencil lowering beyond the exact local raw
 wrapper.
@@ -737,9 +735,10 @@ Evidence boundary:
 - The EC2/Vitis run itself is not raw Scala `Lab2Part5GEMM` or
   `Lab2Part6GEMM` source compatibility. Exact fixed Part5 raw-wrapper support
   is tracked below as a local parser/HLS-equality bridge over the same canary.
-- Dynamic `ArgIn` dimensions, dynamic/tail `numel_k`, K tails,
-  generic/source-compatible Spatial `MemFold`, Part6 `par`, banking, board execution, Vivado
-  implementation, and timing closure remain unsupported.
+- Dynamic `ArgIn` dimensions, arbitrary K-tail shapes beyond the named serial
+  canary, generic/source-compatible Spatial `MemFold`, Part6 `par`, banking,
+  board execution, Vivado implementation, and timing closure remain
+  unsupported.
 
 ## 2026-07-01 Rust Rewrite Lab2-Like Outer-K Parser Bridge
 
@@ -763,6 +762,10 @@ static exact outer-K canary:
   `FixPt[TRUE,_24,_8]`, and there is one matching `Accel` body. This raw-wrapper
   check is token-stream exact: comments and ordinary whitespace between tokens
   are allowed, while token-split identifiers/operators remain rejected.
+- the exact explicit-zero raw fold range
+  `MemFold(tileC_sram)(0 until numel_k by 1)` for fixed Part5/Part6 wrappers,
+  treated as equivalent to the fixture's implicit-zero
+  `MemFold(tileC_sram)(numel_k by 1)` spelling. Nonzero starts remain rejected.
 
 Status:
 - This is parser/source-spelling coverage only. It canonicalizes to the
@@ -780,12 +783,12 @@ Evidence boundary:
   `cargo test -p spatial-rs-core --locked raw_lab2_part5 -- --nocapture`, and
   `cargo test -p spatial-rs-hls --locked lab2_outer_k -- --nocapture`, plus
   `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_raw_part5 -- --nocapture`.
-- Non-exact raw Scala `Lab2Part5GEMM` and all `Lab2Part6GEMM` forms still fail
-  closed. The bridge also keeps full-K MemFold bounds, undeclared or mismatched
-  `numel_k`, malformed or dynamic `numel_k = min(...)` variants, non-exact
-  offset-loop steps, token-split identifiers/operators, dynamic/tail K tiling, hoisted
-  B/C/fold/store phases, Part6 `par`, banking, generic Spatial `MemFold`, board
-  execution, Vivado
+- Non-exact raw Scala `Lab2Part5GEMM` and non-exact `Lab2Part6GEMM` forms
+  still fail closed. The bridge also keeps full-K MemFold bounds, undeclared or
+  mismatched `numel_k`, malformed or dynamic `numel_k = min(...)` variants,
+  non-exact offset-loop steps, token-split identifiers/operators, arbitrary
+  K-tail shapes beyond the named serial canary, hoisted B/C/fold/store phases,
+  Part6 `par`, banking, generic Spatial `MemFold`, board execution, Vivado
   implementation, and timing closure unsupported.
 
 ## 2026-07-01 Rust Rewrite `a16401b9` EC2 Vitis Refresh
@@ -866,7 +869,9 @@ Status:
 - The validation-program list remains the same 25 programs.
 - No generated HLS, manifest, harness, or Vitis evidence changed for this
   parser bridge.
-- A new fail-closed parser guard keeps `numel_k` K tiling unsupported.
+- A new fail-closed parser guard keeps `numel_k` K tiling unsupported for the
+  full-K `Dense2dTileMemFold` path; later outer-K work admits only named static
+  and serial K-tail forms.
 
 Evidence boundary:
 - Local proof is parser regression only:
