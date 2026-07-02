@@ -82,10 +82,11 @@ existing AST operator guard and accepting the Lab2 MemFold sugar's same-span
 sibling loop symbols. Broader Tile-K phase recognition still keeps its private
 structural matcher.
 The exact raw Lab1 Part6 wrapper is different: it canonicalizes to the new
-`SramTileFoldSum32` / `ScalarSramTileFold v0` structural canary, so the local
-validation list is now 28 programs with host-C++, plan-only coverage, and fresh
-current-head EC2 Vitis `csim_design`/`csynth_design` evidence captured in
-`docs/vitis-validation/2026-07-02-partition-helper-current-head/`.
+`SramTileFoldSum32` / `ScalarSramTileFold v0` structural canary, the 27th local
+validation member. The local validation list is 28 programs after the separate
+scheduled Lab2 Part6 `MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32`
+member, with current-head EC2 Vitis `csim_design`/`csynth_design` evidence
+captured in `docs/vitis-validation/2026-07-02-partition-helper-current-head/`.
 These wrappers are not generic Spatial `FIFO`, `Fold`, `MemReduce`, `MemFold`,
 GEMM, generic `par`, automatic banking inference, board execution, timing
 closure, or broad Scala source compatibility.
@@ -203,16 +204,17 @@ Use `accepted fixture adapter` for the current `ProgramKind::LabX...` style case
 
 ## Near-Term Manager Plan
 
-Post-FIFO decision: the narrow FIFO v0 slice is complete with fresh
-19-program Vitis evidence, so the next phase is compiler foundation rather
-than another ad hoc feature promotion. The active plan is
-`[[2026-06-28-post-fifo-compiler-foundation-plan]]`: add an explicit
-source-to-HIR-to-checked-`Program` compiler spine, add crate-private HIR facts
-for local memories and effects, use FIFO as the first production consumer of
-those facts, then route parser diagnostics through stage-aware compiler
-errors. Generic FIFO/streams, GEMM, fixed-point, broader reductions, and board
-or timing claims should wait until the HIR facts and future `ResolvedHir`
-boundary are stable.
+Historical post-FIFO decision: after the narrow FIFO v0 slice completed with
+fresh 19-program Vitis evidence, the next phase became compiler foundation
+rather than another ad hoc feature promotion. Current status: the compiler spine
+exists, `ResolvedHir` now carries loop/effect/affine/index facts, and the
+Tile-K LHS/RHS loads, C-preload, final-store, partial-product, and
+C-accumulation submatchers consume those facts. Broader Tile-K phase recognition
+remains structural. These fact-consumption slices do not change generated
+HLS/manifest output, validation membership, or vendor-HLS evidence. The current
+vendor-HLS anchor remains the 28-program
+`docs/vitis-validation/2026-07-02-partition-helper-current-head/` run until a
+fresh current-HEAD Vitis refresh is captured.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
