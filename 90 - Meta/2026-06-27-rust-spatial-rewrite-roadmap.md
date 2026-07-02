@@ -29,11 +29,13 @@ The current `spatial-rs` work should therefore be treated as a tracer slice:
 `spatial-rs` currently has accepted fixture adapters for scalar add, dense 1-D DRAM/SRAM multiply, LUTs, one exact FSM, rank-2 copy groundwork, and one direct Lab3 convolution semantic adapter.
 
 Current Vitis status: the latest Rust rewrite Vitis checkpoint is the
-2026-07-02 current-head 28-program lane captured after the scheduled Part6
-partition-contract hardening and partition-helper refactor. The prior
-scheduled Part6 canary lane, the 27-program current-head Lab3 raw-wrapper lane,
-the post-refactor `ScalarSramTileFold v0` lane, and the refreshed 26-program
-block-comment/raw-Part5 checkpoint remain historical evidence anchors.
+2026-07-02 current-head 28-program lane captured after the Tile-K
+C-accumulation resolved-facts migration and same-span loop-symbol resolver
+cleanup. The earlier current-head partition-helper and schedule-profile lanes,
+the scheduled Part6 canary lane, the 27-program current-head Lab3 raw-wrapper
+lane, the post-refactor `ScalarSramTileFold v0` lane, and the refreshed
+26-program block-comment/raw-Part5 checkpoint remain historical evidence
+anchors.
 It validates the original adapter baseline plus the reusable
 scalar/dense/LUT/rank-2-copy/control/stencil/scalar-reduction/scalar-fold
 representatives, the local all-ones `MemReduceOnes16` / `MemFoldOnes16`
@@ -86,7 +88,7 @@ The exact raw Lab1 Part6 wrapper is different: it canonicalizes to the new
 validation member. The local validation list is 28 programs after the separate
 scheduled Lab2 Part6 `MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32`
 member, with current-head EC2 Vitis `csim_design`/`csynth_design` evidence
-captured in `docs/vitis-validation/2026-07-02-partition-helper-current-head/`.
+captured in `docs/vitis-validation/2026-07-02-tile-k-facts-current-head/`.
 These wrappers are not generic Spatial `FIFO`, `Fold`, `MemReduce`, `MemFold`,
 GEMM, generic `par`, automatic banking inference, board execution, timing
 closure, or broad Scala source compatibility.
