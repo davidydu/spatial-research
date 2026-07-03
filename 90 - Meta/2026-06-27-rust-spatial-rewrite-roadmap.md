@@ -29,9 +29,10 @@ The current `spatial-rs` work should therefore be treated as a tracer slice:
 `spatial-rs` currently has accepted fixture adapters for scalar add, dense 1-D DRAM/SRAM multiply, LUTs, one exact FSM, rank-2 copy groundwork, and one direct Lab3 convolution semantic adapter.
 
 Current Vitis status: the latest Rust rewrite vendor checkpoint is the
-2026-07-03 33-program literal-`2` MemReduce/MemFold lane captured in
-`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-memreduce-twos-33-program/`.
-The earlier current-head Tile-K proof refresh, Lab2 alternate FSM, scheduled
+2026-07-03 current-head 33-program control/FSM HLS plan-seam refresh captured in
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-control-fsm-plan-seam-current-head-33-program/`.
+The earlier current-head Tile-K loop-body cleanup, literal-`2`
+MemReduce/MemFold lane, Tile-K proof refresh, Lab2 alternate FSM, scheduled
 K-tail, current-head Tile-K facts, partition-helper, schedule-profile,
 scheduled Part6 canary, Lab3 raw-wrapper, post-refactor `ScalarSramTileFold v0`,
 and refreshed 26-program block-comment/raw-Part5 lanes remain historical
@@ -233,6 +234,11 @@ behavior while kernel rendering now consumes `HlsKernelPlan`. Full workspace
 tests, clippy, Vitis dry-run emission, and the 33-program plan-only sidecars
 passed; vendor HLS was not rerun because this is a no-HLS-drift compiler
 foundation change.
+Rust commit `b2f884534dac5a744d396b12fbe5bbfa574554df` (`Record control FSM
+plan seam Vitis evidence`) then refreshed the full 33-program EC2/Vitis 2025.1
+roster at that control/FSM plan-seam head. All validation programs passed
+`csim_design` and `csynth_design`; the captured evidence directory is
+`docs/vitis-validation/2026-07-03-control-fsm-plan-seam-current-head-33-program/`.
 
 This proves useful local compiler plumbing:
 
