@@ -1273,3 +1273,53 @@ Boundary:
   not change.
 - Remaining Tile-K proof work is internal factoring: move loop-spine,
   access-role, phase, and schedule checks into smaller proof-owned helpers.
+
+## 2026-07-03 — Rust rewrite Tile-K proof source-shape and phase-spine facts
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Rust commit:
+`ab1697d6067186df415e955e1034307b3186fafb` (`Enrich Tile-K proof facts`).
+
+Compiler checkpoint:
+- Extended the private Tile-K proof contract with `TileKSourceShapeProof` and
+  `TileKPhaseSpineProof`.
+- `TileKSourceShapeProof` records the accepted DRAM roles, SRAM tile roles,
+  matrix dimensions, tile dimensions, and tile counts.
+- `TileKPhaseSpineProof` records the accepted outer/tile/lane index names,
+  canonical loop-bound symbols (`K_TILES`, `ROW_TILES`, `COL_TILES`,
+  `TILE_R`, `TILE_C`, and `TILE_K` or `numel_k`), K-tail bound, and
+  hoisted-LHS source placement.
+- Kept `Program` as the HLS contract: `program_from_tile_k_memfold_proof`
+  still rebuilds from `proof.element_type` and `proof.payload`, not from the
+  source-shape or phase-spine facts.
+- Updated repo docs and the Tile-K contract plan to record this as
+  compiler-foundation progress only.
+
+Proof added:
+- Red-first proof-contract assertions initially failed at compile time because
+  `TileKMemFoldProof` did not expose source-shape/phase-spine sub-proofs, then
+  again because the phase-spine bound fields did not exist.
+- A GPT-5.5 xhigh read-only reviewer recommended adding explicit phase bound
+  fields; those fields were added before commit.
+- Focused checks passed:
+  `cargo test --locked -p spatial-rs-core tile_k_contract`,
+  `cargo test --locked -p spatial-rs-core tile_k`,
+  `cargo test --locked -p spatial-rs-hls lab2_outer_k`, and
+  `cargo test --locked -p spatial-rs-hls lab2_raw_part`.
+- Full local gates passed:
+  `cargo fmt --all -- --check`,
+  `cargo test --locked`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`,
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-current-plan`, and
+  `git diff --check`.
+
+Boundary:
+- This slice does not change accepted syntax, checked payloads, manifests,
+  generated HLS, or the 31-program validation roster.
+- EC2/Vitis was skipped because emitted artifacts and validation membership did
+  not change.
+- Remaining Tile-K proof work is still internal factoring: move loop-spine,
+  access-role, phase, and schedule checks into smaller proof-owned helpers.

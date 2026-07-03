@@ -280,6 +280,15 @@ preserved. This is deliberately not a syntax/HLS expansion: generated HLS and
 validation membership stay unchanged, and EC2/Vitis is postponed until an
 emitted artifact or validation roster changes.
 
+Follow-up on Rust commit
+`ab1697d6067186df415e955e1034307b3186fafb` (`Enrich Tile-K proof facts`):
+the private proof now carries explicit source-shape and phase-spine sub-proofs.
+Those facts record DRAM/SRAM roles, matrix/tile dimensions, tile counts,
+outer/tile/lane index names, canonical loop-bound symbols, K-tail `numel_k`,
+and hoisted-LHS placement. They remain private compiler facts for later
+diagnostics/lowering; checked `Program` payloads, generated HLS, manifests,
+validation membership, and Vitis evidence are unchanged.
+
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
 `Program` as the HLS contract, reserves resolver diagnostics to
