@@ -3790,3 +3790,52 @@ Boundary:
 - It does not imply generic rank-2 memory lowering, arbitrary affine index
   analysis, dynamic dimensions, board execution, Vivado implementation, or
   timing closure.
+
+## 2026-07-03 -- Rust rewrite b5460335 current-head Vitis refresh
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Source commit `b546033` (`Record Dram2d copy proof boundary`) was copied to
+  the EC2 Vitis host and rerun through the full current 35-program validation
+  roster with Vitis 2025.1.
+- Rust commit `6918e94` (`Record b5460335 Vitis evidence`) imports the captured
+  evidence under
+  `docs/vitis-validation/2026-07-03-current-head-b5460335-35-program/`,
+  updates README/architecture/MVP/fixture docs to name that folder as the
+  active vendor-stability anchor, and updates the repo-local evidence-validator
+  test to cover the new checkpoint.
+
+EC2/Vitis proof:
+- Host: `[ec2-host — see private/ec2-lane.md]`, with
+  `/tools/Xilinx/2025.1/Vitis/settings64.sh`, `rustc 1.75.0`, and
+  `cargo 1.75.0`.
+- Remote run directory:
+  `/home/ubuntu/spatial-rs-runs/current-head-b5460335/spatial-rs`.
+- Remote command:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --out target/vitis-validation-current-head-b5460335 --settings /tools/Xilinx/2025.1/Vitis/settings64.sh`.
+- Remote result: every emitted kernel line reported `returncode=0`,
+  `csim=true`, and `csynth=true`; the imported local validator confirmed
+  mode `both`, execution `execute`, and 35 kernels.
+
+Local proof after import:
+- `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-03-current-head-b5460335-35-program --mode both`
+- `cargo test --locked -p ee109-examples --test ec2_toolchain_compat -- --nocapture`
+- `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_b5460335_checkpoint -- --nocapture`
+- `cargo test --locked -p spatial-rs-hls --test vitis_validation active_docs_name_b5460335_as_current_vendor_anchor -- --nocapture`
+- `cargo test --locked -p spatial-rs-hls --test vitis_validation -- --nocapture`
+- `cargo test --locked -p ee109-examples`
+- `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`
+- `cargo fmt --all -- --check`
+- `git diff --check`
+
+Boundary:
+- This supersedes the prior local-only `b546033` note: that exact head now has
+  imported EC2/Vitis `csim_design` and `csynth_design` evidence for the same
+  35-program roster.
+- It proves vendor C simulation and HLS synthesis for those exact kernels only.
+- It does not claim board execution, Vivado implementation/place-and-route,
+  timing closure, performance optimality, generic Spatial compatibility,
+  arbitrary rank-2 memory lowering, dynamic dimensions, or automatic
+  banking/scheduling inference.
