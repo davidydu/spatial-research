@@ -9,6 +9,38 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite rank-2 copy backend helper extraction
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit `19eeec1`
+  (`Extract rank2 copy renderer`). The `Dram2dCopy` / rank-2 row-major copy
+  HLS kernel and harness rendering moved behind the new crate-private
+  `spatial_rs_hls::rank2_copy` helper module. `emit.rs` still owns
+  `ProgramKind` dispatch, `HlsBodyPlan::Dram2dCopy` matching, and HLS parameter
+  lookup; the helper owns signature/interface rendering, row-major copy loop
+  text, harness cases, and row-major oracle wiring.
+- Generated dry-run artifacts for `Lab3Part0MatrixCopyRowMajor` and
+  `MatrixCopy4x6` were compared against a clean detached baseline worktree at
+  commit `4c29758`; `kernel.cpp`, `harness.cpp`, `manifest.json`,
+  `run_hls.tcl`, and `vitis-project.json` all matched exactly for both
+  programs. Boundary: no fresh EC2/Vitis execution, no validation-roster change,
+  no generated-HLS or manifest change, no new syntax, no broader rank-2 memory
+  support claim, and no new vendor-HLS claim.
+- Verification passed locally:
+  `cargo fmt --all -- --check`;
+  `cargo test -p spatial-rs-hls --locked rank2_copy -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab3_row_major_copy_kernel_uses_cols_as_rank2_flatten_stride -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen matrix_copy_4x6_feature_emits_parameterized_rank2_copy_and_harness -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test vitis_validation captured_dram2d_copy_vitis_evidence_parses_for_adapter_baseline_and_features -- --nocapture`;
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`;
+  detached-baseline `cmp` checks for both copy programs' five dry-run artifacts;
+  `cargo test --locked`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-rank2-copy-renderer-plan`;
+  `git diff --check`.
+
+---
+
 ## 2026-07-03 — Rust rewrite Dense2d tile scalar classifier characterization
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on
