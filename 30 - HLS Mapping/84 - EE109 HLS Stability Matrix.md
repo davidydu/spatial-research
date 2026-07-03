@@ -38,6 +38,16 @@ for `Lab2Part4LUT`, `Lab2Part4LUTNonSquareExample`, and `LutBiasLookup`
 `kernel.cpp`, `harness.cpp`, and `manifest.json`. This is a source-ingress
 retirement only, not new vendor-HLS evidence.
 
+Later no-fresh-Vitis policy update, 2026-07-03: Rust commit
+`1e564a79332d45103413cc4f3d1d9ae86a3bc0c0` retired the raw Scala source
+ingress for `Lab2Part3BasicCondFSMAlt` while keeping the canonical alternate
+FSM payload, generated HLS, manifests, harnesses, validation roster, and
+historical Vitis evidence unchanged. Local dry-run byte comparisons against
+the pre-retirement `702d181` baseline matched for `Lab2Part3BasicCondFSM`,
+`Lab2Part3BasicCondFSMAlt`, and `ControlFsm32` `kernel.cpp`, `harness.cpp`,
+and `manifest.json`. This is a source-ingress retirement only, not new
+vendor-HLS evidence.
+
 ## 2026-07-03 Rust Rewrite Scheduled Row/Column/K-Tail Vitis Checkpoint
 
 The Rust rewrite branch `David/HLS-spatial` passed the full 35-program EE109

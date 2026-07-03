@@ -9,6 +9,49 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite raw Lab2 FSM-alt adapter retirement
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit `1e564a79332d45103413cc4f3d1d9ae86a3bc0c0`
+  (`Retire raw Lab2 FSM alt adapter`). The exact raw Scala
+  `Lab2Part3BasicCondFSMAlt` source-adapter ingress is retired from the
+  quarantined raw-EE109 registry. The canonical `Lab2Part3BasicCondFSMAlt`
+  frontend/HIR payload remains accepted, keeps its reserved adapter name, and
+  remains the 31st validation-program canary with distinct checked IR and HLS
+  semantics.
+- Added fail-closed proof that the retired raw Scala wrapper now rejects with
+  unsupported-source diagnostic `spatial:E0200`, while a direct classifier
+  test guards the canonical alternate FSM path through typed HIR. Updated
+  active Rust docs to distinguish current source-ingress policy from
+  historical Vitis evidence.
+- Generated dry-run artifacts after the change and compared `kernel.cpp`,
+  `harness.cpp`, and `manifest.json` against a clean detached `702d181`
+  baseline for `Lab2Part3BasicCondFSM`, `Lab2Part3BasicCondFSMAlt`, and
+  `ControlFsm32`; all compared files matched byte-for-byte.
+- Verification passed locally:
+  RED `cargo test -p spatial-rs-core --locked parse_accel_rejects_retired_raw_lab2_fsm_alt -- --nocapture`
+  and
+  `cargo test -p spatial-rs-core --locked retired_low_value_raw_scala_wrappers_stay_outside_quarantined_registry -- --nocapture`
+  failed while the adapter still accepted the raw wrapper;
+  `cargo test -p spatial-rs-core --locked lab2_fsm_alt -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked source_adapter -- --nocapture`;
+  `cargo fmt --all`;
+  `cargo test -p spatial-rs-core --locked`;
+  `cargo test -p ee109-examples --locked`;
+  `cargo test -p spatial-rs-hls --locked`;
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`;
+  the nine `cmp` byte checks listed above;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-plan-fsm-alt-raw-retire`;
+  `cargo clippy --workspace --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary: no fresh EC2/Vitis run, no validation-roster change, no generated
+  HLS/manifest/harness change for canonical ControlFsm-family payloads, no
+  generic Scala source compatibility, no generic FSM/control expansion, and no
+  new vendor-HLS claim.
+
+---
+
 ## 2026-07-03 — Rust rewrite raw Lab2 LUT adapter retirement
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on

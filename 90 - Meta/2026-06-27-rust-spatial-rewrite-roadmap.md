@@ -50,13 +50,13 @@ row/column/K-tail Tile-K canaries, plus the Lab1 Part6 `SramTileFoldSum32`
 SRAM-tile fold canary through Vitis 2025.1
 `csim_design` and `csynth_design`.
 Current exact raw-wrapper ingress remains only for Lab2 Part1/Part2
-MemReduce/MemFold, fixed Lab2 Part5, fixed Lab2 Part6, Lab2 alternate FSM, and
-the local Lab3 convolution teaching source. The old raw Lab1 Part4 FIFO, Lab1
-Part6 fold, and Lab2 Part4 square/non-square LUT wrappers are retired; their
-Rust-subset or canonical payloads remain the regression anchors. The Lab2
-Part1/Part2 memory-reduction wrappers now generate bounded Rust frontend
-source for `MemReduceOnes16` / `MemFoldOnes16` and compile through the
-existing frontend/HIR/classifier path.
+MemReduce/MemFold, fixed Lab2 Part5, fixed Lab2 Part6, and the local Lab3
+convolution teaching source. The old raw Lab1 Part4 FIFO, Lab1 Part6 fold,
+Lab2 Part3 alternate FSM, and Lab2 Part4 square/non-square LUT wrappers are
+retired; their Rust-subset or canonical payloads remain the regression
+anchors. The Lab2 Part1/Part2 memory-reduction wrappers now generate bounded
+Rust frontend source for `MemReduceOnes16` / `MemFoldOnes16` and compile
+through the existing frontend/HIR/classifier path.
 The Rust-subset `MemReduceFill v0` / `MemFoldFill v0` frontend now also
 accepts literal fill `2` for local `MemReduceTwos16` / `MemFoldTwos16`
 canaries with generated HLS C++, host-harness coverage, validation membership,
@@ -296,6 +296,14 @@ generated HLS, manifests, validation roster, and `LutLookup v0` feature
 representative unchanged. Local dry-run artifact bytes matched the `d0d6c0f`
 baseline for the two canonical Lab2 LUT fixtures plus `LutBiasLookup`; no
 fresh vendor-HLS evidence is claimed.
+The follow-up raw Lab2 FSM-alt retirement commit
+`1e564a79332d45103413cc4f3d1d9ae86a3bc0c0` removed the exact raw Scala
+`Lab2Part3BasicCondFSMAlt` source-adapter ingress while keeping the canonical
+alternate FSM payload, reserved adapter name, generated HLS, manifests,
+validation roster, and historical Vitis evidence unchanged. Local dry-run
+artifact bytes matched the `702d181` baseline for `Lab2Part3BasicCondFSM`,
+`Lab2Part3BasicCondFSMAlt`, and `ControlFsm32`; no fresh vendor-HLS evidence
+is claimed.
 Rust commit `b2f884534dac5a744d396b12fbe5bbfa574554df` (`Record control FSM
 plan seam Vitis evidence`) then refreshed the full 33-program EC2/Vitis 2025.1
 roster at that control/FSM plan-seam head. All validation programs passed
