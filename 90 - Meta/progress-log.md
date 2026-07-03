@@ -9,6 +9,47 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite Stencil2d/Sobel backend helper extraction
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit `7eb6614`
+  (`Extract Stencil2d Sobel renderer`). The `Stencil2d` / Sobel HLS kernel
+  renderer moved behind `Stencil2dSobelPlan` and the new crate-private
+  `spatial_rs_hls::stencil2d` helper module. `emit.rs` still owns
+  `ProgramKind` dispatch, `HlsBodyPlan::Stencil2dSobel` matching, HLS
+  parameter lookup, and Lab3/Sobel harness-oracle rendering; the helper owns
+  kernel signature/interface rendering, Sobel table rendering, row-major
+  `COLS` / `KW` access text, border-zero policy, absolute-gradient sum, final
+  output store, and the row-major offset validator.
+- Generated dry-run artifacts for `Lab3Part1Convolution` and
+  `SobelStencil12x20` were compared against a clean detached baseline worktree
+  at commit `19eeec1`; `kernel.cpp`, `harness.cpp`, `manifest.json`,
+  `run_hls.tcl`, and `vitis-project.json` all matched exactly for both
+  programs. Boundary: no fresh EC2/Vitis execution, no validation-roster
+  change, no generated-HLS or manifest change, no new syntax, no generic
+  local-window/stencil support, no arbitrary coefficient/parallelism/dimension
+  support, and no new vendor-HLS claim.
+- Verification passed locally:
+  `cargo test -p spatial-rs-hls --locked stencil2d -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab3_convolution -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked plan::tests::lab3_stencil -- --nocapture`;
+  baseline/current `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`;
+  detached-baseline `cmp` checks for both stencil programs' five dry-run
+  artifacts;
+  `cargo test -p spatial-rs-core --locked stencil2d`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab3_local_raw`;
+  `cargo test -p ee109-examples --locked --test emit_vitis_dry_run emit_vitis_dry_run_binary_generates_m1_frontend_bundles`;
+  `cargo test -p ee109-examples --locked --test run_vitis_validation run_vitis_validation_plan_only_writes_sidecar_tcl_for_all_examples`;
+  `cargo test -p spatial-rs-hls --locked --test vitis_validation current_head_vitis_evidence_validator_accepts_cc86ab5_checkpoint`;
+  `cargo test --locked`;
+  `cargo clippy --workspace --all-targets --locked -- -D warnings`;
+  `RUSTDOCFLAGS='-D warnings' cargo doc --workspace --locked --no-deps --document-private-items`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-stencil2d-renderer-plan`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+
+---
+
 ## 2026-07-03 — Rust rewrite rank-2 copy backend helper extraction
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on
