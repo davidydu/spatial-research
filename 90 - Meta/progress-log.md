@@ -9,6 +9,37 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite raw Scala adapter quarantine provenance
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit `488cee9`
+  (`Quarantine raw Scala adapter provenance`). The parser now routes raw EE109
+  Scala only through `match_quarantined_raw_ee109_scala`, and each raw adapter
+  path carries explicit provenance for how it matches today plus the intended
+  retirement target. Low-value exact wrappers are marked as canonical-frontend
+  equivalents, Lab2 Part1/Part2 raw-island proofs are marked as
+  proof-driven-frontend/HIR work, and Lab2 GEMM plus Lab3 Sobel remain
+  quarantined until stronger feature proofs exist. The redundant Lab2 Part5/6
+  exact fallback table entries were removed because those sources already enter
+  through the normalized GEMM proof path. Roadmap Phase 4 was updated to mark
+  quarantine/provenance complete while leaving wrapper retirement and reserved
+  adapter-name narrowing open.
+- Verification passed locally:
+  `cargo test -p spatial-rs-core --locked --quiet source_adapter::tests`;
+  `cargo test -p spatial-rs-core --locked --quiet parse_accel_lab2_outer_k`;
+  `cargo test -p spatial-rs-core --locked --quiet parse_accel_accepts_exact_raw_lab2`;
+  `cargo test -p spatial-rs-core --locked --quiet raw_lab2_part`;
+  `cargo test -p spatial-rs-hls --locked --quiet --test m1_codegen lab2_raw_part`;
+  `cargo test -p spatial-rs-hls --locked --quiet --test m1_codegen lab2_outer_k_part6_structural_par_preserves_scheduled_hls_and_manifest`;
+  `cargo fmt --all -- --check`; `cargo test --locked --quiet`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation --
+  --plan-only --mode both --out target/vitis-validation-raw-quarantine-plan`;
+  and `git diff --check`.
+  Boundary: no fresh EC2/Vitis execution, no generated-HLS evidence change, no
+  new accepted Spatial syntax, no broad Scala compatibility, and no wrapper
+  retirement in this slice.
+
 ## 2026-07-03 — Rust rewrite full-roadmap audit and evidence-anchor cleanup
 
 - Ran a six-lane GPT-5.5 xhigh read-only audit of the Rust Spatial rewrite
