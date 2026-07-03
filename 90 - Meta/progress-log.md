@@ -9,6 +9,18 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite Lab2 LUT reference-wrapper correction
+
+- Corrected the raw `Lab2Part4LUT` fixture to match the actual reference-corpus
+  EE109 source shape, including the `spatial.tests.ee109` package, `runtimeArgs
+  = "0 0 0"`, reference `in/out/i/j` argument setup, `LUT[Int](3,3)`, and the
+  original host oracle. Added the matching exact raw
+  `Lab2Part4LUTNonSquareExample` reference wrapper. Both wrappers canonicalize
+  to their existing checked LUT payloads, with parser equality,
+  source-adapter near-miss rejection, and generated-HLS/manifest equality tests.
+  Boundary: this is source-compatibility only; no generated-HLS change, no
+  validation-roster change, and no fresh vendor-HLS claim.
+
 ## 2026-07-03 — Rust rewrite Lab2 Part4 raw LUT adapter
 
 - Added the exact raw Scala `Lab2Part4LUT` wrapper to the Rust source-adapter
