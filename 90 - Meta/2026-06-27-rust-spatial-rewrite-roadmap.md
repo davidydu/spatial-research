@@ -206,16 +206,24 @@ effect scheduling, alias analysis, FSM/control lowering, stencil lowering, or
 broad memory lowering.
 
 Rank-2 copy opened the crate-private `HlsKernelPlan` path before C++ rendering,
-and scalar assignment has now joined that path for the Lab1/`ScalarExpr`
-surface. The scalar plan carries ordered scalar inputs, the scalar output, and
-the precedence-safe expression AST; the rank-2 copy plan uses manifest-derived
-ABI facts and the shared row-major index expression. This is still not a
-generic HLS MIR or scheduler.
+and scalar assignment plus LUT lookup have now joined that path. The scalar
+plan carries ordered scalar inputs, the scalar output, and the precedence-safe
+expression AST; the LUT plan carries ordered scalar ports, table dimensions,
+and row-major values; the rank-2 copy plan uses manifest-derived ABI facts and
+the shared row-major index expression. This is still not a generic HLS MIR or
+scheduler.
 Rust commit `82ebd3f78a6cb7b00ac33764d7f8462a4ce0d8c9` (`Add scalar HLS plan
 seam`) added this scalar seam with exact scalar snapshot preservation, full
 workspace tests, clippy, Vitis dry-run emission, and 33-program plan-only
 sidecars. Vendor HLS was not rerun because generated artifacts and validation
 membership did not change.
+Rust commit `c3405563c93c0d3050e0dd89ac02d30faac55940` (`Add LUT HLS plan
+seam`) added the LUT plan seam in the same no-HLS-drift style:
+`Lab2Part4LUT`, `Lab2Part4LUTNonSquareExample`, and `LutBiasLookup` keep exact
+generated HLS and harness behavior while the renderer now consumes
+`HlsKernelPlan`. Full workspace tests, clippy, Vitis dry-run emission, and the
+33-program plan-only sidecars passed; vendor HLS was not rerun because emitted
+artifacts and validation membership did not change.
 
 This proves useful local compiler plumbing:
 
