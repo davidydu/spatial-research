@@ -11,6 +11,22 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ## 2026-07-03 — Rust rewrite HLS plan provenance
 
+- Moved four HLS host-harness renderers onto explicit `HlsKernelPlan` data in
+  `/Users/david/Documents/David_code/spatial-rs` on branch
+  `David/HLS-spatial`: ScalarReduce, ScalarFold, MemReduce/MemFold fill, and
+  Control/FSM now lower through their plan objects before rendering the C++
+  harness/oracle driver. This deletes the duplicate local layout extractors
+  for those features and keeps validation anchored on the same checked plans as
+  kernel emission. A `gpt-5.5 xhigh` explorer reviewed the remaining layout
+  boundary; LUT, Dense1d, and Dram2d copy harness layouts remain as next cleanup
+  targets. Focused plan-harness tests, affected m1 codegen/harness tests,
+  `cargo test --locked -p spatial-rs-hls`, `cargo test --locked`,
+  `cargo clippy --all-targets --locked -- -D warnings`, `cargo fmt --all -- --check`,
+  and `git diff --check` passed. Boundary: generated kernels, manifests,
+  validation membership, and existing EC2/Vitis evidence are unchanged; no new
+  Vitis run, board execution, Vivado implementation, timing closure, new
+  syntax, or broader Spatial language support is claimed by this harness
+  refactor.
 - Added a no-HLS-drift MemReduce/MemFold HLS plan-provenance slice in
   `/Users/david/Documents/David_code/spatial-rs` on branch
   `David/HLS-spatial`: `MemReductionFillPlan` now preserves whether the
