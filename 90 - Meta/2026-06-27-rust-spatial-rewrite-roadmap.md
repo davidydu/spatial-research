@@ -31,6 +31,8 @@ The current `spatial-rs` work should therefore be treated as a tracer slice:
 Current Vitis status: the latest Rust rewrite vendor checkpoint is the
 2026-07-03 35-program scheduled row/column/K-tail Tile-K refresh captured in
 `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-scheduled-row-col-k-tail-35-program/`.
+Current and future vendor-HLS claims should pass the repo-local evidence
+validator and the EC2 Rust/Cargo 1.75 compatibility gate.
 The earlier serial row/column/K-tail run, current-head harness cleanup,
 control/FSM plan-seam refresh, Tile-K loop-body cleanup, literal-`2`
 MemReduce/MemFold lane, Tile-K proof refresh, Lab2 alternate FSM, scheduled

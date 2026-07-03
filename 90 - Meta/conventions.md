@@ -99,6 +99,8 @@ After a re-read confirms a claim, add `verified: <YYYY-MM-DD>` to the entry's fr
 - `host_cpp_structural_gate` — generated C++ compiled and ran with the local system compiler
 - `vitis_csim_validated` — generated Vitis/Vivado project ran `csim_design`
 - `vitis_csynth_validated` — generated Vitis/Vivado project ran `csynth_design`, with report metadata recorded
+- `vitis_evidence_validated` — captured evidence directory passed the repo-local Vitis evidence validator
+- `ec2_rust_1_75_compatible` — local manifests and lockfile remain readable by the EC2 Rust/Cargo 1.75 toolchain
 
 ## Progress log format
 

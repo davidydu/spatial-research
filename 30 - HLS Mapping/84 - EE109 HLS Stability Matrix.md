@@ -42,6 +42,12 @@ Evidence:
   `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-scheduled-row-col-k-tail-35-program/`
 - Result: all 35 programs reported `returncode=0`, `csim=true`, and
   `csynth=true`.
+- Evidence validator: passed for
+  `2026-07-03-scheduled-row-col-k-tail-35-program/`.
+- EC2 Rust/Cargo gate: passed with a Rust/Cargo 1.75-compatible local
+  lockfile and package `rust-version = "1.75"` declarations. The historical
+  35-program run still used a remote-only lockfile rewrite; this working tree
+  carries the compatible lockfile locally for future captures.
 - New scheduled row/column/K-tail canary
   `MatrixTileMemFoldOuterKRowColTailInPlacePart6ScheduledFixPt33x35x34`
   reported estimated Fmax 136.99 MHz, estimated clock 7.300 ns, latency

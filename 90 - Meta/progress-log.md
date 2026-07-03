@@ -9,6 +9,16 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite Vitis evidence hygiene gate
+
+- Added a repo-local Vitis evidence validator and explicit EC2 Rust/Cargo 1.75
+  compatibility gate for `/Users/david/Documents/David_code/spatial-rs`
+  (`David/HLS-spatial`). The validator checks the captured 35-program
+  scheduled row/column/K-tail evidence directory for summary mode/execution,
+  exact kernel order, pass state, local sidecars/logs/reports, target device,
+  and clock. Boundary: this is evidence hygiene only; no new HLS surface,
+  validation member, or vendor run.
+
 ## 2026-07-03 — Rust rewrite Lab2 LUT reference-wrapper correction
 
 - Corrected the raw `Lab2Part4LUT` fixture to match the actual reference-corpus
