@@ -3640,3 +3640,58 @@ Boundary:
 - It does not imply generic Spatial `MemFold`, arbitrary GEMM schedules,
   banking inference, arbitrary fixed-point widths, K tiling on this
   non-outer-K path, board execution, Vivado implementation, or timing closure.
+
+## 2026-07-03 -- Rust rewrite Dense2d MemFold access proof split
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `c3e3be5` (`Split dense MemFold access proof`) factors the
+  non-outer-K `Dense2dTileMemFold v0` resolved access-role matching into a
+  dedicated helper after the source-shape and phase/bounds helpers.
+- The helper owns LHS/RHS/C preload, fold, and store matching in the original
+  syntax-first/facts-second order, preserves fold-before-store diagnostics, and
+  returns only row/column/K lane roles plus their bounds for payload
+  construction.
+- Updated the Rust README and architecture/MVP notes to record this as a
+  no-HLS-drift compiler-foundation slice.
+
+Subagent review:
+- A `gpt-5.5` `xhigh` explorer reviewed the proposed helper boundary and
+  highlighted diagnostic-order risk around fold-before-store ordering.
+- The implementation preserves the original order inside the helper and keeps
+  split-C preload versus output-store ports distinct.
+
+Proof:
+- Red check:
+  `cargo test --locked -p spatial-rs-core dense2d_memfold_access_roles_helper_records_shared_lanes_and_bounds -- --nocapture`
+  failed first because `prove_dense2d_tile_memfold_access_roles` did not exist.
+- Focused Dense2d MemFold checks:
+  `cargo test --locked -p spatial-rs-core dense2d_memfold_access_roles_helper_records_shared_lanes_and_bounds -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core dense2d_memfold_proof_records_source_shape_bounds_and_payload -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core dense2d_memfold -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core rank2_tile_memfold -- --nocapture`,
+  `cargo test -p spatial-rs-core --locked classifies_rank2_tile_memfold -- --nocapture`,
+  `cargo test -p spatial-rs-core --locked rank2_tile_memfold_near_misses_fail_closed -- --nocapture`,
+  `cargo test -p spatial-rs-core --locked rank2_tile_memfold_tail_near_misses_fail_closed -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen tile_memfold -- --nocapture`,
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen matrix_tile_memfold_4x6x5_feature_emits_c_preload_partial_fold_and_harness -- --nocapture`,
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen matrix_tile_memfold_tail_5x7x5_feature_compiles_harness -- --nocapture`,
+  and `cargo test -p spatial-rs-hls --locked --test m1_codegen rank2_tile_memfold_bulk_io_preserves_exact_hls_and_manifest -- --nocapture`.
+- Broader local verification:
+  `cargo fmt --all`,
+  `cargo test --locked -p spatial-rs-core`,
+  `cargo test --locked -p ee109-examples`,
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`,
+  `cargo fmt --all -- --check`,
+  and `git diff --check`.
+
+Boundary:
+- This is local classifier proof factoring only.
+- It does not change accepted syntax, checked IR payloads, generated HLS C++,
+  manifests, host harnesses, validation membership, imported Vitis evidence, or
+  the 35-program current-head vendor-HLS claim from source snapshot `6a4c4ae`.
+- It does not imply generic Spatial `MemFold`, arbitrary GEMM schedules,
+  banking inference, arbitrary fixed-point widths, K tiling on this
+  non-outer-K path, board execution, Vivado implementation, or timing closure.
