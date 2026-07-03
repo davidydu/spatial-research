@@ -2967,7 +2967,9 @@ Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
 `David/HLS-spatial`.
 
 Checkpoint:
-- Current Rust head is `a30ec96` (`Support Cargo 1.75 CLI integration tests`).
+- Vitis source snapshot is clean Rust commit `a30ec96` (`Support Cargo 1.75
+  CLI integration tests`); the imported evidence/docs were later committed in
+  the Rust repo as `efca04c`.
 - The preceding raw-ingress cleanup retired the raw Lab2 LUT wrappers at
   `702d181` and the raw Lab2 FSM-alt wrapper at `1e564a7`, while preserving the
   canonical LUT/FSM payloads, validation roster, generated HLS, manifests, and
