@@ -135,6 +135,12 @@ member, the named serial K-tail
 EC2/Vitis `csim_design`/`csynth_design` evidence is the 33-program literal-`2`
 memory reduction/fold checkpoint captured in
 `docs/vitis-validation/2026-07-03-memreduce-twos-33-program/`.
+The current Tile-K HLS backend-ledger cleanup has now moved K-loop bounds,
+local storage declarations, schedule/partition preflight, and serial/scheduled
+tile-body rendering into `crates/spatial-rs-hls/src/tile_k.rs` while preserving
+generated HLS C++, manifests, validation membership, and vendor-evidence
+boundaries. This is reliability work toward a cleaner Rust HLS backend, not a
+new language feature.
 These wrappers are not generic Spatial `FIFO`, `Fold`, `MemReduce`, `MemFold`,
 GEMM, generic `par`, automatic banking inference, board execution, timing
 closure, or broad Scala source compatibility.
