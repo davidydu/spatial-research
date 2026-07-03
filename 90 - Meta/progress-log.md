@@ -1031,3 +1031,44 @@ Boundary:
   generic `par`, inferred banking, board execution, Vivado implementation, or
   timing-closure evidence; it also does not claim II=1/performance optimality
   for the final C writeback loop.
+
+## 2026-07-02 — Rust rewrite Lab2 raw-name GEMM alias bridge
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Frontend checkpoint:
+- Extended the parser-only Lab2-like outer-K bridge to accept the exact fixed
+  raw Lab2 dimension/tile aliases used by the lab sources:
+  `M/N=32` and `tileM/tileN/tileK=16`.
+- The bridge canonicalizes those declarations, DRAM/SRAM dimensions, offset
+  loops (`K by tileK`, `M by tileM`, `N by tileN`), and
+  `min(tileK.to[Int], K - kk)` back to the existing `ROWS/COLS` and
+  `TILE_R/TILE_C/TILE_K` checked payload names before HIR.
+- The same alias bridge applies to the exact scheduled Part6 structural core
+  when the partial-tile loops still carry literal `par 2` / `par 16`.
+
+Local proof added so far:
+- Focused parser regression:
+  `cargo test -p spatial-rs-core --locked lab2_outer_k -- --nocapture`.
+- Focused HLS equality regression:
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_outer_k -- --nocapture`.
+- Focused Part6 parser regression:
+  `cargo test -p spatial-rs-core --locked lab2_part6 -- --nocapture`.
+- Focused Part6 HLS equality regression:
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_raw_part6 -- --nocapture`.
+- Full local gates after formatting:
+  `cargo fmt --all -- --check`,
+  `cargo test --locked`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`, and
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-current-plan`.
+
+Boundary:
+- This is parser/source-spelling coverage only. It does not add a validation
+  program, does not change generated HLS or manifest output, and does not
+  require a new EC2/Vitis run.
+- Wrong alias values, wrong offset-loop steps, malformed `numel_k` min forms,
+  non-exact raw wrappers, arbitrary K tails beyond the named canaries, generic
+  `par`, banking inference, board execution, Vivado implementation, and timing
+  closure remain unsupported.

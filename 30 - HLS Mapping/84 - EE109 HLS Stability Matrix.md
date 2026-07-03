@@ -296,7 +296,7 @@ known local teaching `Lab3Part1Convolution` wrapper from
 `/Users/david/Documents/David_code/lab-3-accelerator-bandits/src/test/scala/Lab3.scala`.
 It canonicalizes to the existing fixed `Lab3Part1Convolution` / `Stencil2d`
 payload and local tests prove parser equality plus generated HLS/manifest
-equality. A fresh current-head 27-program EC2/Vitis run now also proves the
+equality. A then-current-head 27-program EC2/Vitis run also proved the
 canonical Lab3 payload still passes `csim_design` and `csynth_design` with this
 adapter code present; evidence is captured in
 `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-01-lab3-local-raw-wrapper/`.
@@ -780,6 +780,10 @@ static exact outer-K canary:
   the MemFold bound
 - exact static `val numel_k = min(TILE_K.to[Int], K - kk);` spelling under the
   same offset-loop proof
+- exact fixed raw dimension/tile aliases (`M/N=32`,
+  `tileM/tileN/tileK=16`) in declarations, DRAM/SRAM dimensions, offset loops,
+  and `min(tileK.to[Int], K - kk)`, canonicalized back to `ROWS/COLS` and
+  `TILE_R/TILE_C/TILE_K` before HIR
 - the exact fixed raw `@spatial class Lab2Part5GEMM` wrapper when `runtimeArgs`
   prove `M=N=K=32`, `tileM/tileN/tileK` are all `16`, the type alias is
   `FixPt[TRUE,_24,_8]`, and there is one matching `Accel` body. This raw-wrapper
@@ -801,7 +805,7 @@ Status:
   exactly.
 - The accepted raw Part5/Part6 wrappers now reuse this bounded frontend/HIR path
   after their fixed token-stream quarantine succeeds.
-- The validation-program list remains 26 programs.
+- This bridge slice did not add a validation-program member.
 - No new EC2/Vitis evidence is claimed for this bridge because it does not
   change emitted HLS or validation membership.
 
