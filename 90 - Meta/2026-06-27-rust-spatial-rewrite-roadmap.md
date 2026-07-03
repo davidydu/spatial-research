@@ -126,7 +126,7 @@ sibling loop symbols. The fixed Tile-K phase spine is resolver-guarded, while
 broader Tile-K phase recognition beyond that spine still remains unsupported.
 The exact raw Lab1 Part6 wrapper is different: it canonicalizes to the new
 `SramTileFoldSum32` / `ScalarSramTileFold v0` structural canary, the 27th local
-validation member. The local validation list is 31 programs after the separate
+validation member. The local validation list is 33 programs after the separate
 scheduled Lab2 Part6 `MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32`
 member, the named serial K-tail
 `MatrixTileMemFoldOuterKTailInPlaceFixPt32x32x34`, the scheduled K-tail
@@ -142,6 +142,16 @@ generated HLS C++, manifests, validation membership, and vendor-evidence
 boundaries. This is reliability work toward a cleaner Rust HLS backend, not a
 new language feature; the current-head vendor refresh proves the existing
 33-program roster still passes after the cleanup.
+Follow-up Rust commit `ed9c2d3703c4bb98b285ae0e5ac3bb746bad25b5` (`Accept Lab2
+memory reduction call sugar`) added a parser-only normal-frontend bridge for
+the simple Lab2 memory-reduction spelling: `SRAM[Int](16)`, `Foreach(16 by 1)`,
+uppercase `MemReduce(acc)(-5 until 5 by 1)` / `MemFold(acc)(-5 until 5 by 1)`
+with `_+_`, and `out store acc`. It lowers to the existing
+`MemReduceOnes16` / `MemFoldOnes16` checked programs, keeps generated HLS and
+manifests unchanged, and leaves the 33-program validation roster unchanged.
+Local full workspace tests, clippy, Vitis dry-run emission, and 33-program
+plan-only sidecars passed; vendor HLS was not rerun for this slice because it
+does not alter emitted artifacts or validation membership.
 These wrappers are not generic Spatial `FIFO`, `Fold`, `MemReduce`, `MemFold`,
 GEMM, generic `par`, automatic banking inference, board execution, timing
 closure, or broad Scala source compatibility.
@@ -369,6 +379,13 @@ structure slice. Follow-up Rust commit `3bd86c13c5ffe99828b8cf6fa46f136d8746b6e9
 schedule/payload factor agreement, ordered Part6 partition-recipe validation,
 and the serial no-partitions guard into `spatial_rs_hls::tile_k`; Lab2
 outer-K/HLS equality tests and the 33-program plan-only roster remained stable.
+Follow-up Rust commit `ed9c2d3703c4bb98b285ae0e5ac3bb746bad25b5` (`Accept Lab2
+memory reduction call sugar`) switched the manager path back to EE109 source
+coverage: the simple Lab2 memory-reduction frontend now accepts the narrow
+Spatial-ish call syntax directly, with fail-closed tests for wrong bounds,
+wrong fill, wrong store source, missing MemFold zero-init, wrong combiner, and
+wrong local size. This is no-HLS-drift frontend coverage, not a new backend
+feature.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
