@@ -9,6 +9,44 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite ControlFsm harness helper extraction
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit `d0d6c0f`
+  (`Extract ControlFsm HLS harness renderer`). The
+  `Lab2Part3BasicCondFSM`, `Lab2Part3BasicCondFSMAlt`, and `ControlFsm32`
+  ControlFsm host-harness template, display-name handling, and oracle
+  selection moved into the crate-private `spatial_rs_hls::control_fsm` helper
+  module next to the existing ControlFsm kernel frame/body renderer. `emit.rs`
+  still owns `ProgramKind` dispatch, `ControlFsmPlan` lowering,
+  `HlsBodyPlan::ControlFsm` matching, HLS parameter lookup, dry-run project
+  generation, and public harness compile/run orchestration.
+- Generated dry-run artifacts for `Lab2Part3BasicCondFSM`,
+  `Lab2Part3BasicCondFSMAlt`, and `ControlFsm32` were compared against the
+  pre-change `bb83bce` baseline; `vitis-dry-run/kernel.cpp`,
+  `vitis-dry-run/harness.cpp`, and `vitis-dry-run/manifest.json` matched
+  exactly for all three programs. Boundary: local helper refactor only. No
+  fresh EC2/Vitis execution, no validation-roster change, no manifest or HLS
+  kernel change, no host-harness behavior change, no new source syntax, no
+  frontend/HIR/classifier behavior change, no generic FSM/control support, and
+  no new vendor-HLS claim.
+- Verification passed locally:
+  RED `cargo test -p spatial-rs-hls --locked control_fsm_harness_uses_entry_symbol_output_len_and_body_oracle -- --nocapture`
+  failed first on missing `control_fsm_harness` / `ControlFsmHarnessFrame`;
+  `cargo test -p spatial-rs-hls --locked control_fsm_harness_uses_entry_symbol_output_len_and_body_oracle -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked control_fsm -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --lib -- --nocapture`;
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`;
+  `cmp` checks for the three ControlFsm programs' dry-run `kernel.cpp`,
+  `harness.cpp`, and `manifest.json` artifacts against the `bb83bce` baseline;
+  `cargo test -p spatial-rs-hls --locked`;
+  `cargo test -p ee109-examples --locked`;
+  `cargo clippy -p spatial-rs-hls --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+
+---
+
 ## 2026-07-03 — Rust rewrite ControlFsm backend helper extraction
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on

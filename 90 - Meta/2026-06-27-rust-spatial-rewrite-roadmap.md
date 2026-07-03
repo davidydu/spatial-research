@@ -280,6 +280,11 @@ renderer for `Lab2Part3BasicCondFSM`, `Lab2Part3BasicCondFSMAlt`, and
 the dispatcher/orchestrator and leaving the host harness/oracle path in place.
 It is local-only and byte-stable against the `da1da8d` baseline; no fresh
 vendor-HLS evidence is claimed.
+The follow-up ControlFsm harness helper extraction moved the ControlFsm
+host-harness template and oracle selection into the same
+`spatial_rs_hls::control_fsm` module while preserving the three ControlFsm
+dry-run `kernel.cpp`, `harness.cpp`, and `manifest.json` artifacts against the
+`bb83bce` baseline; no fresh vendor-HLS evidence is claimed.
 Rust commit `b2f884534dac5a744d396b12fbe5bbfa574554df` (`Record control FSM
 plan seam Vitis evidence`) then refreshed the full 33-program EC2/Vitis 2025.1
 roster at that control/FSM plan-seam head. All validation programs passed
