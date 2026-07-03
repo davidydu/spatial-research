@@ -9,6 +9,25 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite HLS plan provenance
+
+- Added a no-HLS-drift MemReduce/MemFold HLS plan-provenance slice in
+  `/Users/david/Documents/David_code/spatial-rs` on branch
+  `David/HLS-spatial`: `MemReductionFillPlan` now preserves whether the
+  checked payload came from `MemReduceFill` or `MemFoldFill` while also
+  carrying the literal fill value. A test-first regression first failed because
+  `MemReductionKindPlan` and `mem.kind` did not exist, then passed after adding
+  the plan enum and lowering assignment. Focused verification passed
+  `cargo test --locked -p spatial-rs-hls mem_reduction_fill_plan_preserves_kind_and_literal_fill`
+  and
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen mem_reduction_literal_two`.
+  Boundary: generated HLS remains intentionally unchanged for the v0
+  constant-fill MemReduce/MemFold renderers; no new syntax, validation-program
+  member, EC2/Vitis rerun, board execution, Vivado implementation, timing
+  closure, generic Spatial `MemReduce`/`MemFold`, arbitrary fold bodies,
+  dynamic bounds, banking, scheduling, or performance claim is added by this
+  slice.
+
 ## 2026-07-02 — Rust rewrite Lab2 Part6 and serial K-tail
 
 - Hardened the Lab2 Part1/Part2 memory-reduction classifier in
