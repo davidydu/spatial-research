@@ -147,6 +147,10 @@ modules while preserving generated HLS C++, manifests, validation membership,
 and vendor-evidence boundaries. This is reliability work toward a cleaner Rust
 HLS backend, not a new language feature; the current-head vendor refresh proves
 the existing 33-program roster still passes after the cleanup.
+A later no-HLS-drift dense backend slice moved the `Dense2dTileDotAccum`
+renderer into `spatial_rs_hls::dot_accum`, matching the MemFold helper pattern
+while preserving generated HLS, manifests, validation membership, and
+vendor-evidence boundaries.
 Follow-up Rust commit `ed9c2d3703c4bb98b285ae0e5ac3bb746bad25b5` (`Accept Lab2
 memory reduction call sugar`) added a parser-only normal-frontend bridge for
 the simple Lab2 memory-reduction spelling: `SRAM[Int](16)`, `Foreach(16 by 1)`,

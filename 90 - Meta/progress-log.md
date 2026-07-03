@@ -9,6 +9,33 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite Dense2d DotAccum backend-plan extraction
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit `0adde4d`
+  (`Extract Dense2d DotAccum renderer`). The `Dense2dTileDotAccum` HLS kernel
+  renderer moved behind `Dense2dTileDotAccumPlan` and the new crate-private
+  `spatial_rs_hls::dot_accum` helper path. `emit.rs` now keeps orchestration
+  and parameter lookup, while the helper owns signature/interface pragma
+  rendering, row/column tile loops, flattened local tile declarations, LHS/RHS
+  tile loads, accumulator zero/update, and final store.
+- Generated `kernel.cpp` and `manifest.json` bytes for
+  `MatrixTileAccum4x6x5` were compared against a clean detached baseline
+  worktree at commit `ed10282`; both matched exactly. This was a
+  no-HLS-drift backend cleanup: no validation-roster change, no generated-HLS
+  or manifest change, no new syntax, no generic GEMM/MemFold/K-tiling support,
+  and no fresh vendor-HLS claim.
+- Verification passed locally:
+  `cargo fmt --all -- --check`;
+  `cargo test --locked --quiet`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo run -p ee109-examples --locked --bin ee109-examples`;
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-dot-accum-renderer-plan`;
+  `cargo test -p spatial-rs-hls --locked --test vitis_validation current_head`;
+  `cargo test --locked -p ee109-examples --test ec2_toolchain_compat -- --nocapture`;
+  `git diff --check`.
+
 ## 2026-07-03 — Rust rewrite Dense2d MemFold backend-plan extraction
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on
