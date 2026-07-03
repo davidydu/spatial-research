@@ -9,6 +9,19 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite Lab2 GEMM parameterized raw aliases
+
+- Widened the Rust Lab2 Tile-K GEMM frontend bridge on
+  `/Users/david/Documents/David_code/spatial-rs` (`David/HLS-spatial`) so
+  Lab2-like raw dimension/tile aliases are no longer restricted to literal
+  `M/N=32` and `tileM/tileN/tileK=16` when the source is an exact-coverage
+  serial Tile-K MemFold. Added a local parameter perturbation canary for
+  `M/N/K=24/20/12` with `tileM/tileN/tileK=8/5/4`; it normalizes to the same
+  checked `Dense2dTileKMemFold` payload as the expanded source, preserves
+  generated HLS/manifest equality, and passes the native host-C++ harness.
+  Boundary: this is parser/HIR/classifier/HLS local evidence only; no new
+  Vitis validation-roster member or fresh vendor run.
+
 ## 2026-07-03 — Rust rewrite Vitis evidence hygiene gate
 
 - Added a repo-local Vitis evidence validator and explicit EC2 Rust/Cargo 1.75
