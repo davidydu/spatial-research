@@ -9,6 +9,56 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite ControlFsm backend helper extraction
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit `bb83bce`
+  (`Extract ControlFsm HLS renderer`). The `Lab2Part3BasicCondFSM`,
+  `Lab2Part3BasicCondFSMAlt`, and `ControlFsm32` `ControlFsm` HLS kernel
+  renderer moved behind the existing `ControlFsmPlan` and the new
+  crate-private `spatial_rs_hls::control_fsm` helper module. `emit.rs` still
+  owns `ProgramKind` dispatch, `HlsBodyPlan::ControlFsm` matching, HLS
+  parameter lookup, dry-run project generation, and ControlFsm
+  host-harness/oracle rendering; the helper owns extern signature rendering,
+  DRAM/control AXI pragmas, scratch SRAM declaration, register initialization
+  and update rendering, canonical and alt FSM body rendering, and the dense
+  final store loop.
+- Generated dry-run artifacts for `Lab2Part3BasicCondFSM`,
+  `Lab2Part3BasicCondFSMAlt`, and `ControlFsm32` were compared against a clean
+  detached baseline worktree at Rust commit `da1da8d`; `vitis-dry-run/kernel.cpp`
+  and `vitis-dry-run/manifest.json` matched exactly for all three programs.
+  Boundary: local Rust test coverage plus dry-run artifact byte comparison
+  only. No fresh EC2/Vitis execution, no validation-roster change, no
+  generated-HLS or manifest change, no new syntax, no frontend/HIR/classifier
+  behavior change, no ControlFsm harness/oracle behavior change, no generic
+  FSM/register/control support, no arbitrary conditionals or state updates, no
+  scheduling/banking/performance/board-timing claim, and no new vendor-HLS
+  claim.
+- Verification passed locally:
+  RED `cargo test -p spatial-rs-hls --locked control_fsm -- --nocapture`
+  failed first on deliberate `todo!()` stubs;
+  `cargo test -p spatial-rs-hls --locked --lib control_fsm -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen control_fsm -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_fsm_alt_emits_piecewise_scale_hls_and_harness -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen generated_positive_harnesses_compile_and_run -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test vitis_validation captured_control_fsm_plan_seam_current_head_vitis_evidence_parses_for_thirty_three_program_validation_set -- --nocapture`;
+  baseline/current `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`;
+  detached-baseline `cmp` checks for the three ControlFsm programs'
+  dry-run `kernel.cpp` and `manifest.json` artifacts;
+  `cargo test -p spatial-rs-hls --locked`;
+  `cargo test -p ee109-examples --locked --test emit_vitis_dry_run -- --nocapture`;
+  `cargo test -p ee109-examples --locked --test run_vitis_validation -- --nocapture`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-control-fsm-renderer-plan`;
+  `cargo run -p ee109-examples --locked`;
+  `cargo test -p ee109-examples --locked --test ec2_toolchain_compat -- --nocapture`;
+  `cargo test --locked`;
+  `cargo clippy --workspace --all-targets --locked -- -D warnings`;
+  `RUSTDOCFLAGS='-D warnings' cargo doc --workspace --locked --no-deps --document-private-items`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+
+---
+
 ## 2026-07-03 — Rust rewrite Dense1d backend helper extraction
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on

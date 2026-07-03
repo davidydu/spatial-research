@@ -274,6 +274,12 @@ behavior while kernel rendering now consumes `HlsKernelPlan`. Full workspace
 tests, clippy, Vitis dry-run emission, and the 33-program plan-only sidecars
 passed; vendor HLS was not rerun because this is a no-HLS-drift compiler
 foundation change.
+The later ControlFsm backend renderer extraction moved the kernel frame/body
+renderer for `Lab2Part3BasicCondFSM`, `Lab2Part3BasicCondFSMAlt`, and
+`ControlFsm32` behind `spatial_rs_hls::control_fsm` while keeping `emit.rs` as
+the dispatcher/orchestrator and leaving the host harness/oracle path in place.
+It is local-only and byte-stable against the `da1da8d` baseline; no fresh
+vendor-HLS evidence is claimed.
 Rust commit `b2f884534dac5a744d396b12fbe5bbfa574554df` (`Record control FSM
 plan seam Vitis evidence`) then refreshed the full 33-program EC2/Vitis 2025.1
 roster at that control/FSM plan-seam head. All validation programs passed
@@ -494,7 +500,7 @@ The already-completed foundation items below remain useful historical context:
 9. Use the EC2 Vitis lane as a regular gate for every promoted supported-feature slice.
 10. Extend the new memory foundation toward checked `Shape`/effect/layout views
    shared by validation, manifesting, and HLS lowering.
-11. Extend the new HLS plan seam beyond rank-2 copy to dense/LUT/scalar only
+11. Extend the new HLS plan seam beyond rank-2 copy to dense/LUT/scalar/control
    after exact output-preservation tests are in place.
 12. Factor shared loop, memory, expression, and control structure before promoting FIFO, reductions, FSM variants, or Lab3-style performance/synthesis readiness.
 
