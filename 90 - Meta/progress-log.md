@@ -11,6 +11,22 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ## 2026-07-03 — Rust rewrite HLS plan provenance
 
+- Promoted Rust commit `f1a229f` (`Finish HLS harness plan migration`) to a
+  fresh EC2/Vitis checkpoint. I archived the clean `David/HLS-spatial` commit
+  to `/home/ubuntu/spatial-rs-runs/harness-plan-20260703-f1a229f/spatial-rs`
+  on `[ec2-host — see private/ec2-lane.md]`, used
+  `/home/ubuntu/.cargo/bin/cargo` because `/usr/bin/cargo` was too old for the
+  v4 lockfile, and ran `run-vitis-validation --execute --mode both` with
+  `/tools/Xilinx/2025.1/Vitis/settings64.sh`. All 33 validation programs
+  passed `csim_design` and `csynth_design`, including all nine current raw
+  EE109 fixture adapters and the Lab2 Part6 scheduled/tail canaries. The
+  durable evidence is now in
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-harness-plan-f1a229f/`.
+  Boundary: Vitis C simulation and HLS synthesis only; still no board
+  execution, Vivado implementation, place-and-route, post-implementation timing
+  closure, broad Spatial compatibility, arbitrary MemFold/GEMM support,
+  automatic banking inference, broader `par` inference, or performance
+  optimality claim.
 - Re-ran the local EE109/HLS-prep gate after Rust commit `f1a229f`
   (`Finish HLS harness plan migration`). Evidence: `cargo test --locked
   --quiet` passed across the workspace; `cargo run -p ee109-examples --locked
