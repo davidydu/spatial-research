@@ -2193,3 +2193,43 @@ Boundary:
 - This is local Rust test coverage only. It does not add new accepted Spatial
   syntax, alter generated HLS, run fresh EC2/Vitis, or prove broad generic
   rank-2 memory lowering beyond the current `Dense2dTileMemFold` slice.
+
+## 2026-07-03 — Rust rewrite Lab2 memory-reduction raw-island proof
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Started Phase 3 by moving raw `Lab2Part1SimpleMemReduce` and
+  `Lab2Part2SimpleMemFold` away from exact `Accel` token equality.
+- Added a narrow raw-island proof for the Lab2 memory-reduction shape:
+  fixed class names, one `DRAM[Int](16)` output, one `Accel`, exact
+  `-5 until 5 by 1` reduction/fold range, literal-one temp fill, plus
+  combiner, Part2 zero-init, and full `out store accum`.
+- The proof now accepts shape-equivalent raw variants with renamed
+  accumulator, temp, and loop/lambda identifiers, then canonicalizes to the
+  same frontend/HIR programs `MemReduceOnes16` and `MemFoldOnes16`.
+- Removed the generic exact-fixture fallback for those two raw adapters so the
+  raw-island proof is the only Lab2 Part1/Part2 raw ingress.
+- Tightened the raw proof identifier guard so `_` and core Scala reserved words
+  cannot be treated as user-defined accumulator, temp, or lane names.
+- Preserved HLS kernel text and manifest JSON equality against the canonical
+  frontend programs for original, host-scaffold-edited, and renamed-local raw
+  variants.
+
+Proof added:
+- `cargo test --locked -p spatial-rs-core parse_accel_accepts_shape_equivalent_raw_lab2_memory_reduction_names -- --nocapture`
+- `cargo test --locked -p spatial-rs-core memreduce -- --nocapture`
+- `cargo test --locked -p spatial-rs-core memfold -- --nocapture`
+- `cargo test --locked -p spatial-rs-core lab2_memory_reduction_adapters -- --nocapture`
+- `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part1_simple_memreduce_preserves_hls_and_manifest -- --nocapture`
+- `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part2_simple_memfold_preserves_hls_and_manifest -- --nocapture`
+- `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_mem_reductions -- --nocapture`
+
+Boundary:
+- This does not accept arbitrary Scala, arbitrary reducer bodies, generic
+  `MemReduce` / `MemFold`, dynamic bounds, raw fill values beyond the EE109
+  literal-one Part1/Part2 shape, banking, scheduling, or fresh EC2/Vitis
+  evidence.
+- The next Phase 3 compiler-internal slice is to extract rank-1 resolved
+  indexed-write proof helpers for temp fill and zero-init checks.
