@@ -1651,3 +1651,48 @@ Boundary:
   evidence.
 - Fresh EC2/Vitis was not needed because the generated HLS/manifest stability
   tests and plan-only roster stayed unchanged.
+
+## 2026-07-03 — Rust rewrite Tile-K HLS local storage ledger
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Rust commit:
+`100c18fa970dc4826a5a8c7ede96c6a701c376ab`
+(`Extract Tile-K HLS local storage layout`).
+
+Compiler checkpoint:
+- Extended crate-private `crates/spatial-rs-hls/src/tile_k.rs` with
+  `TileKLocalStorage` and `tile_k_local_storage`.
+- The helper now owns the current Tile-K local array layout split:
+  scheduled Part6 profiles emit 2-D `lhs_tile`, `rhs_tile`, `c_tile`, and
+  `partial_tile` arrays; serial profiles emit flattened arrays with the same
+  overflow-checked sizes previously computed in `emit.rs`.
+- The main Tile-K emitter now splices in the helper's declaration block while
+  keeping schedule validation, partition validation, pipeline/unroll pragmas,
+  and loop bodies unchanged.
+
+Proof added:
+- Red-first storage tests first failed on the intentional `todo!`, then passed:
+  scheduled 2-D declarations, serial flattened declarations, and serial
+  flattened overflow rejection.
+- Focused stability tests passed:
+  `cargo test --locked -p spatial-rs-hls tile_k_`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part5_k_tail_preserves_existing_tail_hls_and_manifest`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part6_k_tail_preserves_existing_scheduled_tail_hls_and_manifest`, and
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part6_fixed_32_matches_stable_scheduled_hls_snapshot`.
+- Full local gates passed:
+  `cargo fmt --all -- --check`, `git diff --check`, `cargo test --locked`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`, and
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-tile-k-local-storage-plan`.
+- The plan-only validation summary still contains 33 kernels and 33 sidecar
+  Tcl files.
+
+Boundary:
+- This is a no-HLS-drift backend reliability slice. It does not change accepted
+  syntax, checked IR, manifests, generated HLS, validation membership, or vendor
+  evidence.
+- Fresh EC2/Vitis was skipped because the HLS byte-stability tests, dry-run
+  generation, and plan-only validation roster stayed unchanged.

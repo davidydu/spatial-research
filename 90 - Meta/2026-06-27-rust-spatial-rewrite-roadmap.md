@@ -345,11 +345,14 @@ no-HLS-drift checkpoint because emitted artifacts and validation membership did
 not change. Follow-up Rust commit `3137a8b` (`Start Tile-K HLS lowering ledger`)
 created crate-private `spatial_rs_hls::tile_k` and moved runtime/static
 K-loop-bound rendering out of the monolithic emitter into `tile_k_loop_bound`.
-Existing Lab2 outer-K and K-tail HLS/manifest preservation tests stayed green,
-and the plan-only validation roster remained 33 programs, so this is another
-no-HLS-drift backend reliability slice. The next manager move is to deepen that
-HLS lowering ledger or broaden a currently narrow adapter into a reusable
-supported feature.
+Follow-up Rust commit `100c18fa970dc4826a5a8c7ede96c6a701c376ab`
+(`Extract Tile-K HLS local storage layout`) moved serial/scheduled local tile
+array declarations into `tile_k_local_storage`. Existing Lab2 outer-K and
+K-tail HLS/manifest preservation tests stayed green, the stable scheduled HLS
+snapshot stayed byte-stable, and the plan-only validation roster remained 33
+programs, so these are no-HLS-drift backend reliability slices. The next
+manager move is to switch to the raw Lab2 GEMM accel-island proof or continue
+deepening that HLS lowering ledger.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
