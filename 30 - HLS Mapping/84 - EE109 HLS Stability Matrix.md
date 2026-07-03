@@ -485,8 +485,8 @@ Generated-code hygiene:
   Lab3 raw-wrapper boundaries remain preserved under their earlier evidence
   folders. Board execution, Vivado implementation, timing closure, generic
   Spatial `Fold`, arbitrary local-memory folds/effects, arbitrary K-tail shapes
-  beyond the named serial canary, generic `par`, broad Scala source
-  compatibility, and broad Spatial coverage remain pending.
+  beyond the named serial and local scheduled-tail canaries, generic `par`,
+  broad Scala source compatibility, and broad Spatial coverage remain pending.
 - The Lab1Part2 memory lowering is a narrow structural slice, not a general Spatial memory backend. It accepts the selected fixed shape: `N = 32`, `tileSize = 16`, one input DRAM, one output DRAM, two 16-element SRAM tiles, one scalar integer multiplier, and dense unit-stride transfers.
 - The Lab1Part2 generated harness uses an independent vector oracle, but the source initialization is currently fixed to the selected EE109 shape `src(i) = i % 256`.
 - FIFO outside the exact raw Lab1 Part4 wrapper / `FifoTileScale32` semantic
@@ -509,12 +509,23 @@ explicit-zero raw Part5/Part6 fold-range bridge, and the raw Part5/Part6
 frontend-routing cleanup plus Lab2 GEMM bridge-profile extraction are local
 fail-closed classifier/source-adapter hardening slices whose checked payloads
 and emitted HLS stay unchanged, so they do not require separate vendor-HLS
-reruns. The next
-implementation slice should stay fail-closed and either choose another explicit
-GEMM canary/source shape or deliberately widen one named syntax surface under
-the same equality discipline before attempting broad Scala shell support. The
+reruns.
+
+The next GEMM implementation slice has now landed locally as
+`MatrixTileMemFoldOuterKTailInPlacePart6ScheduledFixPt32x32x34`. It combines
+the existing named serial K-tail shape (`K=34`, `K_TILES=3`, `TILE_K=16`,
+runtime `numel_k`) with the fixed Part6 schedule (`par 2` / `par 16`). The Rust
+emitter keeps static `TILE_K` local arrays, emits runtime-bounded K load/fold
+loops, and preserves the Part6 array partition, `PIPELINE II=1`, and unroll
+pragmas. This is local parser, checked-IR, manifest, generated-HLS, and
+host-harness evidence only; it does not add validation-program membership or a
+fresh EC2/Vitis checkpoint yet. The next action is therefore an explicit
+Vitis refresh for this scheduled K-tail canary before treating it as vendor
+evidence, or else keeping it documented as host-HLS-only.
+
+The
 main remaining EE109 gaps are generic Spatial `MemFold`/`Fold`, arbitrary
-K-tail shapes beyond the named serial canary, broader fixed-point/tail
+K-tail shapes beyond the two named K-tail canaries, broader fixed-point/tail
 semantics, generic `par` and banking inference beyond the fixed Part6 schedule,
 and generic Lab3 local-window/stencil lowering beyond the exact local raw
 wrapper.

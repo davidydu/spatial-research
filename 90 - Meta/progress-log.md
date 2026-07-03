@@ -963,3 +963,48 @@ Boundary:
   `numel_k`, Part6 `par`, banking, generic Spatial `MemFold`, generic DMA,
   broader fixed-point widths, FixPt tail tiles, board execution, Vivado
   implementation/place-and-route, or timing-closure evidence.
+
+## 2026-07-02 — Rust rewrite scheduled K-tail Part6 canary
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Frontend/IR/HLS checkpoint:
+- Added the local canary
+  `MatrixTileMemFoldOuterKTailInPlacePart6ScheduledFixPt32x32x34`.
+- This combines the existing named serial K-tail shape (`K=34`,
+  `K_TILES=3`, `TILE_K=16`, runtime `numel_k`) with the fixed Part6
+  `partial_row_par=2` / `partial_col_par=16` schedule.
+- Validation now admits this exact scheduled-tail shape only under the exact
+  scheduled-tail kernel name; unlisted scheduled/tail combinations remain
+  fail-closed.
+- The manifest records a distinct source kind:
+  `accel_macro_dense2d_tile_k_memfold_k_tail_part6_par2x16_v0`.
+- HLS emission keeps static `TILE_K` local A/B arrays, uses the runtime
+  `numel_k` bound for K load/fold loops, and preserves Part6 array partition,
+  `PIPELINE II=1`, and row/column unroll pragmas.
+
+Local proof added so far:
+- Red/green core IR test:
+  `cargo test -p spatial-rs-core --locked checked_ir_accepts_part6_tile_k_memfold_k_tail_bound -- --nocapture`.
+- Red/green parser test:
+  `cargo test -p spatial-rs-core --locked parse_accel_lab2_outer_k_accepts_part6_numel_k_tail_bound -- --nocapture`.
+- HLS/codegen/host-harness test:
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_outer_k_part6_numel_k_tail_emits_runtime_k_bound_scheduled_hls_and_harness -- --nocapture`.
+- Focused regressions already green:
+  `cargo test -p spatial-rs-core --locked rank2_tile_memfold_outer_k -- --nocapture`,
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_outer_k -- --nocapture`,
+  and
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_raw_part6_fixed_32 -- --nocapture`.
+
+Boundary:
+- This is local parser, checked-IR, manifest, generated-HLS, and native
+  host-C++ harness evidence only.
+- It does not add validation-program membership and does not create fresh
+  EC2/Vitis evidence. The latest vendor-proven GEMM anchor remains the
+  29-program serial K-tail checkpoint in
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-02-k-tail-29-program/`.
+- It does not accept generic Spatial `MemFold`, broad Scala source
+  compatibility, arbitrary K-tail shapes beyond the two named K-tail canaries,
+  generic `par`, inferred banking, board execution, Vivado implementation, or
+  timing-closure evidence.
