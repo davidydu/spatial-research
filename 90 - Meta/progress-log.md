@@ -9,6 +9,32 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite Dense2d tile scalar classifier characterization
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit `4c29758`
+  (`Characterize Dense2d tile scalar classifier helpers`). Added helper-level
+  characterization tests for `Dense2dTileScalarMul` `match_tile_load`,
+  `match_tile_compute`, and `match_tile_store` in the core classifier.
+- The new coverage pins canonical load/compute/store acceptance and
+  fail-closed rejection for equal-valued wrong row/column coefficient symbols,
+  swapped local lane symbols, commuted scalar multiply, wrong scalar symbol,
+  wrong output tile, staged/split final store, and wrong output symbol.
+- Verification passed locally:
+  `cargo fmt --all -- --check`;
+  `cargo test -p spatial-rs-core --locked dense2d_tile_scalar -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked rank2_tiled_int_scale -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked`;
+  `cargo test --locked`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+  Boundary: test-only core classifier coverage, no production classifier
+  behavior change, no generated-HLS or manifest change, no validation-roster
+  change, no fresh EC2/Vitis execution, no new syntax, and no new vendor-HLS
+  claim.
+
+---
+
 ## 2026-07-03 — Rust rewrite Dense2d tile scalar backend-plan extraction
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on
