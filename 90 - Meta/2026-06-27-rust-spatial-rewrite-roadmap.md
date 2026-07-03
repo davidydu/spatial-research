@@ -83,11 +83,11 @@ commit now has a full 28-program EC2/Vitis refresh in
 The next exact GEMM canary has landed locally as
 `MatrixTileMemFoldOuterKTailInPlacePart6ScheduledFixPt32x32x34`, combining the
 named `K=34` serial tail bound with the fixed Part6 `par 2` / `par 16`
-schedule. It has parser, checked-IR, manifest, generated-HLS, and native
-host-harness coverage, and the HLS emitter uses runtime `numel_k` for the K
-load/fold loops while preserving the scheduled array partition, pipeline, and
-unroll pragmas. It is not a validation-program member and has no separate
-EC2/Vitis evidence yet.
+schedule. It is now the 30th local validation-program member, with parser,
+checked-IR, manifest, generated-HLS, native host-harness, and Vitis dry-run/plan
+coverage. The HLS emitter uses runtime `numel_k` for the K load/fold loops while
+preserving the scheduled array partition, pipeline, and unroll pragmas. It has
+no separate EC2/Vitis evidence yet.
 As the next compiler-foundation slice, `ResolvedHir` now carries loop
 schedule/identity/nesting facts and resolver-owned affine/index-use facts for
 memory accesses, including access occurrence ids, parent-statement joins, and
@@ -120,14 +120,15 @@ sibling loop symbols. The fixed Tile-K phase spine is resolver-guarded, while
 broader Tile-K phase recognition beyond that spine still remains unsupported.
 The exact raw Lab1 Part6 wrapper is different: it canonicalizes to the new
 `SramTileFoldSum32` / `ScalarSramTileFold v0` structural canary, the 27th local
-validation member. The local validation list is 29 programs after the separate
+validation member. The local validation list is 30 programs after the separate
 scheduled Lab2 Part6 `MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32`
-member and the named serial K-tail
-`MatrixTileMemFoldOuterKTailInPlaceFixPt32x32x34`, with the latest EC2/Vitis
-`csim_design`/`csynth_design` evidence captured in
-`docs/vitis-validation/2026-07-02-k-tail-29-program/`. The scheduled K-tail
-`MatrixTileMemFoldOuterKTailInPlacePart6ScheduledFixPt32x32x34` remains a
-local-only canary until a fresh vendor run promotes it.
+member, the named serial K-tail
+`MatrixTileMemFoldOuterKTailInPlaceFixPt32x32x34`, and the scheduled K-tail
+`MatrixTileMemFoldOuterKTailInPlacePart6ScheduledFixPt32x32x34`. The latest
+EC2/Vitis `csim_design`/`csynth_design` evidence is still the 29-program serial
+K-tail checkpoint captured in
+`docs/vitis-validation/2026-07-02-k-tail-29-program/`; the scheduled K-tail needs
+a fresh vendor run before it can be treated as vendor-proven.
 These wrappers are not generic Spatial `FIFO`, `Fold`, `MemReduce`, `MemFold`,
 GEMM, generic `par`, automatic banking inference, board execution, timing
 closure, or broad Scala source compatibility.

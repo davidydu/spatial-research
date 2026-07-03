@@ -517,11 +517,11 @@ the existing named serial K-tail shape (`K=34`, `K_TILES=3`, `TILE_K=16`,
 runtime `numel_k`) with the fixed Part6 schedule (`par 2` / `par 16`). The Rust
 emitter keeps static `TILE_K` local arrays, emits runtime-bounded K load/fold
 loops, and preserves the Part6 array partition, `PIPELINE II=1`, and unroll
-pragmas. This is local parser, checked-IR, manifest, generated-HLS, and
-host-harness evidence only; it does not add validation-program membership or a
-fresh EC2/Vitis checkpoint yet. The next action is therefore an explicit
-Vitis refresh for this scheduled K-tail canary before treating it as vendor
-evidence, or else keeping it documented as host-HLS-only.
+pragmas. This is now the 30th local validation-program member, with local parser,
+checked-IR, manifest, generated-HLS, host-harness, and Vitis dry-run/plan
+coverage. It does not have a fresh EC2/Vitis checkpoint yet. The next action is
+therefore an explicit Vitis refresh for this scheduled K-tail canary before
+treating it as vendor evidence.
 
 The
 main remaining EE109 gaps are generic Spatial `MemFold`/`Fold`, arbitrary

@@ -964,7 +964,7 @@ Boundary:
   broader fixed-point widths, FixPt tail tiles, board execution, Vivado
   implementation/place-and-route, or timing-closure evidence.
 
-## 2026-07-02 — Rust rewrite scheduled K-tail Part6 canary
+## 2026-07-02 — Rust rewrite scheduled K-tail Part6 canary and validation promotion
 
 Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
 `David/HLS-spatial`.
@@ -983,6 +983,9 @@ Frontend/IR/HLS checkpoint:
 - HLS emission keeps static `TILE_K` local A/B arrays, uses the runtime
   `numel_k` bound for K load/fold loops, and preserves Part6 array partition,
   `PIPELINE II=1`, and row/column unroll pragmas.
+- Promoted the canary into the local validation lane as the 30th validation
+  program via `dense2d_tile_k_memfold_scheduled_tail_feature_examples()` and
+  `validation_programs()`.
 
 Local proof added so far:
 - Red/green core IR test:
@@ -991,6 +994,14 @@ Local proof added so far:
   `cargo test -p spatial-rs-core --locked parse_accel_lab2_outer_k_accepts_part6_numel_k_tail_bound -- --nocapture`.
 - HLS/codegen/host-harness test:
   `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_outer_k_part6_numel_k_tail_emits_runtime_k_bound_scheduled_hls_and_harness -- --nocapture`.
+- Validation-lane membership and focused scheduled-tail tests:
+  `cargo test -p ee109-examples --locked dense2d_tile_k_memfold -- --nocapture`
+  and
+  `cargo test -p ee109-examples --locked validation_programs_include_supported_features_after_adapter_baseline -- --nocapture`.
+- Vitis dry-run/plan coverage for the 30-program local validation lane:
+  `cargo test -p ee109-examples --locked --test emit_vitis_dry_run emit_vitis_dry_run_binary_generates_m1_frontend_bundles -- --nocapture`
+  and
+  `cargo test -p ee109-examples --locked --test run_vitis_validation run_vitis_validation_plan_only_writes_sidecar_tcl_for_all_examples -- --nocapture`.
 - Focused regressions already green:
   `cargo test -p spatial-rs-core --locked rank2_tile_memfold_outer_k -- --nocapture`,
   `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_outer_k -- --nocapture`,
@@ -998,11 +1009,10 @@ Local proof added so far:
   `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_raw_part6_fixed_32 -- --nocapture`.
 
 Boundary:
-- This is local parser, checked-IR, manifest, generated-HLS, and native
-  host-C++ harness evidence only.
-- It does not add validation-program membership and does not create fresh
-  EC2/Vitis evidence. The latest vendor-proven GEMM anchor remains the
-  29-program serial K-tail checkpoint in
+- This is local parser, checked-IR, manifest, generated-HLS, native host-C++
+  harness, validation-lane, and Vitis dry-run/plan evidence only.
+- It does not create fresh EC2/Vitis evidence. The latest vendor-proven GEMM
+  anchor remains the 29-program serial K-tail checkpoint in
   `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-02-k-tail-29-program/`.
 - It does not accept generic Spatial `MemFold`, broad Scala source
   compatibility, arbitrary K-tail shapes beyond the two named K-tail canaries,
