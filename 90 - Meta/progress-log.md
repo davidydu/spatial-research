@@ -2169,3 +2169,27 @@ Boundary:
   Spatial compatibility, arbitrary rank-2 local-memory lowering, or completion
   of the remaining fail-closed negative tests for swapped lanes, wrong K lanes,
   wrong const provenance, and split-parent facts.
+
+## 2026-07-03 — Rust rewrite Dense2d MemFold fact-negative coverage
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Added direct `Dense2dTileMemFold` fact-gate negative tests for the first
+  reusable rank-2 access helper increment.
+- Covered swapped local lane symbols, a wrong RHS K lane in the fold product,
+  equal-valued wrong row-coefficient const provenance, and split-parent store
+  access facts.
+- The tests passed without production-code changes, confirming that the helper
+  extraction was already fail-closed for these named residual risks.
+- Updated the full Rust rewrite roadmap so Phase 2's first proof-helper slice
+  now points toward Phase 3 Lab2 memory reductions next.
+
+Proof added:
+- `cargo test --locked -p spatial-rs-core dense2d_memfold_ -- --nocapture`
+
+Boundary:
+- This is local Rust test coverage only. It does not add new accepted Spatial
+  syntax, alter generated HLS, run fresh EC2/Vitis, or prove broad generic
+  rank-2 memory lowering beyond the current `Dense2dTileMemFold` slice.
