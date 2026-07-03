@@ -283,11 +283,20 @@ emitted artifact or validation roster changes.
 Follow-up on Rust commit
 `ab1697d6067186df415e955e1034307b3186fafb` (`Enrich Tile-K proof facts`):
 the private proof now carries explicit source-shape and phase-spine sub-proofs.
-Those facts record DRAM/SRAM roles, matrix/tile dimensions, tile counts,
-outer/tile/lane index names, canonical loop-bound symbols, K-tail `numel_k`,
-and hoisted-LHS placement. They remain private compiler facts for later
+Those facts record DRAM/SRAM roles, matrix/tile dimensions, outer/tile/lane
+index names, canonical loop-bound symbols, K-tail `numel_k`, and hoisted-LHS
+placement. Tile counts are validated from loop bounds rather than
+source-shape matching. They remain private compiler facts for later
 diagnostics/lowering; checked `Program` payloads, generated HLS, manifests,
 validation membership, and Vitis evidence are unchanged.
+
+Follow-up on Rust commit
+`dd8fafbcbcd045d92acb94c7d7ee17f41319253a` (`Extract Tile-K source-shape proof`):
+`prove_tile_k_source_shape` now owns the accepted Tile-K DRAM/SRAM role,
+element-type, and matrix/tile-dimension proof before the main proof path
+validates loop bounds, phase spine, access roles, fold schedule, payload, and
+checked `Program` rehydration. This is still no-HLS-drift compiler
+factoring.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
