@@ -3896,3 +3896,57 @@ Boundary:
 - It does not imply generic rank-1 scheduling, tail tiles, dynamic bounds,
   commuted multiply support, broader Dense1d lowering, board execution, Vivado
   implementation, or timing closure.
+
+## 2026-07-03 -- Rust rewrite FIFO proof boundary
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `c862e57` (`Record FIFO proof boundary`) factors
+  `Fifo1dTileScalarMul v0` classifier admission through a private
+  `FifoTileScalarMulProof` before checked IR construction.
+- The proof records accepted input/scalar/output roles, input/output FIFO
+  memories, source loop indices, static length/depth facts, and ordered
+  dequeue/enqueue resolver evidence.
+- The implementation preserves the cheap `HirFacts` structural FIFO gate and
+  the existing resolver effect rules: exactly one input dequeue before one
+  output enqueue, same parent block, loop depth two, and no conditionals.
+- Updated the Rust README and architecture/MVP notes to record this as a
+  no-HLS-drift compiler-foundation slice.
+
+Subagent review:
+- A `gpt-5.5` `xhigh` explorer recommended FIFO proof factoring over
+  `MemReductionShape` factoring because memory reductions already had a
+  shape/proof object and FIFO still mixed admission, resolver facts, port
+  checks, and checked IR construction in one classifier.
+- The final implementation follows that recommendation and keeps HLS lowering
+  untouched.
+
+Proof:
+- Red check:
+  `cargo test --locked -p spatial-rs-core fifo_tile_scalar_mul_proof_records_roles_indices_bounds_and_effects -- --nocapture`
+  failed first because `fifo_tile_scalar_mul_proof` did not exist.
+- Focused checks:
+  `cargo test --locked -p spatial-rs-core fifo_tile_scalar_mul_proof -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core fifo -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen fifo -- --nocapture`,
+  and
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation active_docs_name_b5460335_as_current_vendor_anchor -- --nocapture`.
+- Broader local verification:
+  `cargo test --locked -p spatial-rs-core`,
+  `cargo test --locked -p ee109-examples`,
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`,
+  `cargo fmt --all -- --check`,
+  and `git diff --check`.
+
+Boundary:
+- This is local classifier proof factoring only.
+- It does not change accepted syntax, checked IR payloads, generated HLS C++,
+  manifests, host harnesses, validation membership, or imported Vitis evidence.
+- The active vendor-HLS evidence anchor remains
+  `docs/vitis-validation/2026-07-03-current-head-b5460335-35-program/`;
+  commit `c862e57` itself has not been rerun on EC2/Vitis yet.
+- It does not imply generic FIFO support, AXI streams, stream ports,
+  back-pressure modeling, arbitrary producer/consumer scheduling, tail tiles,
+  dynamic depths, board execution, Vivado implementation, or timing closure.
