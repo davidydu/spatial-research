@@ -3598,3 +3598,45 @@ Boundary:
 - It does not imply generic Spatial `MemFold`, arbitrary GEMM schedules,
   banking inference, arbitrary fixed-point widths, K tiling on this
   non-outer-K path, board execution, Vivado implementation, or timing closure.
+
+## 2026-07-03 -- Rust rewrite Dense2d MemFold phase proof split
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `9363677` (`Split dense MemFold phase proof`) factors the
+  non-outer-K `Dense2dTileMemFold v0` tile-row/tile-column phase spine and
+  exact/tail bound admission into a dedicated helper.
+- The source-shape helper and phase/bounds helper now run before the existing
+  resolved access matching, keeping the checked IR reconstruction path the
+  same.
+- Updated the Rust README and architecture/MVP notes to record this as a
+  no-HLS-drift compiler-foundation slice.
+
+Proof:
+- Red check:
+  `cargo test --locked -p spatial-rs-core dense2d_memfold_phase_spine_helper_records_loops_phases_and_bounds -- --nocapture`
+  failed first because `prove_dense2d_tile_memfold_phase_spine` did not exist.
+- Focused Dense2d MemFold checks:
+  `cargo test --locked -p spatial-rs-core dense2d_memfold_phase_spine_helper_records_loops_phases_and_bounds -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core dense2d_memfold_proof_records_source_shape_bounds_and_payload -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core dense2d_memfold -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core rank2_tile_memfold -- --nocapture`,
+  and `cargo test --locked -p spatial-rs-hls --test m1_codegen tile_memfold -- --nocapture`.
+- Broader local verification:
+  `cargo fmt --all`,
+  `cargo test --locked -p spatial-rs-core`,
+  `cargo test --locked -p ee109-examples`,
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`,
+  `cargo fmt --all -- --check`,
+  and `git diff --check`.
+
+Boundary:
+- This is local classifier proof factoring only.
+- It does not change accepted syntax, checked IR payloads, generated HLS C++,
+  manifests, host harnesses, validation membership, imported Vitis evidence, or
+  the 35-program current-head vendor-HLS claim from source snapshot `6a4c4ae`.
+- It does not imply generic Spatial `MemFold`, arbitrary GEMM schedules,
+  banking inference, arbitrary fixed-point widths, K tiling on this
+  non-outer-K path, board execution, Vivado implementation, or timing closure.
