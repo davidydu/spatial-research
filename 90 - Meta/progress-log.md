@@ -3279,3 +3279,43 @@ Boundary:
 - It does not imply generic rank-2 memory effects, alias analysis, generic
   GEMM, automatic banking, broad `par` semantics, board execution, Vivado
   implementation, or timing closure.
+
+## 2026-07-03 -- Rust rewrite LUT proof facts
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `7aa1cca` (`Record LUT proof facts`) factors the LUT
+  adapter/feature classifiers through a private proof object before checked IR
+  construction.
+- The proof records the accepted program kind, LUT table, scalar output, scalar
+  input, row/column index roles, table dimensions, and row-major literal
+  values for both the reserved Lab2 square/non-square adapters and the reusable
+  non-lab `LutLookup v0` feature path.
+- Updated the Rust README and architecture/MVP notes to record this as a
+  no-HLS-drift frontend/classifier foundation slice.
+
+Proof:
+- Red/green focused check:
+  `cargo test --locked -p spatial-rs-core lut_feature_proof_records_roles_dims_and_values -- --nocapture`.
+- Focused LUT checks:
+  `cargo test --locked -p spatial-rs-core lut_feature_proof_records_roles_dims_and_values -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core lut_adapter_proof_records_reserved_lab2_shape -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core lut -- --nocapture`,
+  and `cargo test --locked -p spatial-rs-hls --test m1_codegen lut -- --nocapture`.
+- Broader local verification:
+  `cargo test --locked -p spatial-rs-core`,
+  `cargo test --locked -p ee109-examples`,
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`,
+  `cargo fmt --all -- --check`,
+  and `git diff --check`.
+
+Boundary:
+- This is local classifier proof factoring only.
+- It does not change accepted syntax, checked IR payloads, generated HLS C++,
+  manifests, host harnesses, validation membership, imported Vitis evidence, or
+  the 35-program current-head vendor-HLS claim from source snapshot `6a4c4ae`.
+- It does not imply generic LUT support, arbitrary table expressions, runtime
+  bounds checks, dynamic dimensions, non-`Int` LUTs, board execution, Vivado
+  implementation, or timing closure.
