@@ -9,6 +9,35 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite retired Lab1 raw Scala wrappers
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit `c809b6b`
+  (`Retire Lab1 raw Scala wrappers`). The quarantined raw Scala adapter no
+  longer accepts the exact `Lab1Part4FIFOExample` or
+  `Lab1Part6ReduceExample` wrappers. Their behavior remains covered by the
+  Rust-subset representatives `FifoTileScale32` and `SramTileFoldSum32`, and
+  the old lab names remain reserved so they cannot be mistaken for native Rust
+  frontend support. Removed the obsolete raw-HLS equality tests for those two
+  wrappers and updated README / fixture-matrix / architecture / roadmap docs
+  to mark the wrappers retired rather than accepted.
+- Verification passed locally:
+  `cargo test -p spatial-rs-core --locked --quiet source_adapter::tests`;
+  `cargo test -p spatial-rs-core --locked --quiet raw_lab1_part4`;
+  `cargo test -p spatial-rs-core --locked --quiet raw_lab1_part6`;
+  `cargo test -p spatial-rs-hls --locked --quiet --test m1_codegen fifo_feature`;
+  `cargo test -p spatial-rs-hls --locked --quiet --test m1_codegen sram_tile_fold`;
+  `cargo fmt --all -- --check`; `cargo test --locked --quiet`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo run -p ee109-examples --locked --bin ee109-examples`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation --
+  --plan-only --mode both --out target/vitis-validation-lab1-raw-retirement-plan`;
+  and `git diff --check`.
+  Boundary: no fresh EC2/Vitis execution, no validation-roster change, no
+  generated-HLS evidence change, no broad Scala compatibility, and no
+  retirement of Lab2 raw-island, Lab2 GEMM, Lab2 LUT/FSM, or Lab3 quarantine
+  paths in this slice.
+
 ## 2026-07-03 — Rust rewrite raw Scala adapter quarantine provenance
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on
