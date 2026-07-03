@@ -1325,6 +1325,58 @@ Boundary:
 - Remaining Tile-K proof work is still internal factoring: move loop-spine,
   access-role, phase, and schedule checks into smaller proof-owned helpers.
 
+## 2026-07-03 — Rust rewrite Tile-K phase-spine proof extraction
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Rust commit:
+`787510498f0fcca269db571b0418c4f6c4d6f773` (`Extract Tile-K phase-spine proof`).
+
+Compiler checkpoint:
+- Extracted the second proof-owned helper from the monolithic Tile-K recognizer:
+  `prove_tile_k_phase_spine`.
+- The helper owns outer-K loop recovery, optional `numel_k` recovery, tile-row
+  and tile-column loop recovery, canonical `K_TILES`/`ROW_TILES`/`COL_TILES`
+  tile-count validation, exact row/column coverage, exact-or-bounded-ceil K
+  coverage, non-degenerate static K-split validation, hoisted/non-hoisted LHS
+  phase layout, phase statement recovery, and the resolver-backed phase-spine
+  ancestry guard.
+- Access-role matching, fold/update semantics, schedule extraction, payload
+  construction, and checked `Program` rehydration remain separate proof-path
+  responsibilities.
+- Updated repo docs and the Tile-K contract plan to clarify that tile counts
+  now belong to phase-spine proof extraction, not source-shape matching.
+
+Proof added:
+- Red-first helper test initially failed at compile time because
+  `prove_tile_k_phase_spine` did not exist.
+- A GPT-5.5 xhigh read-only reviewer confirmed the helper boundary and warned
+  to preserve diagnostic priority and keep access-role parsing out of the
+  phase helper.
+- Focused checks passed:
+  `cargo test --locked -p spatial-rs-core tile_k_phase_spine_helper_records_loop_bounds_and_phase_refs`,
+  `cargo test --locked -p spatial-rs-core tile_k_phase_spine_helper`,
+  `cargo test --locked -p spatial-rs-core tile_k_phase_spine`,
+  `cargo test --locked -p spatial-rs-core tile_k`,
+  `cargo test --locked -p spatial-rs-hls lab2_outer_k`, and
+  `cargo test --locked -p spatial-rs-hls lab2_raw_part`.
+- Full local gates passed:
+  `cargo fmt --all -- --check`,
+  `cargo test --locked`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`,
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-current-plan`, and
+  `git diff --check`.
+
+Boundary:
+- This slice does not change accepted syntax, checked payloads, manifests,
+  generated HLS, or the 31-program validation roster.
+- EC2/Vitis was skipped because emitted artifacts and validation membership did
+  not change.
+- Remaining Tile-K proof work is still internal factoring: move access-role
+  and schedule checks into smaller proof-owned helpers.
+
 ## 2026-07-03 — Rust rewrite Tile-K source-shape proof extraction
 
 Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

@@ -298,6 +298,18 @@ validates loop bounds, phase spine, access roles, fold schedule, payload, and
 checked `Program` rehydration. This is still no-HLS-drift compiler
 factoring.
 
+Follow-up on Rust commit
+`787510498f0fcca269db571b0418c4f6c4d6f773` (`Extract Tile-K phase-spine proof`):
+`prove_tile_k_phase_spine` now owns the accepted Tile-K outer/tile loop
+recovery, optional `numel_k`, canonical tile-count validation, exact/ceil
+coverage checks, non-degenerate K-split validation, hoisted/non-hoisted phase
+layout, phase statement recovery, and resolver-backed phase-spine ancestry
+guard. Access-role matching, fold/update semantics, schedule extraction,
+payload construction, and checked `Program` rehydration remain separate proof
+path responsibilities. This is still no-HLS-drift compiler factoring; local
+full gates passed and EC2/Vitis was skipped because emitted artifacts and
+validation membership did not change.
+
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
 `Program` as the HLS contract, reserves resolver diagnostics to
