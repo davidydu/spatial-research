@@ -3141,3 +3141,41 @@ Boundary:
 - It does not imply broad Scala source compatibility, generic Spatial `MemFold`,
   arbitrary GEMM shapes, generic `par`, inferred banking, board execution,
   Vivado implementation, or timing closure.
+
+## 2026-07-03 -- Rust rewrite shared rank-2 tile-copy facts
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `6a4c4ae` (`Share rank2 tile copy fact checks`) removes duplicate
+  Tile-K C preload/store affine fact checks by routing them through the existing
+  `rank2_tile_copy_facts_match` helper.
+- The helper is now shared by the non-outer-K MemFold tile-copy path and the
+  Tile-K C preload/store path. It still proves local row/column lanes,
+  global `tile*TILE + lane` affine forms, resolved loop-symbol identity, and
+  const-backed tile-stride provenance.
+- Updated the Rust plan/architecture docs to record this as helper reuse, not a
+  new feature.
+
+Proof:
+- Focused checks:
+  `cargo test --locked -p spatial-rs-core tile_k_c_preload_fact_matcher -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core tile_k_c_store_fact_matcher -- --nocapture`,
+  and
+  `cargo test --locked -p spatial-rs-core dense2d_memfold_preload_fact_matcher -- --nocapture`.
+- Broader local verification:
+  `cargo fmt --all -- --check`,
+  `cargo test --locked -p spatial-rs-core`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k -- --nocapture`,
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`,
+  and `git diff --check`.
+
+Boundary:
+- This is local classifier refactoring only.
+- It does not change accepted syntax, checked IR payloads, generated HLS C++,
+  manifests, host harnesses, validation membership, imported Vitis evidence, or
+  the 35-program vendor-HLS claim from source snapshot `a30ec96`.
+- It does not imply generic rank-2 memory effects, alias analysis, generic
+  GEMM, automatic banking, broad `par` semantics, board execution, Vivado
+  implementation, or timing closure.
