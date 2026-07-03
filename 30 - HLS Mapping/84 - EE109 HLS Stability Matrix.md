@@ -477,15 +477,15 @@ Generated-code hygiene:
   not invoke Vitis/Vivado HLS, synthesize RTL, check timing, or validate board
   integration.
 - For the Rust rewrite, the explicitly listed accepted adapters,
-  supported-feature representatives, and canaries through the named serial
+  supported-feature representatives, and canaries through the named scheduled
   K-tail canary have Vitis `csim_design` and `csynth_design` evidence through
-  the current-head 29-program
-  `docs/vitis-validation/2026-07-02-k-tail-29-program/` checkpoint. The
+  the current-head 30-program
+  `docs/vitis-validation/2026-07-02-scheduled-k-tail-30-program/` checkpoint. The
   previous scheduled Part6, Tile-K facts, post-refactor SRAM-tile fold, and
   Lab3 raw-wrapper boundaries remain preserved under their earlier evidence
   folders. Board execution, Vivado implementation, timing closure, generic
   Spatial `Fold`, arbitrary local-memory folds/effects, arbitrary K-tail shapes
-  beyond the named serial and local scheduled-tail canaries, generic `par`,
+  beyond the named serial and scheduled K-tail canaries, generic `par`,
   broad Scala source compatibility, and broad Spatial coverage remain pending.
 - The Lab1Part2 memory lowering is a narrow structural slice, not a general Spatial memory backend. It accepts the selected fixed shape: `N = 32`, `tileSize = 16`, one input DRAM, one output DRAM, two 16-element SRAM tiles, one scalar integer multiplier, and dense unit-stride transfers.
 - The Lab1Part2 generated harness uses an independent vector oracle, but the source initialization is currently fixed to the selected EE109 shape `src(i) = i % 256`.
