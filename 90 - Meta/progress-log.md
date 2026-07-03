@@ -9,6 +9,44 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite current-head 6a4c4ae Vitis evidence refresh
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit `d4e2fcb` (`Record current-head Vitis
+  evidence`). The committed evidence refresh uses clean source snapshot
+  `6a4c4ae` (`Share rank2 tile copy fact checks`) and makes
+  `docs/vitis-validation/2026-07-03-current-head-6a4c4ae-35-program/` the
+  active current-head vendor-stability anchor in README, architecture docs,
+  the EE109 MVP plan, the fixture matrix, and the HLS evidence test.
+- EC2 host `[ec2-host — see private/ec2-lane.md]` ran the full
+  35-program EE109 validation roster under Vitis/Vivado 2025.1 using
+  `/tools/Xilinx/2025.1/Vitis/settings64.sh`. Remote preflight
+  `cargo test -p ee109-examples --locked` passed under Rust/Cargo 1.75 before
+  the vendor run.
+- Remote Vitis command:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --settings /tools/Xilinx/2025.1/Vitis/settings64.sh --out target/vitis-validation-current-head-6a4c4ae`
+  from
+  `/home/ubuntu/spatial-rs-runs/current-head-6a4c4ae/spatial-rs`.
+- Vitis result: all 35 kernels passed with `returncode=0`, `csim=true`, and
+  `csynth=true`. The local evidence bundle contains `summary-both.md`,
+  `summary-both.json`, logs, reports, sidecar Tcl, and Vitis project trees for
+  the same 35 kernels.
+- Verification passed locally:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-03-current-head-6a4c4ae-35-program --mode both`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation -- --nocapture`;
+  `cargo fmt --all -- --check`;
+  `cargo test --locked -p ee109-examples`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`;
+  `cargo test --locked -p spatial-rs-core`;
+  stale active-anchor `rg` check;
+  `git diff --check`.
+- Boundary: this refresh proves Vitis C simulation and HLS synthesis only for
+  the exact current 35-program roster. It does not prove board execution,
+  Vivado implementation/place-and-route, timing closure, generic Spatial source
+  compatibility, arbitrary unsupported features, or performance optimality.
+
+---
+
 ## 2026-07-03 — Rust rewrite raw Lab2 FSM-alt adapter retirement
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on
