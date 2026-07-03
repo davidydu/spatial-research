@@ -3001,3 +3001,51 @@ Boundary:
   post-implementation timing closure, generic Spatial compatibility, arbitrary
   GEMM/stencil support, automatic banking inference, broader `par` inference,
   II=1 for every loop, or performance optimality.
+
+## 2026-07-03 -- Rust rewrite Tile-K partial schedule facts
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `29e6b52` (`Check Tile-K partial schedule facts`) makes the
+  Tile-K fold-schedule proof consume resolver-owned `ResolvedHir::LoopDomain`
+  facts for the partial-product loops.
+- The classifier still keeps the existing structural MemFold shape guard first,
+  but the accepted partial schedule now walks from the partial product
+  assignment effect to its enclosing column loop, parent row loop, and parent
+  fold-K loop, then checks the resolved loop-index symbols, canonical end-bound
+  symbols, serial fold schedule, and fixed serial or Part6 `par 2` / `par 16`
+  factors.
+- Added fail-closed coverage for crossed resolver facts where the source syntax
+  still says `par 2` but the supplied resolved loop-domain facts say `par 4`.
+- Extended the helper coverage to include the serial and scheduled
+  row/column/K-tail Tile-K profiles.
+- Updated repo docs and the fixture matrix to record this as local
+  fact-consumption hardening, not a new HLS feature.
+
+Proof:
+- Red/green focused test:
+  `cargo test --locked -p spatial-rs-core tile_k_fold_schedule_helper_rejects_resolved_partial_par_mismatch -- --nocapture`.
+- Focused schedule/profile checks:
+  `cargo test --locked -p spatial-rs-core tile_k_fold_schedule_helper -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core tile_k_contract_accepts_all_current_profiles -- --nocapture`,
+  and
+  `cargo test --locked -p spatial-rs-core checked_ir_accepts_exact_part6_tile_k_memfold_schedule -- --nocapture`.
+- Full local verification:
+  `cargo fmt --all -- --check`,
+  `cargo test --locked -p spatial-rs-core`,
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k -- --nocapture`,
+  `cargo test --locked -p ee109-examples`,
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`,
+  and `git diff --check`.
+
+Boundary:
+- This is local compiler/classifier trust reduction only.
+- It does not change accepted syntax, checked IR payloads, validation roster,
+  generated HLS C++, manifests, host harnesses, imported Vitis evidence, or the
+  35-program vendor-HLS claim from source snapshot `a30ec96`.
+- It does not imply generic Spatial `MemFold`, generic GEMM, generic `par`,
+  automatic banking inference, arbitrary K/row/column tails, broad Scala source
+  compatibility, board execution, Vivado implementation, or timing closure.
