@@ -2960,3 +2960,42 @@ Boundary:
   support multiple LUTs, computed/swapped indices, arbitrary scalar
   expressions, dynamic dimensions/bounds, rank-1/rank-3 LUTs, non-`Int` or
   FixPt LUTs, performance, board timing, or make a new vendor-HLS claim.
+
+## 2026-07-03 -- Rust rewrite raw-adapter retirement current-head Vitis refresh
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Current Rust head is `a30ec96` (`Support Cargo 1.75 CLI integration tests`).
+- The preceding raw-ingress cleanup retired the raw Lab2 LUT wrappers at
+  `702d181` and the raw Lab2 FSM-alt wrapper at `1e564a7`, while preserving the
+  canonical LUT/FSM payloads, validation roster, generated HLS, manifests, and
+  host harnesses.
+- The CLI integration tests now work on the EC2 Rust/Cargo 1.75 toolchain by
+  falling back from missing `CARGO_BIN_EXE_*` env vars to `cargo run -p
+  ee109-examples --locked --bin <tool> --`.
+- Re-ran the full 35-program EE109 validation roster on EC2/Vitis 2025.1 from
+  `/home/ubuntu/spatial-rs-runs/raw-ingress-retire-35-a30ec96/spatial-rs`.
+- Durable evidence is captured in
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-raw-ingress-retire-a30ec96-35-program/`.
+- The copied evidence validates locally with
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-03-raw-ingress-retire-a30ec96-35-program --mode both`.
+
+Proof:
+- Remote `cargo test -p ee109-examples --locked` passed under
+  `cargo 1.75.0` / `rustc 1.75.0`.
+- Remote Vitis command:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --settings /tools/Xilinx/2025.1/Vitis/settings64.sh --out target/vitis-validation-raw-ingress-retire-35-a30ec96`
+- Vitis summary result: all 35 kernels passed with `returncode=0`,
+  `csim=true`, and `csynth=true`.
+- Captured artifacts: `summary-both.md`, `summary-both.json`, 35 Vitis logs,
+  35 csynth reports, and 35 sidecar Tcl files.
+
+Boundary:
+- This proves Vitis C simulation and HLS synthesis for the exact 35-program
+  Rust rewrite roster at commit `a30ec96`.
+- It does not prove board execution, Vivado implementation/place-and-route,
+  post-implementation timing closure, generic Spatial compatibility, arbitrary
+  GEMM/stencil support, automatic banking inference, broader `par` inference,
+  II=1 for every loop, or performance optimality.

@@ -48,6 +48,40 @@ the pre-retirement `702d181` baseline matched for `Lab2Part3BasicCondFSM`,
 and `manifest.json`. This is a source-ingress retirement only, not new
 vendor-HLS evidence.
 
+Current Rust rewrite delta, 2026-07-03: commit `a30ec96` is now the active
+current-head vendor-HLS checkpoint. The full 35-program roster passed
+EC2/Vitis 2025.1 `csim_design` and `csynth_design` after raw Lab2 LUT/FSM-alt
+ingress retirement and Rust/Cargo 1.75 CLI test hardening. Durable evidence:
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-raw-ingress-retire-a30ec96-35-program/`.
+
+## 2026-07-03 Rust Rewrite Raw-Adapter Retirement 35-Program Vitis Checkpoint
+
+The Rust rewrite branch `David/HLS-spatial` passed the full 35-program EE109
+validation roster through EC2/Vitis at source commit `a30ec96`.
+
+Evidence:
+- Remote host: `[ec2-host — see private/ec2-lane.md]`
+  (`ip-172-31-37-7`)
+- Remote run directory:
+  `/home/ubuntu/spatial-rs-runs/raw-ingress-retire-35-a30ec96/spatial-rs`
+- Durable evidence:
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-raw-ingress-retire-a30ec96-35-program/`
+- Result: all 35 programs reported `returncode=0`, `csim=true`, and
+  `csynth=true`.
+- Evidence validator: passed for
+  `2026-07-03-raw-ingress-retire-a30ec96-35-program/`.
+- EC2 Rust/Cargo gate: passed under `cargo 1.75.0` / `rustc 1.75.0`.
+- This refresh covers the raw Lab2 LUT/FSM-alt ingress retirement head and the
+  Cargo 1.75-compatible CLI integration-test harness.
+
+Evidence boundary:
+- This validates Vitis C simulation and HLS synthesis for the exact 35-program
+  Rust rewrite roster at `a30ec96`.
+- It does not validate board execution, Vivado implementation/place-and-route,
+  post-implementation timing closure, generic Spatial compatibility, arbitrary
+  GEMM support, automatic banking inference, broader `par` inference, II=1 for
+  every loop, or performance optimality.
+
 ## 2026-07-03 Rust Rewrite Scheduled Row/Column/K-Tail Vitis Checkpoint
 
 The Rust rewrite branch `David/HLS-spatial` passed the full 35-program EE109
@@ -598,25 +632,16 @@ Generated-code hygiene:
 ## Recommended Next Action
 
 For the Rust rewrite, the clean current-head EC2/Vitis checkpoint is now the
-30-program named scheduled K-tail run. The fixed Tile-K phase-spine guard, the
-explicit-zero raw Part5/Part6 fold-range bridge, and the raw Part5/Part6
-frontend-routing cleanup plus Lab2 GEMM bridge-profile extraction are local
-fail-closed classifier/source-adapter hardening slices whose checked payloads
-and emitted HLS stay unchanged, so they do not require separate vendor-HLS
-reruns.
+35-program raw-adapter-retirement refresh at `a30ec96`, captured in
+`docs/vitis-validation/2026-07-03-raw-ingress-retire-a30ec96-35-program/`.
+Use it as the vendor-stability anchor for the current EE109 MVP roster.
 
-The next GEMM implementation slice has now landed locally as
-`MatrixTileMemFoldOuterKTailInPlacePart6ScheduledFixPt32x32x34`. It combines
-the existing named serial K-tail shape (`K=34`, `K_TILES=3`, `TILE_K=16`,
-runtime `numel_k`) with the fixed Part6 schedule (`par 2` / `par 16`). The Rust
-emitter keeps static `TILE_K` local arrays, emits runtime-bounded K load/fold
-loops, and preserves the Part6 array partition, `PIPELINE II=1`, and unroll
-pragmas. This is now the 30th validation-program member, with local parser,
-checked-IR, manifest, generated-HLS, host-harness, Vitis dry-run/plan coverage,
-and EC2/Vitis `csim_design`/`csynth_design` evidence captured in
-`docs/vitis-validation/2026-07-02-scheduled-k-tail-30-program/`. Vitis emits
-II-violation warnings while trying to pipeline the final C writeback loop, so
-this is vendor acceptance evidence rather than a scheduling-optimality claim.
+The natural next implementation action is proof-driven tightening of one
+remaining quarantined source-ingress island, preferably fixed Lab2 GEMM or the
+local Lab3 teaching wrapper, while preserving the same checked payload/HLS
+surface. Byte-stable refactors should keep using local equality, dry-run/plan,
+full test, clippy, and evidence-validator gates; any generated-HLS text change
+or validation-roster change should trigger a fresh EC2/Vitis execution.
 
 The
 main remaining EE109 gaps are generic Spatial `MemFold`/`Fold`, arbitrary
