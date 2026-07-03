@@ -205,10 +205,17 @@ This is an architectural foundation step only; it does not yet provide generic
 effect scheduling, alias analysis, FSM/control lowering, stencil lowering, or
 broad memory lowering.
 
-Rank-2 copy is also the first path lowered through a crate-private
-`HlsKernelPlan` before C++ rendering. The plan uses manifest-derived ABI facts
-and the shared row-major index expression, but it is not yet a generic HLS MIR
-or scheduler.
+Rank-2 copy opened the crate-private `HlsKernelPlan` path before C++ rendering,
+and scalar assignment has now joined that path for the Lab1/`ScalarExpr`
+surface. The scalar plan carries ordered scalar inputs, the scalar output, and
+the precedence-safe expression AST; the rank-2 copy plan uses manifest-derived
+ABI facts and the shared row-major index expression. This is still not a
+generic HLS MIR or scheduler.
+Rust commit `82ebd3f78a6cb7b00ac33764d7f8462a4ce0d8c9` (`Add scalar HLS plan
+seam`) added this scalar seam with exact scalar snapshot preservation, full
+workspace tests, clippy, Vitis dry-run emission, and 33-program plan-only
+sidecars. Vendor HLS was not rerun because generated artifacts and validation
+membership did not change.
 
 This proves useful local compiler plumbing:
 
