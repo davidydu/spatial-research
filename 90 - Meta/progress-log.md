@@ -1426,6 +1426,53 @@ Boundary:
 - Remaining Tile-K proof work is still internal factoring: move fold/update
   schedule checks into a smaller proof-owned helper.
 
+## 2026-07-03 — Rust rewrite Tile-K fold schedule proof extraction
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Rust commit:
+`ee9132795951336bdd95225077efd7b5d4ee8763` (`Extract Tile-K fold schedule proof`).
+
+Compiler checkpoint:
+- Extracted the fourth proof-owned helper from the monolithic Tile-K recognizer:
+  `prove_tile_k_fold_schedule`.
+- The helper owns the existing partial-product and C-accumulation fold matcher,
+  including resolver-backed partial tile write/LHS read/RHS read facts,
+  resolver-backed `c_tile := c_tile + partial_tile` facts, and serial/Part6
+  `partial_row_par` / `partial_col_par` recovery.
+- The main proof path is now staged as source-shape proof, phase-spine proof,
+  access-role proof, fold-schedule proof, payload construction, and checked
+  `Program` rehydration.
+- Updated repo docs and the Tile-K contract plan to record this as the final
+  obvious internal Tile-K proof factoring checkpoint in the current file.
+
+Proof added:
+- Red-first helper test initially failed at compile time because
+  `prove_tile_k_fold_schedule` did not exist.
+- Focused checks passed:
+  `cargo test --locked -p spatial-rs-core tile_k_fold_schedule_helper`,
+  `cargo test --locked -p spatial-rs-core tile_k`,
+  `cargo test --locked -p spatial-rs-hls lab2_outer_k`, and
+  `cargo test --locked -p spatial-rs-hls lab2_raw_part`.
+- Full local gates passed:
+  `cargo fmt --all -- --check`,
+  `cargo test --locked`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`,
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-current-plan`, and
+  `git diff --check`.
+
+Boundary:
+- This slice does not change accepted syntax, checked payloads, manifests,
+  generated HLS, or the 31-program validation roster.
+- EC2/Vitis was skipped because emitted artifacts and validation membership did
+  not change.
+- Remaining work is not another obvious Tile-K helper split; the next useful
+  manager action is to decide whether to run a current-head EC2/Vitis refresh
+  for the accumulated no-HLS-drift proof factoring or move to the next EE109
+  feature gap.
+
 ## 2026-07-03 — Rust rewrite Tile-K source-shape proof extraction
 
 Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

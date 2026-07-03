@@ -321,6 +321,18 @@ factoring; local full gates passed and EC2/Vitis was skipped because emitted
 artifacts and validation membership did not change. The next internal proof
 factoring target is fold/update schedule extraction.
 
+Follow-up on Rust commit
+`ee9132795951336bdd95225077efd7b5d4ee8763` (`Extract Tile-K fold schedule proof`):
+`prove_tile_k_fold_schedule` now owns the partial-product and C-accumulation
+fold matcher, including resolver-backed local read/write facts and serial/Part6
+`partial_row_par` / `partial_col_par` recovery. The Tile-K proof path is now
+staged as source shape, phase spine, access roles, fold schedule, payload
+construction, and checked `Program` rehydration. This is still no-HLS-drift
+compiler factoring; local full gates passed and EC2/Vitis was skipped because
+emitted artifacts and validation membership did not change. The next manager
+decision is whether to run a current-head EC2/Vitis refresh for this accumulated
+proof factoring or move to the next EE109 feature gap.
+
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
 `Program` as the HLS contract, reserves resolver diagnostics to
