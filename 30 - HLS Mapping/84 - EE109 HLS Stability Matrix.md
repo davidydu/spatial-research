@@ -22,9 +22,40 @@ Current Rust rewrite delta, 2026-07-03: commit `fa33d55` added
 `MatrixTileMemFoldOuterKRowColTailInPlaceFixPt33x35x34` as the 34th local
 validation-program member. The canary proves serial Tile-K row/column/K tail
 bounds locally through parser, checked IR, HLS C++ emission, host harness,
-dry-run generation, and plan-only sidecars. Vendor HLS is still pending for
-the 34-program roster; the latest vendor-proven Rust rewrite checkpoint remains
-the earlier 33-program current-head run.
+dry-run generation, and plan-only sidecars. Follow-up commit `2087625` kept the
+same source compatible with the EC2 Rust 1.75 toolchain, and the full
+34-program roster now passes Vitis `csim_design` and `csynth_design` on
+`xc7z020-clg400-1`. Durable evidence:
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-row-col-k-tail-34-program/`.
+
+## 2026-07-03 Rust Rewrite Row/Column/K-Tail Vitis Checkpoint
+
+The Rust rewrite branch `David/HLS-spatial` passed the full 34-program EE109
+validation roster through EC2/Vitis at source commit `2087625`.
+
+Evidence:
+- Remote host: `[ec2-host — see private/ec2-lane.md]`
+  (`ip-172-31-37-7`)
+- Remote run directory:
+  `/home/ubuntu/spatial-rs-runs/row-col-k-tail-34-2087625/spatial-rs`
+- Durable evidence:
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-row-col-k-tail-34-program/`
+- Result: all 34 programs reported `returncode=0`, `csim=true`, and
+  `csynth=true`.
+- New serial row/column/K-tail canary
+  `MatrixTileMemFoldOuterKRowColTailInPlaceFixPt33x35x34` reported estimated
+  Fmax 136.99 MHz, estimated clock 7.300 ns, latency 2329-274840 cycles,
+  interval 2330-274841 cycles, and utilization estimate 11 BRAM_18K, 7 DSP,
+  4389 FF, 4917 LUT, and 0 URAM.
+
+Evidence boundary:
+- This validates Vitis C simulation and HLS synthesis for the exact 34-program
+  Rust rewrite roster, including the serial Tile-K row/column/K-tail
+  runtime-bound canary.
+- It does not validate board execution, Vivado implementation/place-and-route,
+  post-implementation timing closure, generic Spatial compatibility, arbitrary
+  GEMM support, automatic banking inference, broader `par` inference,
+  scheduled row/column tails, II=1 for every loop, or performance optimality.
 
 ## Rust Rewrite Vendor HLS Update
 

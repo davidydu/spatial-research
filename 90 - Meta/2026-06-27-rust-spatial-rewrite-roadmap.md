@@ -171,11 +171,15 @@ canonical `row_limit`, `col_limit`, and `numel_k` bounds for serial
 `TILE_R`, `TILE_C`, and `TILE_K`. The local validation roster is now 34
 programs, with plan-only sidecars generated at
 `target/vitis-validation-row-col-k-tail-34-plan/`. Full local tests, clippy,
-HLS host-harness coverage, dry-run, and plan-only generation passed. Vendor
-HLS is still pending for this 34-program roster; the latest vendor-proven
-checkpoint remains the earlier 33-program current-head run. Scheduled Part6
-row/column tails remain rejected until lane guards or predicated lanes are
-designed.
+HLS host-harness coverage, dry-run, and plan-only generation passed.
+Follow-up commit `2087625` (`Keep core compatible with Rust 1.75`) kept the
+same compiler behavior compatible with the EC2 Rust toolchain, and the full
+34-program roster then passed EC2/Vitis `csim_design` and `csynth_design`.
+Durable evidence is under
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-row-col-k-tail-34-program/`.
+The serial row/column/K-tail canary reports estimated Fmax 136.99 MHz and
+latency 2329-274840 cycles on `xc7z020-clg400-1`. Scheduled Part6 row/column
+tails remain rejected until lane guards or predicated lanes are designed.
 These wrappers are not generic Spatial `FIFO`, `Fold`, `MemReduce`, `MemFold`,
 GEMM, generic `par`, automatic banking inference, board execution, timing
 closure, or broad Scala source compatibility.

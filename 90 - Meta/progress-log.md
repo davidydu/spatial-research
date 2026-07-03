@@ -1948,9 +1948,58 @@ Proof added:
 
 Boundary:
 - This proves local parser/checker/HLS emission/host-harness behavior for the
-  serial non-square Tile-K tail canary and prepares it for EC2/Vitis.
-- Vendor HLS has not yet been run for the 34-program roster. The latest
-  vendor-proven roster remains the earlier 33-program current-head checkpoint.
+  serial non-square Tile-K tail canary and prepared it for the EC2/Vitis
+  checkpoint recorded below.
 - This does not claim generic M/N tails, scheduled Part6 row/column tails,
   arbitrary GEMM shapes, generic `par`, performance optimality, timing closure,
   Vivado implementation, or board execution.
+
+## 2026-07-03 — Rust rewrite row/column/K tail 34-program Vitis checkpoint
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Rust evidence commit:
+`2087625` (`Keep core compatible with Rust 1.75`).
+
+Checkpoint:
+- Re-ran the full 34-program EE109 validation roster on EC2/Vitis after the
+  serial row/column/K-tail canary landed. The source snapshot was clean commit
+  `2087625`, which adds only a Rust 1.75 compatibility shim over the previous
+  canary commit `fa33d55`.
+- EC2 host `[ec2-host — see private/ec2-lane.md]`
+  (`ip-172-31-37-7`) ran Vitis 2025.1 from
+  `/home/ubuntu/spatial-rs-runs/row-col-k-tail-34-2087625/spatial-rs`.
+- Command:
+  `cargo run --manifest-path /home/ubuntu/spatial-rs-runs/row-col-k-tail-34-2087625/spatial-rs/Cargo.toml -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --out /home/ubuntu/spatial-rs-runs/row-col-k-tail-34-2087625/spatial-rs/target/vitis-validation-row-col-k-tail-34-2087625`
+  with `/tools/Xilinx/2025.1/Vitis/settings64.sh` sourced first.
+- Remote-only setup note: the copied `Cargo.lock` was rewritten from lockfile
+  version 4 to version 3 so remote Cargo 1.75 could read it; the local repo
+  lockfile was unchanged.
+- Result: all 34 kernels reported `returncode=0`, `csim=true`, and
+  `csynth=true`.
+- Durable Rust evidence is captured under
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-row-col-k-tail-34-program/`.
+
+Canary evidence:
+- `MatrixTileMemFoldOuterKTailInPlaceFixPt32x32x34`: estimated Fmax
+  136.99 MHz, estimated clock 7.300 ns, latency 13363-61591 cycles, interval
+  13364-61592 cycles, utilization estimate 41 BRAM_18K, 64 DSP, 8227 FF,
+  6013 LUT, and 0 URAM.
+- `MatrixTileMemFoldOuterKRowColTailInPlaceFixPt33x35x34`: estimated Fmax
+  136.99 MHz, estimated clock 7.300 ns, latency 2329-274840 cycles, interval
+  2330-274841 cycles, utilization estimate 11 BRAM_18K, 7 DSP, 4389 FF,
+  4917 LUT, and 0 URAM.
+- `MatrixTileMemFoldOuterKTailInPlacePart6ScheduledFixPt32x32x34`: estimated
+  Fmax 136.99 MHz, estimated clock 7.300 ns, latency 7123-11839 cycles,
+  interval 7124-11840 cycles, utilization estimate 8 BRAM_18K, 128 DSP,
+  15524 FF, 12309 LUT, and 0 URAM.
+
+Boundary:
+- This proves Vitis C simulation and HLS synthesis for the exact 34-program
+  validation set on `xc7z020-clg400-1`, including the serial Tile-K
+  row/column/K-tail runtime-bound canary.
+- This does not claim board execution, Vivado implementation/place-and-route,
+  post-implementation timing closure, generic Spatial compatibility, arbitrary
+  GEMM support, automatic banking inference, broader `par` inference,
+  scheduled row/column tails, II=1 for every loop, or performance optimality.
