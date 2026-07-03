@@ -9,6 +9,38 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite Tile-K support profile ledger
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit `493a3ab`
+  (`Add Tile-K support profile ledger`). The `Dense2dTileKMemFold` validation
+  gate now records the current supported Lab2 Tile-K surface as a closed
+  six-profile ledger: serial full-K, serial K-tail, serial row/column/K-tail,
+  Part6 full-K, Part6 K-tail, and Part6 row/column/K-tail. The slice also adds
+  a fail-closed regression for the previously over-permissive case where the
+  scheduled row/column/K-tail kernel name could carry only a generic serial
+  exact-coverage payload, and the classifier proof tests now pin all six
+  profiles. Roadmap docs were updated to mark this proof/support ledger slice
+  complete.
+- Verification passed locally:
+  `cargo test -p spatial-rs-core --locked --quiet tile_k_support_profile`;
+  `cargo test -p spatial-rs-core --locked --quiet checked_ir_rejects_serial_payload_under_part6_row_col_tail_name`;
+  `cargo test -p spatial-rs-core --locked --quiet tile_k_contract_accepts_all_current_profiles`;
+  `cargo test -p spatial-rs-core --locked --quiet parse_accel_lab2_outer_k`;
+  `cargo test -p spatial-rs-hls --locked --quiet --test m1_codegen lab2_outer_k`;
+  `cargo test -p spatial-rs-hls --locked --quiet --test m1_codegen lab2_raw_part`;
+  `cargo fmt --all -- --check`; `cargo test --locked --quiet`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo run -p ee109-examples --locked --bin ee109-examples`;
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation --
+  --plan-only --mode both --out target/vitis-validation-tile-k-profile-ledger-plan`;
+  and `git diff --check`.
+  Boundary: no fresh EC2/Vitis execution, no generated-HLS evidence change, no
+  validation-roster change, no broad Scala compatibility, and no new generic
+  Spatial GEMM support. This is a local compiler-support and fail-closed
+  validation slice.
+
 ## 2026-07-03 — Rust rewrite retired Lab1 raw Scala wrappers
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on
