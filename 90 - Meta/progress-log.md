@@ -11,6 +11,20 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ## 2026-07-03 — Rust rewrite HLS plan provenance
 
+- Completed the remaining simple HLS host-harness plan migration in
+  `/Users/david/Documents/David_code/spatial-rs` on branch
+  `David/HLS-spatial`: LUT, Dense1d, and Dram2d copy harness rendering now
+  consumes `HlsKernelPlan` data, matching the prior ScalarReduce, ScalarFold,
+  MemReduce/MemFold fill, and Control/FSM harness plan migration. The old
+  `LutLayout`, `DenseLayout`, and `Dram2dCopyLayout` extractors were removed,
+  leaving no legacy `*Layout` helpers in `crates/spatial-rs-hls/src/emit.rs`.
+  Focused plan-harness tests and affected m1 codegen/harness tests passed,
+  followed by `cargo test --locked -p spatial-rs-hls`, `cargo test --locked
+  --quiet`, `cargo clippy --all-targets --locked -- -D warnings`, `cargo fmt
+  --all -- --check`, and `git diff --check`. Boundary: this is a local
+  harness/oracle refactor only; generated kernels, manifests, validation
+  membership, existing EC2/Vitis evidence, board execution, Vivado
+  implementation, timing closure, and source language support are unchanged.
 - Moved four HLS host-harness renderers onto explicit `HlsKernelPlan` data in
   `/Users/david/Documents/David_code/spatial-rs` on branch
   `David/HLS-spatial`: ScalarReduce, ScalarFold, MemReduce/MemFold fill, and
