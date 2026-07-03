@@ -2233,3 +2233,38 @@ Boundary:
   evidence.
 - The next Phase 3 compiler-internal slice is to extract rank-1 resolved
   indexed-write proof helpers for temp fill and zero-init checks.
+
+## 2026-07-03 — Rust rewrite rank-1 memory-reduction write facts
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Continued Phase 3 by adding a reusable rank-1 indexed-write proof helper in
+  the classifier layer.
+- Wired `MemReduceFill` / `MemFoldFill` classification so temp fills and
+  MemFold zero-init are now checked against resolved HIR index-use facts, not
+  only textual `target[lane] := literal` shape.
+- The helper requires a single rank-1 write to the resolved target symbol, the
+  exact source index expression span, a direct lane read, no conditional or
+  unsupported index fact, and an affine unit lane symbol.
+- Kept generated Lab2 HLS/manifest behavior stable for renamed raw
+  Part1/Part2 sources.
+
+Proof added:
+- `cargo test --locked -p spatial-rs-core rank1_indexed_write -- --nocapture`
+- `cargo test --locked -p spatial-rs-core memreduce -- --nocapture`
+- `cargo test --locked -p spatial-rs-core memfold -- --nocapture`
+- `cargo test --locked -p spatial-rs-core mem_reduction_fill_near_misses_stay_fail_closed -- --nocapture`
+- `cargo test --locked -p spatial-rs-core parse_accel_accepts_shape_equivalent_raw_lab2_memory_reduction_names -- --nocapture`
+- `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_mem_reductions_renamed_locals_preserve_hls_and_manifest -- --nocapture`
+- `cargo fmt --all -- --check`
+- `cargo test --locked --quiet`
+- `cargo clippy --all-targets --locked -- -D warnings`
+- `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-rank1-write-plan`
+- `git diff --check`
+
+Boundary:
+- This is a compiler-internal proof-helper extraction. It does not add new
+  accepted Spatial syntax, alter generated HLS intentionally, retire the raw
+  token-cursor adapter, or provide fresh EC2/Vitis evidence.
