@@ -9,6 +9,48 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite FIFO backend helper extraction
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit `7f35974`
+  (`Extract FIFO tile scalar renderer`). The `Fifo1dTileScalarMul` /
+  `FifoTileScale32` HLS kernel renderer moved behind `FifoTileScalarMulPlan`
+  and the new crate-private `spatial_rs_hls::fifo` helper module. `emit.rs`
+  still owns `ProgramKind` dispatch, `HlsBodyPlan::FifoTileScalarMul`
+  matching, HLS parameter lookup, and FIFO harness-oracle rendering; the helper
+  owns kernel signature/interface rendering, `<hls_stream.h>`, local
+  `hls::stream<int>` declarations, stream-depth pragmas, tile/lane loops, FIFO
+  write/read ordering, `value * scale`, and final output store.
+- Generated dry-run artifacts for `FifoTileScale32` were compared against a
+  clean detached baseline worktree at commit `7eb6614`; `kernel.cpp`,
+  `harness.cpp`, `manifest.json`, `run_hls.tcl`, and `vitis-project.json` all
+  matched exactly. Boundary: no fresh EC2/Vitis execution, no validation-roster
+  change, no generated-HLS or manifest change, no new syntax, no generic
+  FIFO/stream support, no AXI stream/dataflow/back-pressure claim, and no new
+  vendor-HLS claim.
+- Verification passed locally:
+  RED `cargo test -p spatial-rs-hls --locked fifo -- --nocapture` failed first
+  on unresolved helper imports;
+  `cargo test -p spatial-rs-hls --locked fifo_tile_scalar_mul_kernel_frame -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked fifo_tile_scalar_mul_plan_extracts_streams_ports_and_loop_shape -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen fifo_feature_emits_real_hls_streams -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen fifo_feature_compiles_with_host_only_stream_shim -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen fifo_staged_dequeue_feature_emits_same_stream_kernel -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen fifo_vitis_dry_run_uses_vendor_stream_header_not_host_shim -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked fifo -- --nocapture`;
+  `cargo test -p ee109-examples --locked validation_programs_include_supported_features_after_adapter_baseline -- --nocapture`;
+  baseline/current `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`;
+  detached-baseline `cmp` checks for `FifoTileScale32`'s five dry-run
+  artifacts;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-fifo-renderer-plan`;
+  `cargo test --locked`;
+  `cargo clippy --workspace --all-targets --locked -- -D warnings`;
+  `RUSTDOCFLAGS='-D warnings' cargo doc --workspace --locked --no-deps --document-private-items`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+
+---
+
 ## 2026-07-03 — Rust rewrite Stencil2d/Sobel backend helper extraction
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on
