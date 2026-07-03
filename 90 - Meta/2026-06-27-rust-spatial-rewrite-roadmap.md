@@ -310,6 +310,17 @@ path responsibilities. This is still no-HLS-drift compiler factoring; local
 full gates passed and EC2/Vitis was skipped because emitted artifacts and
 validation membership did not change.
 
+Follow-up on Rust commit
+`61d24eea248d73a4c46718bd278e3dae8fdc58ed` (`Extract Tile-K access-role proof`):
+`prove_tile_k_access_roles` now owns LHS/RHS load role matching, shared
+inner-K lane/bound agreement, canonical access bounds, C preload role matching,
+C preload lane coherence, and final C-store proof. The helper returns owned
+row/column/inner-K lane names and bounds to the remaining fold/update schedule
+matcher and payload construction. This is still no-HLS-drift compiler
+factoring; local full gates passed and EC2/Vitis was skipped because emitted
+artifacts and validation membership did not change. The next internal proof
+factoring target is fold/update schedule extraction.
+
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
 `Program` as the HLS contract, reserves resolver diagnostics to

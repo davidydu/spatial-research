@@ -1377,6 +1377,55 @@ Boundary:
 - Remaining Tile-K proof work is still internal factoring: move access-role
   and schedule checks into smaller proof-owned helpers.
 
+## 2026-07-03 — Rust rewrite Tile-K access-role proof extraction
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Rust commit:
+`61d24eea248d73a4c46718bd278e3dae8fdc58ed` (`Extract Tile-K access-role proof`).
+
+Compiler checkpoint:
+- Extracted the third proof-owned helper from the monolithic Tile-K recognizer:
+  `prove_tile_k_access_roles`.
+- The helper owns LHS and RHS load role matching, shared inner-K lane/bound
+  agreement, canonical `TILE_R`/`TILE_C`/`TILE_K` or `numel_k` access bounds,
+  C preload role matching, C preload lane coherence with the fold lanes, and
+  final C-store proof.
+- The helper returns owned lane names and bounds (`row`, `col`, `inner_k`,
+  `row_end`, `col_end`, `inner_k_end`) so the remaining fold/update schedule
+  matcher and payload construction stay separate.
+- Updated repo docs and the Tile-K contract plan to record this as
+  no-HLS-drift compiler factoring; fold/update schedule extraction remains the
+  next internal proof-owned helper slice.
+
+Proof added:
+- Red-first helper test initially failed at compile time because
+  `prove_tile_k_access_roles` did not exist.
+- A GPT-5.5 xhigh read-only reviewer confirmed the helper boundary and warned
+  to keep C-store validation inside the helper; a split-parent final-store
+  regression now asserts the helper itself rejects that case.
+- Focused checks passed:
+  `cargo test --locked -p spatial-rs-core tile_k_access_roles_helper`,
+  `cargo test --locked -p spatial-rs-core tile_k`,
+  `cargo test --locked -p spatial-rs-hls lab2_outer_k`, and
+  `cargo test --locked -p spatial-rs-hls lab2_raw_part`.
+- Full local gates passed:
+  `cargo fmt --all -- --check`,
+  `cargo test --locked`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`,
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-current-plan`, and
+  `git diff --check`.
+
+Boundary:
+- This slice does not change accepted syntax, checked payloads, manifests,
+  generated HLS, or the 31-program validation roster.
+- EC2/Vitis was skipped because emitted artifacts and validation membership did
+  not change.
+- Remaining Tile-K proof work is still internal factoring: move fold/update
+  schedule checks into a smaller proof-owned helper.
+
 ## 2026-07-03 — Rust rewrite Tile-K source-shape proof extraction
 
 Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
