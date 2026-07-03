@@ -9,6 +9,26 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite Lab2 Part4 raw LUT adapter
+
+- Added the exact raw Scala `Lab2Part4LUT` wrapper to the Rust source-adapter
+  path on `/Users/david/Documents/David_code/spatial-rs`
+  (`David/HLS-spatial`). The wrapper canonicalizes to the existing checked
+  square-LUT payload rather than adding a new HLS surface. Proof added:
+  `parse_accel_accepts_exact_raw_lab2_part4_lut`,
+  `registry_rejects_raw_lab2_part4_lut_near_misses`, and
+  `lab2_raw_part4_lut_preserves_hls_and_manifest`. Focused tests passed for
+  parser acceptance, source-adapter registry/near-miss rejection, and HLS /
+  manifest equality. Full local gates also passed: Rust formatting, git diff
+  whitespace checks in both repos, full workspace tests, clippy with warnings denied,
+  the EE109 accepted-fixture binary, the 33-program plan-only Vitis roster, and
+  Vitis dry-run emission. Boundary: no fresh EC2/Vitis run for this slice
+  because
+  generated HLS and manifest output are identical to the already-supported
+  canonical LUT path; still no broad Scala LUT compatibility, arbitrary LUT
+  dimensions/values, swapped indices, non-`Int` LUTs, board execution, Vivado
+  implementation, or timing-closure claim.
+
 ## 2026-07-03 — Rust rewrite HLS plan provenance
 
 - Promoted Rust commit `f1a229f` (`Finish HLS harness plan migration`) to a
