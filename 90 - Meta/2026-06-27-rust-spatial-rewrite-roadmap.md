@@ -29,8 +29,8 @@ The current `spatial-rs` work should therefore be treated as a tracer slice:
 `spatial-rs` currently has accepted fixture adapters for scalar add, dense 1-D DRAM/SRAM multiply, LUTs, one exact FSM, rank-2 copy groundwork, and one direct Lab3 convolution semantic adapter.
 
 Current Vitis status: the latest Rust rewrite vendor checkpoint is the
-2026-07-02 29-program named serial K-tail lane captured in
-`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-02-k-tail-29-program/`.
+2026-07-02 30-program named scheduled K-tail lane captured in
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-02-scheduled-k-tail-30-program/`.
 The earlier current-head Tile-K facts, partition-helper, schedule-profile,
 scheduled Part6 canary, Lab3 raw-wrapper, post-refactor `ScalarSramTileFold v0`,
 and refreshed 26-program block-comment/raw-Part5 lanes remain historical
@@ -83,11 +83,13 @@ commit now has a full 28-program EC2/Vitis refresh in
 The next exact GEMM canary has landed locally as
 `MatrixTileMemFoldOuterKTailInPlacePart6ScheduledFixPt32x32x34`, combining the
 named `K=34` serial tail bound with the fixed Part6 `par 2` / `par 16`
-schedule. It is now the 30th local validation-program member, with parser,
-checked-IR, manifest, generated-HLS, native host-harness, and Vitis dry-run/plan
-coverage. The HLS emitter uses runtime `numel_k` for the K load/fold loops while
-preserving the scheduled array partition, pipeline, and unroll pragmas. It has
-no separate EC2/Vitis evidence yet.
+schedule. It is now the 30th validation-program member, with parser, checked-IR,
+manifest, generated-HLS, native host-harness, Vitis dry-run/plan coverage, and
+EC2/Vitis `csim_design`/`csynth_design` evidence. The HLS emitter uses runtime
+`numel_k` for the K load/fold loops while preserving the scheduled array
+partition, pipeline, and unroll pragmas. Vitis emits II-violation warnings on the
+final C writeback pipeline, so this is a vendor-acceptance checkpoint, not a
+performance-optimality claim.
 As the next compiler-foundation slice, `ResolvedHir` now carries loop
 schedule/identity/nesting facts and resolver-owned affine/index-use facts for
 memory accesses, including access occurrence ids, parent-statement joins, and
@@ -125,10 +127,9 @@ scheduled Lab2 Part6 `MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32`
 member, the named serial K-tail
 `MatrixTileMemFoldOuterKTailInPlaceFixPt32x32x34`, and the scheduled K-tail
 `MatrixTileMemFoldOuterKTailInPlacePart6ScheduledFixPt32x32x34`. The latest
-EC2/Vitis `csim_design`/`csynth_design` evidence is still the 29-program serial
+EC2/Vitis `csim_design`/`csynth_design` evidence is the 30-program scheduled
 K-tail checkpoint captured in
-`docs/vitis-validation/2026-07-02-k-tail-29-program/`; the scheduled K-tail needs
-a fresh vendor run before it can be treated as vendor-proven.
+`docs/vitis-validation/2026-07-02-scheduled-k-tail-30-program/`.
 These wrappers are not generic Spatial `FIFO`, `Fold`, `MemReduce`, `MemFold`,
 GEMM, generic `par`, automatic banking inference, board execution, timing
 closure, or broad Scala source compatibility.

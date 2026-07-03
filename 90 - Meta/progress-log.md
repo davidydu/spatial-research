@@ -1002,6 +1002,20 @@ Local proof added so far:
   `cargo test -p ee109-examples --locked --test emit_vitis_dry_run emit_vitis_dry_run_binary_generates_m1_frontend_bundles -- --nocapture`
   and
   `cargo test -p ee109-examples --locked --test run_vitis_validation run_vitis_validation_plan_only_writes_sidecar_tcl_for_all_examples -- --nocapture`.
+- EC2/Vitis proof after promotion:
+  `ssh -i [ssh-key — see private/ec2-lane.md] [ec2-user@host — see private/ec2-lane.md]`
+  ran `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --settings /tools/Xilinx/2025.1/Vitis/settings64.sh --out target/vitis-validation-scheduled-k-tail-30-program`
+  from `/home/ubuntu/spatial-rs-runs/scheduled-k-tail-20260702-af8e307/spatial-rs`
+  at source commit `af8e307955cc913085aabcd2763800563f6ecc44`. All 30
+  validation programs reported `returncode=0`, `csim=true`, and `csynth=true`;
+  durable evidence is captured in
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-02-scheduled-k-tail-30-program/`.
+- Scheduled-tail Vitis result:
+  `MatrixTileMemFoldOuterKTailInPlacePart6ScheduledFixPt32x32x34` reported
+  estimated Fmax 136.99 MHz, estimated clock 7.300 ns, latency 7123-11839
+  cycles, interval 7124-11840 cycles, and utilization estimate 8 BRAM_18K,
+  128 DSP, 15524 FF, and 12309 LUT. Vitis emitted II-violation warnings while
+  trying to pipeline the final C writeback loop; synthesis still completed.
 - Focused regressions already green:
   `cargo test -p spatial-rs-core --locked rank2_tile_memfold_outer_k -- --nocapture`,
   `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_outer_k -- --nocapture`,
@@ -1009,12 +1023,11 @@ Local proof added so far:
   `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_raw_part6_fixed_32 -- --nocapture`.
 
 Boundary:
-- This is local parser, checked-IR, manifest, generated-HLS, native host-C++
-  harness, validation-lane, and Vitis dry-run/plan evidence only.
-- It does not create fresh EC2/Vitis evidence. The latest vendor-proven GEMM
-  anchor remains the 29-program serial K-tail checkpoint in
-  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-02-k-tail-29-program/`.
+- This now has local parser, checked-IR, manifest, generated-HLS, native
+  host-C++ harness, validation-lane, Vitis dry-run/plan, and EC2/Vitis
+  `csim_design`/`csynth_design` evidence for the exact 30-program lane.
 - It does not accept generic Spatial `MemFold`, broad Scala source
   compatibility, arbitrary K-tail shapes beyond the two named K-tail canaries,
   generic `par`, inferred banking, board execution, Vivado implementation, or
-  timing-closure evidence.
+  timing-closure evidence; it also does not claim II=1/performance optimality
+  for the final C writeback loop.

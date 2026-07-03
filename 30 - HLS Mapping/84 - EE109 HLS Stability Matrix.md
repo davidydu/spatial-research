@@ -504,7 +504,7 @@ Generated-code hygiene:
 ## Recommended Next Action
 
 For the Rust rewrite, the clean current-head EC2/Vitis checkpoint is now the
-29-program named serial K-tail run. The fixed Tile-K phase-spine guard, the
+30-program named scheduled K-tail run. The fixed Tile-K phase-spine guard, the
 explicit-zero raw Part5/Part6 fold-range bridge, and the raw Part5/Part6
 frontend-routing cleanup plus Lab2 GEMM bridge-profile extraction are local
 fail-closed classifier/source-adapter hardening slices whose checked payloads
@@ -517,11 +517,12 @@ the existing named serial K-tail shape (`K=34`, `K_TILES=3`, `TILE_K=16`,
 runtime `numel_k`) with the fixed Part6 schedule (`par 2` / `par 16`). The Rust
 emitter keeps static `TILE_K` local arrays, emits runtime-bounded K load/fold
 loops, and preserves the Part6 array partition, `PIPELINE II=1`, and unroll
-pragmas. This is now the 30th local validation-program member, with local parser,
-checked-IR, manifest, generated-HLS, host-harness, and Vitis dry-run/plan
-coverage. It does not have a fresh EC2/Vitis checkpoint yet. The next action is
-therefore an explicit Vitis refresh for this scheduled K-tail canary before
-treating it as vendor evidence.
+pragmas. This is now the 30th validation-program member, with local parser,
+checked-IR, manifest, generated-HLS, host-harness, Vitis dry-run/plan coverage,
+and EC2/Vitis `csim_design`/`csynth_design` evidence captured in
+`docs/vitis-validation/2026-07-02-scheduled-k-tail-30-program/`. Vitis emits
+II-violation warnings while trying to pipeline the final C writeback loop, so
+this is vendor acceptance evidence rather than a scheduling-optimality claim.
 
 The
 main remaining EE109 gaps are generic Spatial `MemFold`/`Fold`, arbitrary
