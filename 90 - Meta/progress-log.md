@@ -9,6 +9,43 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite raw Lab2 LUT adapter retirement
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit `702d1819e833d856820ff83bc9d1adb262e52b8a`
+  (`Retire raw Lab2 LUT adapters`). The exact raw Scala
+  `Lab2Part4LUT` and `Lab2Part4LUTNonSquareExample` source-adapter ingress is
+  retired from the quarantined raw-EE109 registry. The canonical
+  `Lab2Part4LUT` and `Lab2Part4LUTNonSquareExample` frontend/HIR payloads
+  remain accepted, their adapter names remain reserved, and `LutLookup v0`
+  remains the reusable LUT representative.
+- Added fail-closed proof that the retired raw Scala wrappers now reject with
+  parser-stage `spatial:E0002`, while direct classifier and checked-IR tests
+  guard the canonical square/non-square LUT adapter path and reserved-name
+  boundary. Updated active Rust docs to describe raw Scala source ingress as
+  retired without changing the canonical LUT support claim.
+- Generated dry-run artifacts after the change and compared `kernel.cpp`,
+  `harness.cpp`, and `manifest.json` against a clean detached `d0d6c0f`
+  baseline for `Lab2Part4LUT`, `Lab2Part4LUTNonSquareExample`, and
+  `LutBiasLookup`; all compared files matched byte-for-byte.
+- Verification passed locally:
+  `cargo fmt --all`;
+  `cargo test -p spatial-rs-core --locked`;
+  `cargo test -p spatial-rs-hls --locked`;
+  `cargo test -p ee109-examples --locked`;
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`;
+  the nine `cmp` byte checks listed above;
+  `cargo clippy -p spatial-rs-core --all-targets --locked -- -D warnings`;
+  `cargo clippy -p spatial-rs-hls --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary: no fresh EC2/Vitis run, no validation-roster change, no generated
+  HLS/manifest/harness change for canonical LUT payloads, no generic Scala
+  source compatibility, no generic LUT/table arithmetic expansion, and no new
+  vendor-HLS claim.
+
+---
+
 ## 2026-07-03 — Rust rewrite ControlFsm harness helper extraction
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on

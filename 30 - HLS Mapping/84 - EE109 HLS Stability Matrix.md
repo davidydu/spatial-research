@@ -28,6 +28,16 @@ static at the 16-wide tile bounds, and inactive lanes are guarded. The full
 `xc7z020-clg400-1`. Durable evidence:
 `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-scheduled-row-col-k-tail-35-program/`.
 
+Later no-fresh-Vitis policy update, 2026-07-03: Rust commit
+`702d1819e833d856820ff83bc9d1adb262e52b8a` retired the raw Scala source
+ingress for `Lab2Part4LUT` and `Lab2Part4LUTNonSquareExample` while keeping
+the canonical square/non-square LUT payloads, generated HLS, manifests,
+harnesses, validation roster, and historical Vitis evidence unchanged. Local
+dry-run byte comparisons against the pre-retirement `d0d6c0f` baseline matched
+for `Lab2Part4LUT`, `Lab2Part4LUTNonSquareExample`, and `LutBiasLookup`
+`kernel.cpp`, `harness.cpp`, and `manifest.json`. This is a source-ingress
+retirement only, not new vendor-HLS evidence.
+
 ## 2026-07-03 Rust Rewrite Scheduled Row/Column/K-Tail Vitis Checkpoint
 
 The Rust rewrite branch `David/HLS-spatial` passed the full 35-program EE109
