@@ -1129,6 +1129,55 @@ Boundary:
   `par`, broad Scala source compatibility, board execution, Vivado
   implementation, or timing-closure evidence.
 
+## 2026-07-03 — Rust rewrite raw Lab2 GEMM source proof extraction
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Rust commit: `44cbbbbfa6fb06bbe980deac351ee26b3ca52c71`
+(`Extract raw Lab2 GEMM source proof`).
+
+Frontend/source-adapter checkpoint:
+- Extracted a private `Lab2FixedGemmSourceProof` and
+  `Lab2FixedGemmAccelProof` in
+  `crates/spatial-rs-core/src/source_adapter.rs`.
+- The fixed raw `Lab2Part5GEMM` and `Lab2Part6GEMM` source adapter now proves
+  the accepted fixed shell profile (`32 32 32` or the exact named `32 32 34`
+  K-tail profile), raw class target, and normalized single-`Accel` body before
+  emitting generated Lab2-like frontend source.
+- Existing fail-closed behavior is preserved: wrong dimensions, wrong tile
+  sizes, wrong fixed-point type, nonzero explicit fold start, extra hardware
+  setup, extra `Accel`, and wrong Part6 `par` factors remain unsupported.
+- This is a compiler-structure checkpoint only. Accepted profiles, checked
+  payloads, generated HLS, manifests, validation membership, and vendor-HLS
+  evidence boundaries are unchanged.
+
+Proof added:
+- Red-first focused test initially failed because
+  `prove_lab2_fixed_gemm_source` did not exist.
+- Focused green checks:
+  `cargo test --locked -p spatial-rs-core source_adapter::tests::lab2_fixed_gemm`,
+  `cargo test --locked -p spatial-rs-core raw_lab2_part`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part`, and
+  `cargo test --locked -p ee109-examples validation_programs_include_supported_features_after_adapter_baseline`.
+- Full local gates passed:
+  `cargo fmt --all -- --check`,
+  `cargo test --locked`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`,
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-raw-gemm-proof-plan`, and
+  `git diff --check`.
+- The plan-only validation roster remained 33 kernels and 33 sidecar
+  `run_both.tcl` scripts.
+
+Boundary:
+- No EC2/Vitis rerun was needed for this slice because HLS/manifest output and
+  validation-program membership stayed unchanged.
+- This still does not add broad Scala source compatibility, generic GEMM,
+  generic Spatial `MemFold`, arbitrary K tails, dynamic dimensions, schedule
+  inference, banking inference, board execution, Vivado implementation, or
+  timing closure.
+
 ## 2026-07-03 — Rust rewrite raw Lab2 GEMM K-tail source compatibility
 
 Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

@@ -351,8 +351,13 @@ array declarations into `tile_k_local_storage`. Existing Lab2 outer-K and
 K-tail HLS/manifest preservation tests stayed green, the stable scheduled HLS
 snapshot stayed byte-stable, and the plan-only validation roster remained 33
 programs, so these are no-HLS-drift backend reliability slices. The next
-manager move is to switch to the raw Lab2 GEMM accel-island proof or continue
-deepening that HLS lowering ledger.
+manager move switched to the raw Lab2 GEMM source/Accel proof: follow-up Rust
+commit `44cbbbbfa6fb06bbe980deac351ee26b3ca52c71` (`Extract raw Lab2 GEMM
+source proof`) added a private source-adapter proof object for the fixed raw
+Part5/Part6 shell profile and normalized single-`Accel` body before generated
+frontend-source emission. This kept accepted profiles, HLS, manifests, and the
+33-program validation roster unchanged, so it is also a no-HLS-drift compiler
+structure slice.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
