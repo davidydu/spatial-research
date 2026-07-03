@@ -3049,3 +3049,50 @@ Boundary:
 - It does not imply generic Spatial `MemFold`, generic GEMM, generic `par`,
   automatic banking inference, arbitrary K/row/column tails, broad Scala source
   compatibility, board execution, Vivado implementation, or timing closure.
+
+## 2026-07-03 -- Rust rewrite Lab3 local-window facts
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `c44be2a` (`Check Lab3 local-window facts`) makes the
+  Lab3/Stencil2d classifier consume resolver-owned facts before admitting the
+  existing narrow Sobel local-window payload.
+- The accepted Lab3 and `Stencil2d v0` surfaces are unchanged, but admission now
+  checks the resolved row/column/shift loop-domain tree, row-range
+  line-buffer-load and row-store facts, `RegFile` reset/shift effects,
+  line-buffer shift reads, line-output writes, Sobel/window reduction read
+  groups, and const-backed range ends.
+- The root cause during implementation was that valid range ends such as `COLS`
+  resolve to constant value `16` with a backing constant symbol; the gate now
+  accepts resolved constant values whether they came from literals or named
+  constants.
+- Updated the Rust docs and fixture matrix to describe this as local
+  fact-consumption hardening, not generic stencil support or new vendor
+  evidence.
+
+Proof:
+- Focused red/green checks:
+  `cargo test --locked -p spatial-rs-core stencil2d_local_window_fact_gate -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core parse_accel_accepts_alias_named_stencil2d_sobel_feature -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core parse_accel_accepts_local_raw_lab3_convolution -- --nocapture`,
+  and
+  `cargo test --locked -p spatial-rs-core raw_lab3_part1_convolution_near_misses_fail_closed -- --nocapture`.
+- Full local verification:
+  `cargo fmt --all -- --check`,
+  `cargo test --locked -p spatial-rs-core`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab3 -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation -- --nocapture`,
+  `cargo test --locked -p ee109-examples`,
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`,
+  and `git diff --check`.
+
+Boundary:
+- This is local compiler/classifier trust reduction only.
+- It does not change accepted syntax, checked IR payloads, validation roster,
+  generated HLS C++, manifests, host harnesses, imported Vitis evidence, or the
+  35-program vendor-HLS claim from source snapshot `a30ec96`.
+- It does not imply generic Spatial `LineBuffer`, `RegFile`, `Reduce`, generic
+  stencil scheduling, arbitrary `par`, dynamic dimensions, broad Scala source
+  compatibility, board execution, Vivado implementation, or timing closure.
