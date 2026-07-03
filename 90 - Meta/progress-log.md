@@ -2599,3 +2599,52 @@ Boundary:
 - This is a compiler-internal proof-helper extraction. It does not add new
   accepted Spatial syntax, alter generated HLS intentionally, retire the raw
   token-cursor adapter, or provide fresh EC2/Vitis evidence.
+
+## 2026-07-03 -- Rust rewrite MemReduce/MemFold fill renderer extraction
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Committed Rust repo change `138e86e` (`Extract MemReduce/MemFold fill
+  renderer`).
+- Moved the `MemReduceFill` / `MemFoldFill` HLS kernel renderer behind
+  `MemReductionFillPlan` and the crate-private
+  `spatial_rs_hls::mem_reduction_fill` helper module.
+- Kept `emit.rs` responsible for `ProgramKind` dispatch,
+  `HlsBodyPlan::MemReductionFill` matching, HLS parameter lookup, and
+  host-harness/oracle rendering.
+- The new helper owns signature/interface pragma rendering,
+  accumulator/tmp local arrays, zero-fill, fill/accumulate, and final-store
+  loop rendering.
+- Generated dry-run artifacts for `MemReduceOnes16`, `MemReduceTwos16`,
+  `MemFoldOnes16`, and `MemFoldTwos16` were compared against a clean detached
+  baseline worktree at Rust commit `7f35974`; `kernel.cpp`, `harness.cpp`,
+  `manifest.json`, `run_hls.tcl`, and `vitis-project.json` all matched exactly
+  for all four programs.
+
+Proof added:
+- `cargo test -p spatial-rs-hls --locked mem_reduction_fill_kernel_frame -- --nocapture`
+- `cargo test -p spatial-rs-hls --locked mem_reduction_fill_plan_preserves_kind_and_literal_fill -- --nocapture`
+- `cargo test -p spatial-rs-hls --locked --test m1_codegen memreduce_fill_feature_emits_array_sum_loop_and_harness -- --nocapture`
+- `cargo test -p spatial-rs-hls --locked --test m1_codegen memfold_fill_feature_emits_array_sum_loop_and_harness -- --nocapture`
+- `cargo test -p spatial-rs-hls --locked --test m1_codegen mem_reduction_literal_two_fill_features_emit_fill_value_and_pass_harness -- --nocapture`
+- `cargo test --locked -p spatial-rs-hls --test m1_codegen mem_reduction_checked_ir_hls_keeps_length_parameterized -- --nocapture`
+- `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part1_simple_memreduce_preserves_hls_and_manifest -- --nocapture`
+- `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part2_simple_memfold_preserves_hls_and_manifest -- --nocapture`
+- `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`
+- `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-mem-reduction-fill-renderer-plan`
+- `cargo test -p ee109-examples --locked --test emit_vitis_dry_run -- --nocapture`
+- `cargo test -p ee109-examples --locked --test run_vitis_validation -- --nocapture`
+- `cargo fmt --all -- --check`
+- `git diff --check`
+- `cargo test --locked`
+- `cargo clippy --workspace --all-targets --locked -- -D warnings`
+- `RUSTDOCFLAGS='-D warnings' cargo doc --workspace --locked --no-deps --document-private-items`
+
+Boundary:
+- This is local Rust test coverage plus dry-run artifact byte comparison. It
+  does not run fresh EC2/Vitis, change the validation roster, change generated
+  HLS or manifests, add new syntax, add generic `MemReduce` / `MemFold`, accept
+  arbitrary reducer/fold bodies, prove dynamic bounds, banking, scheduling,
+  performance, board timing, or make a new vendor-HLS claim.
