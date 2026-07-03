@@ -896,6 +896,9 @@ Boundary:
 Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
 `David/HLS-spatial`.
 
+Code commit: `9025f5964e8781e271401d42000b185a362ba6f8`.
+Evidence/docs commit: `febd1fbc8aa1c6eb10b465f7e378ecc2f162c16b`.
+
 Frontend/IR/HLS checkpoint:
 - Added first-class `inouts { c: Dram<...>[ROWS, COLS] }` support for the
   narrow rank-2 `Dense2dTileMemFold` canary.
@@ -1072,3 +1075,56 @@ Boundary:
   non-exact raw wrappers, arbitrary K tails beyond the named canaries, generic
   `par`, banking inference, board execution, Vivado implementation, and timing
   closure remain unsupported.
+
+## 2026-07-02 — Rust rewrite Lab2 alternate FSM local canary
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Frontend/IR/HLS checkpoint:
+- Added exact local-course support for `Lab2Part3BasicCondFSMAlt`.
+- The raw Scala fixture is token-quarantined in the source adapter and lowered
+  to a bounded Rust-subset frontend source before HIR/classification.
+- Added distinct checked `ProgramKind::Lab2BasicCondFsmAlt` /
+  `Stmt::Lab2BasicCondFsmAlt` so the alternate FSM cannot silently reuse the
+  canonical `Lab2Part3BasicCondFSM` HLS behavior.
+- HLS emission now produces the exact alternate four-band state behavior:
+  `state`, `state * 2`, `state * 3`, and `state * 4`, with a matching host
+  harness oracle.
+- The local validation roster is now 31 programs, with Alt as an accepted
+  fixture adapter. EC2/Vitis `csim_design`/`csynth_design` evidence for this
+  31-program lane is captured in
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-02-lab2-fsm-alt-31-program/`.
+
+Proof added:
+- Red tests first showed the canonical Alt source failing with `spatial:E0405`,
+  the raw Scala fixture failing with `spatial:E0200`, and the HLS test failing
+  before parser support existed.
+- Focused green checks:
+  `cargo test -p spatial-rs-core --locked lab2_fsm_alt -- --nocapture`,
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_fsm_alt -- --nocapture`,
+  `cargo test -p spatial-rs-core --locked control_fsm -- --nocapture`,
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen control_fsm -- --nocapture`,
+  `cargo test -p spatial-rs-core --locked registry_lists_current_exact_raw_scala_adapters -- --nocapture`,
+  `cargo test -p ee109-examples --locked validation_programs_include_supported_features_after_adapter_baseline -- --nocapture`,
+  `cargo test -p ee109-examples --locked --test emit_vitis_dry_run emit_vitis_dry_run_binary_generates_m1_frontend_bundles -- --nocapture`, and
+  `cargo test -p ee109-examples --locked --test run_vitis_validation run_vitis_validation_plan_only_writes_sidecar_tcl_for_all_examples -- --nocapture`.
+- Post-review local gates passed on commit
+  `9025f5964e8781e271401d42000b185a362ba6f8`: `cargo test --locked`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  `cargo fmt --all -- --check`, Rust/vault `git diff --check`,
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`, and
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-current-plan`.
+- EC2 host `[ec2-host — see private/ec2-lane.md]` completed
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --settings /tools/Xilinx/2025.1/Vitis/settings64.sh --out target/vitis-validation-lab2-fsm-alt-9025f59`
+  from `/home/ubuntu/spatial-rs-runs/lab2-fsm-alt-9025f59/spatial-rs` with
+  return code 0 across all 31 validation programs. Each program reported
+  `csim=true` and `csynth=true`. `Lab2Part3BasicCondFSMAlt` reported estimated
+  Fmax 136.99 MHz, estimated clock 7.300 ns, latency 40 cycles, interval 32
+  cycles, and utilization estimate 0 BRAM_18K, 0 DSP, 882 FF, and 983 LUT.
+
+Boundary:
+- This is exact local fixture support, not generic Spatial `FSM`, arbitrary
+  condition/action lowering, arbitrary registers, dynamic lengths, scheduling,
+  `par`, broad Scala source compatibility, board execution, Vivado
+  implementation, or timing-closure evidence.

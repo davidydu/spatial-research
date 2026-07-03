@@ -477,10 +477,10 @@ Generated-code hygiene:
   not invoke Vitis/Vivado HLS, synthesize RTL, check timing, or validate board
   integration.
 - For the Rust rewrite, the explicitly listed accepted adapters,
-  supported-feature representatives, and canaries through the named scheduled
-  K-tail canary have Vitis `csim_design` and `csynth_design` evidence through
-  the current-head 30-program
-  `docs/vitis-validation/2026-07-02-scheduled-k-tail-30-program/` checkpoint. The
+  supported-feature representatives, and canaries through the exact alternate
+  Lab2 FSM canary have Vitis `csim_design` and `csynth_design` evidence through
+  the current 31-program
+  `docs/vitis-validation/2026-07-02-lab2-fsm-alt-31-program/` checkpoint. The
   previous scheduled Part6, Tile-K facts, post-refactor SRAM-tile fold, and
   Lab3 raw-wrapper boundaries remain preserved under their earlier evidence
   folders. Board execution, Vivado implementation, timing closure, generic
