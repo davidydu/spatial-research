@@ -9,6 +9,19 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite Lab3 Stencil2d alias constants
+
+- Widened the reusable Rust `Stencil2d v0` classifier on
+  `/Users/david/Documents/David_code/spatial-rs` (`David/HLS-spatial`) so the
+  Sobel subset no longer depends on exact Lab3-style constant names
+  `ROWS/COLS/KH/KW/CMAX/LB_PAR`. Added `SobelStencilAlias12x20` as a local
+  perturbation using `H/W/KROWS/KCOLS/LINE_COLS/LOAD_PAR` and `store ... par W`;
+  it classifies to the same checked `Stencil2d` surface, emits the expected HLS
+  shape, and passes the native host-C++ oracle harness. Boundary: this is local
+  parser/classifier/HLS evidence only; generic local-window/stencil support,
+  arbitrary kernels, arbitrary `par`, dynamic dimensions, and fresh
+  EC2/Vitis-roster promotion remain future work.
+
 ## 2026-07-03 — Rust rewrite Lab2 GEMM parameterized raw aliases
 
 - Widened the Rust Lab2 Tile-K GEMM frontend bridge on
