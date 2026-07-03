@@ -3396,3 +3396,48 @@ Boundary:
 - It does not imply generic FSM support, arbitrary control effects, dynamic
   state-machine bounds, broader Scala source compatibility, board execution,
   Vivado implementation, or timing closure.
+
+## 2026-07-03 -- Rust rewrite fixed GEMM frontend proof boundary
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `5a8b1e6` (`Record fixed GEMM frontend proof facts`) extends the
+  private fixed Lab2 GEMM source proof so it carries the emitted quarantined
+  frontend source, instead of recomputing that source at the raw-adapter match
+  boundary.
+- The proof now owns all three adapter facts for the accepted raw Part5/Part6
+  fixed GEMM wrappers: static shell/profile, normalized single-`Accel` island,
+  and generated Lab2-like frontend source.
+- Updated the Rust README and architecture/MVP notes to record this as a
+  no-HLS-drift source-adapter foundation slice.
+
+Proof:
+- Red/green focused check:
+  `cargo test --locked -p spatial-rs-core lab2_fixed_gemm_source_proof_carries_frontend_boundary -- --nocapture`.
+- Focused fixed GEMM/raw Lab2 checks:
+  `cargo test --locked -p spatial-rs-core lab2_fixed_gemm_source_proof_carries_frontend_boundary -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core lab2_fixed_gemm_source_proof_records_profile_target_and_accel_island -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core lab2_fixed_gemm -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core parse_accel_accepts_exact_raw_lab2_part5_gemm_fixed_32 -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core parse_accel_accepts_exact_raw_lab2_part6_gemm_as_scheduled_payload -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core raw_lab2_part5_fixed_wrapper_near_misses_fail_closed -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core raw_lab2_part6_fixed_wrapper_near_misses_fail_closed -- --nocapture`,
+  and `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part -- --nocapture`.
+- Broader local verification:
+  `cargo test --locked -p spatial-rs-core`,
+  `cargo test --locked -p ee109-examples`,
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`,
+  `cargo fmt --all -- --check`,
+  and `git diff --check`.
+
+Boundary:
+- This is local source-adapter proof factoring only.
+- It does not change accepted syntax, normalized frontend text, checked IR
+  payloads, generated HLS C++, manifests, host harnesses, validation membership,
+  imported Vitis evidence, or the 35-program current-head vendor-HLS claim from
+  source snapshot `6a4c4ae`.
+- It does not imply generic Spatial GEMM support, arbitrary `runtimeArgs`,
+  arbitrary K tails beyond the named canaries, broad Scala source compatibility,
+  board execution, Vivado implementation, or timing closure.
