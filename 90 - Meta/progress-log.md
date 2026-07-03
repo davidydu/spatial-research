@@ -9,6 +9,43 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite Dense2d tile scalar backend-plan extraction
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit `08a3399`
+  (`Extract Dense2d tile scalar renderer`). The `Dense2dTileScalarMul` HLS
+  kernel renderer moved behind `Dense2dTileScalarMulPlan` and the new
+  crate-private `spatial_rs_hls::tile_scalar_mul` helper path. `emit.rs` now
+  keeps orchestration and parameter lookup, while the helper owns
+  signature/interface pragma rendering, row/column tile loops, flattened
+  input/output tile declarations, input load, scalar multiply, and final store.
+- Generated `kernel.cpp`, `harness.cpp`, `manifest.json`, and `run_hls.tcl`
+  bytes for `MatrixTileScale4x6` were compared against a clean detached
+  baseline worktree at commit `0adde4d`; all matched exactly. Boundary: no
+  fresh EC2/Vitis execution, no validation-roster change, no generated-HLS or
+  manifest change, no new syntax, no generic rank-2 tiled lowering, and no new
+  vendor-HLS claim.
+- Verification passed locally:
+  `cargo fmt --all -- --check`;
+  `cargo test --locked --quiet`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo run -p ee109-examples --locked --bin ee109-examples`;
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-tile-scalar-mul-renderer-plan`;
+  `cargo test -p spatial-rs-hls --locked --test vitis_validation current_head`;
+  `cargo test --locked -p ee109-examples --test ec2_toolchain_compat -- --nocapture`;
+  `cargo test -p ee109-examples --locked --test emit_vitis_dry_run emit_vitis_dry_run_binary_generates_m1_frontend_bundles`;
+  `cargo test -p ee109-examples --locked --test run_vitis_validation run_vitis_validation_plan_only_writes_sidecar_tcl_for_all_examples`;
+  `cargo test -p spatial-rs-hls --locked --test vitis_validation rank2_tiled_int_scale_vitis_evidence_summary_is_twenty_program_checkpoint`;
+  `cargo test -p spatial-rs-hls --locked --test vitis_validation captured_rank2_tiled_int_scale_vitis_evidence_parses_for_twenty_program_validation_set`;
+  `git diff --check`.
+- Follow-up note: subagent review identified broader
+  `Dense2dTileScalarMul` classifier-helper characterization gaps
+  (`match_tile_load`, `match_tile_compute`, `match_tile_store`, equal-valued
+  alias rejection, lane-swap rejection, staged/split-store rejection). Those
+  are a separate frontend/classifier reliability slice, not part of this
+  byte-stable backend-renderer extraction.
+
 ## 2026-07-03 — Rust rewrite Dense2d DotAccum backend-plan extraction
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on
