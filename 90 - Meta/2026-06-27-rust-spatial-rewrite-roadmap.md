@@ -162,6 +162,20 @@ equality tests, full workspace tests, clippy, Vitis dry-run emission, and
 33-program plan-only sidecars all passed. Vendor HLS was not rerun because this
 was a no-HLS-drift refactor with unchanged generated artifacts and validation
 membership.
+Follow-up Rust commit `fa33d55` (`Add serial Tile-K row-col tail canary`) added
+the first local non-square Tile-K GEMM tail canary,
+`MatrixTileMemFoldOuterKRowColTailInPlaceFixPt33x35x34`. This is a new local
+feature slice rather than a no-drift refactor: parser/checker/HLS now carry
+canonical `row_limit`, `col_limit`, and `numel_k` bounds for serial
+`33x35x34` Tile-K MemFold while global DRAM addressing still strides by static
+`TILE_R`, `TILE_C`, and `TILE_K`. The local validation roster is now 34
+programs, with plan-only sidecars generated at
+`target/vitis-validation-row-col-k-tail-34-plan/`. Full local tests, clippy,
+HLS host-harness coverage, dry-run, and plan-only generation passed. Vendor
+HLS is still pending for this 34-program roster; the latest vendor-proven
+checkpoint remains the earlier 33-program current-head run. Scheduled Part6
+row/column tails remain rejected until lane guards or predicated lanes are
+designed.
 These wrappers are not generic Spatial `FIFO`, `Fold`, `MemReduce`, `MemFold`,
 GEMM, generic `par`, automatic banking inference, board execution, timing
 closure, or broad Scala source compatibility.

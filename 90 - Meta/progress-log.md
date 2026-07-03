@@ -1901,3 +1901,56 @@ Boundary:
   evidence.
 - Fresh EC2/Vitis was skipped because the HLS byte-stability tests, dry-run
   generation, and plan-only validation roster stayed unchanged.
+
+## 2026-07-03 — Rust rewrite serial Tile-K row/column/K tail canary
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Rust commit:
+`fa33d55` (`Add serial Tile-K row-col tail canary`).
+
+Compiler checkpoint:
+- Added the named serial Tile-K GEMM tail canary
+  `MatrixTileMemFoldOuterKRowColTailInPlaceFixPt33x35x34`.
+- The checked payload carries `ROWS=33`, `COLS=35`, `K=34`,
+  `ROW_TILES=3`, `COL_TILES=3`, `K_TILES=3`, `TILE_R/TILE_C/TILE_K=16`,
+  plus `row_bound=row_limit`, `col_bound=col_limit`, and
+  `k_bound=numel_k`.
+- Extended Tile-K HIR proof, checked IR, manifest labeling, HLS planning, and
+  serial HLS emission so dynamic `row_limit`, `col_limit`, and `numel_k` bound
+  the local loops while global DRAM addresses still stride by static
+  `TILE_R`, `TILE_C`, and `TILE_K`.
+- Added the canary to the `ee109-examples` validation roster, increasing the
+  local plan-only roster from 33 to 34 programs.
+- Kept scheduled Part6 row/column tails fail-closed; the checked IR rejects
+  `MatrixTileMemFoldOuterKRowColTailInPlacePart6ScheduledFixPt33x35x34` until
+  lane guards/predicate semantics are designed.
+
+Proof added:
+- Focused tests passed for parser acceptance, checked-IR acceptance/rejection,
+  HLS emission, and the local host-C++ harness:
+  `cargo test --locked -p spatial-rs-core parse_accel_lab2_outer_k_accepts_serial_row_col_k_tail_bounds --lib`,
+  `cargo test --locked -p spatial-rs-core checked_ir_accepts_serial_tile_k_memfold_row_col_k_tail_bounds --lib`,
+  `cargo test --locked -p spatial-rs-core row_col_tail --lib`, and
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k_row_col_k_tail_emits_runtime_bounds_and_harness`.
+- Surrounding Tile-K tests passed:
+  `cargo test --locked -p spatial-rs-core tile_k --lib`,
+  `cargo test --locked -p spatial-rs-hls tile_k --lib`, and
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k`.
+- The `ee109-examples` validation-roster tests passed, including dry-run and
+  plan-only sidecar generation.
+- Full local gates passed:
+  `cargo fmt --all -- --check`, `cargo test --locked --quiet`,
+  `cargo clippy --all-targets --locked -- -D warnings`, and `git diff --check`.
+- Generated explicit 34-program plan-only sidecars at
+  `/Users/david/Documents/David_code/spatial-rs/target/vitis-validation-row-col-k-tail-34-plan/`.
+
+Boundary:
+- This proves local parser/checker/HLS emission/host-harness behavior for the
+  serial non-square Tile-K tail canary and prepares it for EC2/Vitis.
+- Vendor HLS has not yet been run for the 34-program roster. The latest
+  vendor-proven roster remains the earlier 33-program current-head checkpoint.
+- This does not claim generic M/N tails, scheduled Part6 row/column tails,
+  arbitrary GEMM shapes, generic `par`, performance optimality, timing closure,
+  Vivado implementation, or board execution.

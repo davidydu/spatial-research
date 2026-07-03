@@ -18,6 +18,14 @@ This note records the local stability state after the first EE109 HLS expansion 
 
 The supported claim is deliberately narrow: the selected EE109 examples compile through the local Spatial `--hls` lane into HLS-style C++, host-compile with the system `c++`, and pass their generated harnesses. This is not yet a Vitis/Vivado synthesis result.
 
+Current Rust rewrite delta, 2026-07-03: commit `fa33d55` added
+`MatrixTileMemFoldOuterKRowColTailInPlaceFixPt33x35x34` as the 34th local
+validation-program member. The canary proves serial Tile-K row/column/K tail
+bounds locally through parser, checked IR, HLS C++ emission, host harness,
+dry-run generation, and plan-only sidecars. Vendor HLS is still pending for
+the 34-program roster; the latest vendor-proven Rust rewrite checkpoint remains
+the earlier 33-program current-head run.
+
 ## Rust Rewrite Vendor HLS Update
 
 On 2026-06-27, the Rust rewrite workspace
