@@ -1529,3 +1529,42 @@ Boundary:
   not change.
 - Remaining Tile-K proof work is still internal factoring: move loop-spine,
   access-role, phase, and schedule checks into smaller proof-owned helpers.
+
+## 2026-07-03 — Rust rewrite Tile-K proof current-head Vitis refresh
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Rust commit:
+`962fbcec1ae979f02e7bfbf232f27dbb817ff20c` (`Tighten Tile-K fold schedule helper`).
+
+Compiler checkpoint:
+- Staged the exact clean local commit on the EC2 Vitis host using a Git bundle
+  rather than a remote branch, then ran the full 31-program Vitis validation
+  roster.
+- The EC2 default `/usr/bin/cargo` was too old for the current lockfile, so the
+  run pinned the rustup-managed toolchain directly:
+  `/home/ubuntu/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/cargo`
+  with matching `RUSTC`.
+- The full `--execute --mode both` run passed for all 31 kernels:
+  every row in `summary-both.md` reports `returncode=0`, `csim=true`, and
+  `csynth=true`.
+
+Evidence added:
+- Rust repo evidence folder:
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-tile-k-proof-current-head/`.
+- Captured artifacts: `summary-both.md`, `summary-both.json`, 31 Vitis logs,
+  31 csynth reports, and 31 sidecar Tcl scripts.
+- The scheduled K-tail Tile-K canary
+  `MatrixTileMemFoldOuterKTailInPlacePart6ScheduledFixPt32x32x34` passed with
+  estimated clock 7.300 ns, estimated Fmax 136.99 MHz, top-level latency
+  7123 to 11839 cycles, and utilization estimate 8 BRAM_18K, 128 DSP,
+  15524 FF, 12309 LUT, and 0 URAM.
+
+Boundary:
+- This is a current-head vendor-HLS stability refresh for the accumulated
+  Tile-K proof factoring. It does not claim a new accepted syntax surface,
+  changed checked payload, changed generated HLS, changed manifest, or changed
+  validation-program membership.
+- The next manager move is to choose the next EE109 feature gap or broaden one
+  of the narrow lab adapters into a reusable supported feature.

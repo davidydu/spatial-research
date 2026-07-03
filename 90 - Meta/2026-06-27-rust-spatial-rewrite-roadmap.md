@@ -260,9 +260,12 @@ C-accumulation submatchers consume those facts. The fixed Tile-K phase spine has
 a resolver-backed guard, while broader phase recognition and structural
 statement recovery remain fail-closed/private. These fact-consumption slices do
 not change generated HLS/manifest output or validation membership. The current
-vendor-HLS anchor for the fact-migration line is the fresh 28-program
-`docs/vitis-validation/2026-07-02-tile-k-facts-current-head/` current-head
-refresh after Tile-K fact consumption and same-span loop-symbol cleanup. The
+vendor-HLS anchor for the Tile-K compiler-foundation line is the 31-program
+`docs/vitis-validation/2026-07-03-tile-k-proof-current-head/` current-head
+refresh after Tile-K source-shape, phase-spine, access-role, and fold-schedule
+proof factoring. The earlier 28-program
+`docs/vitis-validation/2026-07-02-tile-k-facts-current-head/` run remains the
+anchor for the narrower fact-consumption and same-span loop-symbol cleanup. The
 structural Part6 source bridge is a later equivalence slice over the same
 scheduled HLS surface, and its exact commit has its own 28-program vendor-HLS
 refresh in `docs/vitis-validation/2026-07-02-part6-structural-408e21c/`.
@@ -332,10 +335,13 @@ compiler factoring. Follow-up commit
 `962fbcec1ae979f02e7bfbf232f27dbb817ff20c` (`Tighten Tile-K fold schedule helper`)
 made the helper return a Tile-K-specific schedule result and expanded direct
 helper coverage across all four current Tile-K profiles. Local full gates
-passed after both commits, and EC2/Vitis was skipped because emitted artifacts
-and validation membership did not change. The next manager decision is whether
-to run a current-head EC2/Vitis refresh for this accumulated proof factoring or
-move to the next EE109 feature gap.
+passed after both commits. A current-head EC2/Vitis refresh on commit
+`962fbcec1ae979f02e7bfbf232f27dbb817ff20c` then passed all 31 validation
+programs with `csim_design` and `csynth_design`; evidence is recorded in
+`docs/vitis-validation/2026-07-03-tile-k-proof-current-head/`. This remains a
+no-HLS-drift checkpoint because emitted artifacts and validation membership did
+not change. The next manager move is to choose the next EE109 feature gap or
+broaden a currently narrow adapter into a reusable supported feature.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
