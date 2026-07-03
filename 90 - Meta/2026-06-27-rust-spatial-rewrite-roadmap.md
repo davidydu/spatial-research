@@ -29,12 +29,13 @@ The current `spatial-rs` work should therefore be treated as a tracer slice:
 `spatial-rs` currently has accepted fixture adapters for scalar add, dense 1-D DRAM/SRAM multiply, LUTs, one exact FSM, rank-2 copy groundwork, and one direct Lab3 convolution semantic adapter.
 
 Current Vitis status: the latest Rust rewrite vendor checkpoint is the
-2026-07-02 31-program Lab2 alternate FSM lane captured in
-`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-02-lab2-fsm-alt-31-program/`.
-The earlier scheduled K-tail, current-head Tile-K facts, partition-helper,
-schedule-profile, scheduled Part6 canary, Lab3 raw-wrapper, post-refactor
-`ScalarSramTileFold v0`, and refreshed 26-program block-comment/raw-Part5 lanes
-remain historical evidence anchors.
+2026-07-03 33-program literal-`2` MemReduce/MemFold lane captured in
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-memreduce-twos-33-program/`.
+The earlier current-head Tile-K proof refresh, Lab2 alternate FSM, scheduled
+K-tail, current-head Tile-K facts, partition-helper, schedule-profile,
+scheduled Part6 canary, Lab3 raw-wrapper, post-refactor `ScalarSramTileFold v0`,
+and refreshed 26-program block-comment/raw-Part5 lanes remain historical
+evidence anchors.
 It validates the original adapter baseline plus the reusable
 scalar/dense/LUT/rank-2-copy/control/stencil/scalar-reduction/scalar-fold
 representatives, the local all-ones `MemReduceOnes16` / `MemFoldOnes16`
@@ -50,13 +51,13 @@ now generate bounded Rust frontend source for `MemReduceOnes16` /
 `MemFoldOnes16` and compile through the existing frontend/HIR/classifier path.
 The Rust-subset `MemReduceFill v0` / `MemFoldFill v0` frontend now also
 accepts literal fill `2` for local `MemReduceTwos16` / `MemFoldTwos16`
-canaries with generated HLS C++ and host-harness coverage, while the raw Lab2
-wrappers and vendor-proven validation lane remain the exact all-ones shape.
+canaries with generated HLS C++, host-harness coverage, validation membership,
+and EC2/Vitis 2025.1 `csim_design`/`csynth_design` evidence, while the raw
+Lab2 wrappers remain the exact all-ones shape.
 The classifier now also proves the same narrow rank-1 memory-reduction shape
 through resolved HIR loop/symbol facts, so equivalent Rust-subset static
 length/step aliases are accepted without changing raw Lab2 wrapper matching,
-checked payloads, generated HLS, manifests, validation membership, or Vitis
-evidence.
+checked payloads, generated HLS, manifests, or wrapper semantics.
 The serial Tile-K MemFold path now has a named local K-tail canary,
 `MatrixTileMemFoldOuterKTailInPlaceFixPt32x32x34`: the Lab2-like offset-loop
 `numel_k = min(TILE_K.to[Int], K - kk)` spelling is preserved as checked
@@ -130,9 +131,10 @@ scheduled Lab2 Part6 `MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32`
 member, the named serial K-tail
 `MatrixTileMemFoldOuterKTailInPlaceFixPt32x32x34`, the scheduled K-tail
 `MatrixTileMemFoldOuterKTailInPlacePart6ScheduledFixPt32x32x34`, and
-`Lab2Part3BasicCondFSMAlt`. The latest EC2/Vitis `csim_design`/`csynth_design`
-evidence is the 31-program Lab2 alternate FSM checkpoint captured in
-`docs/vitis-validation/2026-07-02-lab2-fsm-alt-31-program/`.
+`Lab2Part3BasicCondFSMAlt`, `MemReduceTwos16`, and `MemFoldTwos16`. The latest
+EC2/Vitis `csim_design`/`csynth_design` evidence is the 33-program literal-`2`
+memory reduction/fold checkpoint captured in
+`docs/vitis-validation/2026-07-03-memreduce-twos-33-program/`.
 These wrappers are not generic Spatial `FIFO`, `Fold`, `MemReduce`, `MemFold`,
 GEMM, generic `par`, automatic banking inference, board execution, timing
 closure, or broad Scala source compatibility.
@@ -193,9 +195,9 @@ This proves useful local compiler plumbing:
   `ScalarExpr v0`, `Dense1dScalarMul v0`, `LutLookup v0`, `Dram2dCopy v0`,
   `ControlFsm v0`, `Stencil2d v0`, `ScalarReduce v0`, `ScalarFold v0`,
   `Fifo1dTileScalarMul v0`, `ScalarSramTileFold v0`, the local
-  `MemReduceFill v0` / `MemFoldFill v0` canaries, including local literal-`2`
-  host-HLS canaries outside the Vitis validation lane, and the exact scheduled
-  Lab2 Part6 HLS canary
+  `MemReduceFill v0` / `MemFoldFill v0` canaries, including the literal-`2`
+  `MemReduceTwos16` / `MemFoldTwos16` validation canaries, and the exact
+  scheduled Lab2 Part6 HLS canary
 - explicit rejection of unsupported forms
 
 It does not yet prove:

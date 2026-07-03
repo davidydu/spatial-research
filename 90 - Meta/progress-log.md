@@ -1568,3 +1568,46 @@ Boundary:
   validation-program membership.
 - The next manager move is to choose the next EE109 feature gap or broaden one
   of the narrow lab adapters into a reusable supported feature.
+
+## 2026-07-03 — Rust rewrite literal-two MemReduce/MemFold 33-program Vitis checkpoint
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Rust commits:
+- `30d338e00b76c071622468c94edf6c6866d44180`
+  (`Promote literal-two mem reductions to validation`).
+
+Compiler checkpoint:
+- Promoted the already-supported `MemReduceTwos16` and `MemFoldTwos16`
+  literal-`2` canaries into `validation_programs()`, increasing the local EE109
+  validation roster from 31 to 33 programs.
+- The change did not add a new HLS emitter path. It exercises the existing
+  narrow `MemReduceFill v0` / `MemFoldFill v0` constant-fill memory-reduction
+  path with fill value `2`.
+- Local gates passed before EC2: `cargo fmt --all -- --check`,
+  `git diff --check`, `cargo test --locked`, `cargo clippy --all-targets --locked -- -D warnings`,
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`, and
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-33-plan`.
+
+Evidence added:
+- EC2 run directory:
+  `/home/ubuntu/spatial-rs-runs/memreduce-twos-33-20260703-30d338e/spatial-rs`.
+- Rust repo evidence folder:
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-memreduce-twos-33-program/`.
+- The full `--execute --mode both` Vitis run passed for all 33 kernels:
+  every row in `summary-both.md` reports `returncode=0`, `csim=true`, and
+  `csynth=true`.
+- Captured artifacts: `summary-both.md`, `summary-both.json`, 33 Vitis logs,
+  33 csynth reports, and 33 sidecar Tcl scripts.
+- `MemReduceTwos16` and `MemFoldTwos16` each passed with estimated clock
+  7.300 ns, estimated Fmax 136.99 MHz, top-level latency 61 cycles,
+  interval 62 cycles, and utilization estimate 0 BRAM_18K, 0 DSP, 1367 FF,
+  2011 LUT, and 0 URAM.
+
+Boundary:
+- This proves vendor `csim_design` and `csynth_design` for the exact
+  33-program validation set at commit `30d338e`.
+- It does not claim generic Spatial `MemReduce` / `MemFold`, arbitrary reducer
+  bodies, dynamic memory-reduction bounds, board execution, Vivado
+  implementation, timing closure, or performance optimality.
