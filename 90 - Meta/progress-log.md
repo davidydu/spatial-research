@@ -9,6 +9,21 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite full-roadmap audit and evidence-anchor cleanup
+
+- Ran a six-lane GPT-5.5 xhigh read-only audit of the Rust Spatial rewrite
+  direction after the current-head 35-program Vitis checkpoint. Consensus:
+  the known EE109-shaped roster is stable enough to use
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-current-head-cc86ab5-35-program/`
+  as the active vendor-stability anchor, while the full rewrite should now
+  deepen `ResolvedHir -> feature proof -> Program`, raw-source quarantine, and
+  `HlsKernelPlan` seams rather than adding more exact fixture adapters. Added
+  `/Users/david/Documents/David_code/spatial-rs/docs/superpowers/plans/2026-07-03-full-rust-spatial-rewrite-roadmap.md`
+  and updated repo docs so the latest current-head evidence is no longer
+  confused with the earlier scheduled row/column/K-tail roster-expansion
+  checkpoint. Boundary: documentation/roadmap only; no Rust code, HLS output,
+  validation roster, or vendor-HLS evidence changed.
+
 ## 2026-07-03 — Rust rewrite current-head 35-program EC2/Vitis refresh
 
 - Ran the full 35-program EE109 validation roster on EC2/Vitis for
