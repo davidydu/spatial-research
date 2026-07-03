@@ -1434,6 +1434,9 @@ Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
 Rust commit:
 `ee9132795951336bdd95225077efd7b5d4ee8763` (`Extract Tile-K fold schedule proof`).
 
+Reviewer follow-up commit:
+`962fbcec1ae979f02e7bfbf232f27dbb817ff20c` (`Tighten Tile-K fold schedule helper`).
+
 Compiler checkpoint:
 - Extracted the fourth proof-owned helper from the monolithic Tile-K recognizer:
   `prove_tile_k_fold_schedule`.
@@ -1446,6 +1449,10 @@ Compiler checkpoint:
   `Program` rehydration.
 - Updated repo docs and the Tile-K contract plan to record this as the final
   obvious internal Tile-K proof factoring checkpoint in the current file.
+- Follow-up review cleanup made the helper return a Tile-K-specific
+  `TileKFoldSchedule` instead of the generic `MemFoldSchedule`, loosened the
+  `SourceFile` lifetime, and expanded the direct helper test across all four
+  current Tile-K profiles.
 
 Proof added:
 - Red-first helper test initially failed at compile time because
@@ -1462,6 +1469,7 @@ Proof added:
   `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`,
   `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-current-plan`, and
   `git diff --check`.
+- The same full local gates passed again after the reviewer cleanup commit.
 
 Boundary:
 - This slice does not change accepted syntax, checked payloads, manifests,

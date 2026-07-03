@@ -328,10 +328,14 @@ fold matcher, including resolver-backed local read/write facts and serial/Part6
 `partial_row_par` / `partial_col_par` recovery. The Tile-K proof path is now
 staged as source shape, phase spine, access roles, fold schedule, payload
 construction, and checked `Program` rehydration. This is still no-HLS-drift
-compiler factoring; local full gates passed and EC2/Vitis was skipped because
-emitted artifacts and validation membership did not change. The next manager
-decision is whether to run a current-head EC2/Vitis refresh for this accumulated
-proof factoring or move to the next EE109 feature gap.
+compiler factoring. Follow-up commit
+`962fbcec1ae979f02e7bfbf232f27dbb817ff20c` (`Tighten Tile-K fold schedule helper`)
+made the helper return a Tile-K-specific schedule result and expanded direct
+helper coverage across all four current Tile-K profiles. Local full gates
+passed after both commits, and EC2/Vitis was skipped because emitted artifacts
+and validation membership did not change. The next manager decision is whether
+to run a current-head EC2/Vitis refresh for this accumulated proof factoring or
+move to the next EE109 feature gap.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
