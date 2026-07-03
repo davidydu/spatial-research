@@ -3441,3 +3441,42 @@ Boundary:
 - It does not imply generic Spatial GEMM support, arbitrary `runtimeArgs`,
   arbitrary K tails beyond the named canaries, broad Scala source compatibility,
   board execution, Vivado implementation, or timing closure.
+
+## 2026-07-03 -- Rust rewrite non-outer-K Dense2d MemFold proof facts
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `fb47d9b` (`Record dense MemFold proof facts`) wraps the
+  non-outer-K `Dense2dTileMemFold v0` classifier path in a private proof object
+  before reconstructing the same checked IR.
+- The proof records accepted source-shape facts, optional row/column bounds,
+  the shared element type, split-C vs in-place-C mode, and the checked MemFold
+  payload.
+- Updated the Rust README and architecture/MVP notes to record this as a
+  no-HLS-drift classifier foundation slice.
+
+Proof:
+- Red/green focused check:
+  `cargo test --locked -p spatial-rs-core dense2d_memfold_proof_records_source_shape_bounds_and_payload -- --nocapture`.
+- Focused Dense2d MemFold checks:
+  `cargo test --locked -p spatial-rs-core dense2d_memfold_proof_records_source_shape_bounds_and_payload -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core dense2d_memfold -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core rank2_tile_memfold -- --nocapture`,
+  and `cargo test --locked -p spatial-rs-hls --test m1_codegen tile_memfold -- --nocapture`.
+- Broader local verification:
+  `cargo test --locked -p spatial-rs-core`,
+  `cargo test --locked -p ee109-examples`,
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`,
+  `cargo fmt --all -- --check`,
+  and `git diff --check`.
+
+Boundary:
+- This is local classifier proof factoring only.
+- It does not change accepted syntax, checked IR payloads, generated HLS C++,
+  manifests, host harnesses, validation membership, imported Vitis evidence, or
+  the 35-program current-head vendor-HLS claim from source snapshot `6a4c4ae`.
+- It does not imply generic Spatial `MemFold`, arbitrary GEMM schedules,
+  banking inference, arbitrary fixed-point widths, K tiling on this
+  non-outer-K path, board execution, Vivado implementation, or timing closure.
