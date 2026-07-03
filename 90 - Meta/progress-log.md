@@ -3357,3 +3357,42 @@ Boundary:
 - It does not imply generic Spatial `Fold`, arbitrary local-memory effects,
   tail tiles, dynamic bounds, non-`Int` data, board execution, Vivado
   implementation, or timing closure.
+
+## 2026-07-03 -- Rust rewrite Control/FSM proof facts
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `3706bd8` (`Record control FSM proof facts`) renames the internal
+  Control/FSM classifier shape object into an explicit private proof object and
+  adds direct proof tests.
+- The proof records the accepted output DRAM, scratch SRAM, local register,
+  FSM state variable, and body kind before the classifier chooses either the
+  checked Lab2 fixture adapter or reusable `ControlFsm v0` IR.
+- Updated the Rust README and architecture/MVP notes to record this as a
+  no-HLS-drift frontend/classifier foundation slice.
+
+Proof:
+- Red/green focused check:
+  `cargo test --locked -p spatial-rs-core control_fsm_proof_records_feature_roles_and_body_kind -- --nocapture`.
+- Focused Control/FSM checks:
+  `cargo test --locked -p spatial-rs-core control_fsm_proof_records_feature_roles_and_body_kind -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core control_fsm_proof_records_alt_lab2_body_kind -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core control_fsm -- --nocapture`,
+  and `cargo test --locked -p spatial-rs-hls --test m1_codegen control_fsm -- --nocapture`.
+- Broader local verification:
+  `cargo test --locked -p spatial-rs-core`,
+  `cargo test --locked -p ee109-examples`,
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`,
+  `cargo fmt --all -- --check`,
+  and `git diff --check`.
+
+Boundary:
+- This is local classifier proof factoring only.
+- It does not change accepted syntax, checked IR payloads, generated HLS C++,
+  manifests, host harnesses, validation membership, imported Vitis evidence, or
+  the 35-program current-head vendor-HLS claim from source snapshot `6a4c4ae`.
+- It does not imply generic FSM support, arbitrary control effects, dynamic
+  state-machine bounds, broader Scala source compatibility, board execution,
+  Vivado implementation, or timing closure.
