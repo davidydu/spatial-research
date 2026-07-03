@@ -3096,3 +3096,48 @@ Boundary:
 - It does not imply generic Spatial `LineBuffer`, `RegFile`, `Reduce`, generic
   stencil scheduling, arbitrary `par`, dynamic dimensions, broad Scala source
   compatibility, board execution, Vivado implementation, or timing closure.
+
+## 2026-07-03 -- Rust rewrite raw GEMM class-island guard
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `d8c8879` (`Reject ambiguous raw GEMM class islands`) tightens
+  the quarantined raw Lab2 Part5/Part6 GEMM ingress.
+- The raw fixed GEMM source proof now requires exactly one raw `@spatial class`
+  declaration before trusting the normalized single-`Accel` island. Duplicate
+  `Lab2Part5GEMM` class declarations, or mixed Part5/Part6 class declarations
+  in one raw file, are rejected even if one accel body still matches the known
+  fixture.
+- Accepted Part5/Part6 profiles, generated Lab2-like frontend source, checked
+  payloads, generated HLS C++, manifests, validation membership, and vendor
+  evidence are unchanged.
+- Updated the Rust planning docs and fixture matrix to record the single-class
+  raw-island boundary.
+
+Proof:
+- Red/green focused check:
+  `cargo test --locked -p spatial-rs-core lab2_fixed_gemm_adapters_reject_ambiguous_raw_class_islands -- --nocapture`.
+- Focused fixed-GEMM checks:
+  `cargo test --locked -p spatial-rs-core lab2_fixed_gemm -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core raw_lab2_part5_fixed_wrapper_near_misses_fail_closed -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core parse_accel_accepts_exact_raw_lab2_part5_gemm_fixed_32 -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core parse_accel_accepts_exact_raw_lab2_part6_gemm_as_scheduled_payload -- --nocapture`,
+  and
+  `cargo test --locked -p spatial-rs-core raw_lab2_part6_fixed_wrapper_near_misses_fail_closed -- --nocapture`.
+- Broader local verification:
+  `cargo fmt --all -- --check`,
+  `cargo test --locked -p spatial-rs-core`,
+  `cargo test --locked -p ee109-examples`,
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`,
+  and `git diff --check`.
+
+Boundary:
+- This is local raw-ingress hardening only.
+- It does not add accepted Scala syntax, change Rust-subset syntax, change
+  checked IR, change emitted HLS/manifests/harnesses, add validation-program
+  membership, or make a fresh vendor-HLS claim.
+- It does not imply broad Scala source compatibility, generic Spatial `MemFold`,
+  arbitrary GEMM shapes, generic `par`, inferred banking, board execution,
+  Vivado implementation, or timing closure.
