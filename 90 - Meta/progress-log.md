@@ -9,6 +9,54 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite Dense1d backend helper extraction
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit `da1da8d`
+  (`Extract Dense1d HLS renderer`). The `Lab1Part2DramSramExample` and
+  `DenseScale64` `Dense1dTileScalarMul` HLS kernel renderer moved behind the
+  existing `Dense1dTilePlan` and the new crate-private
+  `spatial_rs_hls::dense1d_tile_scalar_mul` helper module. `emit.rs` still owns
+  `ProgramKind` dispatch, `HlsBodyPlan::Dense1dTileScalarMul` matching, HLS
+  parameter lookup, dry-run project generation, and Dense1d host-harness/oracle
+  rendering; the helper owns extern signature rendering, DRAM/scalar/control
+  AXI pragmas, rank-1 local tile declarations, the outer tile loop, lane
+  load/compute/store loops, `input_tile[lane] * scalar`, and rank-1 row-major
+  access text.
+- Generated local harness and dry-run artifacts for
+  `Lab1Part2DramSramExample` and `DenseScale64` were compared against a clean
+  detached baseline worktree at Rust commit `edbb73e`; `kernel.cpp`,
+  `harness.cpp`, `manifest.json`, `run_hls.tcl`, and `vitis-project.json`
+  matched exactly where those artifacts are generated. Boundary: no fresh
+  EC2/Vitis execution, no validation-roster change, no generated-HLS or
+  manifest change, no new syntax, no frontend/HIR/classifier behavior change,
+  no Dense1d host-harness/oracle behavior change, no generic rank-1 memory
+  lowering, no arbitrary tiled-loop scheduling, no dynamic bounds, no non-`Int`
+  or FixPt Dense1d support, no performance/board-timing claim, and no new
+  vendor-HLS claim.
+- Verification passed locally:
+  RED `cargo test -p spatial-rs-hls --locked dense1d_tile_scalar_mul -- --nocapture`
+  failed first on deliberate `todo!()` stubs;
+  `cargo test -p spatial-rs-hls --locked dense1d_tile_scalar_mul -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked dense1d_plan -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen dense -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test vitis_validation captured_dense1d_vitis_evidence_parses_for_adapter_baseline_and_features -- --nocapture`;
+  baseline/current `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`;
+  baseline/current `cargo test -p spatial-rs-hls --locked --test m1_codegen harness -- --nocapture`;
+  detached-baseline `cmp` checks for both Dense1d programs' top-level harness
+  artifacts and five dry-run artifacts;
+  `cargo test -p spatial-rs-hls --locked`;
+  `cargo test -p ee109-examples --locked --test emit_vitis_dry_run -- --nocapture`;
+  `cargo test -p ee109-examples --locked --test run_vitis_validation -- --nocapture`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-dense1d-renderer-plan`;
+  `cargo test --locked`;
+  `cargo clippy --workspace --all-targets --locked -- -D warnings`;
+  `RUSTDOCFLAGS='-D warnings' cargo doc --workspace --locked --no-deps --document-private-items`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+
+---
+
 ## 2026-07-03 — Rust rewrite FIFO backend helper extraction
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on
