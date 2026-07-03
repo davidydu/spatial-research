@@ -3518,3 +3518,41 @@ Boundary:
 - It does not imply generic GEMM support, fixed-point DotAccum, tail tiles,
   K tiling, `MemFold`, `par`, banking inference, board execution, Vivado
   implementation, or timing closure.
+
+## 2026-07-03 -- Rust rewrite Dense2d scalar-scale proof facts
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `c411362` (`Record dense scale proof facts`) wraps the
+  `Dense2dTileScalarMul v0` classifier path in a private proof object before
+  reconstructing the same checked IR.
+- The proof records accepted source-shape facts and the checked scalar-scale
+  payload for the fixed `MatrixTileScale4x6` family.
+- Updated the Rust README and architecture/MVP notes to record this as a
+  no-HLS-drift classifier foundation slice.
+
+Proof:
+- Red/green focused check:
+  `cargo test --locked -p spatial-rs-core dense2d_tile_scalar_mul_proof_records_source_shape_and_payload -- --nocapture`.
+- Focused scalar-scale checks:
+  `cargo test --locked -p spatial-rs-core dense2d_tile_scalar_mul_proof_records_source_shape_and_payload -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core dense2d_tile_scalar -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core rank2_tiled_int_scale -- --nocapture`,
+  and `cargo test --locked -p spatial-rs-hls --test m1_codegen scale -- --nocapture`.
+- Broader local verification:
+  `cargo test --locked -p spatial-rs-core`,
+  `cargo test --locked -p ee109-examples`,
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`,
+  `cargo fmt --all -- --check`,
+  and `git diff --check`.
+
+Boundary:
+- This is local classifier proof factoring only.
+- It does not change accepted syntax, checked IR payloads, generated HLS C++,
+  manifests, host harnesses, validation membership, imported Vitis evidence, or
+  the 35-program current-head vendor-HLS claim from source snapshot `6a4c4ae`.
+- It does not imply generic rank-2 local-memory lowering, tail tiles,
+  fixed-point scalar scale, GEMM semantics, `MemFold`, `par`, banking inference,
+  board execution, Vivado implementation, or timing closure.
