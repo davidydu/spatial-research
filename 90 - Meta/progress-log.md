@@ -3839,3 +3839,60 @@ Boundary:
   timing closure, performance optimality, generic Spatial compatibility,
   arbitrary rank-2 memory lowering, dynamic dimensions, or automatic
   banking/scheduling inference.
+
+## 2026-07-03 -- Rust rewrite Dense1d proof boundary
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `ee145d4` (`Record Dense1d proof boundary`) factors
+  `Dense1dScalarMul v0` classifier admission through a private
+  `Dense1dScalarMulProof` before checked IR construction.
+- The proof records the accepted input/scalar/output roles, input/output tile
+  roles, source loop indices, static length evidence when it resolves, and the
+  resolved tile size.
+- A regression test keeps the old behavior that the canonical Lab1 dense
+  adapter may use noncanonical source loop names; the proof records those names
+  without requiring them to be `i` and `ii`.
+- Updated the Rust README and architecture/MVP notes to record this as a
+  no-HLS-drift compiler-foundation slice.
+
+Subagent review:
+- A `gpt-5.5` `xhigh` explorer reviewed the Dense1d boundary and caught the
+  initial loop-name narrowing risk before broad verification.
+- The final implementation removes that narrowing and preserves the old
+  adapter acceptance boundary.
+
+Proof:
+- Red check:
+  `cargo test --locked -p spatial-rs-core dense1d_scalar_mul_proof_records_roles_indices_and_tile_bound -- --nocapture`
+  failed first because `dense1d_scalar_mul_proof` did not exist.
+- Follow-up red check after subagent review:
+  `cargo test --locked -p spatial-rs-core dense1d_ -- --nocapture`
+  failed because `Dense1dScalarMulProof` did not yet carry optional `len`.
+- Focused checks:
+  `cargo test --locked -p spatial-rs-core dense1d_ -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core dense -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen dense -- --nocapture`,
+  and `cargo test --locked -p spatial-rs-hls dense -- --nocapture`.
+- Broader local verification:
+  `cargo fmt --all`,
+  `cargo test --locked -p spatial-rs-core`,
+  `cargo test --locked -p ee109-examples`,
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`,
+  `cargo fmt --all -- --check`,
+  `git diff --check`,
+  and
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation active_docs_name_b5460335_as_current_vendor_anchor -- --nocapture`.
+
+Boundary:
+- This is local classifier proof factoring only.
+- It does not change accepted syntax, checked IR payloads, generated HLS C++,
+  manifests, host harnesses, validation membership, or imported Vitis evidence.
+- The active vendor-HLS evidence anchor remains
+  `docs/vitis-validation/2026-07-03-current-head-b5460335-35-program/`;
+  commit `ee145d4` itself has not been rerun on EC2/Vitis yet.
+- It does not imply generic rank-1 scheduling, tail tiles, dynamic bounds,
+  commuted multiply support, broader Dense1d lowering, board execution, Vivado
+  implementation, or timing closure.
