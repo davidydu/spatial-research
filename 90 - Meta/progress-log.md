@@ -11,6 +11,18 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ## 2026-07-03 — Rust rewrite HLS plan provenance
 
+- Re-ran the local EE109/HLS-prep gate after Rust commit `f1a229f`
+  (`Finish HLS harness plan migration`). Evidence: `cargo test --locked
+  --quiet` passed across the workspace; `cargo run -p ee109-examples --locked
+  --bin ee109-examples` accepted all nine current raw EE109 fixture adapters;
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run` emitted the
+  current HLS dry-run roster; `cargo run -p ee109-examples --locked --bin
+  run-vitis-validation -- --out target/vitis-validation-plan` produced 33
+  Vitis plan sidecars; and the generated `kernel.cpp`/`host.cpp` leakage scan
+  found no real Scala/Chisel/Spatial shell terms. Boundary: still local only;
+  this does not add fresh Vitis `csim_design` / `csynth_design` evidence,
+  board execution, Vivado implementation, timing closure, or broader Spatial
+  source compatibility.
 - Completed the remaining simple HLS host-harness plan migration in
   `/Users/david/Documents/David_code/spatial-rs` on branch
   `David/HLS-spatial`: LUT, Dense1d, and Dram2d copy harness rendering now
