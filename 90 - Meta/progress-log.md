@@ -9,6 +9,40 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite Dense2d MemFold backend-plan extraction
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit `ed10282`
+  (`Extract Dense2d MemFold renderer`). The non-outer-K
+  `Dense2dTileMemFold` HLS kernel renderer moved behind
+  `Dense2dTileMemFoldPlan` and the new crate-private
+  `spatial_rs_hls::memfold` helper path. `emit.rs` now keeps orchestration and
+  parameter lookup, while the helper owns split-C/in-place signature rendering,
+  AXI interface pragmas, paired row/column-tail bounds, local flattened tile
+  declarations, and the preload / partial-product / fold / store loop body.
+  Generated `kernel.cpp` and `manifest.json` bytes were compared against a
+  clean baseline worktree at commit `493a3ab` for
+  `MatrixTileMemFold4x6x5`, `MatrixTileMemFoldTail5x7x5`,
+  `MatrixTileMemFoldFixPt4x6x5`, and
+  `MatrixTileMemFoldInPlaceFixPt4x6x5`; all matched exactly.
+- Verification passed locally:
+  `cargo test -p spatial-rs-hls --locked memfold::tests`;
+  `cargo test -p spatial-rs-hls --locked emit_dense2d_tile_memfold`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen memfold`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_shell_alias_buffer_preserves_exact_hls_and_manifest`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_infix_tile_io_preserves_exact_hls_and_manifest`;
+  `cargo fmt --all -- --check`; `cargo test --locked --quiet`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo run -p ee109-examples --locked --bin ee109-examples`;
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation --
+  --plan-only --mode both --out target/vitis-validation-dense2d-memfold-renderer-plan`;
+  `cargo test -p spatial-rs-hls --locked --test vitis_validation current_head`;
+  and `git diff --check`.
+  Boundary: no fresh EC2/Vitis execution, no validation-roster change, no
+  generated-HLS or manifest change, no new syntax, no generic Spatial
+  `MemFold` or GEMM support, and no new vendor-HLS claim.
+
 ## 2026-07-03 — Rust rewrite Tile-K support profile ledger
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on
