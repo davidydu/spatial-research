@@ -1128,3 +1128,51 @@ Boundary:
   condition/action lowering, arbitrary registers, dynamic lengths, scheduling,
   `par`, broad Scala source compatibility, board execution, Vivado
   implementation, or timing-closure evidence.
+
+## 2026-07-03 — Rust rewrite raw Lab2 GEMM K-tail source compatibility
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Frontend/HLS checkpoint:
+- Extended the narrow raw Scala source adapter for `Lab2Part5GEMM` and
+  `Lab2Part6GEMM` to accept only the exact named K-tail runtime profile
+  `runtimeArgs = "32 32 34"` in addition to the previous fixed
+  `runtimeArgs = "32 32 32"` profile.
+- The adapter still requires the same fixed token-stream quarantine:
+  `tileM/tileN/tileK = 16`, `FixPt[TRUE,_24,_8]`, exact
+  `ArgIn`/`setArg`/`DRAM`/`setMem` setup, and one known Part5 or Part6
+  `Accel` body.
+- For `K=34`, raw Part5 now emits bounded Lab2-like frontend source that
+  normalizes to `MatrixTileMemFoldOuterKTailInPlaceFixPt32x32x34`.
+- For `K=34`, raw Part6 now normalizes to
+  `MatrixTileMemFoldOuterKTailInPlacePart6ScheduledFixPt32x32x34`, preserving
+  the existing checked `par 2` / `par 16` scheduled payload.
+- Near-miss raw runtime profiles such as `32 32 33`, `32 32 35`, and
+  `32 34 34` remain unsupported.
+- Repo docs now describe this as source compatibility for the two already
+  Vitis-proven K-tail canaries, not as generic K-tail or broad Scala support.
+
+Proof added:
+- Red-first adapter/HLS tests initially failed because the raw `32 32 34`
+  wrappers fell through to unsupported generic reduction lowering.
+- Focused green checks:
+  `cargo test --locked -p spatial-rs-core source_adapter::tests::lab2_fixed_gemm`,
+  `cargo test --locked -p spatial-rs-hls lab2_raw_part`.
+- Full local gates passed:
+  `cargo fmt --all -- --check`,
+  `cargo test --locked`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`,
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-current-plan`, and
+  `git diff --check` in both the Rust repo and research vault.
+
+Boundary:
+- This slice does not add a validation-program member and does not require a
+  new EC2/Vitis run because the accepted raw `32 32 34` wrappers preserve exact
+  checked-program, generated HLS, and manifest equality with the existing
+  serial/scheduled K-tail validation members.
+- Arbitrary K values, dynamic dimensions, non-exact raw Scala wrappers,
+  generic Spatial `MemFold`, broader fixed-point semantics, generic `par`,
+  inferred banking, board execution, Vivado implementation, and timing closure
+  remain unsupported.

@@ -29,12 +29,12 @@ The current `spatial-rs` work should therefore be treated as a tracer slice:
 `spatial-rs` currently has accepted fixture adapters for scalar add, dense 1-D DRAM/SRAM multiply, LUTs, one exact FSM, rank-2 copy groundwork, and one direct Lab3 convolution semantic adapter.
 
 Current Vitis status: the latest Rust rewrite vendor checkpoint is the
-2026-07-02 30-program named scheduled K-tail lane captured in
-`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-02-scheduled-k-tail-30-program/`.
-The earlier current-head Tile-K facts, partition-helper, schedule-profile,
-scheduled Part6 canary, Lab3 raw-wrapper, post-refactor `ScalarSramTileFold v0`,
-and refreshed 26-program block-comment/raw-Part5 lanes remain historical
-evidence anchors.
+2026-07-02 31-program Lab2 alternate FSM lane captured in
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-02-lab2-fsm-alt-31-program/`.
+The earlier scheduled K-tail, current-head Tile-K facts, partition-helper,
+schedule-profile, scheduled Part6 canary, Lab3 raw-wrapper, post-refactor
+`ScalarSramTileFold v0`, and refreshed 26-program block-comment/raw-Part5 lanes
+remain historical evidence anchors.
 It validates the original adapter baseline plus the reusable
 scalar/dense/LUT/rank-2-copy/control/stencil/scalar-reduction/scalar-fold
 representatives, the local all-ones `MemReduceOnes16` / `MemFoldOnes16`
@@ -67,12 +67,15 @@ is now the 29th validation-program member with EC2/Vitis `csim_design` and
 `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-02-k-tail-29-program/`.
 Except for wrappers that introduced or rode a new canonical validation payload,
 these adapters route to existing canaries without adding validation-program
-membership or new Vitis evidence. The fixed Lab2
-Part5 wrapper canonicalizes to the serial outer-K canary. The fixed Lab2 Part6
-wrapper now canonicalizes to
+membership or new Vitis evidence. The fixed Lab2 Part5/Part6 wrappers now
+accept only `runtimeArgs = "32 32 32"` or the exact named K-tail
+`runtimeArgs = "32 32 34"` profile. For `K=32`, Part5 canonicalizes to the
+serial outer-K canary and Part6 canonicalizes to
 `MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32`, preserving the
 exact `par 2` / `par 16` source shape as checked schedule metadata and emitting
 the corresponding HLS `PIPELINE`, `UNROLL`, and local-array partition pragmas.
+For the exact `K=34` profile, raw Part5/Part6 canonicalize to the existing
+serial/scheduled K-tail canaries with generated HLS/manifest equality.
 The structural Lab2-like outer-K bridge now reaches that same scheduled Part6
 payload for infix tile IO, static offset-loop, and exact static
 `numel_k = min(TILE_K.to[Int], K - kk)` source shapes when the partial-tile fill
@@ -122,14 +125,14 @@ sibling loop symbols. The fixed Tile-K phase spine is resolver-guarded, while
 broader Tile-K phase recognition beyond that spine still remains unsupported.
 The exact raw Lab1 Part6 wrapper is different: it canonicalizes to the new
 `SramTileFoldSum32` / `ScalarSramTileFold v0` structural canary, the 27th local
-validation member. The local validation list is 30 programs after the separate
+validation member. The local validation list is 31 programs after the separate
 scheduled Lab2 Part6 `MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32`
 member, the named serial K-tail
-`MatrixTileMemFoldOuterKTailInPlaceFixPt32x32x34`, and the scheduled K-tail
-`MatrixTileMemFoldOuterKTailInPlacePart6ScheduledFixPt32x32x34`. The latest
-EC2/Vitis `csim_design`/`csynth_design` evidence is the 30-program scheduled
-K-tail checkpoint captured in
-`docs/vitis-validation/2026-07-02-scheduled-k-tail-30-program/`.
+`MatrixTileMemFoldOuterKTailInPlaceFixPt32x32x34`, the scheduled K-tail
+`MatrixTileMemFoldOuterKTailInPlacePart6ScheduledFixPt32x32x34`, and
+`Lab2Part3BasicCondFSMAlt`. The latest EC2/Vitis `csim_design`/`csynth_design`
+evidence is the 31-program Lab2 alternate FSM checkpoint captured in
+`docs/vitis-validation/2026-07-02-lab2-fsm-alt-31-program/`.
 These wrappers are not generic Spatial `FIFO`, `Fold`, `MemReduce`, `MemFold`,
 GEMM, generic `par`, automatic banking inference, board execution, timing
 closure, or broad Scala source compatibility.
