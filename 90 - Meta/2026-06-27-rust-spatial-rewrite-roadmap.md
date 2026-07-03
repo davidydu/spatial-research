@@ -136,12 +136,12 @@ EC2/Vitis `csim_design`/`csynth_design` evidence is the 33-program current-head
 Tile-K HLS loop-body cleanup checkpoint captured in
 `docs/vitis-validation/2026-07-03-tile-k-loop-body-current-head-33-program/`.
 The current Tile-K HLS backend-ledger cleanup has now moved K-loop bounds,
-local storage declarations, schedule/partition preflight, and serial/scheduled
-tile-body rendering into `crates/spatial-rs-hls/src/tile_k.rs` while preserving
-generated HLS C++, manifests, validation membership, and vendor-evidence
-boundaries. This is reliability work toward a cleaner Rust HLS backend, not a
-new language feature; the current-head vendor refresh proves the existing
-33-program roster still passes after the cleanup.
+local storage declarations, schedule/partition preflight, serial/scheduled
+tile-body rendering, and the kernel frame itself into crate-private HLS helper
+modules while preserving generated HLS C++, manifests, validation membership,
+and vendor-evidence boundaries. This is reliability work toward a cleaner Rust
+HLS backend, not a new language feature; the current-head vendor refresh proves
+the existing 33-program roster still passes after the cleanup.
 Follow-up Rust commit `ed9c2d3703c4bb98b285ae0e5ac3bb746bad25b5` (`Accept Lab2
 memory reduction call sugar`) added a parser-only normal-frontend bridge for
 the simple Lab2 memory-reduction spelling: `SRAM[Int](16)`, `Foreach(16 by 1)`,
@@ -152,6 +152,15 @@ manifests unchanged, and leaves the 33-program validation roster unchanged.
 Local full workspace tests, clippy, Vitis dry-run emission, and 33-program
 plan-only sidecars passed; vendor HLS was not rerun for this slice because it
 does not alter emitted artifacts or validation membership.
+Follow-up Rust commit `328e9fda3b2d160a0e2fbd5100707a4343d31d32` (`Extract
+Tile-K HLS kernel frame`) continued the Tile-K HLS backend ledger by moving the
+extern signature, AXI interface pragmas, outer tile-loop frame, and
+array-partition pragma rendering into `spatial_rs_hls::tile_k` /
+`spatial_rs_hls::partition`. The stable scheduled HLS snapshot, outer-K
+equality tests, full workspace tests, clippy, Vitis dry-run emission, and
+33-program plan-only sidecars all passed. Vendor HLS was not rerun because this
+was a no-HLS-drift refactor with unchanged generated artifacts and validation
+membership.
 These wrappers are not generic Spatial `FIFO`, `Fold`, `MemReduce`, `MemFold`,
 GEMM, generic `par`, automatic banking inference, board execution, timing
 closure, or broad Scala source compatibility.
@@ -386,6 +395,14 @@ Spatial-ish call syntax directly, with fail-closed tests for wrong bounds,
 wrong fill, wrong store source, missing MemFold zero-init, wrong combiner, and
 wrong local size. This is no-HLS-drift frontend coverage, not a new backend
 feature.
+Follow-up Rust commit `328e9fda3b2d160a0e2fbd5100707a4343d31d32` (`Extract
+Tile-K HLS kernel frame`) switched back to HLS backend-ledger cleanup: the
+Tile-K extern signature, AXI interface pragmas, outer tile-loop frame, and
+array-partition pragma rendering now live in `spatial_rs_hls::tile_k` /
+`spatial_rs_hls::partition` instead of the monolithic emitter. Stable scheduled
+HLS and outer-K equality tests remained green, the 33-program plan-only roster
+was regenerated, and vendor HLS was skipped because emitted artifacts and
+validation membership did not change.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
