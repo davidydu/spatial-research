@@ -9,6 +9,18 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite Vitis evidence CLI validation
+
+- Added a `run-vitis-validation --validate-evidence <dir>` mode in
+  `/Users/david/Documents/David_code/spatial-rs` (`David/HLS-spatial`) so
+  captured EC2/Vitis evidence can be validated through the same runner binary
+  that plans and executes the roster. The CLI checks the current 35-program
+  validation order against summary JSON, sidecar Tcl, logs, csynth reports,
+  all-pass execution state, target device, and clock via the existing
+  repo-local evidence validator. Boundary: this is local evidence ingestion and
+  documentation hygiene only; it does not run Vitis, add new language support,
+  or create fresh vendor-HLS evidence.
+
 ## 2026-07-03 — Rust rewrite Lab3 Stencil2d alias constants
 
 - Widened the reusable Rust `Stencil2d v0` classifier on
