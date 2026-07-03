@@ -3743,3 +3743,50 @@ Boundary:
   timing closure, performance optimality, generic Spatial compatibility,
   generic `MemFold`, arbitrary GEMM schedules, dynamic dimensions, or automatic
   banking/scheduling inference.
+
+## 2026-07-03 -- Rust rewrite Dram2d copy proof boundary
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `b546033` (`Record Dram2d copy proof boundary`) renames the
+  accepted `Dram2dCopy v0` shape record into a private proof boundary and adds
+  a direct unit test for the accepted input/output roles, row/column loop
+  indices, and static row/column bounds.
+- The checked IR payload and HLS-facing feature remain the same: one rank-2
+  DRAM input, one matching rank-2 DRAM output, nested static row/column loops,
+  and direct row-major copy assignment.
+- Updated the Rust README and architecture/MVP notes to record this as a
+  no-HLS-drift compiler-foundation slice.
+
+Proof:
+- Red check:
+  `cargo test --locked -p spatial-rs-core dram2d_copy_proof_records_ports_indices_and_bounds -- --nocapture`
+  failed first because `dram2d_copy_proof` did not exist.
+- Focused checks:
+  `cargo test --locked -p spatial-rs-core dram2d_copy_proof_records_ports_indices_and_bounds -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core rank2_copy -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen matrix_copy_4x6_feature_emits_parameterized_rank2_copy_and_harness -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab3_row_major_copy_kernel_uses_cols_as_rank2_flatten_stride -- --nocapture`,
+  and `cargo test --locked -p spatial-rs-hls rank2_copy -- --nocapture`.
+- Broader local verification:
+  `cargo fmt --all`,
+  `cargo test --locked -p spatial-rs-core`,
+  `cargo test --locked -p ee109-examples`,
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`,
+  `cargo fmt --all -- --check`,
+  `git diff --check`,
+  and
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation active_docs_name_c3e3be5_as_current_vendor_anchor -- --nocapture`.
+
+Boundary:
+- This is local classifier proof factoring only.
+- It does not change accepted syntax, checked IR payloads, generated HLS C++,
+  manifests, host harnesses, validation membership, or imported Vitis evidence.
+- The active vendor-HLS evidence anchor remains
+  `docs/vitis-validation/2026-07-03-current-head-c3e3be5-35-program/`;
+  commit `b546033` itself has not been rerun on EC2/Vitis yet.
+- It does not imply generic rank-2 memory lowering, arbitrary affine index
+  analysis, dynamic dimensions, board execution, Vivado implementation, or
+  timing closure.
