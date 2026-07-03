@@ -9,6 +9,38 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite MemReduce/MemFold proof facts
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit `6eb9a25` (`Record MemReduce proof
+  facts`). The `MemReduceFill v0` / `MemFoldFill v0` classifier now carries a
+  private proof object for the accepted rank-1 memory-reduction shape before
+  checked IR construction. The proof records accumulator/temp/output roles,
+  reduction loop identity, fill loop identity, optional MemFold zero-init loop
+  identity, literal fill, length, and resolved step bound.
+- Added direct proof tests for static alias-bound `MemReduce` and `MemFold`
+  sources, including the separation of the MemFold zero-init loop from the
+  reduction/fill loops. Updated README, the EE109 MVP plan, the fixture matrix,
+  and the Rust rewrite architecture note to describe the proof boundary without
+  claiming broader Spatial `MemReduce` / `MemFold` support.
+- Verification passed locally:
+  RED
+  `cargo test --locked -p spatial-rs-core memreduce_proof_records_roles_and_resolved_facts -- --nocapture`
+  first failed on missing proof fields;
+  `cargo test --locked -p spatial-rs-core classifier::reductions::tests -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core mem_reduction -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen mem_reduction -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core`;
+  `cargo test --locked -p ee109-examples`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary: no accepted syntax, checked payload, generated HLS, manifest,
+  validation roster, or vendor evidence changed. No fresh EC2/Vitis run was
+  needed for this proof-factoring slice.
+
+---
+
 ## 2026-07-03 — Rust rewrite current-head 6a4c4ae Vitis evidence refresh
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on
