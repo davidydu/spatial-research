@@ -206,12 +206,14 @@ effect scheduling, alias analysis, FSM/control lowering, stencil lowering, or
 broad memory lowering.
 
 Rank-2 copy opened the crate-private `HlsKernelPlan` path before C++ rendering,
-and scalar assignment plus LUT lookup have now joined that path. The scalar
-plan carries ordered scalar inputs, the scalar output, and the precedence-safe
-expression AST; the LUT plan carries ordered scalar ports, table dimensions,
-and row-major values; the rank-2 copy plan uses manifest-derived ABI facts and
-the shared row-major index expression. This is still not a generic HLS MIR or
-scheduler.
+and scalar assignment, LUT lookup, and control/FSM have now joined that path.
+The scalar plan carries ordered scalar inputs, the scalar output, and the
+precedence-safe expression AST; the LUT plan carries ordered scalar ports,
+table dimensions, and row-major values; the rank-2 copy plan uses
+manifest-derived ABI facts and the shared row-major index expression; the
+control/FSM plan carries the output DRAM ABI, scratch SRAM, register/state
+names, fixed loop length, register initialization/update values, and body-kind
+variant. This is still not a generic HLS MIR or scheduler.
 Rust commit `82ebd3f78a6cb7b00ac33764d7f8462a4ce0d8c9` (`Add scalar HLS plan
 seam`) added this scalar seam with exact scalar snapshot preservation, full
 workspace tests, clippy, Vitis dry-run emission, and 33-program plan-only
@@ -224,6 +226,13 @@ generated HLS and harness behavior while the renderer now consumes
 `HlsKernelPlan`. Full workspace tests, clippy, Vitis dry-run emission, and the
 33-program plan-only sidecars passed; vendor HLS was not rerun because emitted
 artifacts and validation membership did not change.
+Rust commit `740b5b7bc67d587903eb47f1a73884e36545d2b8` (`Add control FSM HLS
+plan seam`) added the Lab2/control-FSM seam: `Lab2Part3BasicCondFSM`,
+`Lab2Part3BasicCondFSMAlt`, and `ControlFsm32` keep generated HLS and harness
+behavior while kernel rendering now consumes `HlsKernelPlan`. Full workspace
+tests, clippy, Vitis dry-run emission, and the 33-program plan-only sidecars
+passed; vendor HLS was not rerun because this is a no-HLS-drift compiler
+foundation change.
 
 This proves useful local compiler plumbing:
 
