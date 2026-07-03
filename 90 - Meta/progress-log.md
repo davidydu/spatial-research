@@ -2648,3 +2648,53 @@ Boundary:
   HLS or manifests, add new syntax, add generic `MemReduce` / `MemFold`, accept
   arbitrary reducer/fold bodies, prove dynamic bounds, banking, scheduling,
   performance, board timing, or make a new vendor-HLS claim.
+
+## 2026-07-03 -- Rust rewrite scalar-family renderer extraction
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Committed Rust repo change `7ddf17b` (`Extract scalar-family HLS
+  renderers`).
+- Moved the `ScalarAssign`, `ScalarReduce`, `ScalarFold`, and
+  `ScalarSramTileFold` HLS kernel renderers behind the crate-private
+  `spatial_rs_hls::scalar` helper module.
+- Kept `emit.rs` responsible for `ProgramKind` dispatch, lowering
+  orchestration, `HlsBodyPlan` matching, HLS parameter lookup for DRAM-input
+  folds, dry-run project generation, and host-harness/oracle rendering.
+- The new helper owns scalar kernel signature/interface pragma rendering,
+  scalar-expression C++ rendering, arithmetic-series reduce loop rendering,
+  direct rank-1 DRAM fold rendering, and SRAM tile-load fold loop rendering.
+- Generated dry-run artifacts for `Lab1Part1RegExample`,
+  `Lab1Part1RegThreeInputExample`, `ScalarAffine4`, `ScalarReduceSum16`,
+  `ScalarFoldTileSum32`, and `SramTileFoldSum32` were compared against a clean
+  detached baseline worktree at Rust commit `138e86e`; `kernel.cpp`,
+  `harness.cpp`, `manifest.json`, `run_hls.tcl`, and `vitis-project.json` all
+  matched exactly for all six programs. `ScalarMixedPrecedence` is not in the
+  dry-run registry, so its expression-precedence canary remains covered by the
+  exact m1 codegen/harness tests.
+
+Proof added:
+- `cargo test -p spatial-rs-hls --lib --locked scalar::tests -- --nocapture`
+- `cargo test -p spatial-rs-hls --locked --test m1_codegen scalar -- --nocapture`
+- `cargo test -p spatial-rs-hls --locked --test m1_codegen sram_tile_fold -- --nocapture`
+- `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`
+- `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-scalar-renderer-plan`
+- `cargo test -p spatial-rs-hls --locked`
+- `cargo test -p ee109-examples --locked --test emit_vitis_dry_run -- --nocapture`
+- `cargo test -p ee109-examples --locked --test run_vitis_validation -- --nocapture`
+- `cargo fmt --all -- --check`
+- `git diff --check`
+- `cargo test --locked`
+- `cargo clippy --workspace --all-targets --locked -- -D warnings`
+- `RUSTDOCFLAGS='-D warnings' cargo doc --workspace --locked --no-deps --document-private-items`
+
+Boundary:
+- This is local Rust test coverage plus dry-run artifact byte comparison only.
+  It does not run fresh EC2/Vitis, change the validation roster, change
+  generated HLS or manifests, add new accepted syntax, add new scalar/reduction
+  or fold semantics, add generic `Reduce` / `Fold` / `MemReduce` / `MemFold`,
+  accept arbitrary bodies, tail tiles, dynamic bounds, non-unit parallelism,
+  scheduling, banking, performance, board timing, or make a new vendor-HLS
+  claim.
