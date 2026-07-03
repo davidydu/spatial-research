@@ -2698,3 +2698,49 @@ Boundary:
   accept arbitrary bodies, tail tiles, dynamic bounds, non-unit parallelism,
   scheduling, banking, performance, board timing, or make a new vendor-HLS
   claim.
+
+## 2026-07-03 -- Rust rewrite LUT renderer extraction
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Committed Rust repo change `edbb73e` (`Extract LUT HLS renderer`).
+- Moved `Lab2Part4LUT`, `Lab2Part4LUTNonSquareExample`, and
+  `LutBiasLookup` kernel rendering behind the existing `Lut2dLookupPlan` and
+  the new crate-private `spatial_rs_hls::lut` helper module.
+- Kept `emit.rs` responsible for `ProgramKind` dispatch,
+  `HlsBodyPlan::Lut2dLookup` matching, lowering orchestration, dry-run project
+  generation, and LUT host-harness/oracle rendering.
+- The helper owns extern signature rendering, scalar/control AXI-lite pragma
+  rendering, static row-major `int` LUT literal rendering, `(row * cols) + col`
+  lookup text, and scalar output store rendering.
+- Generated dry-run artifacts for `Lab2Part4LUT`,
+  `Lab2Part4LUTNonSquareExample`, and `LutBiasLookup` were compared against a
+  clean detached baseline worktree at Rust commit `7ddf17b`; `kernel.cpp`,
+  `harness.cpp`, `manifest.json`, `run_hls.tcl`, and `vitis-project.json` all
+  matched exactly for all three programs.
+
+Proof added:
+- `cargo test -p spatial-rs-hls --locked --lib lut_kernel_frame -- --nocapture`
+- `cargo test -p spatial-rs-hls --locked --test m1_codegen lut -- --nocapture`
+- `cargo test -p spatial-rs-hls --locked --test vitis_validation captured_lut_lookup_vitis_evidence_parses_for_adapter_baseline_and_features -- --nocapture`
+- `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`
+- `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-lut-renderer-plan`
+- `cargo test -p spatial-rs-hls --locked`
+- `cargo test -p ee109-examples --locked --test emit_vitis_dry_run -- --nocapture`
+- `cargo test -p ee109-examples --locked --test run_vitis_validation -- --nocapture`
+- `cargo fmt --all -- --check`
+- `git diff --check`
+- `cargo test --locked`
+- `cargo clippy --workspace --all-targets --locked -- -D warnings`
+- `RUSTDOCFLAGS='-D warnings' cargo doc --workspace --locked --no-deps --document-private-items`
+
+Boundary:
+- This is local Rust test coverage plus dry-run artifact byte comparison only.
+  It does not run fresh EC2/Vitis, change the validation roster, change
+  generated HLS or manifests, add new syntax, change frontend/HIR/classifier
+  behavior, retire raw Lab2 LUT wrappers, add generic LUT/table indexing,
+  support multiple LUTs, computed/swapped indices, arbitrary scalar
+  expressions, dynamic dimensions/bounds, rank-1/rank-3 LUTs, non-`Int` or
+  FixPt LUTs, performance, board timing, or make a new vendor-HLS claim.
