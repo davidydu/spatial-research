@@ -267,6 +267,17 @@ structural Part6 source bridge is a later equivalence slice over the same
 scheduled HLS surface, and its exact commit has its own 28-program vendor-HLS
 refresh in `docs/vitis-validation/2026-07-02-part6-structural-408e21c/`.
 
+Current local foundation continuation: the Tile-K MemFold classifier now has an
+initial private proof facade on Rust commit
+`ed32bfdb22db8688306dc5c0a948d8d752cf29f8`. The classifier entrypoint preserves
+the old cheap candidate precheck before resolver work, then routes true Tile-K
+candidates through a proof-shaped result carrying the current serial/scheduled
+full-K and K-tail profiles before rebuilding the same checked `Program`. This
+is deliberately not a syntax/HLS expansion: the proof constructor still wraps
+the existing helper sequence, generated HLS and validation membership stay
+unchanged, and EC2/Vitis is postponed until an emitted artifact or validation
+roster changes.
+
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
 `Program` as the HLS contract, reserves resolver diagnostics to

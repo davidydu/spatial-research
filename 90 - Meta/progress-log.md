@@ -1176,3 +1176,49 @@ Boundary:
   generic Spatial `MemFold`, broader fixed-point semantics, generic `par`,
   inferred banking, board execution, Vivado implementation, and timing closure
   remain unsupported.
+
+## 2026-07-03 — Rust rewrite Tile-K proof contract foundation
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Rust commit:
+`ed32bfdb22db8688306dc5c0a948d8d752cf29f8` (`Start Tile-K proof contract`).
+
+Compiler checkpoint:
+- Added an initial private Tile-K MemFold proof facade inside
+  `classifier/tiled2d.rs`: `TileKProfile`, `TileKMemFoldProof`, and
+  `TileKProofResult`.
+- Routed `classify_dense2d_tile_k_memfold` through `prove_tile_k_memfold` and
+  `program_from_tile_k_memfold_proof`, so the caller now consumes a named proof
+  result before reconstructing the same checked `Program`.
+- Preserved classifier diagnostic priority with a cheap Tile-K candidate
+  precheck before resolver work. This fixed a full-suite regression where an
+  unrelated control-FSM near miss reported resolver duplicate-name
+  `spatial:E0302` before the expected feature diagnostic `spatial:E0405`.
+- Added direct proof tests for the serial full-K profile and generic no-match
+  fallthrough.
+- Updated repo docs to record this as compiler foundation only, not broader
+  Tile-K/Scala/HLS support.
+
+Proof added:
+- Focused regression checks passed:
+  `cargo test --locked -p spatial-rs-core parser::tests::control_fsm_feature_name_collisions_use_feature_diagnostic`
+  and `cargo test --locked -p spatial-rs-core tile_k_contract`.
+- Full local gates passed:
+  `cargo test --locked`,
+  `cargo fmt --all -- --check`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`,
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-current-plan`, and
+  `git diff --check`.
+
+Boundary:
+- This slice does not change accepted syntax, checked payloads, manifests,
+  generated HLS, or the 31-program validation roster.
+- EC2/Vitis was skipped because emitted artifacts and validation membership did
+  not change.
+- The proof constructor currently wraps the existing helper sequence. The next
+  extraction step is to move loop-spine, access-role, phase, schedule, and
+  payload checks directly into the proof object and pin all four accepted
+  profiles with direct proof tests.
