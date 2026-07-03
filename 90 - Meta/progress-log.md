@@ -3695,3 +3695,51 @@ Boundary:
 - It does not imply generic Spatial `MemFold`, arbitrary GEMM schedules,
   banking inference, arbitrary fixed-point widths, K tiling on this
   non-outer-K path, board execution, Vivado implementation, or timing closure.
+
+## 2026-07-03 -- Rust rewrite c3e3be5 current-head Vitis refresh
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Source commit `c3e3be5` (`Split dense MemFold access proof`) was copied to
+  the EC2 Vitis host and rerun through the full current 35-program validation
+  roster with Vitis 2025.1.
+- Rust commit `231e072` (`Record c3e3be5 Vitis evidence`) imports the captured
+  evidence under
+  `docs/vitis-validation/2026-07-03-current-head-c3e3be5-35-program/`,
+  updates README/architecture/MVP/fixture docs to name that folder as the
+  active vendor-stability anchor, and updates the repo-local evidence-validator
+  test to cover the new checkpoint.
+
+EC2/Vitis proof:
+- Host: `[ec2-host — see private/ec2-lane.md]`, with
+  `/tools/Xilinx/2025.1/Vitis/settings64.sh`, `rustc 1.75.0`, and
+  `cargo 1.75.0`.
+- Remote run directory:
+  `/home/ubuntu/spatial-rs-runs/current-head-c3e3be5/spatial-rs`.
+- Remote command:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --out target/vitis-validation-current-head-c3e3be5 --settings /tools/Xilinx/2025.1/Vitis/settings64.sh`.
+- Remote summary: mode `both`, execution `execute`, 35 kernels, 0 failures;
+  every kernel reported Vitis `csim_design` and `csynth_design` success.
+
+Local proof after import:
+- `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_c3e3be5_checkpoint -- --nocapture`
+- `cargo test --locked -p spatial-rs-hls --test vitis_validation active_docs_name_c3e3be5_as_current_vendor_anchor -- --nocapture`
+- `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-03-current-head-c3e3be5-35-program --mode both`
+- `cargo test --locked -p ee109-examples --test ec2_toolchain_compat -- --nocapture`
+- `cargo test --locked -p spatial-rs-hls --test vitis_validation -- --nocapture`
+- `cargo test --locked -p ee109-examples`
+- `cargo test --locked -p spatial-rs-core`
+- `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`
+- `cargo fmt --all -- --check`
+- `git diff --check`
+
+Boundary:
+- This is a vendor-HLS stability refresh for the existing 35-program roster
+  after compiler-foundation proof factoring.
+- It proves Vitis C simulation and HLS synthesis for those exact kernels only.
+- It does not claim board execution, Vivado implementation/place-and-route,
+  timing closure, performance optimality, generic Spatial compatibility,
+  generic `MemFold`, arbitrary GEMM schedules, dynamic dimensions, or automatic
+  banking/scheduling inference.
