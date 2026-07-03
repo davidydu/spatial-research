@@ -9,6 +9,36 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite ScalarReduce/ScalarFold proof facts
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit `3498213` (`Record scalar reduction proof
+  facts`). The `ScalarReduce v0` and `ScalarFold v0` classifier paths now carry
+  private proof objects before checked IR construction. The proofs record
+  accepted output/input roles, reduction/fold indices, static length, tile, and
+  `par` bounds.
+- Added direct proof tests for `ScalarReduceSum16` and `ScalarFoldTileSum32`
+  source shapes. Updated README, the EE109 MVP plan, and the Rust rewrite
+  architecture note to describe the scalar proof boundary without claiming
+  broader scalar reduction/fold syntax.
+- Verification passed locally:
+  RED
+  `cargo test --locked -p spatial-rs-core scalar_reduce_proof_records_output_index_and_bounds -- --nocapture`
+  first failed on missing proof functions;
+  `cargo test --locked -p spatial-rs-core scalar_reduce -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core scalar_fold -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen scalar -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core`;
+  `cargo test --locked -p ee109-examples`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary: no accepted syntax, checked payload, generated HLS, manifest,
+  validation roster, or vendor evidence changed. No fresh EC2/Vitis run was
+  needed for this no-HLS-drift proof-factoring slice.
+
+---
+
 ## 2026-07-03 — Rust rewrite MemReduce/MemFold proof facts
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on
