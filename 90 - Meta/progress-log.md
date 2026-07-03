@@ -2136,3 +2136,36 @@ Boundary:
   post-implementation timing closure, generic Spatial compatibility, arbitrary
   GEMM support, automatic banking inference, broader `par` inference, II=1 for
   every loop, or performance optimality.
+
+## 2026-07-03 — Rust rewrite rank-2 access proof helper extraction
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Started Phase 2 of the full Rust Spatial rewrite roadmap by extracting the
+  rank-2 access fact matcher from the Tile-K classifier into
+  `classifier/rank2_access.rs`.
+- Reused the shared helper in the non-outer-K `Dense2dTileMemFold` path for
+  lhs tile load, rhs tile load, C preload, partial/accumulation fold, and final
+  C tile store checks.
+- Kept the existing structural recognizers in place first, then added
+  resolver-backed rank-2 fact checks as an additional fail-closed guard.
+- Added a non-outer-K `MatrixTileMemFold4x6x5` behavioral test that exercises
+  the new fold fact matcher on parsed/resolved HIR.
+- Updated the full Rust rewrite roadmap to mark the first helper-extraction
+  increment complete while leaving the broader negative-test matrix open.
+
+Proof added:
+- `cargo fmt --all -- --check`
+- `cargo test --locked`
+- `cargo clippy --all-targets --locked -- -D warnings`
+- `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-rank2-access-plan`
+
+Boundary:
+- This proves the local Rust parser/checker/HLS-emission test suite and the
+  35-program Vitis sidecar plan still pass after the proof-helper refactor.
+- This does not claim fresh EC2/Vitis execution, board execution, generic
+  Spatial compatibility, arbitrary rank-2 local-memory lowering, or completion
+  of the remaining fail-closed negative tests for swapped lanes, wrong K lanes,
+  wrong const provenance, and split-parent facts.
