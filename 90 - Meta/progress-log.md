@@ -1178,6 +1178,53 @@ Boundary:
   inference, banking inference, board execution, Vivado implementation, or
   timing closure.
 
+## 2026-07-03 — Rust rewrite Tile-K HLS schedule preflight ledger
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Rust commit: `3bd86c13c5ffe99828b8cf6fa46f136d8746b6e9`
+(`Extract Tile-K HLS schedule preflight`).
+
+HLS backend checkpoint:
+- Added crate-private `TileKScheduleLowering` and
+  `tile_k_schedule_lowering` in `crates/spatial-rs-hls/src/tile_k.rs`.
+- The Tile-K HLS ledger now owns schedule/payload factor agreement, ordered
+  Part6 partition-recipe validation, and the serial no-partitions guard before
+  the emitter renders pragmas.
+- `emit_dense2d_tile_k_memfold_kernel_plan` now consumes this helper instead
+  of carrying the Tile-K-specific preflight inline.
+- Existing generated C++ byte shape, manifests, and validation membership are
+  intended to remain unchanged; this is a backend reliability/refactoring
+  checkpoint, not a new HLS surface.
+
+Proof added:
+- Red-first tests initially failed because `tile_k_schedule_lowering` and
+  `TileKScheduleLowering` did not exist.
+- Focused green checks:
+  `cargo test --locked -p spatial-rs-hls tile_k_schedule_lowering`,
+  `cargo test --locked -p spatial-rs-hls tile_k_`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part6_fixed_32_matches_stable_scheduled_hls_snapshot`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part6_k_tail_preserves_existing_scheduled_tail_hls_and_manifest`, and
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k_part6_structural_par_preserves_scheduled_hls_and_manifest`.
+- Full local gates passed:
+  `cargo fmt --all -- --check`,
+  `cargo test --locked`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`,
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-tile-k-schedule-preflight-plan`, and
+  `git diff --check`.
+- The plan-only validation roster remained 33 kernels and 33 sidecar
+  `run_both.tcl` scripts.
+
+Boundary:
+- No EC2/Vitis rerun was needed because generated HLS, manifests, and
+  validation-program membership stayed unchanged.
+- This still does not add syntax, schedule support, banking inference,
+  checked-IR changes, arbitrary K tails, dynamic dimensions, board execution,
+  Vivado implementation, or timing closure.
+
 ## 2026-07-03 — Rust rewrite raw Lab2 GEMM K-tail source compatibility
 
 Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

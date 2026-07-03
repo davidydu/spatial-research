@@ -357,7 +357,11 @@ source proof`) added a private source-adapter proof object for the fixed raw
 Part5/Part6 shell profile and normalized single-`Accel` body before generated
 frontend-source emission. This kept accepted profiles, HLS, manifests, and the
 33-program validation roster unchanged, so it is also a no-HLS-drift compiler
-structure slice.
+structure slice. Follow-up Rust commit `3bd86c13c5ffe99828b8cf6fa46f136d8746b6e9`
+(`Extract Tile-K HLS schedule preflight`) continued the HLS ledger by moving
+schedule/payload factor agreement, ordered Part6 partition-recipe validation,
+and the serial no-partitions guard into `spatial_rs_hls::tile_k`; Lab2
+outer-K/HLS equality tests and the 33-program plan-only roster remained stable.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
