@@ -18,15 +18,44 @@ This note records the local stability state after the first EE109 HLS expansion 
 
 The supported claim is deliberately narrow: the selected EE109 examples compile through the local Spatial `--hls` lane into HLS-style C++, host-compile with the system `c++`, and pass their generated harnesses. This is not yet a Vitis/Vivado synthesis result.
 
-Current Rust rewrite delta, 2026-07-03: commit `fa33d55` added
-`MatrixTileMemFoldOuterKRowColTailInPlaceFixPt33x35x34` as the 34th local
-validation-program member. The canary proves serial Tile-K row/column/K tail
-bounds locally through parser, checked IR, HLS C++ emission, host harness,
-dry-run generation, and plan-only sidecars. Follow-up commit `2087625` kept the
-same source compatible with the EC2 Rust 1.75 toolchain, and the full
-34-program roster now passes Vitis `csim_design` and `csynth_design` on
+Current Rust rewrite delta, 2026-07-03: commit `d521a0f` added
+`MatrixTileMemFoldOuterKRowColTailInPlacePart6ScheduledFixPt33x35x34` as the
+35th local validation-program member. The canary proves scheduled Part6
+Tile-K row/column/K tail bounds locally and through EC2/Vitis: load/store loops
+stay runtime-bounded by `row_limit`/`col_limit`, scheduled compute loops stay
+static at the 16-wide tile bounds, and inactive lanes are guarded. The full
+35-program roster now passes Vitis `csim_design` and `csynth_design` on
 `xc7z020-clg400-1`. Durable evidence:
-`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-row-col-k-tail-34-program/`.
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-scheduled-row-col-k-tail-35-program/`.
+
+## 2026-07-03 Rust Rewrite Scheduled Row/Column/K-Tail Vitis Checkpoint
+
+The Rust rewrite branch `David/HLS-spatial` passed the full 35-program EE109
+validation roster through EC2/Vitis at source commit `d521a0f`.
+
+Evidence:
+- Remote host: `[ec2-host — see private/ec2-lane.md]`
+  (`ip-172-31-37-7`)
+- Remote run directory:
+  `/home/ubuntu/spatial-rs-runs/scheduled-row-col-k-tail-35-d521a0f/spatial-rs`
+- Durable evidence:
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-scheduled-row-col-k-tail-35-program/`
+- Result: all 35 programs reported `returncode=0`, `csim=true`, and
+  `csynth=true`.
+- New scheduled row/column/K-tail canary
+  `MatrixTileMemFoldOuterKRowColTailInPlacePart6ScheduledFixPt33x35x34`
+  reported estimated Fmax 136.99 MHz, estimated clock 7.300 ns, latency
+  2707-26872 cycles, interval 2708-26873 cycles, and utilization estimate
+  58 BRAM_18K, 131 DSP, 19307 FF, 13628 LUT, and 0 URAM.
+
+Evidence boundary:
+- This validates Vitis C simulation and HLS synthesis for the exact 35-program
+  Rust rewrite roster, including the scheduled Tile-K row/column/K-tail canary
+  with guarded inactive lanes.
+- It does not validate board execution, Vivado implementation/place-and-route,
+  post-implementation timing closure, generic Spatial compatibility, arbitrary
+  GEMM support, automatic banking inference, broader `par` inference, II=1 for
+  every loop, or performance optimality.
 
 ## 2026-07-03 Rust Rewrite Row/Column/K-Tail Vitis Checkpoint
 

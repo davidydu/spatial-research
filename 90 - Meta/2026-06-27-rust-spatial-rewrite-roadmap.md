@@ -29,9 +29,10 @@ The current `spatial-rs` work should therefore be treated as a tracer slice:
 `spatial-rs` currently has accepted fixture adapters for scalar add, dense 1-D DRAM/SRAM multiply, LUTs, one exact FSM, rank-2 copy groundwork, and one direct Lab3 convolution semantic adapter.
 
 Current Vitis status: the latest Rust rewrite vendor checkpoint is the
-2026-07-03 current-head 33-program control/FSM HLS plan-seam refresh captured in
-`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-control-fsm-plan-seam-current-head-33-program/`.
-The earlier current-head Tile-K loop-body cleanup, literal-`2`
+2026-07-03 35-program scheduled row/column/K-tail Tile-K refresh captured in
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-scheduled-row-col-k-tail-35-program/`.
+The earlier serial row/column/K-tail run, current-head harness cleanup,
+control/FSM plan-seam refresh, Tile-K loop-body cleanup, literal-`2`
 MemReduce/MemFold lane, Tile-K proof refresh, Lab2 alternate FSM, scheduled
 K-tail, current-head Tile-K facts, partition-helper, schedule-profile,
 scheduled Part6 canary, Lab3 raw-wrapper, post-refactor `ScalarSramTileFold v0`,
@@ -41,9 +42,10 @@ It validates the original adapter baseline plus the reusable
 scalar/dense/LUT/rank-2-copy/control/stencil/scalar-reduction/scalar-fold
 representatives, the local all-ones `MemReduceOnes16` / `MemFoldOnes16`
 canaries, `FifoTileScale32`, rank-2 tiled GEMM precursors, fixed-point MemFold,
-tail/min MemFold, explicit-inout C MemFold, and the static exact outer-K
-in-place C canary, the new exact scheduled Part6 outer-K canary, plus the
-Lab1 Part6 `SramTileFoldSum32` SRAM-tile fold canary through Vitis 2025.1
+tail/min MemFold, explicit-inout C MemFold, static exact outer-K in-place C,
+scheduled Part6 outer-K, serial and scheduled K-tail, serial and scheduled
+row/column/K-tail Tile-K canaries, plus the Lab1 Part6 `SramTileFoldSum32`
+SRAM-tile fold canary through Vitis 2025.1
 `csim_design` and `csynth_design`.
 Exact raw wrappers now exist for Lab1 Part4 FIFO, Lab2 Part1/Part2
 MemReduce/MemFold, fixed Lab2 Part5, fixed Lab2 Part6, and the local Lab3
@@ -179,7 +181,17 @@ Durable evidence is under
 `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-row-col-k-tail-34-program/`.
 The serial row/column/K-tail canary reports estimated Fmax 136.99 MHz and
 latency 2329-274840 cycles on `xc7z020-clg400-1`. Scheduled Part6 row/column
-tails remain rejected until lane guards or predicated lanes are designed.
+tails were then promoted in follow-up commit `d521a0f` (`Add scheduled row-col
+K-tail canary`). The new
+`MatrixTileMemFoldOuterKRowColTailInPlacePart6ScheduledFixPt33x35x34` canary
+keeps load/store loops runtime-bounded by `row_limit`/`col_limit`, keeps
+scheduled compute loops static at 16-wide tile bounds, and guards inactive
+lanes before `partial_tile` writes and `c_tile` accumulation. It is the 35th
+validation member, and the full 35-program EC2/Vitis run passed
+`csim_design` and `csynth_design`. Durable evidence is under
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-scheduled-row-col-k-tail-35-program/`.
+The scheduled row/column/K-tail canary reports estimated Fmax 136.99 MHz and
+latency 2707-26872 cycles on `xc7z020-clg400-1`.
 These wrappers are not generic Spatial `FIFO`, `Fold`, `MemReduce`, `MemFold`,
 GEMM, generic `par`, automatic banking inference, board execution, timing
 closure, or broad Scala source compatibility.

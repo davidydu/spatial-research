@@ -2003,3 +2003,57 @@ Boundary:
   post-implementation timing closure, generic Spatial compatibility, arbitrary
   GEMM support, automatic banking inference, broader `par` inference,
   scheduled row/column tails, II=1 for every loop, or performance optimality.
+
+## 2026-07-03 — Rust rewrite scheduled row/column/K tail 35-program Vitis checkpoint
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Rust commits:
+- `d521a0f` (`Add scheduled row-col K-tail canary`)
+- `d5816ad` (`Record scheduled row-col K-tail Vitis evidence`)
+
+Checkpoint:
+- Added the exact scheduled Part6 row/column/K-tail Tile-K canary
+  `MatrixTileMemFoldOuterKRowColTailInPlacePart6ScheduledFixPt33x35x34`.
+- The canary uses `ROWS=33`, `COLS=35`, `K=34`, 16-wide tiles, runtime
+  `row_limit`, `col_limit`, and `numel_k`, with fixed Part6
+  `partial_row_par=2` and `partial_col_par=16`.
+- HLS lowering keeps load/store loops runtime-bounded, keeps scheduled compute
+  loops static at the 16-wide tile bounds, and guards inactive lanes before
+  writing `partial_tile` or accumulating into `c_tile`.
+- Re-ran the full 35-program EE109 validation roster on EC2/Vitis. The source
+  snapshot was clean commit `d521a0f`, with evidence recorded at `d5816ad`.
+- Remote run directory:
+  `/home/ubuntu/spatial-rs-runs/scheduled-row-col-k-tail-35-d521a0f/spatial-rs`.
+- Remote-only setup note: the copied `Cargo.lock` was rewritten from lockfile
+  version 4 to version 3 so remote Cargo 1.75 could read it; the local repo
+  lockfile was unchanged.
+- Result: all 35 kernels reported `returncode=0`, `csim=true`, and
+  `csynth=true`.
+- Durable Rust evidence is captured under
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-scheduled-row-col-k-tail-35-program/`.
+
+Proof added:
+- Full local gates before the EC2 run passed:
+  `cargo fmt --all -- --check`, `cargo test --locked --quiet`,
+  `cargo clippy --all-targets --locked -- -D warnings`, and `git diff --check`.
+- EC2/Vitis 2025.1 `--execute --mode both` passed all 35 programs.
+- Evidence bundle includes 35 logs, 35 synthesis reports, 35 sidecar TCL files,
+  `summary-both.json`, `summary-both.md`, `README.md`, and
+  `evidence-manifest.json`.
+
+Canary evidence:
+- `MatrixTileMemFoldOuterKRowColTailInPlacePart6ScheduledFixPt33x35x34`:
+  estimated Fmax 136.99 MHz, estimated clock 7.300 ns, latency 2707-26872
+  cycles, interval 2708-26873 cycles, utilization estimate 58 BRAM_18K,
+  131 DSP, 19307 FF, 13628 LUT, and 0 URAM.
+
+Boundary:
+- This proves Vitis C simulation and HLS synthesis for the exact 35-program
+  validation set on `xc7z020-clg400-1`, including the scheduled Tile-K
+  row/column/K-tail runtime-bound canary with guarded inactive lanes.
+- This does not claim board execution, Vivado implementation/place-and-route,
+  post-implementation timing closure, generic Spatial compatibility, arbitrary
+  GEMM support, automatic banking inference, broader `par` inference, II=1 for
+  every loop, or performance optimality.
