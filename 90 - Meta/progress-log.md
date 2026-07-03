@@ -1222,3 +1222,54 @@ Boundary:
   extraction step is to move loop-spine, access-role, phase, schedule, and
   payload checks directly into the proof object and pin all four accepted
   profiles with direct proof tests.
+
+## 2026-07-03 — Rust rewrite Tile-K proof payload construction
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Rust commit:
+`24eb75b9d3a33003e1806fab5ea55055817deebe` (`Build Tile-K proof payload directly`).
+
+Compiler checkpoint:
+- Extended the private Tile-K proof contract with `TileKScheduleProof`.
+- Pinned all four current accepted Tile-K profiles with direct proof tests:
+  serial full-K, Part6 scheduled full-K, serial `K=34` tail, and Part6
+  scheduled `K=34` tail.
+- Added proof-level near-miss tests for unsupported Part6 schedule factors and
+  split-parent C-store grouping.
+- Changed the proof path so `build_tile_k_memfold_proof` constructs the
+  `Dense2dTileKMemFold` payload directly instead of first building a `Program`
+  and extracting the payload back out.
+- Preserved checked-IR validation and public diagnostic priority by
+  rehydrating the payload through the same checked `Program` helper before
+  accepting the proof. This fixed the transient regression where a wrong Part6
+  row-par near miss surfaced `spatial:E0415` instead of the previous
+  `spatial:E0300`.
+- Updated repo docs to record this as compiler foundation only, not broader
+  Tile-K, K-tail, schedule, Scala, or HLS support.
+
+Proof added:
+- Red-first proof-contract test initially failed at compile time because
+  `TileKMemFoldProof` did not yet expose a schedule sub-proof.
+- Focused checks passed:
+  `cargo test --locked -p spatial-rs-core tile_k`,
+  `cargo test --locked -p spatial-rs-core parser::tests::lab2_outer_k_infix_tile_io_near_misses_fail_closed`,
+  `cargo test --locked -p spatial-rs-core tile_k_contract`,
+  `cargo test --locked -p spatial-rs-hls lab2_outer_k`, and
+  `cargo test --locked -p spatial-rs-hls lab2_raw_part`.
+- Full local gates passed:
+  `cargo test --locked`,
+  `cargo fmt --all -- --check`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`,
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-current-plan`, and
+  `git diff --check`.
+
+Boundary:
+- This slice does not change accepted syntax, checked payloads, manifests,
+  generated HLS, or the 31-program validation roster.
+- EC2/Vitis was skipped because emitted artifacts and validation membership did
+  not change.
+- Remaining Tile-K proof work is internal factoring: move loop-spine,
+  access-role, phase, and schedule checks into smaller proof-owned helpers.
