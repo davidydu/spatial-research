@@ -9,6 +9,22 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite current-head 35-program EC2/Vitis refresh
+
+- Ran the full 35-program EE109 validation roster on EC2/Vitis for
+  `/Users/david/Documents/David_code/spatial-rs` (`David/HLS-spatial`) at clean
+  source commit `cc86ab5d2f62a335bd189fb7b1916990efc51ff2`. EC2 host
+  `[ec2-host — see private/ec2-lane.md]` / `ip-172-31-37-7` ran
+  Vitis 2025.1 with `/tools/Xilinx/2025.1/Vitis/settings64.sh`; all 35 kernels
+  reported `returncode=0`, `csim=true`, and `csynth=true`. Imported evidence is
+  in
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-current-head-cc86ab5-35-program/`
+  and validates locally with
+  `run-vitis-validation --validate-evidence ... --mode both`. Boundary: Vitis C
+  simulation and HLS synthesis only; no board execution, Vivado implementation,
+  place-and-route, timing closure, generic Spatial compatibility, or performance
+  optimality claim.
+
 ## 2026-07-03 — Rust rewrite Vitis evidence CLI validation
 
 - Added a `run-vitis-validation --validate-evidence <dir>` mode in
