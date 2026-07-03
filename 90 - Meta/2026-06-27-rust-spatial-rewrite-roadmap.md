@@ -342,8 +342,14 @@ passed after both commits. A current-head EC2/Vitis refresh on commit
 programs with `csim_design` and `csynth_design`; evidence is recorded in
 `docs/vitis-validation/2026-07-03-tile-k-proof-current-head/`. This remains a
 no-HLS-drift checkpoint because emitted artifacts and validation membership did
-not change. The next manager move is to choose the next EE109 feature gap or
-broaden a currently narrow adapter into a reusable supported feature.
+not change. Follow-up Rust commit `3137a8b` (`Start Tile-K HLS lowering ledger`)
+created crate-private `spatial_rs_hls::tile_k` and moved runtime/static
+K-loop-bound rendering out of the monolithic emitter into `tile_k_loop_bound`.
+Existing Lab2 outer-K and K-tail HLS/manifest preservation tests stayed green,
+and the plan-only validation roster remained 33 programs, so this is another
+no-HLS-drift backend reliability slice. The next manager move is to deepen that
+HLS lowering ledger or broaden a currently narrow adapter into a reusable
+supported feature.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked

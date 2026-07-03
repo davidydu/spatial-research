@@ -1611,3 +1611,43 @@ Boundary:
 - It does not claim generic Spatial `MemReduce` / `MemFold`, arbitrary reducer
   bodies, dynamic memory-reduction bounds, board execution, Vivado
   implementation, timing closure, or performance optimality.
+
+## 2026-07-03 — Rust rewrite Tile-K HLS lowering ledger start
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Rust commit:
+`3137a8b` (`Start Tile-K HLS lowering ledger`).
+
+Compiler checkpoint:
+- Added crate-private `crates/spatial-rs-hls/src/tile_k.rs` as the first
+  Tile-K HLS backend-ledger module.
+- Moved runtime/static K-loop-bound rendering out of the large HLS emitter into
+  `tile_k_loop_bound`.
+- The helper now owns both current cases:
+  full-K profiles use the static `TILE_K` loop bound, while K-tail profiles
+  emit the runtime `numel_k = min(TILE_K, K - kk*TILE_K)` declaration.
+- The emitter now consumes this helper; generated HLS and manifests are intended
+  to stay byte-stable.
+
+Proof added:
+- Red-first `tile_k_loop_bound` tests failed on the intentional `todo!`, then
+  passed after implementation.
+- Focused HLS stability tests passed:
+  `cargo test --locked -p spatial-rs-hls tile_k_loop_bound`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k`, and
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part6_k_tail_preserves_existing_scheduled_tail_hls_and_manifest`.
+- Full local gates passed:
+  `cargo fmt --all -- --check`, `git diff --check`, `cargo test --locked`,
+  `cargo clippy --all-targets --locked -- -D warnings`, and
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-tile-k-ledger-plan`.
+- The plan-only validation summary still contains 33 kernels and 33 sidecar
+  Tcl files.
+
+Boundary:
+- This is a no-HLS-drift backend reliability slice. It does not change accepted
+  syntax, checked IR, manifests, generated HLS, validation membership, or vendor
+  evidence.
+- Fresh EC2/Vitis was not needed because the generated HLS/manifest stability
+  tests and plan-only roster stayed unchanged.
