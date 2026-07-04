@@ -247,14 +247,18 @@ is now the 29th validation-program member with EC2/Vitis `csim_design` and
 Except for wrappers that introduced or rode a new canonical validation payload,
 these adapters route to existing canaries without adding validation-program
 membership or new Vitis evidence. The fixed Lab2 Part5/Part6 wrappers now
-accept only `runtimeArgs = "32 32 32"` or the exact named K-tail
-`runtimeArgs = "32 32 34"` profile. For `K=32`, Part5 canonicalizes to the
+accept only `runtimeArgs = "32 32 32"`, the exact named K-tail
+`runtimeArgs = "32 32 34"` profile, or the exact row/column/K-tail
+`runtimeArgs = "33 35 34"` profile. For `K=32`, Part5 canonicalizes to the
 serial outer-K canary and Part6 canonicalizes to
 `MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32`, preserving the
 exact `par 2` / `par 16` source shape as checked schedule metadata and emitting
 the corresponding HLS `PIPELINE`, `UNROLL`, and local-array partition pragmas.
 For the exact `K=34` profile, raw Part5/Part6 canonicalize to the existing
 serial/scheduled K-tail canaries with generated HLS/manifest equality.
+For the exact `33 35 34` profile, raw Part5/Part6 canonicalize to the existing
+serial/scheduled row/column/K-tail canaries with generated HLS/manifest
+equality.
 The structural Lab2-like outer-K bridge now reaches that same scheduled Part6
 payload for infix tile IO, static offset-loop, and exact static
 `numel_k = min(TILE_K.to[Int], K - kk)` source shapes when the partial-tile fill
@@ -302,17 +306,17 @@ same parent statement, and row/column lane symbol identity while preserving the
 existing AST operator guard and accepting the Lab2 MemFold sugar's same-span
 sibling loop symbols. The fixed Tile-K phase spine is resolver-guarded, while
 broader Tile-K phase recognition beyond that spine still remains unsupported.
-The exact raw Lab1 Part6 wrapper is different: it canonicalizes to the new
+The exact raw Lab1 Part6 wrapper is different: it canonicalizes to the
 `SramTileFoldSum32` / `ScalarSramTileFold v0` structural canary, the 27th local
-validation member. The local validation list is 33 programs after the separate
-scheduled Lab2 Part6 `MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32`
-member, the named serial K-tail
-`MatrixTileMemFoldOuterKTailInPlaceFixPt32x32x34`, the scheduled K-tail
-`MatrixTileMemFoldOuterKTailInPlacePart6ScheduledFixPt32x32x34`, and
-`Lab2Part3BasicCondFSMAlt`, `MemReduceTwos16`, and `MemFoldTwos16`. A
-then-current Tile-K HLS loop-body cleanup checkpoint captured 33-program
-EC2/Vitis `csim_design`/`csynth_design` evidence in
-`docs/vitis-validation/2026-07-03-tile-k-loop-body-current-head-33-program/`.
+validation member. The local validation list later grew to 35 programs after
+the separate scheduled Lab2 Part6
+`MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32` member, the named
+serial/scheduled K-tail members, `Lab2Part3BasicCondFSMAlt`,
+`MemReduceTwos16`, `MemFoldTwos16`, and the serial/scheduled row/column/K-tail
+`33 35 34` Tile-K canaries. A then-current Tile-K HLS loop-body cleanup
+checkpoint captured 33-program EC2/Vitis `csim_design`/`csynth_design` evidence
+in `docs/vitis-validation/2026-07-03-tile-k-loop-body-current-head-33-program/`;
+the active current-head vendor anchor is now the 35-program `7a350983` refresh.
 The current Tile-K HLS backend-ledger cleanup has now moved K-loop bounds,
 local storage declarations, schedule/partition preflight, serial/scheduled
 tile-body rendering, and the kernel frame itself into crate-private HLS helper

@@ -833,11 +833,14 @@ commit `73032944`, captured in
 `docs/vitis-validation/2026-07-04-current-head-7a350983-35-program/`. Use it
 as the vendor-stability anchor for the current EE109 MVP roster.
 
-The latest local MemReduce/MemFold static-literal widening is a bounded
-semantic slice with local HLS harness evidence but no validation-roster change.
-The follow-up affine HIR index predicate helper is no-HLS-drift compiler
-infrastructure. The natural next implementation action is another single
-semantic slice chosen with the same fail-closed evidence ladder.
+The latest local no-HLS-drift compiler-structure work after the `7a350983`
+vendor anchor is the Dram2dCopy plan-frame guard and Tile-K fold/update proof
+cleanup. Earlier MemReduce/MemFold static-literal widening remains the first
+bounded semantic slice with local HLS harness evidence but no validation-roster
+change. The natural next implementation action is either another small
+proof/helper-boundary slice with local equality gates or, when ready for a
+larger step, promoting the existing non-lab MemReduce/MemFold canaries into a
+fresh validation roster with EC2/Vitis evidence.
 Byte-stable refactors should keep using local equality, dry-run/plan, full
 test, clippy, and evidence-validator gates; any generated-HLS text change or
 validation-roster change should trigger a fresh EC2/Vitis execution.
