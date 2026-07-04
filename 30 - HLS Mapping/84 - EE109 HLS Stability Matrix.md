@@ -51,6 +51,14 @@ frontend/HIR proof structure only; accepted syntax, checked payloads,
 generated HLS, manifests, validation membership, imported Vitis evidence, and
 the active `7a350983` vendor-HLS anchor are unchanged.
 
+Current local no-fresh-Vitis update, 2026-07-04: Rust commit `2841cc56`
+moves Tile-K body/ABI-param adaptation into `spatial_rs_hls::tile_k`. The
+shared `tile_k_frame_from_plan` helper now rejects malformed internal Tile-K
+plans unless ABI params are exactly `[lhs, rhs, c_inout]` in order before
+kernel or harness rendering. This is backend structure only; accepted syntax,
+generated valid HLS, manifests, validation membership, imported Vitis evidence,
+and the active `7a350983` vendor-HLS anchor are unchanged.
+
 Current local no-fresh-Vitis update, 2026-07-04: `MemReduceFill v0` /
 `MemFoldFill v0` now accept supported static rank-1 lengths beyond the 16-lane
 lab representative and arbitrary integer literal temp fills in the bounded
@@ -834,13 +842,14 @@ commit `73032944`, captured in
 as the vendor-stability anchor for the current EE109 MVP roster.
 
 The latest local no-HLS-drift compiler-structure work after the `7a350983`
-vendor anchor is the Dram2dCopy plan-frame guard and Tile-K fold/update proof
-cleanup. Earlier MemReduce/MemFold static-literal widening remains the first
-bounded semantic slice with local HLS harness evidence but no validation-roster
-change. The natural next implementation action is either another small
-proof/helper-boundary slice with local equality gates or, when ready for a
-larger step, promoting the existing non-lab MemReduce/MemFold canaries into a
-fresh validation roster with EC2/Vitis evidence.
+vendor anchor is the Dram2dCopy plan-frame guard, Tile-K fold/update proof
+cleanup, and Tile-K plan-frame guard. Earlier MemReduce/MemFold static-literal
+widening remains the first bounded semantic slice with local HLS harness
+evidence but no validation-roster change. The natural next implementation
+action is either another small proof/helper-boundary slice with local equality
+gates or, when ready for a larger step, promoting the existing non-lab
+MemReduce/MemFold canaries into a fresh validation roster with EC2/Vitis
+evidence.
 Byte-stable refactors should keep using local equality, dry-run/plan, full
 test, clippy, and evidence-validator gates; any generated-HLS text change or
 validation-roster change should trigger a fresh EC2/Vitis execution.

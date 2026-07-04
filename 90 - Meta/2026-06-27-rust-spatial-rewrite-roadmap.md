@@ -51,6 +51,13 @@ The latest local backend-structure cleanup is Rust commit `88e33a09`
 swapped or extra ABI params before kernel or harness rendering. Accepted syntax,
 generated valid HLS, manifests, validation membership, imported Vitis evidence,
 and the active `7a350983` vendor-HLS anchor are unchanged.
+The latest Tile-K backend-structure cleanup is Rust commit `2841cc56` (`Guard
+Tile-K plan frames`). It moves Tile-K body/ABI-param adaptation into
+`spatial_rs_hls::tile_k`, rejecting malformed internal Tile-K plans with
+swapped, missing, or extra ABI params unless they are exactly
+`[lhs, rhs, c_inout]` in order before kernel or harness rendering. Accepted
+syntax, generated valid HLS, manifests, validation membership, imported Vitis
+evidence, and the active `7a350983` vendor-HLS anchor are unchanged.
 The latest local frontend/HIR proof cleanup is Rust commit `52953ae0`
 (`Name Tile-K fold update proof`). It replaces the Tile-K fold schedule-only
 helper with `TileKFoldUpdateProof`, recording row/column/K update domains,

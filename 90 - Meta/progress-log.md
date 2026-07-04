@@ -9,6 +9,35 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 -- Rust rewrite Tile-K plan-frame guard
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `2841cc56ac3a081cae56e03f8b9a1ef04b39998a` (`Guard Tile-K plan frames`).
+- Moved Tile-K HLS body/ABI-param adaptation into `spatial_rs_hls::tile_k`
+  via `tile_k_frame_from_plan`.
+- New fail-closed coverage rejects malformed internal Tile-K plans with
+  swapped, missing, or extra ABI params unless they are exactly
+  `[lhs, rhs, c_inout]` in order before either kernel or harness rendering.
+- Red test:
+  `cargo test --locked -p spatial-rs-hls tile_k_frame_from_plan_requires_exact_ordered_params -- --nocapture`
+  first failed because `tile_k_frame_from_plan` did not exist.
+- Verification passed:
+  `cargo fmt --all -- --check`;
+  `cargo test --locked -p spatial-rs-hls -- --nocapture`;
+  `cargo clippy -p spatial-rs-hls --all-targets --locked -- -D warnings`;
+  `cargo test --locked -p ee109-examples --test run_vitis_validation run_vitis_validation_validate_evidence_accepts_current_checkpoint -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_7a350983_checkpoint -- --nocapture`;
+  `cargo run --locked -p ee109-examples --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-04-current-head-7a350983-35-program --mode both`;
+  `git diff --check` in the Rust repo.
+- A `gpt-5.5`/`xhigh` reviewer subagent reported no blocking issues; one
+  reviewer suggestion added the explicit missing-param assertion.
+- Boundary: this is no-HLS-drift backend structure. It does not change accepted
+  syntax, generated valid HLS, manifests, validation membership, imported Vitis
+  evidence, or the active `7a350983` vendor-HLS anchor. No fresh EC2/Vitis run
+  was needed.
+
 ## 2026-07-04 -- Rust rewrite Tile-K fold/update proof
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
