@@ -26,27 +26,22 @@ The current `spatial-rs` work should therefore be treated as a tracer slice:
 
 ## Current Position
 
-`spatial-rs` currently has accepted fixture adapters for scalar add, dense 1-D DRAM/SRAM multiply, LUTs, one exact FSM, rank-2 copy groundwork, and one direct Lab3 convolution semantic adapter.
+`spatial-rs` currently has a 35-program EE109 MVP validation roster covering
+the lab fixtures plus narrow reusable representatives for scalar expressions,
+reductions/folds, SRAM tile fold, LUT lookup, rank-1/2 dense kernels, MemReduce
+/ MemFold fill, FIFO tile scaling, ControlFsm, Stencil2d/Sobel, and named
+Tile-K GEMM/tail/schedule canaries.
 
 Current Vitis status: the latest Rust rewrite vendor checkpoint is the
-2026-07-03 35-program current-head refresh at source commit `c862e57a`,
+2026-07-04 35-program current-head refresh at source commit `eb4f6236`,
 captured in
-`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-current-head-c862e57a-35-program/`.
-It refreshes the same 35-program roster after the non-outer-K
-`Dense2dTileMemFold` proof-helper cleanup plus the `Dram2dCopy`, Dense1d, and
-FIFO proof-boundary cleanups.
-After that vendor snapshot, the local rank-1 classifier path now shares a
-DRAM/scalar ABI proof and tiled local-I/O shell proof between
-`Dense1dScalarMul v0` and `Fifo1dTileScalarMul v0`. This is compiler
-foundation work only: Dense compute and FIFO effect proofs remain feature-local,
-and the active Vitis evidence anchor is still the `c862e57a` 35-program
-refresh pending any later EC2/Vitis rerun.
-The follow-up local rank-2 classifier path now shares the tile-copy role proof
-between non-outer-K `Dense2dTileMemFold` C preload/store and Tile-K C
-preload/store. This is also compiler foundation work only: feature-local syntax
-gates and higher-level proofs remain separate, generated HLS and validation
-membership are unchanged, and the active Vitis evidence anchor is still
-`c862e57a` pending any later EC2/Vitis rerun.
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-04-current-head-eb4f6236-35-program/`.
+It refreshes the same 35-program roster after the proof-boundary and HLS helper
+cleanups through the MemReduce/MemFold fill harness extraction. All 35 programs
+passed EC2/Vitis 2025.1 `csim_design` and `csynth_design`; this proves vendor
+HLS acceptance for the exact roster only, not board execution, implementation,
+timing closure, performance optimality, generic Spatial compatibility, or broad
+Scala source compatibility.
 The quarantined raw Lab2 GEMM source adapter has also been tightened locally:
 Rust commit `38c5ebfddcc984d4c1af5407824d0246cf11f3e0` records exact A/B/C
 preload and C-store rank-2 tile-I/O role/window facts in the private raw source

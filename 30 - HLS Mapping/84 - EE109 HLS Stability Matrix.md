@@ -16,7 +16,21 @@ depends_on:
 
 This note records the local stability state after the first EE109 HLS expansion pass on the Spatial branch `David/HLS-spatial`.
 
-The supported claim is deliberately narrow: the selected EE109 examples compile through the local Spatial `--hls` lane into HLS-style C++, host-compile with the system `c++`, and pass their generated harnesses. This is not yet a Vitis/Vivado synthesis result.
+The supported claim is deliberately narrow: the selected EE109 examples compile
+through the local Spatial `--hls` lane into HLS-style C++, host-compile with
+the system `c++`, pass their generated harnesses, and for the current Rust
+rewrite 35-program roster pass EC2/Vitis `csim_design` and `csynth_design`.
+This is still not board execution, Vivado implementation, timing closure, or a
+generic Spatial compatibility claim.
+
+Current Rust rewrite delta, 2026-07-04: Rust commit `eb4f6236` is now the
+active current-head vendor-HLS checkpoint. The full 35-program roster passed
+EC2/Vitis 2025.1 `csim_design` and `csynth_design` after the later
+proof-boundary and HLS helper cleanups through the MemReduce/MemFold fill
+harness extraction. Durable evidence:
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-04-current-head-eb4f6236-35-program/`.
+This supersedes older notes below that say the active anchor remains
+`c862e57a`.
 
 Current Rust rewrite delta, 2026-07-03: commit `d521a0f` added
 `MatrixTileMemFoldOuterKRowColTailInPlacePart6ScheduledFixPt33x35x34` as the
@@ -59,9 +73,9 @@ Later no-fresh-Vitis policy update, 2026-07-03: Rust commit
 Part5/Part6 wrappers to neutral checked-IR Tile-K profiles. The parser now
 checks the generated frontend program against the expected profile, while
 accepted raw syntax, generated HLS, manifests, validation membership, and
-imported Vitis evidence are unchanged. No fresh EC2/Vitis run is needed for
-this profile bridge. The active current-head vendor-HLS anchor remains
-`c862e57a`.
+imported Vitis evidence are unchanged. No fresh EC2/Vitis run was needed for
+this profile bridge at the time; the active current-head vendor-HLS anchor is
+now `eb4f6236`.
 
 Rust commit `0f16af3e7b042554369ce69972da580078651c6a` tightened the known
 local Lab3 teaching wrapper from exact raw-wrapper equality to a scoped source
@@ -70,8 +84,9 @@ setup facts before the single `Accel`, and local-window facts for
 `lb`/`sr`/`lineOut`, `kh`/`kv`, row/column/shift loops, border handling, and
 the `par 16` store before canonical `Lab3Part1Convolution` payload emission.
 Generated HLS, manifests, validation membership, and imported Vitis evidence
-are unchanged, so no fresh EC2/Vitis run is needed for this source-proof
-cleanup. The active current-head vendor-HLS anchor remains `c862e57a`.
+are unchanged, so no fresh EC2/Vitis run was needed for this source-proof
+cleanup at the time; the active current-head vendor-HLS anchor is now
+`eb4f6236`.
 
 A verified working-tree follow-up now records the accepted `Stencil2d v0`
 Sobel source shape plus resolved row/column/shift local-window facts in a
@@ -81,8 +96,9 @@ planning. The Rust commit is pending because the Codex app approval/usage gate
 blocked the escalated Git index write, but local fmt, diff hygiene, clippy,
 core, EE109 examples, and HLS package tests passed. Accepted syntax, generated
 HLS, manifests, validation membership, and imported Vitis evidence are
-unchanged, so no fresh EC2/Vitis run is needed for this proof/preflight
-cleanup. The active current-head vendor-HLS anchor remains `c862e57a`.
+unchanged, so no fresh EC2/Vitis run was needed for this proof/preflight
+cleanup at the time; the active current-head vendor-HLS anchor is now
+`eb4f6236`.
 
 A second verified working-tree cleanup tightens the same raw Lab3 ingress:
 the accepted raw `Accel` island must be a direct top-level statement in `main`,

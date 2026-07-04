@@ -9,6 +9,42 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 — Rust rewrite eb4f6236 current-head Vitis refresh
+
+- Re-ran the full 35-program EE109 validation roster on
+  `[ec2-host — see private/ec2-lane.md]` using Vitis/Vivado 2025.1
+  and Rust/Cargo 1.75. Source snapshot: Rust commit `eb4f6236` on branch
+  `David/HLS-spatial`.
+- Remote workspace:
+  `/home/ubuntu/spatial-rs-runs/current-head-20260704-eb4f6236/spatial-rs`.
+  Remote command used the existing runner:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --out /home/ubuntu/spatial-rs-runs/current-head-20260704-eb4f6236/evidence`.
+- EC2/Vitis result: all 35 kernels reported `returncode=0`,
+  `csim=true`, and `csynth=true`. This covers Vitis C simulation and HLS
+  synthesis for the exact EE109 MVP validation roster only.
+- Imported evidence:
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-04-current-head-eb4f6236-35-program/`.
+  The imported bundle is about 686 MB and contains per-kernel project
+  directories plus `logs/`, `reports/`, `sidecars/`, `summary-both.md`, and
+  `summary-both.json`.
+- Repo-local validation passed:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-04-current-head-eb4f6236-35-program --mode both`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_eb4f6236_checkpoint -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation active_docs_name_eb4f6236_as_current_vendor_anchor -- --nocapture`;
+  `cargo test --locked -p ee109-examples --test run_vitis_validation run_vitis_validation_validate_evidence_accepts_current_checkpoint -- --nocapture`;
+  `cargo test --locked -p ee109-examples --test ec2_toolchain_compat -- --nocapture`;
+  `cargo test --locked -p ee109-examples --quiet`;
+  `cargo test --locked -p spatial-rs-hls --quiet`;
+  `cargo fmt --all -- --check`;
+  `cargo test --locked -p spatial-rs-core --quiet`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary: this refresh supersedes `c862e57a` as the active current-head
+  vendor-HLS evidence anchor. It does not claim board execution, Vivado
+  implementation, timing closure, generic Spatial compatibility, broad Scala
+  source compatibility, performance optimality, or any roster expansion beyond
+  the existing 35 validation programs.
+
 ## 2026-07-04 — Rust rewrite MemReduce/MemFold fill HLS harness helper
 
 - Moved the `MemReduceFill v0` and `MemFoldFill v0` host-harness renderer
