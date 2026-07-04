@@ -9,6 +9,32 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 — Rust rewrite Dense1d HLS harness helper
+
+- Moved the `Lab1Part2DramSramExample` / `DenseScale64`
+  `Dense1dScalarMul v0` host-harness renderer behind
+  `crates/spatial-rs-hls/src/dense1d_tile_scalar_mul.rs`, beside the existing
+  rank-1 Dense1d kernel frame. `emit.rs` now lowers to the HLS plan, resolves
+  ABI params, builds a Dense1d harness frame, and delegates to the Dense1d
+  helper.
+- Verification passed locally:
+  RED
+  `cargo test -p spatial-rs-hls --locked dense1d_tile_scalar_mul_harness_uses_entry_symbol_ports_cases_and_display_name -- --nocapture`
+  first failed because the Dense1d harness frame/function did not exist;
+  focused rerun passed;
+  `cargo test -p spatial-rs-hls --locked dense1d -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen dense -- --nocapture`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`;
+  vault `git diff --check`;
+  `cargo test --locked -p spatial-rs-core --quiet`;
+  `cargo test --locked -p spatial-rs-hls --quiet`;
+  `cargo test --locked -p ee109-examples --quiet`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`.
+- Boundary: generated Dense1d kernel text, manifests, validation roster, and
+  imported Vitis evidence are unchanged. No EC2/Vitis run is needed for this
+  helper extraction.
+
 ## 2026-07-04 — Rust rewrite Dense2dTileMemFold HLS harness helper
 
 - Moved the non-outer-K `Dense2dTileMemFold v0` host-harness renderer behind

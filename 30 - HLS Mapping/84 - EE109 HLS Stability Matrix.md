@@ -159,6 +159,13 @@ dispatcher and ABI adapter. This is a backend helper-boundary cleanup only:
 generated kernel text, manifests, validation membership, and imported Vitis
 evidence are unchanged, and no fresh EC2/Vitis run is needed.
 
+A twelfth verified working-tree cleanup moves the
+`Lab1Part2DramSramExample` / `DenseScale64` host-harness renderer into
+`spatial_rs_hls::dense1d_tile_scalar_mul`, beside the existing rank-1 Dense1d
+kernel frame. This is a backend helper-boundary cleanup only: generated kernel
+text, manifests, validation membership, and imported Vitis evidence are
+unchanged, and no fresh EC2/Vitis run is needed.
+
 ## 2026-07-03 Rust Rewrite Raw-Adapter Retirement 35-Program Vitis Checkpoint
 
 The Rust rewrite branch `David/HLS-spatial` passed the full 35-program EE109

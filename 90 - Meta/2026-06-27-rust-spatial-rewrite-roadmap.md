@@ -152,6 +152,13 @@ frame. Split-C, tail, exact fixed-point, and explicit in-place C harness paths
 still route through `emit.rs` as the plan dispatcher and ABI plan-to-frame
 adapter. This is no-HLS-drift backend helper work; generated kernels,
 manifests, validation membership, and imported Vitis evidence are unchanged.
+A twelfth verified working-tree checkpoint moves the
+`Lab1Part2DramSramExample` / `DenseScale64` host-harness renderer into
+`crates/spatial-rs-hls/src/dense1d_tile_scalar_mul.rs`, beside the existing
+rank-1 Dense1d kernel frame. `emit.rs` remains the plan dispatcher and ABI
+plan-to-frame adapter. This is no-HLS-drift backend helper work; generated
+kernels, manifests, validation membership, and imported Vitis evidence are
+unchanged.
 A seventh verified working-tree checkpoint moves `Dense2dTileKMemFold v0`
 host-harness rendering into `crates/spatial-rs-hls/src/tile_k.rs`, beside the
 existing Tile-K kernel frame/body helpers. `emit.rs` remains the plan
@@ -290,6 +297,11 @@ A later no-HLS-drift dense backend slice moved the non-outer-K
 `Dense2dTileMemFold v0` host harness into `spatial_rs_hls::memfold`, matching
 the same helper pattern while preserving generated HLS, manifests, validation
 membership, and vendor-evidence boundaries.
+A later no-HLS-drift dense backend slice moved the
+`Lab1Part2DramSramExample` / `DenseScale64` host harness into
+`spatial_rs_hls::dense1d_tile_scalar_mul`, matching the same helper pattern
+while preserving generated HLS, manifests, validation membership, and
+vendor-evidence boundaries.
 A later no-HLS-drift dense backend slice moved the `Dense2dTileScalarMul`
 renderer into `spatial_rs_hls::tile_scalar_mul`, matching the same small-helper
 pattern while preserving generated HLS, manifests, validation membership, and
