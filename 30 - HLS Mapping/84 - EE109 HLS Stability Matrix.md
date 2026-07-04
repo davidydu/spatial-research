@@ -43,6 +43,18 @@ stores, and bad MemFold zero-initialization. This does not change the
 35-program validation roster or imported Vitis evidence; exact raw Lab2
 Part1/Part2 Scala adapters remain all-ones 16-lane compatibility wrappers.
 
+Current local no-fresh-Vitis update, 2026-07-04: Rust commit `c4f8eea6`
+extends the quarantined raw `Lab2Part5GEMM` and `Lab2Part6GEMM` adapters to
+admit the exact lab
+row/column/K-tail runtime tuple `runtimeArgs = "33 35 34"`. Part5 maps to the
+existing `MatrixTileMemFoldOuterKRowColTailInPlaceFixPt33x35x34` payload and
+Part6 maps to
+`MatrixTileMemFoldOuterKRowColTailInPlacePart6ScheduledFixPt33x35x34`, with
+parser, generated HLS, and manifest equality against those existing
+Vitis-proven canaries. Near-miss dimensions and wrong Part6 par factors remain
+fail-closed. This does not change the 35-program validation roster or imported
+Vitis evidence.
+
 Current Rust rewrite delta, 2026-07-03: commit `d521a0f` added
 `MatrixTileMemFoldOuterKRowColTailInPlacePart6ScheduledFixPt33x35x34` as the
 35th local validation-program member. The canary proves scheduled Part6

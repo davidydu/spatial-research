@@ -58,6 +58,13 @@ profile mappings are Part5 fixed32 -> `SerialFullK`, Part6 fixed32 ->
 `Part6ScheduledKTail`. This is still no-HLS-drift compiler structure work:
 accepted raw syntax, generated HLS, manifests, validation membership, and
 imported Vitis evidence are unchanged.
+Follow-up Rust commit `c4f8eea6` (`Accept raw Lab2 row-col K-tail GEMM`) admits
+only the exact row/column/K-tail lab runtime tuple `runtimeArgs = "33 35 34"`
+in that same quarantined adapter. Part5 maps to `SerialRowColKTail` and Part6
+maps to `Part6ScheduledRowColKTail`, preserving generated HLS/manifest equality
+with the existing serial and scheduled row/column/K-tail Vitis-proven canaries.
+Near-miss dimensions and wrong Part6 par factors remain fail-closed; validation
+membership and imported Vitis evidence are unchanged.
 The known local Lab3 convolution teaching wrapper has also moved off exact raw
 wrapper equality. Rust commit
 `0f16af3e7b042554369ce69972da580078651c6a` (`Record raw Lab3 source proof`)

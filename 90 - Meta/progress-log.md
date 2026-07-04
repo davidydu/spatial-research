@@ -4755,3 +4755,69 @@ Boundary:
 - It does not imply generic rank-2 memory lowering, alias analysis, broader
   GEMM/MemFold support, board execution, Vivado implementation, timing closure,
   or completion of the full Spatial rewrite.
+
+## 2026-07-04 -- Rust rewrite raw Lab2 GEMM row/column/K-tail adapter
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `c4f8eea6a8c9ef9c9e20c9bf7f92526568859ec9` (`Accept raw Lab2
+  row-col K-tail GEMM`) extends the quarantined raw `Lab2Part5GEMM` and
+  `Lab2Part6GEMM` source adapter to the exact lab runtime profile
+  `runtimeArgs = "33 35 34"`.
+- Part5 now maps to the existing
+  `MatrixTileMemFoldOuterKRowColTailInPlaceFixPt33x35x34` checked payload and
+  neutral Tile-K profile `SerialRowColKTail`.
+- Part6 now maps to the existing
+  `MatrixTileMemFoldOuterKRowColTailInPlacePart6ScheduledFixPt33x35x34`
+  checked payload and neutral Tile-K profile `Part6ScheduledRowColKTail`.
+- The adapter remains token-stream quarantined and exact: near-miss dimensions,
+  wrong Part6 par factors, dynamic dimensions, broader K/row/column tails,
+  generic `par`, inferred banking, and broad Scala source compatibility remain
+  fail-closed.
+- Updated the Rust README, fixture matrix, EE109 MVP plan, architecture note,
+  superpowers roadmap, vault stability matrix, vault roadmap, and this progress
+  log.
+
+Subagent review:
+- A `gpt-5.5` `xhigh` read-only review subagent found no blocking, important,
+  or minor issues.
+- The reviewer confirmed that exact `runtimeArgs` matching is still limited to
+  the named strings, the new profile maps only to the existing row/column/K-tail
+  Tile-K profiles, and no validation roster or Vitis evidence files changed.
+
+Proof:
+- Red check:
+  `cargo test -p spatial-rs-core --locked lab2_fixed_gemm_adapters_accept_exact_row_col_k_tail_runtime_args -- --nocapture`
+  failed first because the adapter did not match `33 35 34`.
+- Focused checks:
+  `cargo test -p spatial-rs-core --locked lab2_fixed_gemm_adapters_accept_exact_row_col_k_tail_runtime_args -- --nocapture`,
+  `cargo test -p spatial-rs-core --locked lab2_fixed_gemm_source_proof_records_row_col_k_tail_profile -- --nocapture`,
+  `cargo test -p spatial-rs-core --locked parse_accel_accepts_raw_lab2_part5_row_col_k_tail -- --nocapture`,
+  `cargo test -p spatial-rs-core --locked parse_accel_accepts_raw_lab2_part6_row_col_k_tail_as_scheduled_payload -- --nocapture`,
+  `cargo test -p spatial-rs-core --locked raw_lab2_gemm_row_col_k_tail_near_misses_fail_closed -- --nocapture`,
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_raw_part5_row_col_k_tail -- --nocapture`,
+  and
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_raw_part6_row_col_k_tail -- --nocapture`.
+- Broader local verification:
+  `cargo test -p spatial-rs-core --locked lab2_fixed_gemm -- --nocapture`,
+  `cargo test -p spatial-rs-core --locked parse_accel_lab2_outer_k -- --nocapture`,
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_outer_k -- --nocapture`,
+  `cargo test -p spatial-rs-hls --locked --test vitis_validation scheduled_row_col_k_tail -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core --quiet`,
+  `cargo test --locked -p spatial-rs-hls --quiet`,
+  `cargo test --locked -p ee109-examples --quiet`,
+  `cargo fmt --all -- --check`,
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`,
+  `git diff --check` in the Rust repo,
+  and `git diff --check` in the vault.
+
+Boundary:
+- This is a bounded source-adapter compatibility slice.
+- It does not add validation-program membership, generated-HLS surface area, or
+  fresh EC2/Vitis evidence; it maps exact raw lab sources to existing
+  Vitis-proven row/column/K-tail canaries.
+- It does not imply arbitrary GEMM dimensions, generic row/column tails, broad
+  Scala source compatibility, board execution, Vivado implementation, timing
+  closure, or completion of the full Spatial rewrite.
