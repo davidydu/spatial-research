@@ -3999,3 +3999,61 @@ Boundary:
   timing closure, performance optimality, generic Spatial compatibility,
   arbitrary FIFO/stream support, broad rank-1/rank-2 lowering, automatic
   banking/scheduling inference, or completion of the full Spatial rewrite.
+
+## 2026-07-03 -- Rust rewrite shared rank-1 proof shell
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `2f527aa4` (`Share rank-1 classifier proof shell`) records a
+  local no-HLS-drift rank-1 classifier cleanup.
+- `Dense1dScalarMul v0` and `Fifo1dTileScalarMul v0` now share a
+  `rank1_dram_scalar_ports` helper for the common rank-1 DRAM input, scalar
+  input, and rank-1 DRAM output ABI.
+- They also share a private `Rank1TiledIoProof` in `tiled1d.rs` for the common
+  local-memory, unit-stride load, inner-loop bound, and unit-stride store
+  shell.
+- Dense1d still owns its indexed scalar-multiply compute proof. FIFO still
+  owns its staged/direct enqueue-dequeue compute proof and resolver-backed
+  ordered effect proof.
+- Updated the Rust README, EE109 MVP plan, architecture note, superpowers
+  roadmap, and this vault roadmap/progress log.
+
+Subagent review:
+- Three `gpt-5.5` `xhigh` subagents reviewed the next compiler-foundation
+  direction before implementation.
+- Consensus was to do the shared rank-1 Dense/FIFO proof shell first, keep it
+  private to `tiled1d.rs`, and postpone the rank-2 tile-copy role helper as the
+  next natural slice.
+
+Proof:
+- Red check:
+  `cargo test --locked -p spatial-rs-core rank1_tiled_io_proof -- --nocapture`
+  failed first because `rank1_tiled_io_proof` did not exist.
+- Focused checks:
+  `cargo test --locked -p spatial-rs-core rank1_tiled_io_proof -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core tiled1d -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core rank1_dram_scalar_ports -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen dense -- --nocapture`,
+  and
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen fifo -- --nocapture`.
+- Broader local verification:
+  `cargo test --locked -p spatial-rs-core`,
+  `cargo test --locked -p ee109-examples`,
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation active_docs_name_c862e57a_as_current_vendor_anchor -- --nocapture`,
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`,
+  `cargo fmt --all -- --check`,
+  `git diff --check` in the Rust repo,
+  and `git diff --check` in the vault.
+
+Boundary:
+- This is local classifier proof factoring only.
+- It does not change accepted syntax, checked IR payloads, generated HLS C++,
+  manifests, host harnesses, validation membership, or imported Vitis evidence.
+- The active vendor-HLS evidence anchor remains
+  `docs/vitis-validation/2026-07-03-current-head-c862e57a-35-program/`;
+  this rank-1 helper slice has not been rerun on EC2/Vitis yet.
+- It does not imply generic rank-1 scheduling, tail tiles, dynamic bounds,
+  generic FIFO/stream support, board execution, Vivado implementation, timing
+  closure, or completion of the full Spatial rewrite.

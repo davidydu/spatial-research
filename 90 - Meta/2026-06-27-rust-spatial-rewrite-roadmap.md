@@ -35,6 +35,12 @@ captured in
 It refreshes the same 35-program roster after the non-outer-K
 `Dense2dTileMemFold` proof-helper cleanup plus the `Dram2dCopy`, Dense1d, and
 FIFO proof-boundary cleanups.
+After that vendor snapshot, the local rank-1 classifier path now shares a
+DRAM/scalar ABI proof and tiled local-I/O shell proof between
+`Dense1dScalarMul v0` and `Fifo1dTileScalarMul v0`. This is compiler
+foundation work only: Dense compute and FIFO effect proofs remain feature-local,
+and the active Vitis evidence anchor is still the `c862e57a` 35-program
+refresh pending any later EC2/Vitis rerun.
 Current and future vendor-HLS claims should pass the repo-local evidence
 validator and the EC2 Rust/Cargo 1.75 compatibility gate.
 The earlier raw-adapter-retirement current-head refresh, scheduled
