@@ -44,6 +44,13 @@ and `csynth_design`; this proves vendor HLS acceptance for the exact roster
 only, not board execution, implementation, timing closure, performance
 optimality, generic Spatial compatibility, or broad Scala source
 compatibility.
+The latest local backend-structure cleanup is Rust commit `88e33a09`
+(`Guard Dram2dCopy plan frames`). It gives rank-2 copy a named
+`Dram2dCopyPlan` body and moves plan-to-frame validation into
+`spatial_rs_hls::rank2_copy`, rejecting malformed internal copy plans with
+swapped or extra ABI params before kernel or harness rendering. Accepted syntax,
+generated valid HLS, manifests, validation membership, imported Vitis evidence,
+and the active `7a350983` vendor-HLS anchor are unchanged.
 The quarantined raw Lab2 GEMM source adapter has also been tightened locally:
 Rust commit `38c5ebfddcc984d4c1af5407824d0246cf11f3e0` records exact A/B/C
 preload and C-store rank-2 tile-I/O role/window facts in the private raw source

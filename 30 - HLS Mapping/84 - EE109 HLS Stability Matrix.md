@@ -33,6 +33,15 @@ literal-fill widening, and documentation cleanup. Durable evidence:
 This supersedes older notes below that say the active anchor remains
 `eb4f6236` or `c862e57a`.
 
+Current local no-fresh-Vitis update, 2026-07-04: Rust commit `88e33a09`
+adds a named `Dram2dCopyPlan` body and moves rank-2 copy plan-to-renderer
+validation into `spatial_rs_hls::rank2_copy`. The shared
+`rank2_copy_frame_from_plan` helper now rejects malformed internal copy plans
+unless ABI params are exactly `[input, output]` in order before kernel or
+harness rendering. This is backend structure only; accepted syntax, generated
+valid HLS, manifests, validation membership, imported Vitis evidence, and the
+active `7a350983` vendor-HLS anchor are unchanged.
+
 Current local no-fresh-Vitis update, 2026-07-04: `MemReduceFill v0` /
 `MemFoldFill v0` now accept supported static rank-1 lengths beyond the 16-lane
 lab representative and arbitrary integer literal temp fills in the bounded

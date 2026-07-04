@@ -9,6 +9,31 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 -- Rust rewrite Dram2dCopy plan-frame guard
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `88e33a0959478eba4bf1114517aa314fd5f11699` (`Guard Dram2dCopy plan frames`).
+- Added a named `Dram2dCopyPlan` HLS body and moved rank-2 copy
+  plan-to-renderer adaptation into `spatial_rs_hls::rank2_copy` via
+  `rank2_copy_frame_from_plan`.
+- New fail-closed coverage rejects malformed internal rank-2 copy plans with
+  swapped or extra ABI params before either kernel or harness rendering.
+- Red test:
+  `cargo test --locked -p spatial-rs-hls emit::tests::dram2d_copy_harness_plan_rejects_swapped_param_order -- --nocapture`
+  first failed because the swapped `[dst, src]` internal plan still rendered.
+- Verification passed:
+  `cargo fmt --all -- --check`;
+  `cargo test --locked -p spatial-rs-hls -- --nocapture`;
+  `cargo clippy -p spatial-rs-hls --all-targets --locked -- -D warnings`;
+  `git diff --check` in the Rust repo.
+- A `gpt-5.5`/`xhigh` reviewer subagent reported no blocking issues.
+- Boundary: this is no-HLS-drift backend structure. It does not change accepted
+  syntax, generated valid HLS, manifests, validation membership, imported Vitis
+  evidence, or the active `7a350983` vendor-HLS anchor. No fresh EC2/Vitis run
+  was needed.
+
 ## 2026-07-04 -- Rust rewrite 7a350983 current-head Vitis refresh
 
 Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
