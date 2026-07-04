@@ -798,9 +798,9 @@ Use it as the vendor-stability anchor for the current EE109 MVP roster.
 
 The latest local MemReduce/MemFold static-literal widening is a bounded
 semantic slice with local HLS harness evidence but no validation-roster change.
-The natural next implementation action is either the HIR affine-index helper
-cleanup identified by review, or another single semantic slice chosen with the
-same fail-closed evidence ladder.
+The follow-up affine HIR index predicate helper is no-HLS-drift compiler
+infrastructure. The natural next implementation action is another single
+semantic slice chosen with the same fail-closed evidence ladder.
 Byte-stable refactors should keep using local equality, dry-run/plan, full
 test, clippy, and evidence-validator gates; any generated-HLS text change or
 validation-roster change should trigger a fresh EC2/Vitis execution.

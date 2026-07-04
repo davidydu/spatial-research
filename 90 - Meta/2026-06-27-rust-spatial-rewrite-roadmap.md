@@ -219,6 +219,10 @@ The classifier now also proves the same narrow rank-1 memory-reduction shape
 through resolved HIR loop/symbol facts, so equivalent Rust-subset static
 length/step aliases are accepted without changing raw Lab2 wrapper matching,
 checked payloads, generated HLS, manifests, or wrapper semantics.
+The follow-up affine HIR helper cleanup centralizes lane, constant, and
+tile-plus-lane index predicates on `IndexUseFact` for rank-1, rank-2 Tile-K /
+MemFold, and Stencil2d proof checks without changing generated HLS or the
+validation roster.
 The serial Tile-K MemFold path now has a named local K-tail canary,
 `MatrixTileMemFoldOuterKTailInPlaceFixPt32x32x34`: the Lab2-like offset-loop
 `numel_k = min(TILE_K.to[Int], K - kk)` spelling is preserved as checked

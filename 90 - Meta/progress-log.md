@@ -9,6 +9,32 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 — Rust rewrite affine HIR index predicate helper
+
+- Added reusable `IndexUseFact` predicates for lane-symbol, constant-value, and
+  tile-plus-lane affine index shapes in the Rust rewrite frontend/HIR layer.
+- Migrated duplicated classifier-local predicates in rank-1 indexed writes,
+  rank-2 Tile-K/MemFold access checks, shared rank-2 tile-copy role checks, and
+  Stencil2d row/column/range checks to the shared HIR API.
+- Red test:
+  `cargo test -p spatial-rs-core --locked resolved_hir_exposes_reusable_affine_index_predicates -- --nocapture`
+  first failed because the `IndexUseFact` methods did not exist.
+- Focused verification passed:
+  `cargo test -p spatial-rs-core --locked resolved_hir_exposes_reusable_affine_index_predicates -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked rank1_indexed_write_lane -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked rank2_tile_copy_role -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked stencil2d_local_window -- --nocapture`.
+- Broader local verification passed:
+  `cargo test --locked -p spatial-rs-core --quiet`;
+  `cargo test --locked -p spatial-rs-hls --quiet`;
+  `cargo test --locked -p ee109-examples --quiet`;
+  `cargo fmt --all -- --check`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`;
+  `git diff --check` in the Rust repo and the vault.
+- Boundary: this is no-HLS-drift compiler infrastructure. It does not change
+  accepted syntax, checked payloads, generated HLS, validation roster, imported
+  Vitis evidence, or the active `eb4f6236` vendor anchor.
+
 ## 2026-07-04 — Rust rewrite MemReduce/MemFold static literal widening
 
 - Selected the first post-`eb4f6236` semantic widening slice after
