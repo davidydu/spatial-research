@@ -9,6 +9,46 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite raw Lab2 GEMM tile-I/O proof facts
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit
+  `38c5ebfddcc984d4c1af5407824d0246cf11f3e0` (`Record raw GEMM tile IO
+  proof`). The fixed raw Lab2 Part5/Part6 GEMM source proof now records exact
+  rank-2 tile-I/O role/window facts for A/B/C preload and C store before the
+  existing normalized `Accel`-body equality guard is trusted.
+- Added direct proof coverage that both raw Part5 and raw Part6 expose the
+  expected local/global roles and `(mm,kk)`, `(kk,nn)`, and `(mm,nn)` windows,
+  plus fail-closed drift tests for C-store role drift, C-preload window drift,
+  and B-load window drift. Updated README, the EE109 MVP plan, the fixture
+  matrix, the Rust rewrite architecture note, and the full-roadmap plan to
+  describe this as source-adapter proof tightening only.
+- `gpt-5.5 xhigh` subagents reviewed the slice selection and final diff. The
+  final review found no blocking correctness issue and identified one stale
+  architecture-doc sentence about raw GEMM being only `32x32x32`; that wording
+  is now corrected to include the exact named `K=34` tail profile.
+- Verification passed locally:
+  RED
+  `cargo test --locked -p spatial-rs-core lab2_fixed_gemm_source_proof_records_rank2_tile_io_roles -- --nocapture`
+  first failed on the missing proof fields;
+  `cargo test --locked -p spatial-rs-core lab2_fixed_gemm_source_proof_records_rank2_tile_io_roles -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core lab2_fixed_gemm_tile_io_proof_rejects_role_drift -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core lab2_fixed_gemm -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core --quiet`;
+  `cargo test --locked -p ee109-examples --quiet`;
+  `cargo test --locked -p spatial-rs-hls --quiet`;
+  `cargo test -p spatial-rs-hls --locked --test vitis_validation active_docs_name_c862e57a_as_current_vendor_anchor -- --nocapture`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`.
+- Boundary: no accepted syntax, checked payload, generated HLS, manifest,
+  validation roster, or imported Vitis evidence changed. The active vendor
+  evidence anchor remains `c862e57a`. Next recommended compiler slice: bridge
+  the accepted raw Part5/Part6 variants to the existing `TileKProfile` HIR
+  proof vocabulary without widening raw Scala syntax.
+
+---
+
 ## 2026-07-03 — Rust rewrite ScalarReduce/ScalarFold proof facts
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on

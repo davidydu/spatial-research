@@ -47,6 +47,15 @@ preload/store. This is also compiler foundation work only: feature-local syntax
 gates and higher-level proofs remain separate, generated HLS and validation
 membership are unchanged, and the active Vitis evidence anchor is still
 `c862e57a` pending any later EC2/Vitis rerun.
+The quarantined raw Lab2 GEMM source adapter has also been tightened locally:
+Rust commit `38c5ebfddcc984d4c1af5407824d0246cf11f3e0` records exact A/B/C
+preload and C-store rank-2 tile-I/O role/window facts in the private raw source
+proof before retaining the normalized `Accel`-body equality guard. This is a
+source-adapter proof cleanup only; accepted raw syntax, checked payloads,
+generated HLS, validation membership, and imported Vitis evidence are
+unchanged. The next natural bridge is to map accepted raw Part5/Part6 variants
+onto the existing `TileKProfile` HIR proof vocabulary without widening raw
+Scala compatibility.
 Current and future vendor-HLS claims should pass the repo-local evidence
 validator and the EC2 Rust/Cargo 1.75 compatibility gate.
 The earlier raw-adapter-retirement current-head refresh, scheduled
