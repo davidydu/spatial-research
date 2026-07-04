@@ -294,9 +294,9 @@ scheduled Lab2 Part6 `MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32`
 member, the named serial K-tail
 `MatrixTileMemFoldOuterKTailInPlaceFixPt32x32x34`, the scheduled K-tail
 `MatrixTileMemFoldOuterKTailInPlacePart6ScheduledFixPt32x32x34`, and
-`Lab2Part3BasicCondFSMAlt`, `MemReduceTwos16`, and `MemFoldTwos16`. The latest
-EC2/Vitis `csim_design`/`csynth_design` evidence is the 33-program current-head
-Tile-K HLS loop-body cleanup checkpoint captured in
+`Lab2Part3BasicCondFSMAlt`, `MemReduceTwos16`, and `MemFoldTwos16`. A
+then-current Tile-K HLS loop-body cleanup checkpoint captured 33-program
+EC2/Vitis `csim_design`/`csynth_design` evidence in
 `docs/vitis-validation/2026-07-03-tile-k-loop-body-current-head-33-program/`.
 The current Tile-K HLS backend-ledger cleanup has now moved K-loop bounds,
 local storage declarations, schedule/partition preflight, serial/scheduled
