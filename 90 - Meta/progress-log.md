@@ -9,6 +9,33 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 — Rust rewrite LUT HLS harness helper
+
+- Moved the square/non-square lab LUT and `LutBiasLookup`
+  `LutLookup v0` host-harness renderer behind
+  `crates/spatial-rs-hls/src/lut.rs`, beside the existing LUT kernel frame.
+  `emit.rs` now lowers to the HLS plan, builds a LUT harness frame, and
+  delegates to the LUT helper.
+- Verification passed locally:
+  RED
+  `cargo test -p spatial-rs-hls --locked lut_harness_uses_entry_symbol_ports_points_and_display_name -- --nocapture`
+  first failed because the LUT harness frame/function did not exist, then
+  failed once more because the new assertion used the wrong inherited
+  sample-point expectation for a `2 x 4` table; focused rerun passed after
+  correcting the assertion to the actual bottom-right/center row-major oracle
+  cases;
+  `cargo test -p spatial-rs-hls --locked lut -- --nocapture`;
+  `cargo fmt --all`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`;
+  `cargo test --locked -p spatial-rs-core --quiet`;
+  `cargo test --locked -p spatial-rs-hls --quiet`;
+  `cargo test --locked -p ee109-examples --quiet`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`.
+- Boundary: generated LUT kernel text, manifests, validation roster, and
+  imported Vitis evidence are unchanged. No EC2/Vitis run is needed for this
+  helper extraction.
+
 ## 2026-07-04 — Rust rewrite Dense1d HLS harness helper
 
 - Moved the `Lab1Part2DramSramExample` / `DenseScale64`

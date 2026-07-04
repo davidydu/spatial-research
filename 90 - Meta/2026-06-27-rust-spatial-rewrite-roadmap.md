@@ -159,6 +159,12 @@ rank-1 Dense1d kernel frame. `emit.rs` remains the plan dispatcher and ABI
 plan-to-frame adapter. This is no-HLS-drift backend helper work; generated
 kernels, manifests, validation membership, and imported Vitis evidence are
 unchanged.
+A thirteenth verified working-tree checkpoint moves square/non-square lab LUT
+and `LutBiasLookup` host-harness rendering into
+`crates/spatial-rs-hls/src/lut.rs`, beside the existing LUT kernel frame.
+`emit.rs` remains the plan dispatcher and ABI plan-to-frame adapter. This is
+no-HLS-drift backend helper work; generated kernels, manifests, validation
+membership, and imported Vitis evidence are unchanged.
 A seventh verified working-tree checkpoint moves `Dense2dTileKMemFold v0`
 host-harness rendering into `crates/spatial-rs-hls/src/tile_k.rs`, beside the
 existing Tile-K kernel frame/body helpers. `emit.rs` remains the plan
