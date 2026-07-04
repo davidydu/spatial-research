@@ -63,6 +63,16 @@ imported Vitis evidence are unchanged. No fresh EC2/Vitis run is needed for
 this profile bridge. The active current-head vendor-HLS anchor remains
 `c862e57a`.
 
+Rust commit `0f16af3e7b042554369ce69972da580078651c6a` tightened the known
+local Lab3 teaching wrapper from exact raw-wrapper equality to a scoped source
+proof. The adapter now records direct class image facts before `main`, main
+setup facts before the single `Accel`, and local-window facts for
+`lb`/`sr`/`lineOut`, `kh`/`kv`, row/column/shift loops, border handling, and
+the `par 16` store before canonical `Lab3Part1Convolution` payload emission.
+Generated HLS, manifests, validation membership, and imported Vitis evidence
+are unchanged, so no fresh EC2/Vitis run is needed for this source-proof
+cleanup. The active current-head vendor-HLS anchor remains `c862e57a`.
+
 ## 2026-07-03 Rust Rewrite Raw-Adapter Retirement 35-Program Vitis Checkpoint
 
 The Rust rewrite branch `David/HLS-spatial` passed the full 35-program EE109
@@ -632,10 +642,11 @@ Generated-code hygiene:
   and non-`Int` element types beyond the exact Rust
   `FixPt[TRUE,_24,_8]` MemFold canary remain unsupported in HLS mode and should
   stay fail-closed until selected intentionally.
-- The exact local Lab3 teaching raw wrapper is a source-compatibility adapter
-  only. It preserves the existing Vitis-proven `Lab3Part1Convolution` payload
-  locally; the fresh current-head EC2/Vitis run proves the canonical payload
-  with this adapter code present, not a distinct raw-wrapper validation program.
+- The known local Lab3 teaching raw wrapper is now a scoped source-proof
+  adapter only. It preserves the existing Vitis-proven
+  `Lab3Part1Convolution` payload locally; the fresh current-head EC2/Vitis run
+  proves the canonical payload with this adapter code present, not a distinct
+  raw-wrapper validation program.
 - The Scala runs still emit the existing `libisl appears to be missing` warning. That warning does not block these local regression results, but it is separate from vendor HLS readiness.
 
 ## Recommended Next Action
@@ -645,21 +656,21 @@ For the Rust rewrite, the clean current-head EC2/Vitis checkpoint is now the
 `docs/vitis-validation/2026-07-03-current-head-c862e57a-35-program/`.
 Use it as the vendor-stability anchor for the current EE109 MVP roster.
 
-The fixed Lab2 GEMM raw-ingress/profile bridge is now complete as a
-no-HLS-drift compiler-structure slice. The natural next implementation action
-is either proof-driven tightening of the remaining local Lab3 teaching wrapper
-or a small backend/helper reliability slice, while preserving the same checked
-payload/HLS surface. Byte-stable refactors should keep using local equality,
-dry-run/plan, full test, clippy, and evidence-validator gates; any
-generated-HLS text change or validation-roster change should trigger a fresh
-EC2/Vitis execution.
+The fixed Lab2 GEMM raw-ingress/profile bridge and the known local Lab3
+source-proof cleanup are complete as no-HLS-drift compiler-structure slices.
+The natural next implementation action is to promote the fixed
+`Stencil2d`/local-window path into a HIR/fact proof object, add stale/non-affine
+negative tests, and add the stencil extent/product overflow guard found during
+review. A small backend/helper reliability slice can follow after that.
+Byte-stable refactors should keep using local equality, dry-run/plan, full
+test, clippy, and evidence-validator gates; any generated-HLS text change or
+validation-roster change should trigger a fresh EC2/Vitis execution.
 
-The
-main remaining EE109 gaps are generic Spatial `MemFold`/`Fold`, arbitrary
+The main remaining EE109 gaps are generic Spatial `MemFold`/`Fold`, arbitrary
 K-tail shapes beyond the two named K-tail canaries, broader fixed-point/tail
 semantics, generic `par` and banking inference beyond the fixed Part6 schedule,
-and generic Lab3 local-window/stencil lowering beyond the exact local raw
-wrapper.
+and generic Lab3 local-window/stencil lowering beyond the known local
+source-proof wrapper.
 
 ## 2026-06-30 Rust Rewrite Bulk Tile IO Bridge
 

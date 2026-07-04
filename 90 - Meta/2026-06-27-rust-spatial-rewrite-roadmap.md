@@ -63,6 +63,17 @@ profile mappings are Part5 fixed32 -> `SerialFullK`, Part6 fixed32 ->
 `Part6ScheduledKTail`. This is still no-HLS-drift compiler structure work:
 accepted raw syntax, generated HLS, manifests, validation membership, and
 imported Vitis evidence are unchanged.
+The known local Lab3 convolution teaching wrapper has also moved off exact raw
+wrapper equality. Rust commit
+`0f16af3e7b042554369ce69972da580078651c6a` (`Record raw Lab3 source proof`)
+records a scoped source/local-window proof before canonical
+`Lab3Part1Convolution` payload emission: direct class image facts before
+`main`, main setup facts before the single `Accel`, and local-window facts for
+`lb`/`sr`/`lineOut`, `kh`/`kv`, row/column/shift loops, two-row/two-column
+border handling, and `par 16`. Host scaffolding can vary, but moved facts and
+accelerator-shape drift are rejected. This is also no-HLS-drift compiler
+structure work: generated HLS, manifests, validation membership, and imported
+Vitis evidence are unchanged.
 Current and future vendor-HLS claims should pass the repo-local evidence
 validator and the EC2 Rust/Cargo 1.75 compatibility gate.
 The earlier raw-adapter-retirement current-head refresh, scheduled
@@ -521,7 +532,15 @@ structure slice. Later Rust commit
 profiles`) closed the raw-to-checked-profile gap by validating accepted raw
 Part5/Part6 generated frontend sources against neutral checked-IR Tile-K
 profiles without changing HLS, manifests, validation membership, or vendor
-evidence. Follow-up Rust commit `3bd86c13c5ffe99828b8cf6fa46f136d8746b6e9`
+evidence. Follow-up Rust commit `0f16af3e7b042554369ce69972da580078651c6a`
+(`Record raw Lab3 source proof`) tightened the known local Lab3 teaching
+wrapper from exact wrapper equality to a scoped source/local-window proof
+before canonical `Lab3Part1Convolution` emission. It records direct class
+image facts before `main`, main setup facts before the single `Accel`, and the
+local-window `lb`/`sr`/`lineOut` plus `kh`/`kv`/border/`par 16` shape, with
+negative tests for facts moved outside their valid scopes. HLS, manifests,
+validation membership, and vendor evidence remain unchanged. Follow-up Rust
+commit `3bd86c13c5ffe99828b8cf6fa46f136d8746b6e9`
 (`Extract Tile-K HLS schedule preflight`) continued the HLS ledger by moving
 schedule/payload factor agreement, ordered Part6 partition-recipe validation,
 and the serial no-partitions guard into `spatial_rs_hls::tile_k`; Lab2

@@ -9,6 +9,48 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite raw Lab3 source proof
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit
+  `0f16af3e7b042554369ce69972da580078651c6a` (`Record raw Lab3 source
+  proof`). The known local `Lab3Part1Convolution` teaching wrapper now records
+  a scoped source proof before canonical `Lab3Part1Convolution` emission,
+  rather than relying on an exact raw wrapper match.
+- The proof records direct class-level image facts before `main`, main setup
+  facts before the single `Accel`, and local-window facts for `lb`, `sr`,
+  `lineOut`, `kh`, `kv`, row/column/shift loops, two-row/two-column border
+  handling, and the `par 16` store shape. Host print/oracle scaffolding may
+  vary, but moved class/setup facts and changed accelerator/window shape are
+  rejected fail-closed.
+- `gpt-5.5 xhigh` review found two real scoping risks during the loop:
+  shell facts were initially accepted outside `main`, and class image facts
+  were initially accepted inside helper scope. Both were fixed and re-reviewed;
+  the final spec and code-quality reviewers reported no remaining findings.
+- Verification passed locally:
+  RED
+  `cargo test -p spatial-rs-core --locked source_adapter::tests:: -- --nocapture`
+  first exposed shell facts accepted outside `main`;
+  follow-up RED exposed class facts accepted inside helper scope;
+  `cargo test -p spatial-rs-core --locked source_adapter::tests:: -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked parse_accel_accepts_local_raw_lab3_convolution -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked raw_lab3_part1_convolution_near_misses_fail_closed -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab3_local_raw_convolution_preserves_hls_and_manifest -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab3_convolution_kernel_matches_stable_hls_snapshot -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab3_convolution_harness_compares_full_256_pixel_oracle -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core --quiet`;
+  `cargo test --locked -p ee109-examples --quiet`;
+  `cargo test --locked -p spatial-rs-hls --quiet`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`.
+- Boundary: no accepted HLS payload, generated C++, manifest, validation
+  roster, or imported Vitis evidence changed. The active vendor evidence
+  anchor remains `c862e57a`; no EC2/Vitis run was needed for this
+  source-proof cleanup. Next recommended slice: promote the fixed
+  `Stencil2d`/local-window path into HIR/fact proof form and add the stencil
+  extent/product overflow guard found by review.
+
 ## 2026-07-03 — Rust rewrite raw Lab2 GEMM Tile-K profile bridge
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on
