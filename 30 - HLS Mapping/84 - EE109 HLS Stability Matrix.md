@@ -32,6 +32,17 @@ harness extraction. Durable evidence:
 This supersedes older notes below that say the active anchor remains
 `c862e57a`.
 
+Current local no-fresh-Vitis update, 2026-07-04: `MemReduceFill v0` /
+`MemFoldFill v0` now accept supported static rank-1 lengths beyond the 16-lane
+lab representative and arbitrary integer literal temp fills in the bounded
+Rust/Spatial-ish frontend path. Local canaries `MemReduceFives8` and
+`MemFoldSevens12` prove parser/classifier payloads plus HLS emission and
+host-harness execution. Fail-closed tests still reject nonliteral fills,
+unsupported lengths, extra local memories/effects, rank-2 reductions, missing
+stores, and bad MemFold zero-initialization. This does not change the
+35-program validation roster or imported Vitis evidence; exact raw Lab2
+Part1/Part2 Scala adapters remain all-ones 16-lane compatibility wrappers.
+
 Current Rust rewrite delta, 2026-07-03: commit `d521a0f` added
 `MatrixTileMemFoldOuterKRowColTailInPlacePart6ScheduledFixPt33x35x34` as the
 35th local validation-program member. The canary proves scheduled Part6
@@ -781,15 +792,15 @@ Generated-code hygiene:
 ## Recommended Next Action
 
 For the Rust rewrite, the clean current-head EC2/Vitis checkpoint is now the
-35-program current-head refresh at `c862e57a`, captured in
-`docs/vitis-validation/2026-07-03-current-head-c862e57a-35-program/`.
+35-program current-head refresh at `eb4f6236`, captured in
+`docs/vitis-validation/2026-07-04-current-head-eb4f6236-35-program/`.
 Use it as the vendor-stability anchor for the current EE109 MVP roster.
 
-The fixed Lab2 GEMM raw-ingress/profile bridge, known local Lab3 source-proof
-cleanup, verified pending `Stencil2d` proof/preflight cleanup, and verified
-pending raw Lab3 direct-`main` `Accel` guard are no-HLS-drift compiler-structure
-slices. After committing the pending worktree checkpoints, the natural next
-implementation action is a small backend/helper reliability slice.
+The latest local MemReduce/MemFold static-literal widening is a bounded
+semantic slice with local HLS harness evidence but no validation-roster change.
+The natural next implementation action is either the HIR affine-index helper
+cleanup identified by review, or another single semantic slice chosen with the
+same fail-closed evidence ladder.
 Byte-stable refactors should keep using local equality, dry-run/plan, full
 test, clippy, and evidence-validator gates; any generated-HLS text change or
 validation-roster change should trigger a fresh EC2/Vitis execution.

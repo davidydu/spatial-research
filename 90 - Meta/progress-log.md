@@ -9,6 +9,40 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 — Rust rewrite MemReduce/MemFold static literal widening
+
+- Selected the first post-`eb4f6236` semantic widening slice after
+  `gpt-5.5`/`xhigh` subagent review: broaden `MemReduceFill v0` /
+  `MemFoldFill v0` constant-fill support without opening generic
+  `MemReduce`/`MemFold`.
+- Updated the Rust classifier and checked-IR validation so the supported
+  rank-1 `Int` accumulator/temp/output shape may use any supported static
+  length and any integer literal temp fill. New positive canaries:
+  `MemReduceFives8` (`LEN=8`, `ROUNDS=3`, fill `5`) and `MemFoldSevens12`
+  (`LEN=12`, `ROUNDS=4`, fill `7`).
+- Added fail-closed coverage for nonliteral fills, unsupported lengths, extra
+  local memories/effects, rank-2 reductions, missing stores, bad MemFold
+  zero-initialization, and the existing narrow Spatial-ish Lab2 spelling.
+- Added local HLS emission/host-harness coverage proving the carried array
+  length, step count, lane name, and fill value. This does not add validation
+  roster members or fresh EC2/Vitis evidence; the active vendor anchor remains
+  `docs/vitis-validation/2026-07-04-current-head-eb4f6236-35-program/`.
+- Local verification passed:
+  `cargo test -p spatial-rs-core --locked mem_reduction -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked lab2_simple_memory_reduction_spatialish_sugar_near_misses_stay_fail_closed -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked mem_reduction -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core --quiet`;
+  `cargo test --locked -p spatial-rs-hls --quiet`;
+  `cargo test --locked -p ee109-examples --quiet`;
+  `cargo fmt --all -- --check`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`;
+  `git diff --check` in the Rust repo and the vault.
+- Boundary: exact raw Lab2 Part1/Part2 Scala adapters remain fixed to the
+  all-ones 16-lane lab wrappers. This is still not generic Spatial
+  `MemReduce`/`MemFold`, arbitrary reducer/fold bodies, dynamic bounds, rank-2
+  reductions, banking, scheduling, broad Scala compatibility, board execution,
+  Vivado implementation, or timing closure.
+
 ## 2026-07-04 — Rust rewrite eb4f6236 current-head Vitis refresh
 
 - Re-ran the full 35-program EE109 validation roster on

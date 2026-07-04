@@ -206,11 +206,15 @@ retired; their Rust-subset or canonical payloads remain the regression
 anchors. The Lab2 Part1/Part2 memory-reduction wrappers now generate bounded
 Rust frontend source for `MemReduceOnes16` / `MemFoldOnes16` and compile
 through the existing frontend/HIR/classifier path.
-The Rust-subset `MemReduceFill v0` / `MemFoldFill v0` frontend now also
-accepts literal fill `2` for local `MemReduceTwos16` / `MemFoldTwos16`
-canaries with generated HLS C++, host-harness coverage, validation membership,
-and EC2/Vitis 2025.1 `csim_design`/`csynth_design` evidence, while the raw
-Lab2 wrappers remain the exact all-ones shape.
+The Rust-subset `MemReduceFill v0` / `MemFoldFill v0` frontend now accepts
+supported static rank-1 lengths beyond the 16-lane lab representative and
+arbitrary integer literal temp fills. `MemReduceTwos16` / `MemFoldTwos16`
+remain the validation-member literal-`2` canaries with EC2/Vitis 2025.1
+`csim_design`/`csynth_design` evidence, while local non-roster canaries such as
+`MemReduceFives8` and `MemFoldSevens12` prove the broader static
+length/literal-fill path through parser/classifier payloads and local HLS
+harness execution. The raw Lab2 wrappers remain the exact all-ones 16-lane
+shape.
 The classifier now also proves the same narrow rank-1 memory-reduction shape
 through resolved HIR loop/symbol facts, so equivalent Rust-subset static
 length/step aliases are accepted without changing raw Lab2 wrapper matching,
