@@ -119,17 +119,14 @@ equality against the canonical `Lab3Part1Convolution` payload are preserved;
 swapped `Kh`/`Kw` border expressions remain fail-closed. This does not change
 the 35-program validation roster or imported Vitis evidence.
 
-A verified working-tree follow-up now records the accepted `Stencil2d v0`
-Sobel source shape plus resolved row/column/shift local-window facts in a
-private classifier proof object, and checked IR rejects flattened stencil
-extents beyond the supported HLS/harness `int` indexing range before HLS
-planning. The Rust commit is pending because the Codex app approval/usage gate
-blocked the escalated Git index write, but local fmt, diff hygiene, clippy,
-core, EE109 examples, and HLS package tests passed. Accepted syntax, generated
-HLS, manifests, validation membership, and imported Vitis evidence are
-unchanged, so no fresh EC2/Vitis run was needed for this proof/preflight
-cleanup at the time; the active current-head vendor-HLS anchor is now
-`eb4f6236`.
+A landed Rust follow-up, commit `5c21c48520b96425ee4303185ce262c699e02ac5`,
+records the accepted `Stencil2d v0` Sobel source shape plus resolved
+row/column/shift local-window facts in a private classifier proof object, and
+checked IR rejects flattened stencil extents beyond the supported HLS/harness
+`int` indexing range before HLS planning. Accepted syntax, generated HLS,
+manifests, validation membership, and imported Vitis evidence are unchanged, so
+no fresh EC2/Vitis run was needed for this proof/preflight cleanup at the time;
+the active current-head vendor-HLS anchor is now `eb4f6236`.
 
 A second verified working-tree cleanup tightens the same raw Lab3 ingress:
 the accepted raw `Accel` island must be a direct top-level statement in `main`,
@@ -137,25 +134,24 @@ so identical accelerator text hidden inside a helper is rejected fail-closed.
 This is source-scope hardening only. Local source-adapter, raw-lab, fmt, diff
 hygiene, clippy, core, EE109 examples, and HLS package tests passed; generated
 HLS, manifests, validation membership, and imported Vitis evidence are
-unchanged. This checkpoint is also pending commit because the Codex app
-approval/usage gate blocked the escalated Git index write.
+unchanged. This checkpoint also landed in Rust commit
+`5c21c48520b96425ee4303185ce262c699e02ac5`.
 
 A third verified working-tree cleanup moves the `Fifo1dTileScalarMul`
 host-harness renderer into `spatial_rs_hls::fifo`, beside the FIFO kernel
 frame. This is a backend helper-boundary cleanup only: `emit.rs` remains the
 plan dispatcher and ABI adapter, generated FIFO kernel text, manifests,
 validation membership, and imported Vitis evidence are unchanged, and no fresh
-EC2/Vitis run is needed. This checkpoint is pending commit because the Codex
-app approval/usage gate still blocks escalated Git index writes.
+EC2/Vitis run is needed. This checkpoint also landed in Rust commit
+`5c21c48520b96425ee4303185ce262c699e02ac5`.
 
 A fourth verified working-tree cleanup moves the Lab3 convolution and reusable
 `Stencil2d v0` Sobel host-harness renderers into `spatial_rs_hls::stencil2d`,
 beside the Sobel kernel frame. This is also a backend helper-boundary cleanup:
 `emit.rs` remains the plan dispatcher and ABI adapter, generated Lab3/Stencil2d
 kernel text, manifests, validation membership, and imported Vitis evidence are
-unchanged, and no fresh EC2/Vitis run is needed. This checkpoint is pending
-commit because the Codex app approval/usage gate still blocks escalated Git
-index writes.
+unchanged, and no fresh EC2/Vitis run is needed. This checkpoint also landed in
+Rust commit `5c21c48520b96425ee4303185ce262c699e02ac5`.
 
 A fifth verified working-tree cleanup adds a full exact emitted-kernel snapshot
 for `MatrixTileMemFoldInPlaceFixPt4x6x5`, the non-outer-K in-place
