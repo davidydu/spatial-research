@@ -9,6 +9,35 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 — Rust rewrite Dense2dTileMemFold HLS harness helper
+
+- Moved the non-outer-K `Dense2dTileMemFold v0` host-harness renderer behind
+  `crates/spatial-rs-hls/src/memfold.rs`, beside the existing MemFold kernel
+  frame. `emit.rs` now lowers to the HLS plan, resolves ABI params, builds a
+  MemFold harness frame, and delegates to the MemFold helper.
+- The helper covers the existing split-C, tail, exact `FixPt[TRUE,_24,_8]`,
+  and explicit in-place C harness paths. A parallel exploratory run of two
+  overlapping MemFold harness filters produced one transient missing-harness
+  executable error from shared output-path contention; the same MemFold filter
+  passed when rerun sequentially.
+- Verification passed locally:
+  RED
+  `cargo test -p spatial-rs-hls --locked memfold_harness_ -- --nocapture`
+  first failed because the MemFold harness frame/function did not exist;
+  focused rerun passed;
+  `cargo test -p spatial-rs-hls --locked memfold -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen memfold -- --nocapture`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`;
+  vault `git diff --check`;
+  `cargo test --locked -p spatial-rs-core --quiet`;
+  `cargo test --locked -p spatial-rs-hls --quiet`;
+  `cargo test --locked -p ee109-examples --quiet`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`.
+- Boundary: generated non-outer-K MemFold kernel text, manifests, validation
+  roster, and imported Vitis evidence are unchanged. No EC2/Vitis run is
+  needed for this helper extraction.
+
 ## 2026-07-04 — Rust rewrite Dense2dTileDotAccum HLS harness helper
 
 - Moved the `MatrixTileAccum4x6x5` host-harness renderer behind
