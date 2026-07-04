@@ -3950,3 +3950,52 @@ Boundary:
 - It does not imply generic FIFO support, AXI streams, stream ports,
   back-pressure modeling, arbitrary producer/consumer scheduling, tail tiles,
   dynamic depths, board execution, Vivado implementation, or timing closure.
+
+## 2026-07-03 -- Rust rewrite c862e57a current-head Vitis refresh
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `c862e57a` was rerun on EC2/Vitis after the accumulated
+  non-outer-K `Dense2dTileMemFold` proof-helper cleanup, the `Dram2dCopy`
+  proof-boundary cleanup, and the follow-up Dense1d/FIFO proof-boundary
+  cleanups.
+- Imported evidence is captured in
+  `docs/vitis-validation/2026-07-03-current-head-c862e57a-35-program/`.
+- Rust docs/tests now promote this directory as the active current-head
+  vendor-stability anchor, while the scheduled row/column/K-tail run remains
+  the latest roster-expansion anchor.
+
+Remote proof:
+- EC2 host: `[ec2-host — see private/ec2-lane.md]`.
+- Remote source directory:
+  `/home/ubuntu/spatial-rs-runs/current-head-c862e57/spatial-rs`.
+- Command:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --settings /tools/Xilinx/2025.1/Vitis/settings64.sh --out target/vitis-validation-current-head-c862e57`.
+- Result: the runner exited with code 0; all 35 kernels in
+  `summary-both.json` report `status=passed`, `returncode=0`,
+  `csim_passed=true`, and `csynth_finished=true`.
+
+Local verification:
+- `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-03-current-head-c862e57a-35-program --mode both`
+- `cargo test --locked -p ee109-examples --test ec2_toolchain_compat -- --nocapture`
+- `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_c862e57a_checkpoint -- --nocapture`
+- `cargo test --locked -p spatial-rs-hls --test vitis_validation active_docs_name_c862e57a_as_current_vendor_anchor -- --nocapture`
+- `cargo test --locked -p spatial-rs-hls --test vitis_validation -- --nocapture`
+- `cargo test --locked -p spatial-rs-core`
+- `cargo test --locked -p ee109-examples`
+- `cargo test --locked -p spatial-rs-hls`
+- `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`
+- `cargo fmt --all -- --check`
+- `git diff --check`
+
+Boundary:
+- This refresh proves Vitis 2025.1 C simulation and HLS synthesis for the exact
+  35-program EE109 MVP roster only.
+- It does not add validation-program membership or claim new emitted-HLS
+  behavior beyond the current source snapshot.
+- It does not claim board execution, Vivado implementation/place-and-route,
+  timing closure, performance optimality, generic Spatial compatibility,
+  arbitrary FIFO/stream support, broad rank-1/rank-2 lowering, automatic
+  banking/scheduling inference, or completion of the full Spatial rewrite.

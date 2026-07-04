@@ -29,17 +29,22 @@ The current `spatial-rs` work should therefore be treated as a tracer slice:
 `spatial-rs` currently has accepted fixture adapters for scalar add, dense 1-D DRAM/SRAM multiply, LUTs, one exact FSM, rank-2 copy groundwork, and one direct Lab3 convolution semantic adapter.
 
 Current Vitis status: the latest Rust rewrite vendor checkpoint is the
-2026-07-03 35-program raw-adapter-retirement current-head refresh captured in
-`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-raw-ingress-retire-a30ec96-35-program/`.
+2026-07-03 35-program current-head refresh at source commit `c862e57a`,
+captured in
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-current-head-c862e57a-35-program/`.
+It refreshes the same 35-program roster after the non-outer-K
+`Dense2dTileMemFold` proof-helper cleanup plus the `Dram2dCopy`, Dense1d, and
+FIFO proof-boundary cleanups.
 Current and future vendor-HLS claims should pass the repo-local evidence
 validator and the EC2 Rust/Cargo 1.75 compatibility gate.
-The earlier scheduled row/column/K-tail roster expansion, serial
-row/column/K-tail run, current-head harness cleanup, control/FSM plan-seam
-refresh, Tile-K loop-body cleanup, literal-`2` MemReduce/MemFold lane, Tile-K
-proof refresh, Lab2 alternate FSM, scheduled K-tail, current-head Tile-K facts,
-partition-helper, schedule-profile, scheduled Part6 canary, Lab3 raw-wrapper,
-post-refactor `ScalarSramTileFold v0`, and refreshed 26-program
-block-comment/raw-Part5 lanes remain historical evidence anchors.
+The earlier raw-adapter-retirement current-head refresh, scheduled
+row/column/K-tail roster expansion, serial row/column/K-tail run, current-head
+harness cleanup, control/FSM plan-seam refresh, Tile-K loop-body cleanup,
+literal-`2` MemReduce/MemFold lane, Tile-K proof refresh, Lab2 alternate FSM,
+scheduled K-tail, current-head Tile-K facts, partition-helper,
+schedule-profile, scheduled Part6 canary, Lab3 raw-wrapper, post-refactor
+`ScalarSramTileFold v0`, and refreshed 26-program block-comment/raw-Part5
+lanes remain historical evidence anchors.
 It validates the original adapter baseline plus the reusable
 scalar/dense/LUT/rank-2-copy/control/stencil/scalar-reduction/scalar-fold
 representatives, the local all-ones `MemReduceOnes16` / `MemFoldOnes16`
