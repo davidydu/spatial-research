@@ -76,6 +76,11 @@ border handling, and `par 16`. Host scaffolding can vary, but moved facts and
 accelerator-shape drift are rejected. This is also no-HLS-drift compiler
 structure work: generated HLS, manifests, validation membership, and imported
 Vitis evidence are unchanged.
+The next bounded raw-Lab3 compatibility slice admits only the exact
+static-kernel border predicate `r < Kh - 1 || c < Kw - 1`, normalizing it to the
+same `pad_r`/`pad_c` source-proof form and preserving canonical Lab3
+parser/HLS/manifest equality. Swapped `Kh`/`Kw` border expressions remain
+fail-closed; validation membership and imported Vitis evidence are unchanged.
 A verified but not-yet-committed follow-up working-tree checkpoint now records
 the accepted `Stencil2d v0` Sobel source shape plus resolved row/column/shift
 local-window facts in a private classifier proof object, and checked IR rejects

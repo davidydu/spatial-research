@@ -4821,3 +4821,67 @@ Boundary:
 - It does not imply arbitrary GEMM dimensions, generic row/column tails, broad
   Scala source compatibility, board execution, Vivado implementation, timing
   closure, or completion of the full Spatial rewrite.
+
+## 2026-07-04 -- Rust rewrite raw Lab3 convolution static-border adapter
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `07a55ba88cb517ce528722367d507869d600dce8` (`Accept raw Lab3
+  static border predicate`) extends the quarantined raw
+  `Lab3Part1Convolution` source adapter to accept the exact teaching spelling
+  `r < Kh - 1 || c < Kw - 1`.
+- The adapter normalizes only that full paired predicate to the existing
+  checked `pad_r`/`pad_c` proof form, then compares against the canonical
+  local-window fixture before emitting the canonical Lab3 convolution payload.
+- Swapped and mixed near-misses such as `r < Kw - 1 || c < Kh - 1`,
+  `r < Kh - 1 || c < pad_c`, and `r < pad_r || c < Kw - 1` remain rejected.
+- Updated the Rust README, fixture matrix, EE109 MVP plan, architecture note,
+  superpowers roadmap, vault stability matrix, vault roadmap, and this progress
+  log.
+
+Subagent review:
+- A `gpt-5.5` `xhigh` read-only exploration subagent confirmed this was the
+  next bounded Lab3 source-compatibility slice.
+- A `gpt-5.5` `xhigh` review subagent caught that the first implementation
+  normalized each side independently and could have accepted mixed predicates.
+  The implementation was tightened to whole-predicate normalization and covered
+  by a failing-then-passing mixed-form rejection test.
+
+Proof:
+- Red check:
+  `cargo test -p spatial-rs-core --locked local_lab3_convolution_adapter_accepts_static_kernel_border_expression -- --nocapture`
+  failed first because exact fixture equality rejected the static kernel-border
+  spelling.
+- Review red check:
+  `cargo test -p spatial-rs-core --locked local_lab3_convolution_adapter_rejects_mixed_static_kernel_border_expression -- --nocapture`
+  failed against the initial independent-token normalizer before the
+  whole-predicate fix.
+- Focused checks:
+  `cargo test -p spatial-rs-core --locked local_lab3_convolution_adapter_accepts_static_kernel_border_expression -- --nocapture`,
+  `cargo test -p spatial-rs-core --locked local_lab3_convolution_adapter_rejects_mixed_static_kernel_border_expression -- --nocapture`,
+  `cargo test -p spatial-rs-core --locked parse_accel_accepts_local_raw_lab3_static_kernel_border_expression -- --nocapture`,
+  `cargo test -p spatial-rs-core --locked raw_lab3_part1_convolution_near_misses_fail_closed -- --nocapture`,
+  and
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab3_local_raw_convolution_static_kernel_border_preserves_hls_and_manifest -- --nocapture`.
+- Broader local verification:
+  `cargo test --locked -p spatial-rs-core --quiet`,
+  `cargo test --locked -p spatial-rs-hls --quiet`,
+  `cargo test --locked -p ee109-examples --quiet`,
+  `cargo fmt --all -- --check`,
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`,
+  `git diff --check` in the Rust repo,
+  and `git diff --check` in the vault.
+
+Boundary:
+- This is a bounded source-adapter compatibility slice.
+- It does not add generic Scala `LineBuffer`, `RegFile`, `Reduce`,
+  arbitrary local-window syntax, rotated kernels, dynamic dimensions, renamed
+  row/column identifiers, generated-HLS surface area, or validation-program
+  membership.
+- It has not been rerun on EC2/Vitis yet; the result is stable under local
+  Rust, HLS-codegen equality, and manifest equality tests, pending fresh vendor
+  HLS validation.
+- It does not imply board execution, Vivado implementation, timing closure, or
+  completion of the full Spatial rewrite.

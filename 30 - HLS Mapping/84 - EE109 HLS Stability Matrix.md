@@ -111,6 +111,14 @@ are unchanged, so no fresh EC2/Vitis run was needed for this source-proof
 cleanup at the time; the active current-head vendor-HLS anchor is now
 `eb4f6236`.
 
+Current local no-fresh-Vitis update, 2026-07-04: the same quarantined raw
+Lab3 teaching adapter now accepts the exact static-kernel border predicate
+`r < Kh - 1 || c < Kw - 1` as equivalent to the existing
+`r < pad_r || c < pad_c` proof form. Parser, generated HLS, and manifest
+equality against the canonical `Lab3Part1Convolution` payload are preserved;
+swapped `Kh`/`Kw` border expressions remain fail-closed. This does not change
+the 35-program validation roster or imported Vitis evidence.
+
 A verified working-tree follow-up now records the accepted `Stencil2d v0`
 Sobel source shape plus resolved row/column/shift local-window facts in a
 private classifier proof object, and checked IR rejects flattened stencil
