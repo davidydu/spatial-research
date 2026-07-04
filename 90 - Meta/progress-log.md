@@ -9,6 +9,33 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 -- Rust rewrite a62eb274 37-program Vitis refresh
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Source checkpoint:
+  `a62eb27443950ed431bfdc19de381c98560352f4`
+  (`Promote MemReduce fill canaries to validation roster`).
+- Promoted `MemReduceFives8` and `MemFoldSevens12` into
+  `ee109_examples::validation_programs()`, growing the official roster from 35
+  to 37 programs.
+- EC2/Vitis proof:
+  host `[ec2-host — see private/ec2-lane.md]`
+  (`ip-172-31-37-7`), Vitis 2025.1, Rust/Cargo 1.75.0, target
+  `xc7z020-clg400-1`, 10 ns clock target.
+- Remote run directory:
+  `/home/ubuntu/spatial-rs-runs/2026-07-04-current-head-a62eb274/repo`.
+- Imported evidence directory:
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-04-current-head-a62eb274-37-program/`.
+- Result: all 37 validation kernels reported `returncode=0`, `csim=true`, and
+  `csynth=true`; the repo-local validator reported
+  `VALIDATED ... mode=both execution=execute kernels=37`.
+- Boundary: this proves vendor C simulation and HLS synthesis for the exact
+  37-program roster only. It does not widen exact raw Lab2 source-adapter
+  admission, generic Spatial `MemReduce`/`MemFold` bodies, dynamic bounds,
+  rank-2 reductions, banking, scheduling, board execution, implementation,
+  timing closure, or performance claims.
+
 ## 2026-07-04 -- Rust rewrite Tile-K plan-frame guard
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

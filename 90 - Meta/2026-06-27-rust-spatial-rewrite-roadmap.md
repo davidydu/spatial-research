@@ -26,21 +26,22 @@ The current `spatial-rs` work should therefore be treated as a tracer slice:
 
 ## Current Position
 
-`spatial-rs` currently has a 35-program EE109 MVP validation roster covering
+`spatial-rs` currently has a 37-program EE109 MVP validation roster covering
 the lab fixtures plus narrow reusable representatives for scalar expressions,
 reductions/folds, SRAM tile fold, LUT lookup, rank-1/2 dense kernels, MemReduce
 / MemFold fill, FIFO tile scaling, ControlFsm, Stencil2d/Sobel, and named
 Tile-K GEMM/tail/schedule canaries.
 
 Current Vitis status: the latest Rust rewrite vendor checkpoint is the
-2026-07-04 35-program current-head refresh at source snapshot `7a350983`,
+2026-07-04 37-program current-head refresh at source snapshot `a62eb274`,
 captured in
-`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-04-current-head-7a350983-35-program/`
-and imported by Rust commit `73032944`. It refreshes the same 35-program roster
-after the raw Lab2 row/column/K-tail adapter, raw Lab3 static-border adapter,
-affine-index helper cleanup, MemReduce/MemFold literal-fill widening, and
-documentation cleanup. All 35 programs passed EC2/Vitis 2025.1 `csim_design`
-and `csynth_design`; this proves vendor HLS acceptance for the exact roster
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-04-current-head-a62eb274-37-program/`.
+It promotes `MemReduceFives8` and `MemFoldSevens12` into the validation roster
+after the earlier raw Lab2 row/column/K-tail adapter, raw Lab3 static-border
+adapter, affine-index helper cleanup, MemReduce/MemFold literal-fill widening,
+and documentation cleanup. All 37 programs passed EC2/Vitis 2025.1
+`csim_design` and `csynth_design`; this proves vendor HLS acceptance for the
+exact roster
 only, not board execution, implementation, timing closure, performance
 optimality, generic Spatial compatibility, or broad Scala source
 compatibility.
@@ -49,23 +50,26 @@ The latest local backend-structure cleanup is Rust commit `88e33a09`
 `Dram2dCopyPlan` body and moves plan-to-frame validation into
 `spatial_rs_hls::rank2_copy`, rejecting malformed internal copy plans with
 swapped or extra ABI params before kernel or harness rendering. Accepted syntax,
-generated valid HLS, manifests, validation membership, imported Vitis evidence,
-and the active `7a350983` vendor-HLS anchor are unchanged.
+generated valid HLS, manifests, validation membership, and imported Vitis
+evidence were unchanged; the then-active `7a350983` vendor-HLS anchor is now
+superseded by the `a62eb274` 37-program refresh.
 The latest Tile-K backend-structure cleanup is Rust commit `2841cc56` (`Guard
 Tile-K plan frames`). It moves Tile-K body/ABI-param adaptation into
 `spatial_rs_hls::tile_k`, rejecting malformed internal Tile-K plans with
 swapped, missing, or extra ABI params unless they are exactly
 `[lhs, rhs, c_inout]` in order before kernel or harness rendering. Accepted
-syntax, generated valid HLS, manifests, validation membership, imported Vitis
-evidence, and the active `7a350983` vendor-HLS anchor are unchanged.
+syntax, generated valid HLS, manifests, validation membership, and imported
+Vitis evidence were unchanged; the then-active `7a350983` vendor-HLS anchor is
+now superseded by the `a62eb274` 37-program refresh.
 The latest local frontend/HIR proof cleanup is Rust commit `52953ae0`
 (`Name Tile-K fold update proof`). It replaces the Tile-K fold schedule-only
 helper with `TileKFoldUpdateProof`, recording row/column/K update domains,
 effective bounds, local LHS/RHS/C/partial tile roles, and serial/scheduled
 partial-product par factors after the existing partial-product and
 C-accumulation resolved-fact checks pass. Accepted syntax, checked payloads,
-generated HLS, manifests, validation membership, imported Vitis evidence, and
-the active `7a350983` vendor-HLS anchor are unchanged.
+generated HLS, manifests, validation membership, and imported Vitis evidence
+were unchanged; the then-active `7a350983` vendor-HLS anchor is now superseded
+by the `a62eb274` 37-program refresh.
 The quarantined raw Lab2 GEMM source adapter has also been tightened locally:
 Rust commit `38c5ebfddcc984d4c1af5407824d0246cf11f3e0` records exact A/B/C
 preload and C-store rank-2 tile-I/O role/window facts in the private raw source
@@ -323,7 +327,7 @@ serial/scheduled K-tail members, `Lab2Part3BasicCondFSMAlt`,
 `33 35 34` Tile-K canaries. A then-current Tile-K HLS loop-body cleanup
 checkpoint captured 33-program EC2/Vitis `csim_design`/`csynth_design` evidence
 in `docs/vitis-validation/2026-07-03-tile-k-loop-body-current-head-33-program/`;
-the active current-head vendor anchor is now the 35-program `7a350983` refresh.
+the active current-head vendor anchor is now the 37-program `a62eb274` refresh.
 The current Tile-K HLS backend-ledger cleanup has now moved K-loop bounds,
 local storage declarations, schedule/partition preflight, serial/scheduled
 tile-body rendering, and the kernel frame itself into crate-private HLS helper

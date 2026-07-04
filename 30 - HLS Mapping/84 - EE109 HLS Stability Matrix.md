@@ -19,19 +19,17 @@ This note records the local stability state after the first EE109 HLS expansion 
 The supported claim is deliberately narrow: the selected EE109 examples compile
 through the local Spatial `--hls` lane into HLS-style C++, host-compile with
 the system `c++`, pass their generated harnesses, and for the current Rust
-rewrite 35-program roster pass EC2/Vitis `csim_design` and `csynth_design`.
+rewrite 37-program roster pass EC2/Vitis `csim_design` and `csynth_design`.
 This is still not board execution, Vivado implementation, timing closure, or a
 generic Spatial compatibility claim.
 
-Current Rust rewrite delta, 2026-07-04: source snapshot `7a350983` is now the
-active current-head vendor-HLS checkpoint, imported by Rust commit `73032944`.
-The full 35-program roster passed EC2/Vitis 2025.1 `csim_design` and
-`csynth_design` after the raw Lab2 row/column/K-tail adapter, raw Lab3
-static-border adapter, affine-index helper cleanup, MemReduce/MemFold
-literal-fill widening, and documentation cleanup. Durable evidence:
-`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-04-current-head-7a350983-35-program/`.
+Current Rust rewrite delta, 2026-07-04: source snapshot `a62eb274` is now the
+active current-head vendor-HLS checkpoint. The full 37-program roster passed
+EC2/Vitis 2025.1 `csim_design` and `csynth_design` after promoting
+`MemReduceFives8` and `MemFoldSevens12` into validation. Durable evidence:
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-04-current-head-a62eb274-37-program/`.
 This supersedes older notes below that say the active anchor remains
-`eb4f6236` or `c862e57a`.
+`7a350983`, `eb4f6236`, or `c862e57a`.
 
 Current local no-fresh-Vitis update, 2026-07-04: Rust commit `88e33a09`
 adds a named `Dram2dCopyPlan` body and moves rank-2 copy plan-to-renderer
@@ -66,9 +64,11 @@ Rust/Spatial-ish frontend path. Local canaries `MemReduceFives8` and
 `MemFoldSevens12` prove parser/classifier payloads plus HLS emission and
 host-harness execution. Fail-closed tests still reject nonliteral fills,
 unsupported lengths, extra local memories/effects, rank-2 reductions, missing
-stores, and bad MemFold zero-initialization. This does not change the
-35-program validation roster or imported Vitis evidence; exact raw Lab2
-Part1/Part2 Scala adapters remain all-ones 16-lane compatibility wrappers.
+stores, and bad MemFold zero-initialization. At the time, this did not change
+the 35-program validation roster or raw Lab2 adapter admission; exact raw Lab2
+Part1/Part2 Scala adapters remain all-ones 16-lane compatibility wrappers. The later
+`a62eb274` run promotes `MemReduceFives8` and `MemFoldSevens12` into the
+37-program vendor-proven roster.
 
 Current local no-fresh-Vitis update, 2026-07-04: Rust commit `c4f8eea6`
 extends the quarantined raw `Lab2Part5GEMM` and `Lab2Part6GEMM` adapters to
@@ -836,20 +836,16 @@ Generated-code hygiene:
 ## Recommended Next Action
 
 For the Rust rewrite, the clean current-head EC2/Vitis checkpoint is now the
-35-program current-head refresh at source snapshot `7a350983`, imported by Rust
-commit `73032944`, captured in
-`docs/vitis-validation/2026-07-04-current-head-7a350983-35-program/`. Use it
-as the vendor-stability anchor for the current EE109 MVP roster.
+37-program current-head refresh at source snapshot `a62eb274`, captured in
+`docs/vitis-validation/2026-07-04-current-head-a62eb274-37-program/`. Use it as
+the vendor-stability anchor for the current EE109 MVP roster.
 
-The latest local no-HLS-drift compiler-structure work after the `7a350983`
-vendor anchor is the Dram2dCopy plan-frame guard, Tile-K fold/update proof
-cleanup, and Tile-K plan-frame guard. Earlier MemReduce/MemFold static-literal
-widening remains the first bounded semantic slice with local HLS harness
-evidence but no validation-roster change. The natural next implementation
-action is either another small proof/helper-boundary slice with local equality
-gates or, when ready for a larger step, promoting the existing non-lab
-MemReduce/MemFold canaries into a fresh validation roster with EC2/Vitis
-evidence.
+The latest larger validation-roster step promoted the existing non-lab
+MemReduce/MemFold canaries into the official roster with EC2/Vitis evidence.
+The natural next implementation action is another bounded proof/helper-boundary
+slice with local equality gates, or a deliberately chosen next semantic canary
+that expands the reusable Rust compiler surface without widening raw Scala
+adapters by token matching.
 Byte-stable refactors should keep using local equality, dry-run/plan, full
 test, clippy, and evidence-validator gates; any generated-HLS text change or
 validation-roster change should trigger a fresh EC2/Vitis execution.
