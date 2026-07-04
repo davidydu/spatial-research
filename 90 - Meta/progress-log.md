@@ -9,6 +9,249 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 — Rust rewrite Dense2dTileScalarMul load/store fact gate
+
+- Verified local working-tree checkpoint in
+  `/Users/david/Documents/David_code/spatial-rs` on `David/HLS-spatial`.
+  Rust commit remains pending because the Codex app approval/usage gate is
+  blocking escalated Git index writes.
+- Hardened `Dense2dTileScalarMul v0` classifier admission by routing the
+  load/store tile-copy phases through the shared resolver-backed rank-2
+  tile-copy fact helper after the structural matcher succeeds. The proof now
+  checks local/global access grouping, same parent statement, loop-symbol
+  identity, and const-backed stride provenance before reconstructing the
+  existing checked payload.
+- Verification passed locally:
+  RED
+  `cargo test -p spatial-rs-core --locked dense2d_tile_scalar_store_fact_matcher_rejects_equal_valued_wrong_row_coefficient_symbol -- --nocapture`
+  first failed because the Dense2dTileScalar fact spec/helper did not exist;
+  focused rerun passed;
+  `cargo test -p spatial-rs-core --locked dense2d_tile_scalar -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen matrix_tile_scale -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked rank2 -- --nocapture`.
+- Boundary: generated `MatrixTileScale4x6` HLS, manifests, validation roster,
+  and imported Vitis evidence are unchanged. No EC2/Vitis run is needed for
+  this proof-boundary cleanup.
+
+## 2026-07-04 — Rust rewrite Tile-K HLS harness helper
+
+- Verified local working-tree checkpoint in
+  `/Users/david/Documents/David_code/spatial-rs` on `David/HLS-spatial`.
+  Rust commit remains pending because the Codex app approval/usage gate is
+  blocking escalated Git index writes.
+- Moved the `Dense2dTileKMemFold v0` host-harness renderer behind
+  `crates/spatial-rs-hls/src/tile_k.rs`, beside the existing Tile-K kernel
+  frame/body helpers. `emit.rs` now lowers to the HLS plan, resolves ABI params,
+  builds a harness frame, and delegates to the Tile-K helper. The existing
+  `PASS ..._kernel` display behavior is intentionally preserved.
+- Verification passed locally:
+  RED
+  `cargo test -p spatial-rs-hls --locked tile_k_harness_uses_entry_symbol_fixpt_inout_shape_and_oracle_cases -- --nocapture`
+  first failed because the Tile-K harness frame/function did not exist;
+  focused rerun passed;
+  `cargo test -p spatial-rs-hls --locked tile_k_harness -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_outer_k -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_raw_part6_fixed_32 -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test vitis_validation tile_k -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --quiet`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`;
+  `cargo test --locked -p spatial-rs-core --quiet`;
+  `cargo test --locked -p ee109-examples --quiet`.
+- Boundary: generated Tile-K kernel text, manifests, validation roster, and
+  imported Vitis evidence are unchanged. No EC2/Vitis run is needed for this
+  helper extraction.
+
+## 2026-07-04 — Rust rewrite TileScalarMul HLS harness helper
+
+- Verified local working-tree checkpoint in
+  `/Users/david/Documents/David_code/spatial-rs` on `David/HLS-spatial`.
+  Rust commit remains pending because the Codex app approval/usage gate is
+  blocking escalated Git index writes.
+- Moved the `Dense2dTileScalarMul v0` / `MatrixTileScale4x6` host-harness
+  renderer behind `crates/spatial-rs-hls/src/tile_scalar_mul.rs`, beside the
+  existing rank-2 tile-scalar kernel frame. `emit.rs` now lowers to the HLS
+  plan, resolves ABI params, builds a harness frame, and delegates to the
+  tile-scalar helper.
+- Verification passed locally:
+  RED
+  `cargo test -p spatial-rs-hls --locked tile_scalar_mul_harness_uses_entry_symbol_ports_cases_and_display_name -- --nocapture`
+  first failed because the tile-scalar harness frame/function did not exist;
+  focused rerun passed through
+  `cargo test -p spatial-rs-hls --locked tile_scalar_mul -- --nocapture`;
+  integration rerun passed
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen matrix_tile_scale -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --quiet`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`;
+  `cargo test --locked -p spatial-rs-core --quiet`;
+  `cargo test --locked -p ee109-examples --quiet`.
+- Boundary: generated `MatrixTileScale4x6` kernel text, manifests, validation
+  roster, and imported Vitis evidence are unchanged. No EC2/Vitis run is needed
+  for this helper extraction.
+
+## 2026-07-04 — Rust rewrite MemFold full-kernel snapshot guard
+
+- Verified local working-tree checkpoint in
+  `/Users/david/Documents/David_code/spatial-rs` on `David/HLS-spatial`.
+  Rust commit remains pending because the Codex app approval/usage gate is
+  blocking escalated Git index writes.
+- Added an exact full emitted-kernel snapshot for
+  `MatrixTileMemFoldInPlaceFixPt4x6x5`, the non-outer-K in-place
+  `FixPt[TRUE,_24,_8]` MemFold path. This protects the full signature,
+  mutable `c` pointer interface, AXI pragmas, local tile declarations, preload,
+  partial-product, accumulation, and final store text before deeper ABI/frame
+  helper work.
+- Verification passed locally:
+  RED
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_inplace_c_memfold_matches_stable_full_hls_snapshot -- --nocapture`
+  first failed because the full-kernel expected snapshot helper did not exist;
+  focused rerun passed;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen memfold -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked memfold -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --quiet`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`;
+  `cargo test --locked -p spatial-rs-core --quiet`;
+  `cargo test --locked -p ee109-examples --quiet`.
+- Boundary: this is a test-coverage guard only. Generated MemFold HLS,
+  manifests, validation roster, and imported Vitis evidence are unchanged. No
+  EC2/Vitis run is needed.
+
+## 2026-07-04 — Rust rewrite Stencil2d/Lab3 HLS harness helper
+
+- Verified local working-tree checkpoint in
+  `/Users/david/Documents/David_code/spatial-rs` on `David/HLS-spatial`.
+  Rust commit remains pending because the Codex app approval/usage gate is
+  blocking escalated Git index writes.
+- Moved the Lab3 convolution and reusable `Stencil2d v0` Sobel host-harness
+  renderers behind `crates/spatial-rs-hls/src/stencil2d.rs`, beside the
+  existing Sobel kernel frame. `emit.rs` now lowers to the HLS plan, builds a
+  harness frame, and delegates to the Stencil2d helper.
+- Verification passed locally:
+  RED
+  `cargo test -p spatial-rs-hls --locked stencil2d_sobel_harnesses_use_entry_symbol_display_name_and_full_cases -- --nocapture`
+  first failed because the Stencil2d harness frame/functions did not exist;
+  focused rerun passed;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab3 -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen stencil2d -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked stencil2d -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --quiet`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`;
+  `cargo test --locked -p spatial-rs-core --quiet`;
+  `cargo test --locked -p ee109-examples --quiet`.
+- Boundary: generated Lab3/Stencil2d kernel text, manifests, validation roster,
+  and imported Vitis evidence are unchanged. The active vendor evidence anchor
+  remains `c862e57a`; no EC2/Vitis run is needed for this helper extraction.
+- Next recommended action after committing the pending Rust/vault checkpoints:
+  add a full non-outer-K MemFold kernel snapshot before deeper ABI/frame work,
+  then continue small helper-boundary or proof-boundary slices.
+
+## 2026-07-04 — Rust rewrite FIFO HLS harness helper
+
+- Verified local working-tree checkpoint in
+  `/Users/david/Documents/David_code/spatial-rs` on `David/HLS-spatial`.
+  Rust commit remains pending because the Codex app approval/usage gate is
+  blocking escalated Git index writes.
+- Moved the FIFO tile-scalar-multiply host harness renderer behind
+  `crates/spatial-rs-hls/src/fifo.rs`, beside the existing FIFO kernel frame.
+  `emit.rs` remains the dispatcher and plan-to-frame adapter. This is a
+  backend helper-boundary cleanup only.
+- Verification passed locally:
+  RED
+  `cargo test -p spatial-rs-hls --locked fifo_tile_scalar_mul_harness_uses_entry_symbol_ports_cases_and_display_name -- --nocapture`
+  first failed because the FIFO harness frame/function did not exist;
+  focused rerun passed;
+  `cargo test -p spatial-rs-hls --locked fifo -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen fifo -- --nocapture`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`;
+  `cargo test --locked -p spatial-rs-core --quiet`;
+  `cargo test --locked -p spatial-rs-hls --quiet`;
+  `cargo test --locked -p ee109-examples --quiet`.
+- Boundary: no generated FIFO kernel text, manifest, validation roster, or
+  imported Vitis evidence changed. The active vendor evidence anchor remains
+  `c862e57a`; no EC2/Vitis run is needed for this helper extraction.
+- Subagent review: two `gpt-5.5 xhigh` read-only scouts recommended finishing
+  the FIFO harness extraction before starting a Stencil2d/Lab3 harness helper
+  slice, and noted that future ABI/frame work should either extract the
+  Stencil2d/Lab3 Sobel harness into `stencil2d.rs` or first add a full
+  non-outer-K MemFold kernel snapshot.
+
+## 2026-07-03 — Rust rewrite raw Lab3 direct-main Accel guard
+
+- Verified local working-tree checkpoint in
+  `/Users/david/Documents/David_code/spatial-rs` on `David/HLS-spatial`.
+  Rust commit is still pending because the Codex app approval/usage gate is
+  blocking escalated Git index writes.
+- The quarantined raw Scala scanner now requires the accepted raw Lab3
+  `Accel` island to be a direct top-level statement in `main`, not identical
+  accelerator text hidden inside a helper. This closes the direct-parent
+  source-scope hole found after the Stencil2d proof/preflight cleanup.
+- Verification passed locally:
+  RED
+  `cargo test -p spatial-rs-core --locked local_lab3_convolution_adapter_rejects_accel_hidden_inside_main_helper -- --nocapture`
+  first failed because the hidden helper `Accel` was accepted;
+  focused rerun passed;
+  `cargo test -p spatial-rs-core --locked source_adapter::tests:: -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked raw_lab -- --nocapture`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`;
+  `cargo test --locked -p spatial-rs-core --quiet`;
+  `cargo test --locked -p ee109-examples --quiet`;
+  `cargo test --locked -p spatial-rs-hls --quiet`.
+- Boundary: this is source-scope hardening only. No accepted canonical payload,
+  generated HLS C++, manifest, validation roster, or imported Vitis evidence
+  changed. The active vendor evidence anchor remains `c862e57a`; no EC2/Vitis
+  run is needed until generated HLS or validation membership changes.
+- Next recommended action after committing the pending Rust/vault checkpoints:
+  take a small HLS ABI/frame helper reliability slice before widening syntax.
+
+## 2026-07-03 — Rust rewrite Stencil2d proof preflight
+
+- Verified local working-tree checkpoint in
+  `/Users/david/Documents/David_code/spatial-rs` on `David/HLS-spatial`.
+  Rust commit is pending because the Codex app approval/usage gate rejected the
+  escalated `git add` needed to write the Git index.
+- `Stencil2d v0` now records the accepted Sobel source shape and resolved
+  row/column/shift local-window facts in a private classifier proof object
+  before rebuilding the same checked `Stmt::Stencil2d` payload. The proof
+  covers loop-domain identity, row-range line-buffer loads/stores, `RegFile`
+  reset/shift effects, shift/line-output accesses, and Sobel/window reduction
+  reads.
+- Checked IR now rejects flattened stencil extents whose `ROWS * COLS` product
+  overflows or exceeds the supported HLS/harness `int` indexing range, before
+  HLS planning.
+- Verification passed locally:
+  RED
+  `cargo test -p spatial-rs-core --locked stencil2d_sobel_proof_records_shape_payload_and_resolved_domains -- --nocapture`
+  first failed because the proof helpers did not exist;
+  `cargo test -p spatial-rs-core --locked stencil2d_sobel_proof_records_shape_payload_and_resolved_domains -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked checked_ir_rejects_stencil2d_extent_product_overflow -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked stencil2d_local_window_proof_rejects_non_affine_line_buffer_read -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked stencil2d -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked lab3 -- --nocapture`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`;
+  `cargo test --locked -p spatial-rs-core --quiet`;
+  `cargo test --locked -p ee109-examples --quiet`;
+  `cargo test --locked -p spatial-rs-hls --quiet`.
+- Boundary: no accepted syntax, generated HLS C++, manifest, validation roster,
+  or imported Vitis evidence changed. The active vendor evidence anchor remains
+  `c862e57a`; no EC2/Vitis run is needed for this proof/preflight cleanup until
+  the generated HLS or validation roster changes.
+- Next recommended action after committing this checkpoint: either add one more
+  stale-fact/source-scope negative around raw Lab3 direct-parent `Accel`
+  handling, or take a small HLS ABI/frame helper reliability slice.
+
 ## 2026-07-03 — Rust rewrite raw Lab3 source proof
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on

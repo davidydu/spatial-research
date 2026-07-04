@@ -74,6 +74,70 @@ border handling, and `par 16`. Host scaffolding can vary, but moved facts and
 accelerator-shape drift are rejected. This is also no-HLS-drift compiler
 structure work: generated HLS, manifests, validation membership, and imported
 Vitis evidence are unchanged.
+A verified but not-yet-committed follow-up working-tree checkpoint now records
+the accepted `Stencil2d v0` Sobel source shape plus resolved row/column/shift
+local-window facts in a private classifier proof object, and checked IR rejects
+flattened stencil extents beyond the supported HLS/harness `int` range before
+HLS planning. The Rust commit is pending only because the Codex app
+approval/usage gate rejected the escalated Git index write; local `cargo fmt`,
+`git diff --check`, clippy, core, EE109 examples, and HLS package tests passed.
+This is again no-HLS-drift compiler structure work: accepted syntax, generated
+HLS, manifests, validation membership, and imported Vitis evidence are
+unchanged.
+A second verified working-tree checkpoint tightens the same raw Lab3 ingress:
+the accepted `Accel` island must now be a direct top-level statement in `main`,
+so identical accelerator text hidden inside a helper is rejected fail-closed.
+This direct-parent source-scope cleanup is also pending commit only because Git
+index writes are blocked by the app approval/usage gate. Local source-adapter,
+raw-lab, fmt, diff hygiene, clippy, core, EE109 examples, and HLS package tests
+passed; generated HLS, manifests, validation membership, and imported Vitis
+evidence are unchanged.
+A third verified working-tree checkpoint moves the FIFO tile-scalar host
+harness renderer into `crates/spatial-rs-hls/src/fifo.rs`, beside the existing
+FIFO kernel frame. `emit.rs` remains the HLS plan dispatcher and ABI
+plan-to-frame adapter. This helper extraction is also pending commit because
+Git index writes remain blocked by the app approval/usage gate. Local FIFO
+focused tests, fmt, diff hygiene, clippy, core, EE109 examples, and HLS package
+tests passed; generated FIFO kernel text, manifests, validation membership,
+and imported Vitis evidence are unchanged.
+A fourth verified working-tree checkpoint moves the Lab3 convolution and
+reusable `Stencil2d v0` Sobel host-harness renderers into
+`crates/spatial-rs-hls/src/stencil2d.rs`, beside the existing Sobel kernel
+frame. `emit.rs` remains the HLS plan dispatcher and ABI plan-to-frame adapter.
+This helper extraction is also pending commit because Git index writes remain
+blocked by the app approval/usage gate. Local helper, Lab3, Stencil2d, full HLS
+package, and clippy gates passed; generated Lab3/Stencil2d kernel text,
+manifests, validation membership, and imported Vitis evidence are unchanged.
+A fifth verified working-tree checkpoint adds a full exact emitted-kernel
+snapshot for `MatrixTileMemFoldInPlaceFixPt4x6x5`, the non-outer-K in-place
+fixed-point MemFold canary. This is a test-coverage guard before deeper
+ABI/frame helper work; generated HLS, manifests, validation membership, and
+imported Vitis evidence are unchanged.
+A sixth verified working-tree checkpoint moves the rank-2 tile-scalar
+`MatrixTileScale4x6` host-harness renderer into
+`crates/spatial-rs-hls/src/tile_scalar_mul.rs`, beside the existing kernel
+frame. `emit.rs` remains the plan dispatcher and ABI plan-to-frame adapter.
+This is no-HLS-drift backend helper work; generated kernels, manifests,
+validation membership, and imported Vitis evidence are unchanged.
+A seventh verified working-tree checkpoint moves `Dense2dTileKMemFold v0`
+host-harness rendering into `crates/spatial-rs-hls/src/tile_k.rs`, beside the
+existing Tile-K kernel frame/body helpers. `emit.rs` remains the plan
+dispatcher and ABI plan-to-frame adapter. This is no-HLS-drift backend helper
+work; generated kernels, manifests, validation membership, and imported Vitis
+evidence are unchanged.
+An eighth verified working-tree checkpoint hardens `Dense2dTileScalarMul v0`
+classifier admission by routing load/store tile-copy phases through the shared
+resolver-backed rank-2 tile-copy fact helper after structural matching. It
+checks same access grouping, same parent statement, loop-symbol identity, and
+const-backed stride provenance before reconstructing the existing checked
+payload. This is no-HLS-drift compiler foundation work; generated kernels,
+manifests, validation membership, and imported Vitis evidence are unchanged.
+A seventh verified working-tree checkpoint moves `Dense2dTileKMemFold v0`
+host-harness rendering into `crates/spatial-rs-hls/src/tile_k.rs`, beside the
+existing Tile-K kernel frame/body helpers. `emit.rs` remains the plan
+dispatcher and ABI plan-to-frame adapter. This is no-HLS-drift backend helper
+work; generated kernels, manifests, validation membership, and imported Vitis
+evidence are unchanged.
 Current and future vendor-HLS claims should pass the repo-local evidence
 validator and the EC2 Rust/Cargo 1.75 compatibility gate.
 The earlier raw-adapter-retirement current-head refresh, scheduled
@@ -540,7 +604,14 @@ image facts before `main`, main setup facts before the single `Accel`, and the
 local-window `lb`/`sr`/`lineOut` plus `kh`/`kv`/border/`par 16` shape, with
 negative tests for facts moved outside their valid scopes. HLS, manifests,
 validation membership, and vendor evidence remain unchanged. Follow-up Rust
-commit `3bd86c13c5ffe99828b8cf6fa46f136d8746b6e9`
+working-tree checkpoint pending commit recorded the `Stencil2d v0` Sobel
+source-shape/local-window proof object and an HLS/harness `int` extent-product
+preflight guard, with local fmt, diff hygiene, clippy, core, EE109 examples,
+and HLS tests passing and no HLS/evidence drift. A second pending working-tree
+checkpoint requires the raw Lab3 `Accel` island to be a direct `main` statement
+and rejects hidden helper `Accel` text, again with local gates passing and no
+HLS/evidence drift. Follow-up Rust commit
+`3bd86c13c5ffe99828b8cf6fa46f136d8746b6e9`
 (`Extract Tile-K HLS schedule preflight`) continued the HLS ledger by moving
 schedule/payload factor agreement, ordered Part6 partition-recipe validation,
 and the serial no-partitions guard into `spatial_rs_hls::tile_k`; Lab2

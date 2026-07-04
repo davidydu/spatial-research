@@ -73,6 +73,70 @@ Generated HLS, manifests, validation membership, and imported Vitis evidence
 are unchanged, so no fresh EC2/Vitis run is needed for this source-proof
 cleanup. The active current-head vendor-HLS anchor remains `c862e57a`.
 
+A verified working-tree follow-up now records the accepted `Stencil2d v0`
+Sobel source shape plus resolved row/column/shift local-window facts in a
+private classifier proof object, and checked IR rejects flattened stencil
+extents beyond the supported HLS/harness `int` indexing range before HLS
+planning. The Rust commit is pending because the Codex app approval/usage gate
+blocked the escalated Git index write, but local fmt, diff hygiene, clippy,
+core, EE109 examples, and HLS package tests passed. Accepted syntax, generated
+HLS, manifests, validation membership, and imported Vitis evidence are
+unchanged, so no fresh EC2/Vitis run is needed for this proof/preflight
+cleanup. The active current-head vendor-HLS anchor remains `c862e57a`.
+
+A second verified working-tree cleanup tightens the same raw Lab3 ingress:
+the accepted raw `Accel` island must be a direct top-level statement in `main`,
+so identical accelerator text hidden inside a helper is rejected fail-closed.
+This is source-scope hardening only. Local source-adapter, raw-lab, fmt, diff
+hygiene, clippy, core, EE109 examples, and HLS package tests passed; generated
+HLS, manifests, validation membership, and imported Vitis evidence are
+unchanged. This checkpoint is also pending commit because the Codex app
+approval/usage gate blocked the escalated Git index write.
+
+A third verified working-tree cleanup moves the `Fifo1dTileScalarMul`
+host-harness renderer into `spatial_rs_hls::fifo`, beside the FIFO kernel
+frame. This is a backend helper-boundary cleanup only: `emit.rs` remains the
+plan dispatcher and ABI adapter, generated FIFO kernel text, manifests,
+validation membership, and imported Vitis evidence are unchanged, and no fresh
+EC2/Vitis run is needed. This checkpoint is pending commit because the Codex
+app approval/usage gate still blocks escalated Git index writes.
+
+A fourth verified working-tree cleanup moves the Lab3 convolution and reusable
+`Stencil2d v0` Sobel host-harness renderers into `spatial_rs_hls::stencil2d`,
+beside the Sobel kernel frame. This is also a backend helper-boundary cleanup:
+`emit.rs` remains the plan dispatcher and ABI adapter, generated Lab3/Stencil2d
+kernel text, manifests, validation membership, and imported Vitis evidence are
+unchanged, and no fresh EC2/Vitis run is needed. This checkpoint is pending
+commit because the Codex app approval/usage gate still blocks escalated Git
+index writes.
+
+A fifth verified working-tree cleanup adds a full exact emitted-kernel snapshot
+for `MatrixTileMemFoldInPlaceFixPt4x6x5`, the non-outer-K in-place
+fixed-point MemFold canary. This is a local test-coverage guard only: generated
+HLS, manifests, validation membership, and imported Vitis evidence are
+unchanged, and no fresh EC2/Vitis run is needed.
+
+A sixth verified working-tree cleanup moves the rank-2 tile-scalar
+`MatrixTileScale4x6` host-harness renderer into
+`spatial_rs_hls::tile_scalar_mul`, beside the existing kernel frame. This is a
+backend helper-boundary cleanup only: generated kernel text, manifests,
+validation membership, and imported Vitis evidence are unchanged, and no fresh
+EC2/Vitis run is needed.
+
+A seventh verified working-tree cleanup moves `Dense2dTileKMemFold v0`
+host-harness rendering into `spatial_rs_hls::tile_k`, beside the existing
+Tile-K kernel frame/body helpers. This is a backend helper-boundary cleanup
+only: generated kernel text, manifests, validation membership, and imported
+Vitis evidence are unchanged, and no fresh EC2/Vitis run is needed.
+
+An eighth verified working-tree cleanup hardens `Dense2dTileScalarMul v0`
+classifier admission: the load and store tile-copy phases now pass through the
+shared resolver-backed rank-2 tile-copy fact helper after structural matching.
+This checks same access grouping, same parent statement, loop-symbol identity,
+and const-backed stride provenance before reconstructing the existing checked
+payload. Generated kernel text, manifests, validation membership, and imported
+Vitis evidence are unchanged, and no fresh EC2/Vitis run is needed.
+
 ## 2026-07-03 Rust Rewrite Raw-Adapter Retirement 35-Program Vitis Checkpoint
 
 The Rust rewrite branch `David/HLS-spatial` passed the full 35-program EE109
@@ -656,12 +720,11 @@ For the Rust rewrite, the clean current-head EC2/Vitis checkpoint is now the
 `docs/vitis-validation/2026-07-03-current-head-c862e57a-35-program/`.
 Use it as the vendor-stability anchor for the current EE109 MVP roster.
 
-The fixed Lab2 GEMM raw-ingress/profile bridge and the known local Lab3
-source-proof cleanup are complete as no-HLS-drift compiler-structure slices.
-The natural next implementation action is to promote the fixed
-`Stencil2d`/local-window path into a HIR/fact proof object, add stale/non-affine
-negative tests, and add the stencil extent/product overflow guard found during
-review. A small backend/helper reliability slice can follow after that.
+The fixed Lab2 GEMM raw-ingress/profile bridge, known local Lab3 source-proof
+cleanup, verified pending `Stencil2d` proof/preflight cleanup, and verified
+pending raw Lab3 direct-`main` `Accel` guard are no-HLS-drift compiler-structure
+slices. After committing the pending worktree checkpoints, the natural next
+implementation action is a small backend/helper reliability slice.
 Byte-stable refactors should keep using local equality, dry-run/plan, full
 test, clippy, and evidence-validator gates; any generated-HLS text change or
 validation-roster change should trigger a fresh EC2/Vitis execution.
