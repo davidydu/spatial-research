@@ -45,6 +45,14 @@ exact roster
 only, not board execution, implementation, timing closure, performance
 optimality, generic Spatial compatibility, or broad Scala source
 compatibility.
+The latest local evidence-validation cleanup is Rust commit `ba388096`
+(`Reject stale Vitis evidence artifacts`). It makes the repo-local evidence
+validator reject unexpected stable artifacts for kernels outside the expected
+roster under `sidecars/`, `logs/`, and `reports/`, so a bundle cannot silently
+carry retired-kernel leftovers while claiming the exact current roster. The
+active `a62eb274` 37-program evidence bundle still validates; generated HLS,
+manifests, validation membership, and imported Vitis evidence are unchanged, so
+no fresh EC2/Vitis run was claimed.
 The latest local backend-structure cleanup is Rust commit `88e33a09`
 (`Guard Dram2dCopy plan frames`). It gives rank-2 copy a named
 `Dram2dCopyPlan` body and moves plan-to-frame validation into

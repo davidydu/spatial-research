@@ -9,6 +9,42 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 -- Rust rewrite Vitis evidence stale-artifact guard
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `ba3880967858c908c180ee39a32dfbc08d7bd8e2`
+  (`Reject stale Vitis evidence artifacts`).
+- Hardened `spatial_rs_hls::validate_vitis_evidence_bundle`: after validating
+  the summary roster and expected per-kernel paths, it now enumerates the stable
+  `sidecars/`, `logs/`, and `reports/` artifact directories and rejects matching
+  artifacts whose kernel name is outside the expected roster.
+- Red test:
+  `cargo test --locked -p spatial-rs-hls vitis_evidence_validator_rejects_unexpected_artifact_kernel -- --nocapture`
+  first failed because a clean one-kernel synthetic bundle could silently carry
+  `RetiredKernel` sidecar/log/report artifacts.
+- Review coverage: two `gpt-5.5 xhigh` subagents checked the next bounded
+  slice. One confirmed the older Tile-K fold/update memory was stale because
+  the current checkout already has `TileKFoldUpdateProof` and resolved-fact
+  tests; the other identified this exact Vitis evidence validator
+  stale-artifact gap.
+- Verification passed:
+  `cargo fmt --all -- --check`;
+  `cargo test --locked -p spatial-rs-hls vitis_evidence_validator_rejects_unexpected_artifact_kernel -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls vitis_evidence_validator -- --nocapture`;
+  `cargo test --locked -p ee109-examples run_vitis_validation_validate_evidence_accepts_current_37_checkpoint -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls -- --nocapture`;
+  `cargo test --locked -p ee109-examples -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core -- --nocapture`;
+  `cargo clippy -p spatial-rs-hls --all-targets --locked -- -D warnings`;
+  `cargo clippy -p spatial-rs-core -p ee109-examples --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary: this is local evidence-validator reliability work only. It does not
+  change generated HLS C++, manifests, validation-program membership, imported
+  Vitis evidence, or the active `a62eb274` 37-program vendor checkpoint, so no
+  EC2/Vitis rerun was needed.
+
 ## 2026-07-04 -- Rust rewrite raw Lab2 fixed GEMM ingress guard
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
