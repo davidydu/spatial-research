@@ -137,6 +137,14 @@ and const-backed stride provenance before reconstructing the existing checked
 payload. Generated kernel text, manifests, validation membership, and imported
 Vitis evidence are unchanged, and no fresh EC2/Vitis run is needed.
 
+A ninth verified working-tree cleanup hardens `Dense2dTileDotAccum v0`
+classifier admission: the lhs load, rhs load, and final accumulator store now
+pass through resolver-backed rank-2 access facts after structural matching.
+This checks same access grouping, same parent statement, loop-symbol identity,
+and const-backed stride provenance before reconstructing the existing checked
+payload. Generated kernel text, manifests, validation membership, and imported
+Vitis evidence are unchanged, and no fresh EC2/Vitis run is needed.
+
 ## 2026-07-03 Rust Rewrite Raw-Adapter Retirement 35-Program Vitis Checkpoint
 
 The Rust rewrite branch `David/HLS-spatial` passed the full 35-program EE109

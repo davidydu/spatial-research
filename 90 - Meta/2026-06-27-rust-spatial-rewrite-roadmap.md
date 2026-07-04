@@ -132,6 +132,13 @@ checks same access grouping, same parent statement, loop-symbol identity, and
 const-backed stride provenance before reconstructing the existing checked
 payload. This is no-HLS-drift compiler foundation work; generated kernels,
 manifests, validation membership, and imported Vitis evidence are unchanged.
+A ninth verified working-tree checkpoint hardens `Dense2dTileDotAccum v0`
+classifier admission by routing the lhs load, rhs load, and final accumulator
+store through resolver-backed rank-2 access facts after structural matching. It
+checks same access grouping, same parent statement, loop-symbol identity, and
+const-backed stride provenance before reconstructing the existing checked
+payload. This is no-HLS-drift compiler foundation work; generated kernels,
+manifests, validation membership, and imported Vitis evidence are unchanged.
 A seventh verified working-tree checkpoint moves `Dense2dTileKMemFold v0`
 host-harness rendering into `crates/spatial-rs-hls/src/tile_k.rs`, beside the
 existing Tile-K kernel frame/body helpers. `emit.rs` remains the plan

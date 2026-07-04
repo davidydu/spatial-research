@@ -9,6 +9,29 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 — Rust rewrite Dense2dTileDotAccum access-role fact gate
+
+- Committed the previous no-HLS-drift Rust checkpoint as
+  `5c21c485` (`Record no-HLS-drift helper checkpoints`) on
+  `David/HLS-spatial`, and the matching research-vault record as `c8f4c4c`
+  (`Record spatial-rs no-HLS-drift checkpoints`) on vault `main`.
+- Hardened `Dense2dTileDotAccum v0` classifier admission by routing the lhs
+  load, rhs load, and final accumulator store through resolver-backed rank-2
+  access facts after the structural matchers succeed. The proof now checks
+  local/global access grouping, same parent statement, loop-symbol identity,
+  and const-backed stride provenance before reconstructing the existing checked
+  payload.
+- Verification passed locally:
+  RED
+  `cargo test -p spatial-rs-core --locked dense2d_dot_accum_lhs_load_fact_matcher_rejects_equal_valued_wrong_row_coefficient_symbol -- --nocapture`
+  first failed because the DotAccum fact spec/helper did not exist; focused
+  rerun passed;
+  `cargo test -p spatial-rs-core --locked dense2d_dot_accum -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen matrix_tile_accum -- --nocapture`.
+- Boundary: generated `MatrixTileAccum4x6x5` HLS, manifests, validation
+  roster, and imported Vitis evidence are unchanged. No EC2/Vitis run is
+  needed for this proof-boundary cleanup.
+
 ## 2026-07-04 — Rust rewrite Dense2dTileScalarMul load/store fact gate
 
 - Verified local working-tree checkpoint in
