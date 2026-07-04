@@ -9,6 +9,34 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 -- Rust rewrite Tile-K fold/update proof
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `52953ae0767bf6e94fec59171d6ce0d941b184b7` (`Name Tile-K fold update proof`).
+- Replaced the Tile-K fold schedule-only helper with a named
+  `TileKFoldUpdateProof`.
+- The new proof records row/column/K update domains, effective bounds, local
+  LHS/RHS/C/partial tile roles, and serial/scheduled partial-product par
+  factors after the existing partial-product and C-accumulation resolved-fact
+  checks pass.
+- Red test:
+  `cargo test -p spatial-rs-core --locked tile_k_fold_update_proof_records_domains_accesses_and_profile_schedule -- --nocapture`
+  first failed because `TileKFoldUpdateProof` and `prove_tile_k_fold_update`
+  did not exist.
+- Verification passed:
+  `cargo fmt --all -- --check`;
+  `cargo test --locked -p spatial-rs-core -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen outer_k -- --nocapture`;
+  `cargo clippy -p spatial-rs-core --all-targets --locked -- -D warnings`;
+  `git diff --check` in the Rust repo.
+- A `gpt-5.5`/`xhigh` reviewer subagent reported no blocking issues.
+- Boundary: this is no-HLS-drift frontend/HIR proof structure. It does not
+  change accepted syntax, checked payloads, generated HLS, manifests,
+  validation membership, imported Vitis evidence, or the active `7a350983`
+  vendor-HLS anchor. No fresh EC2/Vitis run was needed.
+
 ## 2026-07-04 -- Rust rewrite Dram2dCopy plan-frame guard
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

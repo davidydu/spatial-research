@@ -42,6 +42,15 @@ harness rendering. This is backend structure only; accepted syntax, generated
 valid HLS, manifests, validation membership, imported Vitis evidence, and the
 active `7a350983` vendor-HLS anchor are unchanged.
 
+Current local no-fresh-Vitis update, 2026-07-04: Rust commit `52953ae0`
+replaces the Tile-K fold schedule-only helper with
+`TileKFoldUpdateProof`. The proof records update domains, effective bounds,
+local tile roles, and serial/scheduled partial-product par factors after the
+existing partial-product and C-accumulation resolved-fact checks pass. This is
+frontend/HIR proof structure only; accepted syntax, checked payloads,
+generated HLS, manifests, validation membership, imported Vitis evidence, and
+the active `7a350983` vendor-HLS anchor are unchanged.
+
 Current local no-fresh-Vitis update, 2026-07-04: `MemReduceFill v0` /
 `MemFoldFill v0` now accept supported static rank-1 lengths beyond the 16-lane
 lab representative and arbitrary integer literal temp fills in the bounded

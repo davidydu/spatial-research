@@ -51,6 +51,14 @@ The latest local backend-structure cleanup is Rust commit `88e33a09`
 swapped or extra ABI params before kernel or harness rendering. Accepted syntax,
 generated valid HLS, manifests, validation membership, imported Vitis evidence,
 and the active `7a350983` vendor-HLS anchor are unchanged.
+The latest local frontend/HIR proof cleanup is Rust commit `52953ae0`
+(`Name Tile-K fold update proof`). It replaces the Tile-K fold schedule-only
+helper with `TileKFoldUpdateProof`, recording row/column/K update domains,
+effective bounds, local LHS/RHS/C/partial tile roles, and serial/scheduled
+partial-product par factors after the existing partial-product and
+C-accumulation resolved-fact checks pass. Accepted syntax, checked payloads,
+generated HLS, manifests, validation membership, imported Vitis evidence, and
+the active `7a350983` vendor-HLS anchor are unchanged.
 The quarantined raw Lab2 GEMM source adapter has also been tightened locally:
 Rust commit `38c5ebfddcc984d4c1af5407824d0246cf11f3e0` records exact A/B/C
 preload and C-store rank-2 tile-I/O role/window facts in the private raw source
