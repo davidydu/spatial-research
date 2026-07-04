@@ -53,9 +53,16 @@ preload and C-store rank-2 tile-I/O role/window facts in the private raw source
 proof before retaining the normalized `Accel`-body equality guard. This is a
 source-adapter proof cleanup only; accepted raw syntax, checked payloads,
 generated HLS, validation membership, and imported Vitis evidence are
-unchanged. The next natural bridge is to map accepted raw Part5/Part6 variants
-onto the existing `TileKProfile` HIR proof vocabulary without widening raw
-Scala compatibility.
+unchanged. Follow-up Rust commit
+`47f9baa43f455f6078a514098f25ad7815a58298` completed that bridge by moving the
+Tile-K profile vocabulary into checked IR as neutral
+`Dense2dTileKMemFoldProfile` values and making the raw source proof validate
+its generated frontend source against the expected profile. The covered raw
+profile mappings are Part5 fixed32 -> `SerialFullK`, Part6 fixed32 ->
+`Part6ScheduledFullK`, Part5 K-tail34 -> `SerialKTail`, and Part6 K-tail34 ->
+`Part6ScheduledKTail`. This is still no-HLS-drift compiler structure work:
+accepted raw syntax, generated HLS, manifests, validation membership, and
+imported Vitis evidence are unchanged.
 Current and future vendor-HLS claims should pass the repo-local evidence
 validator and the EC2 Rust/Cargo 1.75 compatibility gate.
 The earlier raw-adapter-retirement current-head refresh, scheduled
@@ -509,7 +516,12 @@ source proof`) added a private source-adapter proof object for the fixed raw
 Part5/Part6 shell profile and normalized single-`Accel` body before generated
 frontend-source emission. This kept accepted profiles, HLS, manifests, and the
 33-program validation roster unchanged, so it is also a no-HLS-drift compiler
-structure slice. Follow-up Rust commit `3bd86c13c5ffe99828b8cf6fa46f136d8746b6e9`
+structure slice. Later Rust commit
+`47f9baa43f455f6078a514098f25ad7815a58298` (`Bridge raw GEMM to Tile-K
+profiles`) closed the raw-to-checked-profile gap by validating accepted raw
+Part5/Part6 generated frontend sources against neutral checked-IR Tile-K
+profiles without changing HLS, manifests, validation membership, or vendor
+evidence. Follow-up Rust commit `3bd86c13c5ffe99828b8cf6fa46f136d8746b6e9`
 (`Extract Tile-K HLS schedule preflight`) continued the HLS ledger by moving
 schedule/payload factor agreement, ordered Part6 partition-recipe validation,
 and the serial no-partitions guard into `spatial_rs_hls::tile_k`; Lab2

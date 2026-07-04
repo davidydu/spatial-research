@@ -9,6 +9,45 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-03 — Rust rewrite raw Lab2 GEMM Tile-K profile bridge
+
+- Committed `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at Rust commit
+  `47f9baa43f455f6078a514098f25ad7815a58298` (`Bridge raw GEMM to Tile-K
+  profiles`). The accepted raw Lab2 Part5/Part6 GEMM wrappers now validate
+  their generated frontend source against the checked-IR Tile-K profile that
+  the wrapper proof expects, instead of trusting only normalized source text.
+- Added neutral `Dense2dTileKMemFoldProfile` vocabulary in checked IR while
+  keeping `TileKMemFoldProof` private. `source_adapter` records the expected
+  profile, `parser` checks the compiled checked program against that profile,
+  and the classifier no longer owns the stable profile vocabulary.
+- Covered the four accepted raw profile mappings: Part5 fixed32 ->
+  `SerialFullK`, Part6 fixed32 -> `Part6ScheduledFullK`, Part5 K-tail34 ->
+  `SerialKTail`, and Part6 K-tail34 -> `Part6ScheduledKTail`.
+- `gpt-5.5 xhigh` reviewers found the intended compiler boundary sound after
+  follow-up fixes: no `compile_source` call remains in `source_adapter`, the
+  classifier tests no longer depend on the raw adapter, the profile marker is
+  carried into the parser check, and the profile names no longer encode a
+  specific dimension while the matcher still supports parameterized aliases.
+- Verification passed locally:
+  `cargo test --locked -p spatial-rs-core lab2_fixed_gemm -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core tile_k_contract -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core parse_accel_accepts_exact_raw_lab2_part5_gemm_fixed_32 -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core parse_accel_accepts_exact_raw_lab2_part6_gemm_as_scheduled_payload -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core raw_lab2_part5_fixed_wrapper_near_misses_fail_closed -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core raw_lab2_part6_fixed_wrapper_near_misses_fail_closed -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_raw_part -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core --quiet`;
+  `cargo test --locked -p ee109-examples --quiet`;
+  `cargo test --locked -p spatial-rs-hls --quiet`;
+  `cargo test -p spatial-rs-hls --locked --test vitis_validation active_docs_name_c862e57a_as_current_vendor_anchor -- --nocapture`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary: no accepted syntax, generated HLS, manifest, validation roster, or
+  imported Vitis evidence changed. The active vendor evidence anchor remains
+  `c862e57a`; no EC2/Vitis run was needed for this profile-bridge cleanup.
+
 ## 2026-07-03 — Rust rewrite raw Lab2 GEMM tile-I/O proof facts
 
 - Committed `/Users/david/Documents/David_code/spatial-rs` on

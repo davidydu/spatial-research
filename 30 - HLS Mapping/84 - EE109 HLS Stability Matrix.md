@@ -54,6 +54,15 @@ EC2/Vitis 2025.1 `csim_design` and `csynth_design` after raw Lab2 LUT/FSM-alt
 ingress retirement and Rust/Cargo 1.75 CLI test hardening. Durable evidence:
 `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-03-raw-ingress-retire-a30ec96-35-program/`.
 
+Later no-fresh-Vitis policy update, 2026-07-03: Rust commit
+`47f9baa43f455f6078a514098f25ad7815a58298` bridged the accepted raw Lab2 GEMM
+Part5/Part6 wrappers to neutral checked-IR Tile-K profiles. The parser now
+checks the generated frontend program against the expected profile, while
+accepted raw syntax, generated HLS, manifests, validation membership, and
+imported Vitis evidence are unchanged. No fresh EC2/Vitis run is needed for
+this profile bridge. The active current-head vendor-HLS anchor remains
+`c862e57a`.
+
 ## 2026-07-03 Rust Rewrite Raw-Adapter Retirement 35-Program Vitis Checkpoint
 
 The Rust rewrite branch `David/HLS-spatial` passed the full 35-program EE109
@@ -632,16 +641,18 @@ Generated-code hygiene:
 ## Recommended Next Action
 
 For the Rust rewrite, the clean current-head EC2/Vitis checkpoint is now the
-35-program raw-adapter-retirement refresh at `a30ec96`, captured in
-`docs/vitis-validation/2026-07-03-raw-ingress-retire-a30ec96-35-program/`.
+35-program current-head refresh at `c862e57a`, captured in
+`docs/vitis-validation/2026-07-03-current-head-c862e57a-35-program/`.
 Use it as the vendor-stability anchor for the current EE109 MVP roster.
 
-The natural next implementation action is proof-driven tightening of one
-remaining quarantined source-ingress island, preferably fixed Lab2 GEMM or the
-local Lab3 teaching wrapper, while preserving the same checked payload/HLS
-surface. Byte-stable refactors should keep using local equality, dry-run/plan,
-full test, clippy, and evidence-validator gates; any generated-HLS text change
-or validation-roster change should trigger a fresh EC2/Vitis execution.
+The fixed Lab2 GEMM raw-ingress/profile bridge is now complete as a
+no-HLS-drift compiler-structure slice. The natural next implementation action
+is either proof-driven tightening of the remaining local Lab3 teaching wrapper
+or a small backend/helper reliability slice, while preserving the same checked
+payload/HLS surface. Byte-stable refactors should keep using local equality,
+dry-run/plan, full test, clippy, and evidence-validator gates; any
+generated-HLS text change or validation-roster change should trigger a fresh
+EC2/Vitis execution.
 
 The
 main remaining EE109 gaps are generic Spatial `MemFold`/`Fold`, arbitrary
