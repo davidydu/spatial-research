@@ -145,6 +145,12 @@ and const-backed stride provenance before reconstructing the existing checked
 payload. Generated kernel text, manifests, validation membership, and imported
 Vitis evidence are unchanged, and no fresh EC2/Vitis run is needed.
 
+A tenth verified working-tree cleanup moves the `MatrixTileAccum4x6x5`
+host-harness renderer into `spatial_rs_hls::dot_accum`, beside the existing
+rank-2 dot-accum kernel frame. This is a backend helper-boundary cleanup only:
+generated kernel text, manifests, validation membership, and imported Vitis
+evidence are unchanged, and no fresh EC2/Vitis run is needed.
+
 ## 2026-07-03 Rust Rewrite Raw-Adapter Retirement 35-Program Vitis Checkpoint
 
 The Rust rewrite branch `David/HLS-spatial` passed the full 35-program EE109

@@ -9,6 +9,33 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 — Rust rewrite Dense2dTileDotAccum HLS harness helper
+
+- Moved the `MatrixTileAccum4x6x5` host-harness renderer behind
+  `crates/spatial-rs-hls/src/dot_accum.rs`, beside the existing rank-2
+  dot-accum kernel frame. `emit.rs` now lowers to the HLS plan, resolves ABI
+  params, builds a DotAccum harness frame, and delegates to the DotAccum
+  helper.
+- Verification passed locally:
+  RED
+  `cargo test -p spatial-rs-hls --locked dot_accum_harness_uses_entry_symbol_ports_cases_and_display_name -- --nocapture`
+  first failed because the DotAccum harness frame/function did not exist, then
+  failed once more because the new assertion used the wrong oracle row; focused
+  rerun passed after correcting the assertion to the actual row-major
+  dot-product output;
+  `cargo test -p spatial-rs-hls --locked dot_accum -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen matrix_tile_accum -- --nocapture`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`;
+  vault `git diff --check`;
+  `cargo test --locked -p spatial-rs-core --quiet`;
+  `cargo test --locked -p spatial-rs-hls --quiet`;
+  `cargo test --locked -p ee109-examples --quiet`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`.
+- Boundary: generated `MatrixTileAccum4x6x5` kernel text, manifests,
+  validation roster, and imported Vitis evidence are unchanged. No EC2/Vitis
+  run is needed for this helper extraction.
+
 ## 2026-07-04 — Rust rewrite Dense2dTileDotAccum access-role fact gate
 
 - Committed the previous no-HLS-drift Rust checkpoint as

@@ -139,6 +139,12 @@ checks same access grouping, same parent statement, loop-symbol identity, and
 const-backed stride provenance before reconstructing the existing checked
 payload. This is no-HLS-drift compiler foundation work; generated kernels,
 manifests, validation membership, and imported Vitis evidence are unchanged.
+A tenth verified working-tree checkpoint moves the `MatrixTileAccum4x6x5`
+host-harness renderer into `crates/spatial-rs-hls/src/dot_accum.rs`, beside the
+existing rank-2 dot-accum kernel frame. `emit.rs` remains the plan dispatcher
+and ABI plan-to-frame adapter. This is no-HLS-drift backend helper work;
+generated kernels, manifests, validation membership, and imported Vitis
+evidence are unchanged.
 A seventh verified working-tree checkpoint moves `Dense2dTileKMemFold v0`
 host-harness rendering into `crates/spatial-rs-hls/src/tile_k.rs`, beside the
 existing Tile-K kernel frame/body helpers. `emit.rs` remains the plan
@@ -267,6 +273,10 @@ HLS backend, not a new language feature; the current-head vendor refresh proves
 the existing 33-program roster still passes after the cleanup.
 A later no-HLS-drift dense backend slice moved the `Dense2dTileDotAccum`
 renderer into `spatial_rs_hls::dot_accum`, matching the MemFold helper pattern
+while preserving generated HLS, manifests, validation membership, and
+vendor-evidence boundaries.
+A later no-HLS-drift dense backend slice moved the `MatrixTileAccum4x6x5`
+host harness into `spatial_rs_hls::dot_accum`, matching the same helper pattern
 while preserving generated HLS, manifests, validation membership, and
 vendor-evidence boundaries.
 A later no-HLS-drift dense backend slice moved the `Dense2dTileScalarMul`
