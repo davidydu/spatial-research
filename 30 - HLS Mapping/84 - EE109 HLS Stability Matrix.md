@@ -31,6 +31,15 @@ EC2/Vitis 2025.1 `csim_design` and `csynth_design` after promoting
 This supersedes older notes below that say the active anchor remains
 `7a350983`, `eb4f6236`, or `c862e57a`.
 
+Current local no-fresh-Vitis update, 2026-07-04: Rust commit `5af91664`
+hardens the raw Lab2 simple `MemReduce` / `MemFold` ingress. The adapter now
+binds the accepted `Accel` island to the matched raw `@spatial class`, and
+direct tests prove the promoted `MemReduceFives8` / `MemFoldSevens12` profiles
+do not widen raw Scala adapter admission or reuse reserved raw Lab2 names.
+This is local fail-closed guard work only; generated HLS C++, manifests,
+validation-program membership, imported Vitis evidence, and the active
+`a62eb274` vendor-HLS anchor are unchanged.
+
 Current local no-fresh-Vitis update, 2026-07-04: Rust commit `88e33a09`
 adds a named `Dram2dCopyPlan` body and moves rank-2 copy plan-to-renderer
 validation into `spatial_rs_hls::rank2_copy`. The shared

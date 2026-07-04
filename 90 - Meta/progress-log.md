@@ -9,6 +9,39 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 -- Rust rewrite raw Lab2 memory-reduction ingress guard
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `5af91664c6ac7105dfb71971f136c7da662686c8`
+  (`Guard raw Lab2 memory reduction ingress`).
+- Added direct guard coverage proving the promoted normal-kernel profiles
+  `MemReduceFives8` and `MemFoldSevens12` do not widen the quarantined raw
+  Scala `Lab2Part1SimpleMemReduce` / `Lab2Part2SimpleMemFold` adapter path.
+- Fixed a real raw-adapter binding gap found during review: the Lab2 simple
+  `MemReduce` / `MemFold` raw ingress now extracts the direct `main` and
+  direct `Accel` body from the matched raw `@spatial class`, instead of pairing
+  a global class-name token with a `main`/`Accel` island from another class.
+- Red test:
+  `cargo test --locked -p spatial-rs-core lab2_memory_reduction_adapters_bind_accel_to_matched_class -- --nocapture`
+  first failed because an empty old Lab2 class marker could be paired with an
+  exact old accel in a renamed class.
+- Verification passed:
+  `cargo fmt --all -- --check`;
+  `cargo test --locked -p spatial-rs-core raw_lab2_part -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core lab2_memory_reduction -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core promoted_mem_reduction_profiles_cannot_reuse_reserved_raw_lab2_names -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core static_len_and_general_literal_fill -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core -- --nocapture`;
+  `cargo test --locked -p ee109-examples -- --nocapture`;
+  `cargo clippy -p spatial-rs-core --all-targets --locked -- -D warnings`;
+  `cargo clippy -p ee109-examples --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary: this is local fail-closed raw-adapter hardening only. It does not
+  change generated HLS C++, manifests, validation-program membership, or the
+  imported 37-program Vitis evidence at `a62eb274`.
+
 ## 2026-07-04 -- Rust rewrite a62eb274 37-program Vitis refresh
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
