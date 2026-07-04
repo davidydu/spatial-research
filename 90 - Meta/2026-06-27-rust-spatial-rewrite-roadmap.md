@@ -41,6 +41,12 @@ DRAM/scalar ABI proof and tiled local-I/O shell proof between
 foundation work only: Dense compute and FIFO effect proofs remain feature-local,
 and the active Vitis evidence anchor is still the `c862e57a` 35-program
 refresh pending any later EC2/Vitis rerun.
+The follow-up local rank-2 classifier path now shares the tile-copy role proof
+between non-outer-K `Dense2dTileMemFold` C preload/store and Tile-K C
+preload/store. This is also compiler foundation work only: feature-local syntax
+gates and higher-level proofs remain separate, generated HLS and validation
+membership are unchanged, and the active Vitis evidence anchor is still
+`c862e57a` pending any later EC2/Vitis rerun.
 Current and future vendor-HLS claims should pass the repo-local evidence
 validator and the EC2 Rust/Cargo 1.75 compatibility gate.
 The earlier raw-adapter-retirement current-head refresh, scheduled

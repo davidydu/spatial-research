@@ -4057,3 +4057,60 @@ Boundary:
 - It does not imply generic rank-1 scheduling, tail tiles, dynamic bounds,
   generic FIFO/stream support, board execution, Vivado implementation, timing
   closure, or completion of the full Spatial rewrite.
+
+## 2026-07-03 -- Rust rewrite shared rank-2 tile-copy role proof
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `1ac50545f11332acf06d4887ad791fa1d44ac906` (`Share rank-2
+  tile-copy role proof`) records a local no-HLS-drift rank-2 classifier cleanup.
+- `Dense2dTileMemFold v0` and `Dense2dTileKMemFold v0` now share a private
+  `Rank2TileCopyRole` / `Rank2TileCopyRoleSpec` helper for the common
+  local-write/global-read and global-write/local-read tile-copy fact roles.
+- The helper is wired only into the non-outer-K MemFold C preload/store path and
+  the Tile-K C preload/store path. Feature-local syntax gates, phase-spine
+  checks, source-shape proofs, fold/update proofs, and payload construction stay
+  outside the helper.
+- Updated the Rust README, EE109 MVP plan, architecture note, superpowers
+  roadmap, and this vault roadmap/progress log.
+
+Subagent review:
+- A `gpt-5.5` `xhigh` read-only review subagent found no blocking issues.
+- The review confirmed that feature-local syntax gates still run before the
+  shared helper, docs keep `c862e57a` as the active vendor-HLS evidence anchor,
+  and `.codex/` remains private/untracked.
+
+Proof:
+- Red check:
+  `cargo test --locked -p spatial-rs-core rank2_tile_copy_role -- --nocapture`
+  failed first because the helper did not exist.
+- Focused checks:
+  `cargo test --locked -p spatial-rs-core rank2_tile_copy_role -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core tiled2d -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core rank2_tile_memfold -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core tile_k_contract -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen tile_memfold -- --nocapture`,
+  and
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k -- --nocapture`.
+- Broader local verification:
+  `cargo test --locked -p spatial-rs-core`,
+  `cargo test --locked -p ee109-examples`,
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation active_docs_name_c862e57a_as_current_vendor_anchor -- --nocapture`,
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`,
+  `cargo fmt --all -- --check`,
+  `git diff --check` in the Rust repo,
+  and `git diff --check` in the vault.
+
+Boundary:
+- This is local classifier proof factoring only.
+- It does not change accepted syntax, diagnostics intent, checked IR payloads,
+  generated HLS C++, manifests, host harnesses, validation membership, or
+  imported Vitis evidence.
+- The active vendor-HLS evidence anchor remains
+  `docs/vitis-validation/2026-07-03-current-head-c862e57a-35-program/`;
+  this rank-2 helper slice has not been rerun on EC2/Vitis yet.
+- It does not imply generic rank-2 memory lowering, alias analysis, broader
+  GEMM/MemFold support, board execution, Vivado implementation, timing closure,
+  or completion of the full Spatial rewrite.
