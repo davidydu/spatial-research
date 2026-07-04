@@ -9,6 +9,30 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 — Rust rewrite MemReduce/MemFold fill HLS harness helper
+
+- Moved the `MemReduceFill v0` and `MemFoldFill v0` host-harness renderer
+  behind `crates/spatial-rs-hls/src/mem_reduction_fill.rs`, beside the existing
+  fill kernel frame. `emit.rs` now lowers to the HLS plan, builds a fill
+  harness frame, and delegates to the fill helper.
+- Verification passed locally:
+  RED
+  `cargo test -p spatial-rs-hls --locked mem_reduction_fill_harness_uses_entry_output_expected_values_and_display_name -- --nocapture`
+  first failed because the fill harness frame/function did not exist; focused
+  rerun passed after moving the expected-array/oracle comparison into the
+  helper;
+  `cargo test -p spatial-rs-hls --locked mem_reduction_fill -- --nocapture`;
+  `cargo fmt --all`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`;
+  `cargo test --locked -p spatial-rs-core --quiet`;
+  `cargo test --locked -p spatial-rs-hls --quiet`;
+  `cargo test --locked -p ee109-examples --quiet`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`.
+- Boundary: generated fill kernel/harness text, manifests, validation roster,
+  and imported Vitis evidence are unchanged. No EC2/Vitis run is needed for
+  this helper extraction.
+
 ## 2026-07-04 — Rust rewrite scalar-family HLS harness helper
 
 - Moved the `ScalarExpr v0`, `ScalarReduce v0`, `ScalarFold v0`, and

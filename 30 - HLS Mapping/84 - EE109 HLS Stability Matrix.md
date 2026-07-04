@@ -179,6 +179,13 @@ frames. This is a backend helper-boundary cleanup only: generated kernel text,
 manifests, validation membership, and imported Vitis evidence are unchanged,
 and no fresh EC2/Vitis run is needed.
 
+A fifteenth verified working-tree cleanup moves `MemReduceFill v0` and
+`MemFoldFill v0` host-harness rendering into
+`spatial_rs_hls::mem_reduction_fill`, beside the existing fill kernel frame.
+This is a backend helper-boundary cleanup only: generated kernel text,
+manifests, validation membership, and imported Vitis evidence are unchanged,
+and no fresh EC2/Vitis run is needed.
+
 ## 2026-07-03 Rust Rewrite Raw-Adapter Retirement 35-Program Vitis Checkpoint
 
 The Rust rewrite branch `David/HLS-spatial` passed the full 35-program EE109

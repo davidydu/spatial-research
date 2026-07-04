@@ -172,6 +172,12 @@ scalar kernel frames. `emit.rs` remains the plan dispatcher and ABI
 plan-to-frame adapter. This is no-HLS-drift backend helper work; generated
 kernels, manifests, validation membership, and imported Vitis evidence are
 unchanged.
+A fifteenth verified working-tree checkpoint moves `MemReduceFill v0` and
+`MemFoldFill v0` host-harness rendering into
+`crates/spatial-rs-hls/src/mem_reduction_fill.rs`, beside the existing fill
+kernel frame. `emit.rs` remains the plan dispatcher and ABI plan-to-frame
+adapter. This is no-HLS-drift backend helper work; generated kernels,
+manifests, validation membership, and imported Vitis evidence are unchanged.
 A seventh verified working-tree checkpoint moves `Dense2dTileKMemFold v0`
 host-harness rendering into `crates/spatial-rs-hls/src/tile_k.rs`, beside the
 existing Tile-K kernel frame/body helpers. `emit.rs` remains the plan
