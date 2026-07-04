@@ -172,6 +172,13 @@ existing LUT kernel frame. This is a backend helper-boundary cleanup only:
 generated kernel text, manifests, validation membership, and imported Vitis
 evidence are unchanged, and no fresh EC2/Vitis run is needed.
 
+A fourteenth verified working-tree cleanup moves `ScalarExpr v0`,
+`ScalarReduce v0`, `ScalarFold v0`, and `ScalarSramTileFold v0` host-harness
+rendering into `spatial_rs_hls::scalar`, beside the existing scalar kernel
+frames. This is a backend helper-boundary cleanup only: generated kernel text,
+manifests, validation membership, and imported Vitis evidence are unchanged,
+and no fresh EC2/Vitis run is needed.
+
 ## 2026-07-03 Rust Rewrite Raw-Adapter Retirement 35-Program Vitis Checkpoint
 
 The Rust rewrite branch `David/HLS-spatial` passed the full 35-program EE109

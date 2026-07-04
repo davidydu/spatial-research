@@ -9,6 +9,31 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 — Rust rewrite scalar-family HLS harness helper
+
+- Moved the `ScalarExpr v0`, `ScalarReduce v0`, `ScalarFold v0`, and
+  `ScalarSramTileFold v0` host-harness renderers behind
+  `crates/spatial-rs-hls/src/scalar.rs`, beside the existing scalar kernel
+  frames. `emit.rs` now lowers to HLS plans, builds scalar harness frames, and
+  delegates to the scalar helper.
+- Verification passed locally:
+  RED
+  `cargo test -p spatial-rs-hls --locked scalar_ -- --nocapture`
+  first failed because the scalar harness frame/functions did not exist, then
+  failed once more because the new fold-harness assertions used the wrong
+  oracle input vector; focused rerun passed after correcting them to the
+  deterministic `scalar_fold_inputs(8)` row;
+  `cargo fmt --all`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`;
+  `cargo test --locked -p spatial-rs-core --quiet`;
+  `cargo test --locked -p spatial-rs-hls --quiet`;
+  `cargo test --locked -p ee109-examples --quiet`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`.
+- Boundary: generated scalar-family kernel/harness text, manifests, validation
+  roster, and imported Vitis evidence are unchanged. No EC2/Vitis run is
+  needed for this helper extraction.
+
 ## 2026-07-04 — Rust rewrite LUT HLS harness helper
 
 - Moved the square/non-square lab LUT and `LutBiasLookup`

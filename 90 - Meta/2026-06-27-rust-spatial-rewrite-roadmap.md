@@ -165,6 +165,13 @@ and `LutBiasLookup` host-harness rendering into
 `emit.rs` remains the plan dispatcher and ABI plan-to-frame adapter. This is
 no-HLS-drift backend helper work; generated kernels, manifests, validation
 membership, and imported Vitis evidence are unchanged.
+A fourteenth verified working-tree checkpoint moves `ScalarExpr v0`,
+`ScalarReduce v0`, `ScalarFold v0`, and `ScalarSramTileFold v0` host-harness
+rendering into `crates/spatial-rs-hls/src/scalar.rs`, beside the existing
+scalar kernel frames. `emit.rs` remains the plan dispatcher and ABI
+plan-to-frame adapter. This is no-HLS-drift backend helper work; generated
+kernels, manifests, validation membership, and imported Vitis evidence are
+unchanged.
 A seventh verified working-tree checkpoint moves `Dense2dTileKMemFold v0`
 host-harness rendering into `crates/spatial-rs-hls/src/tile_k.rs`, beside the
 existing Tile-K kernel frame/body helpers. `emit.rs` remains the plan
