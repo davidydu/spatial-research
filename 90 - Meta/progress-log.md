@@ -9,6 +9,60 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 -- Rust rewrite 7a350983 current-head Vitis refresh
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- EC2/Vitis source snapshot:
+  `7a350983c3a8b0bc6a8a6fcc4603fc507df7f95a` (`Fix EE109 documentation drift`).
+- Rust evidence/import commit:
+  `73032944727e3024fddd154d235c6217040ffbf1` (`Record 7a350983 Vitis evidence`).
+- The imported evidence directory is
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-04-current-head-7a350983-35-program/`.
+- This promotes the 35-program current-head vendor-HLS anchor after the raw
+  Lab2 row/column/K-tail adapter, raw Lab3 static-border adapter, affine-index
+  helper cleanup, MemReduce/MemFold literal-fill widening, and documentation
+  cleanup.
+
+EC2/Vitis proof:
+- Host: `[ec2-host — see private/ec2-lane.md]`
+  (`ip-172-31-37-7`).
+- Toolchain: `/tools/Xilinx/2025.1/Vitis/settings64.sh`, Vitis runner
+  `vitis-run v2025.1`, HLS build `2025.1 6135595`, Rust/Cargo 1.75.0,
+  target `xc7z020-clg400-1`, 10 ns clock target.
+- Remote run directory:
+  `/home/ubuntu/spatial-rs-runs/2026-07-04-current-head-7a350983/repo`.
+- Remote command:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --settings /tools/Xilinx/2025.1/Vitis/settings64.sh --out target/vitis-validation-current-head-7a350983`.
+- Result: all 35 validation kernels reported Vitis `csim_design` and
+  `csynth_design` success. The remote and local evidence validators reported
+  `VALIDATED ... mode=both execution=execute kernels=35`.
+
+Proof:
+- Remote EC2 compatibility gate passed:
+  `cargo test --locked -p ee109-examples --test ec2_toolchain_compat -- --nocapture`.
+- Local evidence anchor tests passed:
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_7a350983_checkpoint -- --nocapture`
+  and
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation active_docs_name_7a350983_as_current_vendor_anchor -- --nocapture`.
+- Local evidence CLI validation passed:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-04-current-head-7a350983-35-program --mode both`.
+- Local hygiene passed: `cargo fmt --all -- --check`, `git diff --check` in the
+  Rust repo, and `git diff --check` in the vault.
+
+Boundary:
+- This is a vendor-HLS stability refresh for the exact 35-program current-head
+  validation roster.
+- It proves Vitis C simulation and HLS synthesis only; it does not prove board
+  execution, Vivado implementation, place-and-route, timing closure,
+  performance optimality, arbitrary GEMM, broad Scala source compatibility, or
+  completion of the full Spatial rewrite.
+- The raw Lab2 GEMM and raw Lab3 teaching-wrapper adapters are still covered by
+  parser/HLS/manifest equality against canonical Vitis-proven canaries, not by
+  separate validation-roster members.
+
 ## 2026-07-04 — Rust rewrite affine HIR index predicate helper
 
 - Added reusable `IndexUseFact` predicates for lane-symbol, constant-value, and

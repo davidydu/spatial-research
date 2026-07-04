@@ -23,14 +23,15 @@ rewrite 35-program roster pass EC2/Vitis `csim_design` and `csynth_design`.
 This is still not board execution, Vivado implementation, timing closure, or a
 generic Spatial compatibility claim.
 
-Current Rust rewrite delta, 2026-07-04: Rust commit `eb4f6236` is now the
-active current-head vendor-HLS checkpoint. The full 35-program roster passed
-EC2/Vitis 2025.1 `csim_design` and `csynth_design` after the later
-proof-boundary and HLS helper cleanups through the MemReduce/MemFold fill
-harness extraction. Durable evidence:
-`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-04-current-head-eb4f6236-35-program/`.
+Current Rust rewrite delta, 2026-07-04: source snapshot `7a350983` is now the
+active current-head vendor-HLS checkpoint, imported by Rust commit `73032944`.
+The full 35-program roster passed EC2/Vitis 2025.1 `csim_design` and
+`csynth_design` after the raw Lab2 row/column/K-tail adapter, raw Lab3
+static-border adapter, affine-index helper cleanup, MemReduce/MemFold
+literal-fill widening, and documentation cleanup. Durable evidence:
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-04-current-head-7a350983-35-program/`.
 This supersedes older notes below that say the active anchor remains
-`c862e57a`.
+`eb4f6236` or `c862e57a`.
 
 Current local no-fresh-Vitis update, 2026-07-04: `MemReduceFill v0` /
 `MemFoldFill v0` now accept supported static rank-1 lengths beyond the 16-lane
@@ -97,8 +98,8 @@ Part5/Part6 wrappers to neutral checked-IR Tile-K profiles. The parser now
 checks the generated frontend program against the expected profile, while
 accepted raw syntax, generated HLS, manifests, validation membership, and
 imported Vitis evidence are unchanged. No fresh EC2/Vitis run was needed for
-this profile bridge at the time; the active current-head vendor-HLS anchor is
-now `eb4f6236`.
+this profile bridge at the time; its then-active current-head vendor-HLS anchor
+was `eb4f6236`, now superseded by the `7a350983` refresh.
 
 Rust commit `0f16af3e7b042554369ce69972da580078651c6a` tightened the known
 local Lab3 teaching wrapper from exact raw-wrapper equality to a scoped source
@@ -108,8 +109,8 @@ setup facts before the single `Accel`, and local-window facts for
 the `par 16` store before canonical `Lab3Part1Convolution` payload emission.
 Generated HLS, manifests, validation membership, and imported Vitis evidence
 are unchanged, so no fresh EC2/Vitis run was needed for this source-proof
-cleanup at the time; the active current-head vendor-HLS anchor is now
-`eb4f6236`.
+cleanup at the time; its then-active current-head vendor-HLS anchor was
+`eb4f6236`, now superseded by the `7a350983` refresh.
 
 Current local no-fresh-Vitis update, 2026-07-04: the same quarantined raw
 Lab3 teaching adapter now accepts the exact static-kernel border predicate
@@ -126,7 +127,8 @@ checked IR rejects flattened stencil extents beyond the supported HLS/harness
 `int` indexing range before HLS planning. Accepted syntax, generated HLS,
 manifests, validation membership, and imported Vitis evidence are unchanged, so
 no fresh EC2/Vitis run was needed for this proof/preflight cleanup at the time;
-the active current-head vendor-HLS anchor is now `eb4f6236`.
+its then-active current-head vendor-HLS anchor was `eb4f6236`, now superseded
+by the `7a350983` refresh.
 
 A second verified working-tree cleanup tightens the same raw Lab3 ingress:
 the accepted raw `Accel` island must be a direct top-level statement in `main`,
@@ -808,9 +810,10 @@ Generated-code hygiene:
 ## Recommended Next Action
 
 For the Rust rewrite, the clean current-head EC2/Vitis checkpoint is now the
-35-program current-head refresh at `eb4f6236`, captured in
-`docs/vitis-validation/2026-07-04-current-head-eb4f6236-35-program/`.
-Use it as the vendor-stability anchor for the current EE109 MVP roster.
+35-program current-head refresh at source snapshot `7a350983`, imported by Rust
+commit `73032944`, captured in
+`docs/vitis-validation/2026-07-04-current-head-7a350983-35-program/`. Use it
+as the vendor-stability anchor for the current EE109 MVP roster.
 
 The latest local MemReduce/MemFold static-literal widening is a bounded
 semantic slice with local HLS harness evidence but no validation-roster change.

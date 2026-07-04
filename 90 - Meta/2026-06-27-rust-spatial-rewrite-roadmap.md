@@ -33,15 +33,17 @@ reductions/folds, SRAM tile fold, LUT lookup, rank-1/2 dense kernels, MemReduce
 Tile-K GEMM/tail/schedule canaries.
 
 Current Vitis status: the latest Rust rewrite vendor checkpoint is the
-2026-07-04 35-program current-head refresh at source commit `eb4f6236`,
+2026-07-04 35-program current-head refresh at source snapshot `7a350983`,
 captured in
-`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-04-current-head-eb4f6236-35-program/`.
-It refreshes the same 35-program roster after the proof-boundary and HLS helper
-cleanups through the MemReduce/MemFold fill harness extraction. All 35 programs
-passed EC2/Vitis 2025.1 `csim_design` and `csynth_design`; this proves vendor
-HLS acceptance for the exact roster only, not board execution, implementation,
-timing closure, performance optimality, generic Spatial compatibility, or broad
-Scala source compatibility.
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-04-current-head-7a350983-35-program/`
+and imported by Rust commit `73032944`. It refreshes the same 35-program roster
+after the raw Lab2 row/column/K-tail adapter, raw Lab3 static-border adapter,
+affine-index helper cleanup, MemReduce/MemFold literal-fill widening, and
+documentation cleanup. All 35 programs passed EC2/Vitis 2025.1 `csim_design`
+and `csynth_design`; this proves vendor HLS acceptance for the exact roster
+only, not board execution, implementation, timing closure, performance
+optimality, generic Spatial compatibility, or broad Scala source
+compatibility.
 The quarantined raw Lab2 GEMM source adapter has also been tightened locally:
 Rust commit `38c5ebfddcc984d4c1af5407824d0246cf11f3e0` records exact A/B/C
 preload and C-store rank-2 tile-I/O role/window facts in the private raw source
