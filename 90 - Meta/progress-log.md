@@ -9,6 +9,43 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 -- Rust rewrite raw Lab2 fixed GEMM ingress guard
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `89b637ede527c9ebedfab4312d926c32dce0daf9`
+  (`Bind raw Lab2 GEMM ingress to matched class`).
+- Fixed a second raw-adapter binding gap: the exact raw
+  `Lab2Part5GEMM` / `Lab2Part6GEMM` adapter now proves runtime profile facts
+  and the exact `Accel` island from the matched raw `@spatial class` body,
+  rather than from whole-file tokens that could include a donor class or
+  object.
+- Red test:
+  `cargo test --locked -p spatial-rs-core lab2_fixed_gemm_adapters_bind_accel_to_matched_spatial_class -- --nocapture`
+  first failed because an empty raw Lab2 GEMM class marker could be paired with
+  an exact Part5 donor class body.
+- Review coverage: two `gpt-5.5 xhigh` subagents confirmed the fixed-GEMM gap,
+  recommended binding the profile and `Accel` proof to the matched class body,
+  and judged Lab3's current path suspicious but not exploitable by the same
+  empty-marker donor shape because the matched class must already contain the
+  unique direct `main`.
+- Verification passed:
+  `cargo fmt --all -- --check`;
+  `cargo test --locked -p spatial-rs-core lab2_fixed_gemm_adapters_bind_accel_to_matched_spatial_class -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core lab2_fixed_gemm -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core local_lab3_convolution_adapter -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core source_adapter::tests -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core raw_lab2_part -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core -- --nocapture`;
+  `cargo test --locked -p ee109-examples -- --nocapture`;
+  `cargo clippy -p spatial-rs-core --all-targets --locked -- -D warnings`;
+  `cargo clippy -p ee109-examples --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary: this is local fail-closed raw-adapter hardening only. It does not
+  change generated HLS C++, manifests, validation-program membership, or the
+  imported 37-program Vitis evidence at `a62eb274`.
+
 ## 2026-07-04 -- Rust rewrite raw Lab2 memory-reduction ingress guard
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

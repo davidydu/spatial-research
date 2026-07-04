@@ -31,6 +31,14 @@ EC2/Vitis 2025.1 `csim_design` and `csynth_design` after promoting
 This supersedes older notes below that say the active anchor remains
 `7a350983`, `eb4f6236`, or `c862e57a`.
 
+Current local no-fresh-Vitis update, 2026-07-04: Rust commit `89b637ed`
+hardens the raw Lab2 fixed GEMM ingress. The `Lab2Part5GEMM` /
+`Lab2Part6GEMM` adapter now proves runtime profile facts and the exact `Accel`
+island from the matched raw `@spatial class`, rejecting donor class/object
+bodies elsewhere in the same source. This is local fail-closed guard work only;
+generated HLS C++, manifests, validation-program membership, imported Vitis
+evidence, and the active `a62eb274` vendor-HLS anchor are unchanged.
+
 Current local no-fresh-Vitis update, 2026-07-04: Rust commit `5af91664`
 hardens the raw Lab2 simple `MemReduce` / `MemFold` ingress. The adapter now
 binds the accepted `Accel` island to the matched raw `@spatial class`, and
