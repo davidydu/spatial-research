@@ -9,6 +9,48 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite generic scheduled row/column/K-tail Tile-K canary
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `5f684f2a`
+  (`Add generic scheduled row-col Tile-K canary`).
+- Added the local validation canary
+  `MatrixTileMemFoldOuterKRowColTailInPlacePar4x8FixPt33x35x34`.
+  It keeps the existing Tile-K row/column/K-tail shape
+  (`ROWS=33`, `COLS=35`, `K=34`, `row_limit`, `col_limit`, `numel_k`) and
+  proves a non-Part6 partial schedule (`partial_row_par=4`,
+  `partial_col_par=8`) through checked IR, HLS row-cyclic partitions,
+  pipeline/unroll pragmas, and the native host-C++ harness.
+- The EE109 local validation roster is now 39 programs. The previous
+  38-program par4x16 EC2/Vitis bundle remains the full vendor-stability
+  anchor; the new par4x8 row/column/K-tail canary is explicitly pending
+  selected Vitis evidence.
+- Tightened fail-closed boundaries after GPT-5.5 xhigh review:
+  non-dividing generic schedules such as `4x7` are rejected, the reserved
+  Part6 `2x16` row/column/K-tail schedule is rejected under generic names, and
+  row/column/K-tail payloads cannot use the old serial full-K or par4x16
+  full-K kernel names.
+- Updated CLI/evidence tests so local plan generation covers all 39 kernels,
+  while default full-bundle evidence validation now rejects old 35-, 37-, and
+  38-program bundles against the current 39-kernel local roster.
+- Verification passed:
+  `cargo test -p spatial-rs-core --locked generic_scheduled_tile_k_row_col_tail -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked checked_ir_rejects_generic_row_col_tail_payloads_under_full_k_profile_names -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_outer_k_par4x8_row_col_k_tail_emits_parametric_guarded_hls_and_harness -- --nocapture`;
+  `cargo test -p ee109-examples --locked --test run_vitis_validation -- --nocapture`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --kernel MatrixTileMemFoldOuterKRowColTailInPlacePar4x8FixPt33x35x34 --out target/vitis-validation-plan-par4x8-row-col-tail-fresh`;
+  `cargo test --locked --workspace`;
+  `cargo fmt --all -- --check`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary:
+  this is a local compiler/HLS canary, not a generic GEMM/schedule optimizer.
+  It does not add raw Scala support, generic `MemFold`, schedule inference,
+  arbitrary dimensions, generic fixed-point widths, board-fit claims, or a new
+  full Vitis anchor.
+
 ## 2026-07-05 -- Rust rewrite rank-2 local-compute proof helper cleanup
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
