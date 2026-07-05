@@ -6324,3 +6324,40 @@ Boundary:
 - It does not claim board execution, Vivado implementation, timing closure,
   performance optimality, resource fit, generic Spatial scheduling, inferred
   banking, arbitrary K-tail schedules, or broad Scala source compatibility.
+
+## 2026-07-05 -- Rust rewrite records parameterized Tile-K proof gate
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `3a4d753f354eb20dfa4218ea38b2e954d699c783` (`Record
+  parameterized Tile-K proof gate`).
+- Promoted the existing local non-roster
+  `MatrixTileMemFoldOuterKInPlaceFixPt24x20x12Tile8x5x4` canary into an
+  explicit proof/equality gate.
+- Added private `TileKMemFoldProof` coverage for the 24x20x12 / 8x5x4 exact
+  full-K shape, including source-shape, loop-bound, tile-size, and serial
+  schedule facts.
+- Added fail-closed parser/classifier coverage for inconsistent parameterized
+  raw-alias coverage and wrong stride-symbol provenance.
+- Updated the repo fixture matrix, vault roadmap, and stability matrix to
+  record this as local non-roster proof coverage rather than a Vitis-roster
+  change.
+
+Proof:
+- `cargo test -p spatial-rs-core --locked parse_accel_lab2_outer_k_accepts_parameterized_raw_dimension_tile_aliases -- --nocapture`
+- `cargo test -p spatial-rs-core --locked lab2_outer_k_infix_tile_io_near_misses_fail_closed -- --nocapture`
+- `cargo test -p spatial-rs-core --locked tile_k_contract -- --nocapture`
+- `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_outer_k -- --nocapture`
+- `git diff --check`
+
+Boundary:
+- Generated HLS, manifests, validation roster membership, and imported Vitis
+  evidence are unchanged, so no fresh EC2/Vitis run is claimed.
+- This is not raw Scala compatibility, generic Spatial `MemFold`, arbitrary
+  K-tail support, inferred banking, dynamic dimensions, board execution, or
+  timing/resource evidence.
+- Subagent review ranked the next substantive semantic slice as a named FixPt
+  tail `Dense2dTileMemFold` canary; that can start locally, but needs fresh
+  EC2/Vitis evidence before any vendor-HLS readiness or roster-promotion claim.

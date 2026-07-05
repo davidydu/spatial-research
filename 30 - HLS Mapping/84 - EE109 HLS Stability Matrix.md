@@ -898,15 +898,17 @@ it as the vendor-stability anchor for the current EE109 MVP roster.
 
 The latest validation-roster step promoted the exact full-K Tile-K `par4x16`
 schedule canary into the official roster with EC2/Vitis evidence. The latest
-local compiler steps completed bounded no-HLS-drift structural-recovery slices:
-Tile-K pre-fold/tail-bound role recovery for the covered profiles, then
-non-outer-K `Dense2dTileMemFold` `row_limit`/`col_limit` role recovery for the
-local `MatrixTileMemFoldTail5x7x5` canary. This is classifier hardening only:
-generated HLS, validation roster membership, and imported Vitis evidence remain
-unchanged. The natural next implementation action is another bounded
-proof/helper-boundary slice with local equality gates, or a fresh EC2/Vitis run
-only if generated HLS text or roster membership changes. Do not spend the next
-step optimizing `par4x16` DSP use unless the research goal shifts toward
+local compiler steps completed bounded no-HLS-drift structural-recovery and
+proof/equality slices: Tile-K pre-fold/tail-bound role recovery for the covered
+profiles, non-outer-K `Dense2dTileMemFold` `row_limit`/`col_limit` role
+recovery for the local `MatrixTileMemFoldTail5x7x5` canary, and the
+non-roster `MatrixTileMemFoldOuterKInPlaceFixPt24x20x12Tile8x5x4` Tile-K
+parameter perturbation proof gate. Generated HLS, validation roster
+membership, and imported Vitis evidence remain unchanged. The natural next
+implementation action is either the named FixPt tail `Dense2dTileMemFold`
+canary, which will require fresh vendor evidence before promotion, or one more
+bounded helper-boundary cleanup with local equality gates. Do not spend the
+next step optimizing `par4x16` DSP use unless the research goal shifts toward
 board-fit implementation; the validator now keeps that caveat visible while the
 compiler surface continues to deepen.
 Byte-stable refactors should keep using local equality, dry-run/plan, full

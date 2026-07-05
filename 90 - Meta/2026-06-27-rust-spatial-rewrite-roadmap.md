@@ -68,7 +68,18 @@ frontend/HIR Tile-K classifier remains the semantic authority for rank-2
 tile-copy/access-role proof. Accepted raw syntax, generated frontend source,
 checked IR, generated HLS, manifests, validation membership, and imported
 Vitis evidence are unchanged, so no fresh EC2/Vitis run was claimed.
-The current local frontend source-admission cleanup is Rust commit
+The latest local proof/equality cleanup is Rust commit `3a4d753f`
+(`Record parameterized Tile-K proof gate`). It promotes the existing local
+non-roster `MatrixTileMemFoldOuterKInPlaceFixPt24x20x12Tile8x5x4`
+Tile-K canary into an explicit classifier proof/equality gate: parser raw-alias
+normalization, private `TileKMemFoldProof`, HLS/manifest equality, and local
+host compile/run now pin the 24x20x12 / 8x5x4 exact full-K shape. New
+fail-closed coverage rejects inconsistent parameterized alias coverage and
+wrong stride-symbol provenance. Generated HLS, manifests, validation
+membership, and the active Vitis evidence anchor are unchanged; this is not
+raw Scala compatibility, generic `MemFold`, arbitrary K-tail support,
+inferred banking, or a new vendor-HLS claim.
+The preceding local frontend source-admission cleanup is Rust commit
 `4834a9c8` (`Recover dense MemFold tail bounds by role`). It accepts the two
 canonical non-outer-K `Dense2dTileMemFold` tail-bound lets, `row_limit` and
 `col_limit`, in either declaration order for the local
