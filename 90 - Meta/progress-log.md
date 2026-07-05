@@ -6051,3 +6051,49 @@ Boundary:
   slice.
 - The imported `a62eb274` 37-program current-head checkpoint remains the active
   vendor-HLS anchor pending the next real Vitis refresh.
+
+## 2026-07-05 -- Rust rewrite refreshes current-head EC2/Vitis evidence
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `0a21d52e` (`Refresh current-head Vitis evidence`) imports a new
+  current-head 37-program EC2/Vitis bundle at
+  `docs/vitis-validation/2026-07-05-current-head-b91118f7-37-program/`.
+- The run executed from source commit `b91118f7` after the raw Lab2 Part5/Part6
+  GEMM Scala-ingress retirement.
+- All 37 validation programs passed Vitis 2025.1 `csim_design` and
+  `csynth_design` on the EC2 instance.
+- README, fixture matrix, MVP plan, architecture notes, roadmap, and evidence
+  validator tests now name `b91118f7` as the active vendor-HLS anchor while
+  keeping `a62eb274` as a historical checkpoint.
+
+Proof:
+- EC2 plan gate passed with Rust/Cargo 1.75 and `PLAN_COUNT=37`.
+- Full EC2 command:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --settings /tools/Xilinx/2025.1/Vitis/settings64.sh --out target/vitis-validation-current-head-b91118f7`.
+- Last EC2 kernel completed successfully:
+  `MatrixTileMemFoldOuterKRowColTailInPlacePart6ScheduledFixPt33x35x34`
+  with `returncode=0 csim=true csynth=true`.
+- Repo-local evidence validation passed on EC2 and locally:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-b91118f7-37-program --mode both`.
+- Focused local gates passed:
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_b91118f7_checkpoint -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation historical_current_head_vitis_evidence_validator_accepts_a62eb274_checkpoint -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation active_docs_name_b91118f7_as_current_vendor_anchor -- --nocapture`,
+  and
+  `cargo test --locked -p ee109-examples --test ec2_toolchain_compat -- --nocapture`.
+- Broader local verification passed:
+  `cargo fmt --all -- --check`,
+  `cargo test --locked --quiet`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  and `git diff --check` in the Rust repo.
+
+Boundary:
+- This is vendor-HLS evidence for Vitis `csim_design` and `csynth_design` only.
+  It does not prove board execution, Vivado implementation, timing closure, or
+  performance optimality.
+- It does not reintroduce broad Scala source compatibility. Raw
+  `Lab2Part5GEMM` / `Lab2Part6GEMM` wrappers remain retired; the supported
+  GEMM path is still the Rust-subset Tile-K canary set.
