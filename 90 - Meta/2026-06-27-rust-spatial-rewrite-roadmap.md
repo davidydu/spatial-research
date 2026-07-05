@@ -53,7 +53,13 @@ carry retired-kernel leftovers while claiming the exact current roster. The
 active `a62eb274` 37-program evidence bundle still validates; generated HLS,
 manifests, validation membership, and imported Vitis evidence are unchanged, so
 no fresh EC2/Vitis run was claimed.
-The latest local backend-structure cleanup is Rust commit `851586fb` (`Guard
+The latest local backend-structure cleanup is Rust commit `c1581476` (`Guard
+Stencil plan frames`). It moves `Stencil2d v0` / `Lab3Part1Convolution`
+plan-to-frame validation into `spatial_rs_hls::stencil2d`, rejecting malformed
+internal plans unless params are exactly `[input, output]` in order. Accepted
+syntax, generated HLS, manifests, validation membership, and imported Vitis
+evidence are unchanged; no fresh EC2/Vitis run was claimed.
+An earlier local backend-structure cleanup is Rust commit `851586fb` (`Guard
 DotAccum plan frames`). It moves `Dense2dTileDotAccum v0` plan-to-frame
 validation into `spatial_rs_hls::dot_accum`, rejecting malformed internal plans
 unless params are exactly `[lhs, rhs, output]` in order. Accepted syntax,

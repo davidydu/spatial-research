@@ -9,6 +9,39 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 -- Rust rewrite Stencil/Lab3 plan-frame guard
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `c158147627db818321596ac80666ce0153133d6f`
+  (`Guard Stencil plan frames`).
+- Moved `Stencil2d v0` / `Lab3Part1Convolution` plan-to-frame validation into
+  `spatial_rs_hls::stencil2d`.
+- New guard requires exact ordered ABI params `[input, output]` before Lab3 or
+  generic Stencil2d kernel/harness rendering.
+- Red test:
+  `cargo test --locked -p spatial-rs-hls emit_lab3_convolution_kernel_plan_rejects_malformed_param_frames -- --nocapture`
+  first failed because swapped Lab3 stencil params were accepted through
+  unordered `find_plan_param` lookups.
+- Review coverage: `gpt-5.5 xhigh` subagent ranked Stencil2d/Lab3 as the next
+  highest-risk plan-frame guard after DotAccum because kernel and harness
+  emission had split plan/ABI validation paths.
+- Verification passed:
+  `cargo fmt --all -- --check`;
+  `cargo test --locked -p spatial-rs-hls stencil -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls emit_lab3_convolution_kernel_plan_rejects_malformed_param_frames -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls -- --nocapture`;
+  `cargo test --locked -p ee109-examples -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core -- --nocapture`;
+  `cargo clippy -p spatial-rs-hls --all-targets --locked -- -D warnings`;
+  `cargo clippy -p spatial-rs-core -p ee109-examples --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary: this is internal HLS plan admissibility hardening only. Existing
+  Stencil/Lab3 codegen/harness snapshots and Vitis evidence tests passed;
+  generated kernels, manifests, validation-program membership, and imported
+  Vitis evidence are unchanged, so no EC2/Vitis rerun was needed.
+
 ## 2026-07-04 -- Rust rewrite DotAccum plan-frame guard
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
