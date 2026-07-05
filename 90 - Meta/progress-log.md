@@ -6753,6 +6753,48 @@ Boundary:
   tail support, arbitrary fixed-point widths, inferred banking, scheduling,
   board execution, resource fit, or timing evidence.
 
+## 2026-07-05 -- Rust rewrite refreshes 00797aed current-head Vitis evidence
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `00797aedfb2c9af7d2b25848dfa409e2569be72e` (`Accept scheduled
+  Tile-K bulk IO`) now has a fresh full-roster EC2/Vitis evidence bundle:
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
+- This supersedes
+  `docs/vitis-validation/2026-07-05-current-head-746d9ec5-39-program/` as the
+  active vendor-HLS anchor; `746d9ec5` remains historical evidence.
+- The roster remains 39 validation programs. All 39 passed Vitis 2025.1
+  `csim_design` and `csynth_design`.
+- The repo-local evidence validator reports
+  `kernels=39 resource_fit=37/39 over_budget=2 ii_caveated=14`.
+- The exact scheduled Part6 full-K Tile-K canary
+  `MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32` passed in the
+  full-roster run after the canonical arrow bulk IO source cleanup.
+
+Proof:
+- EC2 source checkout staged from local git bundle at
+  `/home/ubuntu/spatial-rs-runs/2026-07-05-current-head-00797aed-39-program/repo`.
+- Remote command:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --out target/vitis-validation-current-head-00797aed-39-program-run`.
+- Remote and local validator command:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-00797aed-39-program --mode both`.
+- Focused local pins passed:
+  `run_vitis_validation_validate_evidence_accepts_current_39_checkpoint`,
+  `current_head_vitis_evidence_validator_accepts_00797aed_checkpoint`,
+  `current_head_39_checkpoint_distinguishes_hls_acceptance_from_resource_fit`,
+  `active_docs_name_39_program_checkpoint_as_current_vendor_anchor`, and
+  `ec2_toolchain_compat`.
+
+Boundary:
+- This is Vitis C simulation and HLS synthesis evidence for the exact
+  39-program roster only.
+- It is not board execution, Vivado implementation, timing closure,
+  resource-fit implementation evidence for the two over-DSP Tile-K schedules,
+  arbitrary tails, inferred banking/scheduling, generic Spatial `MemFold`, raw
+  Scala compatibility, or broad Spatial source compatibility.
+
 ## 2026-07-05 -- Rust rewrite accepts scheduled canonical Tile-K bulk IO
 
 Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
@@ -6782,8 +6824,9 @@ Proof:
 
 Limit:
 - No fresh EC2/Vitis run was performed for this slice.
-- Validation-roster membership, imported Vitis evidence, and vendor-HLS claims
-  are unchanged. The active vendor-HLS anchor remains
+- At the time of this local source cleanup, validation-roster membership,
+  imported Vitis evidence, and vendor-HLS claims were unchanged. The active
+  vendor-HLS anchor remained
   `docs/vitis-validation/2026-07-05-current-head-746d9ec5-39-program/`.
 
 ## 2026-07-05 -- Rust rewrite accepts canonical Tile-K bulk IO

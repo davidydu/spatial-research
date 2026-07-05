@@ -23,22 +23,25 @@ rewrite 39-program roster pass EC2/Vitis `csim_design` and `csynth_design`.
 This is still not board execution, Vivado implementation, timing closure, or a
 generic Spatial compatibility claim.
 
-Current Rust rewrite delta, 2026-07-05: the 39-program current-head refresh is
-now the active vendor-HLS checkpoint. The full 39-program roster passed
-EC2/Vitis 2025.1 `csim_design` and `csynth_design` after locking
-`FixPt[TRUE,_24,_8]` lowering to signed truncation/wrap, promoting the exact
-full-K `MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32` schedule canary,
-and promoting the non-Part6
+Current Rust rewrite delta, 2026-07-05: the 39-program current-head refresh at
+Rust commit `00797aed` is now the active vendor-HLS checkpoint. The full
+39-program roster passed EC2/Vitis 2025.1 `csim_design` and `csynth_design`
+after locking `FixPt[TRUE,_24,_8]` lowering to signed truncation/wrap,
+promoting the exact full-K
+`MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32` schedule canary,
+promoting the non-Part6
 `MatrixTileMemFoldOuterKRowColTailInPlacePar4x8FixPt33x35x34`
-row/column/K-tail schedule canary.
+row/column/K-tail schedule canary, and refreshing the scheduled canonical
+Tile-K bulk IO cleanup.
 Durable evidence:
-`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-746d9ec5-39-program/`.
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
 This supersedes older notes below that say the active anchor remains
 `a62eb274`, `7a350983`, `eb4f6236`, `c862e57a`, `b91118f7`, or the
-fixed-point-policy 37-program checkpoint. The bundle validates as
+fixed-point-policy 37-program checkpoint, and also supersedes the earlier
+`746d9ec5` 39-program current-head bundle. The bundle validates as
 `resource_fit=37/39`, `over_budget=2`, and `ii_caveated=14`, so this is HLS
-acceptance evidence, not board/resource-fit implementation evidence for the two
-over-DSP Tile-K schedules.
+acceptance evidence, not board/resource-fit implementation evidence for the
+two over-DSP Tile-K schedules.
 
 Current local frontend/HIR cleanup, 2026-07-05: Rust commit `038fae29`
 (`Accept SRAM tile fold alias bounds`) accepts equivalent length/tile constant
@@ -142,16 +145,18 @@ manifest, validation roster, and imported Vitis evidence remain unchanged.
 This is local fail-closed guard work only, not a new Vitis execution or broader
 tail-support claim.
 
-Current local no-fresh-Vitis update, 2026-07-05: Rust commit `00797aed`
-(`Accept scheduled Tile-K bulk IO`) accepts exact scheduled Part6 canonical
+Current vendor-HLS refresh, 2026-07-05: Rust commit `00797aed` (`Accept
+scheduled Tile-K bulk IO`) now has a full 39-program current-head EC2/Vitis
+checkpoint at
+`docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`. The
+earlier local-only source cleanup accepted exact scheduled Part6 canonical
 arrow bulk tile IO for the full-K
 `MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32` Tile-K canary when
-only the partial-product loops carry literal `par 2` / `par 16`. The accepted
-source lowers to the same checked scheduled payload and exact generated
-HLS/manifest as the existing structural scheduled canary. Generic `par`,
-symbolic canonical `par`, non-partial-loop `par`, `numel_k`, tails, raw Scala
-wrappers, validation roster membership, imported Vitis evidence, and
-vendor-HLS claims are unchanged.
+only the partial-product loops carry literal `par 2` / `par 16`; this fresh
+bundle proves the unchanged 39-program roster through Vitis `csim_design` and
+`csynth_design` after that cleanup. Generic `par`, symbolic canonical `par`,
+non-partial-loop `par`, `numel_k`, tails, raw Scala wrappers, board execution,
+timing closure, and resource-fit implementation claims remain unsupported.
 
 Current local no-fresh-Vitis update, 2026-07-05: Rust commit `5b428158`
 (`Accept canonical Tile-K bulk IO`) accepts canonical Rust-subset arrow bulk
@@ -970,7 +975,7 @@ Generated-code hygiene:
   evidence through the 31-program
   `docs/vitis-validation/2026-07-02-lab2-fsm-alt-31-program/` checkpoint. The
   active Rust-rewrite vendor-stability anchor is now the 39-program
-  `docs/vitis-validation/2026-07-05-current-head-746d9ec5-39-program/`
+  `docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`
   checkpoint. The previous scheduled Part6, Tile-K facts, post-refactor
   SRAM-tile fold, Lab3 raw-wrapper, fixed-point-policy, and par4x16 boundaries
   remain preserved under their earlier evidence folders. Board execution,
@@ -998,7 +1003,7 @@ Generated-code hygiene:
 
 For the Rust rewrite, the clean current-head EC2/Vitis checkpoint is now the
 39-program current-head refresh, captured in
-`docs/vitis-validation/2026-07-05-current-head-746d9ec5-39-program/`. Use it
+`docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`. Use it
 as the vendor-stability anchor for the current EE109 MVP roster, while tracking
 the two over-DSP Tile-K schedules separately from HLS acceptance.
 
