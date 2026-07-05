@@ -998,8 +998,10 @@ only lower-par Tile-K canary for the same 33x35x34 row/column/K-tail profile.
 It preserves `partial_row_par=2` and `partial_col_par=8`, emits factor-2 row
 partitions plus factor-2/factor-8 unroll pragmas, and is reachable through
 `run-vitis-validation --kernel`. It is not part of the 39-program validation
-roster and has no imported EC2/Vitis evidence yet; use it next to test whether
-DSP pressure follows requested lane count before changing the existing
+roster, but selected EC2/Vitis evidence in
+`docs/vitis-validation/2026-07-05-selected-par2x8-row-col-tail-f920a754/`
+validates it as `resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`.
+Use it as the lower-par resource diagnostic before changing the existing
 `par4x16` or `par4x8` schedules.
 Byte-stable refactors should keep using local equality, dry-run/plan, full
 test, clippy, and evidence-validator gates; any generated-HLS text change or

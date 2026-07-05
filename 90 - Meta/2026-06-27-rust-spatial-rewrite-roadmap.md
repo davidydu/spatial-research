@@ -65,10 +65,11 @@ into row-cyclic partitions plus row/column unroll pragmas when factors divide
 the static tile dimensions. Non-dividing schedule factors remain fail-closed;
 the representative is now validation-roster and EC2/Vitis proven.
 The current lower-par resource diagnostic is
-`MatrixTileMemFoldOuterKRowColTailInPlacePar2x8FixPt33x35x34`. It is selected
-Vitis-plan capable and locally emits the requested `partial_row_par=2` /
-`partial_col_par=8` schedule, but it intentionally remains outside the
-39-program validation roster until selected EC2/Vitis evidence exists.
+`MatrixTileMemFoldOuterKRowColTailInPlacePar2x8FixPt33x35x34`. It remains
+outside the 39-program validation roster, but selected EC2/Vitis evidence in
+`docs/vitis-validation/2026-07-05-selected-par2x8-row-col-tail-f920a754/`
+validates the requested `partial_row_par=2` / `partial_col_par=8` schedule as
+`resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`.
 The previous local frontend/HIR foundation cleanup is Rust commit `2a7fe3bb`
 (`Retire duplicate raw GEMM tile proof`). It removes the private raw-adapter
 Tile-K tile-I/O role proof object from `source_adapter.rs`; the quarantined
