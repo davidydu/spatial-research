@@ -70,7 +70,12 @@ outside the 39-program validation roster, but selected EC2/Vitis evidence in
 `docs/vitis-validation/2026-07-05-selected-par2x8-row-col-tail-f920a754/`
 validates the requested `partial_row_par=2` / `partial_col_par=8` schedule as
 `resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`.
-The latest frontend/HIR cleanup is Rust commit `9797d162` (`Accept scalar
+The latest Lab2/Tile-K frontend cleanup is Rust commit `224d7a76` (`Accept
+hoisted Tile-K tail lhs load`). It accepts `row_limit` and `tileA_sram load` at
+tile-row scope before the column tile loop while keeping `col_limit`, B/C
+loads, fold, and C store column-local, and normalizes both serial and Part6
+scheduled forms to the existing row/column/K-tail checked payload and HLS.
+The previous scalar frontend/HIR cleanup is Rust commit `9797d162` (`Accept scalar
 reduction alias bounds`). `ScalarReduce v0` and `ScalarFold v0` now resolve the
 constant identifiers used in their reduce/fold syntax, accepting equivalent
 Rust-subset names such as `LEN`/`LANES` and `LEN`/`BLOCK`/`LANES` while keeping
@@ -380,12 +385,12 @@ scheduled Part6 outer-K, serial and scheduled K-tail, serial and scheduled
 row/column/K-tail Tile-K canaries, plus the Lab1 Part6 `SramTileFoldSum32`
 SRAM-tile fold canary through Vitis 2025.1
 `csim_design` and `csynth_design`.
-Current exact raw-wrapper ingress remains only for fixed Lab2 Part5, fixed
-Lab2 Part6, and the local Lab3 convolution teaching source. The old raw Lab1
-Part4 FIFO, Lab1 Part6 fold, Lab2 Part1/Part2 memory-reduction, Lab2 Part3
-alternate FSM, and Lab2 Part4 square/non-square LUT wrappers are retired;
-their Rust-subset or canonical payloads remain the regression anchors. The
-Lab2 Part1/Part2 memory-reduction behavior stays covered by
+Current raw-wrapper ingress is retired from the quarantined source adapter. The
+old raw Lab1 Part4 FIFO, Lab1 Part6 fold, Lab2 Part1/Part2 memory-reduction,
+Lab2 Part3 alternate FSM, Lab2 Part4 square/non-square LUT, fixed Lab2
+Part5/Part6 GEMM, and local Lab3 convolution teaching wrappers are reserved or
+historical only; their Rust-subset or canonical payloads remain the regression
+anchors. The Lab2 Part1/Part2 memory-reduction behavior stays covered by
 `MemReduceOnes16` / `MemFoldOnes16` and the promoted `MemReduceFill v0` /
 `MemFoldFill v0` family, while the old raw lab class names remain reserved.
 The Rust-subset `MemReduceFill v0` / `MemFoldFill v0` frontend now accepts

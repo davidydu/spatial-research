@@ -93,7 +93,8 @@ validator reports `kernels=1 resource_fit=1/1 over_budget=0 ii_caveated=0`.
 Durable evidence:
 `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-selected-outerk-38ade9d2/`.
 This is supplemental selected-run evidence and does not replace the current
-38-program vendor anchor.
+39-program vendor anchor; it was captured beside the then-current 38-program
+checkpoint and remains historical selected evidence.
 
 Current selected-run caveat update, 2026-07-05: Rust commit `6d461260`
 (`Record selected outer-k Vitis evidence`) was used to run the known
@@ -1273,22 +1274,21 @@ static exact outer-K canary:
   the MemFold bound
 - tile-size-first or remaining-first static `val numel_k = min(...);` spelling
   under the same offset-loop proof
+- row/column/K-tail forms where `row_limit` and the A-tile load are hoisted to
+  tile-row scope before the column tile loop, while `col_limit`, B/C loads,
+  fold, and C store remain column-local
 - exact fixed raw dimension/tile aliases (`M/N=32`,
   `tileM/tileN/tileK=16`) in declarations, DRAM/SRAM dimensions, offset loops,
   and `min(tileK.to[Int], K - kk)`, canonicalized back to `ROWS/COLS` and
   `TILE_R/TILE_C/TILE_K` before HIR
-- the exact fixed raw `@spatial class Lab2Part5GEMM` wrapper when `runtimeArgs`
-  prove `M=N=K=32`, `tileM/tileN/tileK` are all `16`, the type alias is
-  `FixPt[TRUE,_24,_8]`, and there is one matching `Accel` body. This raw-wrapper
-  check is token-stream exact: comments and ordinary whitespace between tokens
-  are allowed, while token-split identifiers/operators remain rejected.
+- historical note: an earlier exact fixed raw `@spatial class Lab2Part5GEMM`
+  wrapper bridge was accepted only under token-stream exact checks, but raw
+  Lab2 Part5/Part6 wrapper ingress is now retired; the Rust-subset Tile-K
+  source forms above remain the active regression anchors.
 - the exact explicit-zero raw fold range
   `MemFold(tileC_sram)(0 until numel_k by 1)` for fixed Part5/Part6 wrappers,
-  treated as equivalent to the fixture's implicit-zero
-  `MemFold(tileC_sram)(numel_k by 1)` spelling. Nonzero starts remain rejected.
-- accepted fixed Part5/Part6 wrappers now emit bounded Lab2-like frontend
-  source using the existing shell/infix bridge before HIR/classification,
-  rather than returning expanded canonical source text directly.
+  was likewise historical under the retired raw-wrapper bridge. Nonzero starts
+  remain rejected by the active Rust-subset parser surface.
 
 Status:
 - This is parser/source-spelling coverage only. It canonicalizes to the

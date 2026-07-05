@@ -9,6 +9,44 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite hoisted-LHS row/column/K-tail Tile-K source shape
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `224d7a76`
+  (`Accept hoisted Tile-K tail lhs load`).
+- Accepted the Lab2-like row/column/K-tail Tile-K placement where `row_limit`
+  and `tileA_sram load` are hoisted to tile-row scope before the column-tile
+  loop, while `col_limit`, B/C tile loads, fold, and C store remain
+  column-local.
+- Added serial and Part6 scheduled parser/proof coverage. The accepted shape
+  normalizes to the existing `Dense2dTileKMemFold` row/column/K-tail payloads,
+  including `k_bound=numel_k`, `row_bound=row_limit`, `col_bound=col_limit`,
+  and Part6 `partial_row_par=2` / `partial_col_par=16`.
+- Added an HLS/manifest equality regression for the scheduled Part6
+  row/column/K-tail hoisted-LHS source. Generated HLS and manifests match the
+  existing scheduled row/column/K-tail canary exactly.
+- Cleaned stale docs/evidence wording while in the area:
+  README scalar alias-bound text now matches the resolved-name cleanup, retired
+  raw Lab1 wrapper claims were corrected, selected 38-program evidence is
+  marked historical beside the active 39-program anchor, and vault raw-wrapper
+  ingress language now says raw wrappers are retired.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core hoisted_lhs_row_col_k_tail -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen hoisted_lhs -- --nocapture`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary:
+  this is a source-shape/proof cleanup only. It does not add new validation
+  roster members, fresh EC2/Vitis evidence, one-sided tails, generic Tile-K
+  phase discovery, raw Scala wrapper ingress, generic Spatial `MemFold`,
+  inferred banking, board execution, or timing closure claims.
+
+---
+
 ## 2026-07-05 -- Rust rewrite scalar reduction/fold alias-bound cleanup
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
