@@ -43,19 +43,22 @@ fixed-point-policy 37-program checkpoint, and also supersedes the earlier
 acceptance evidence, not board/resource-fit implementation evidence for the
 two over-DSP Tile-K schedules.
 
-Current local frontend/HIR cleanup, 2026-07-05: Rust commit `fcdfed4c`
-(`Resolve DRAM2d copy proof facts`) moves `Dram2dCopy v0` onto
-resolver-backed row/column loop and rank-2 copy access facts before checked IR
-emission. It records the input/output symbols, loop domains, static bounds,
-and same-statement global-write/global-read access facts while keeping the same
-checked payload and HLS contract. Loop-index names that shadow the `ROWS` or
-`COLS` constants now fail through the resolver with `spatial:E0302`. Local
-core, HLS equality, evidence-validator, full workspace, clippy, fmt, and diff
-checks pass.
+Current local frontend/HIR cleanup, 2026-07-05: Rust commit `98d0d3fe`
+(`Resolve Dense1d proof facts`) moves `Dense1dScalarMul v0` onto
+resolver-backed outer/lane loop domains, input/scalar/output symbols,
+input/output tile symbols, rank-1 remote load/store range facts, and local lane
+read/write facts before checked IR emission. It keeps the parser/structural
+tiled-I/O shell as the first accepted shape guard and preserves the same
+checked payload and HLS contract. Loop-index and local-memory names that shadow
+accepted Dense1d constants or ports now fail through resolver diagnostics with
+`spatial:E0302`; parseable lane drift remains fail-closed with
+`spatial:E0403`, while parser-bridge range-bound off-by-one variants fail
+before HIR with `spatial:E0002`. Local core, HLS equality, evidence-validator,
+full workspace, clippy, fmt, and diff checks pass.
 This does not add a validation roster member, fresh EC2/Vitis evidence,
-generated HLS changes, manifest changes, generic rank-2 memory lowering,
-aliases/in-place semantics, board execution, or broader Scala source
-compatibility.
+generated HLS changes, manifest changes, generic rank-1 scheduling, tail
+support, arbitrary load/store endpoint support, board execution, or broader
+Scala source compatibility.
 
 Current promoted Vitis update, 2026-07-05: the Rust rewrite now accepts
 and validates the exact full-K Tile-K schedule canary

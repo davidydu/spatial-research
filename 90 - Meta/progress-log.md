@@ -9,6 +9,46 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite Dense1d resolved-proof cleanup
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `98d0d3fe`
+  (`Resolve Dense1d proof facts`).
+- `Dense1dScalarMul v0` now records resolver-backed outer/lane loop domains,
+  loop-index symbols, input/scalar/output symbols, input/output tile symbols,
+  rank-1 remote load/store range facts, and local lane read/write facts before
+  producing the same checked `Dense1dScalarMul` payload. The parser/structural
+  tiled-I/O shell remains the first accepted shape guard, so accepted syntax is
+  not broadened.
+- New fail-closed coverage:
+  outer/lane loop names and local tile names that shadow accepted constants or
+  ports fail through resolver diagnostics with `spatial:E0302`; output-lane
+  drift fails with `spatial:E0403`; parser-bridge load/store range bound
+  off-by-one variants fail before HIR with `spatial:E0002`. The dense adapter
+  duplicate-constant near-miss now correctly reports the resolver duplicate
+  declaration diagnostic `spatial:E0302`.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core dense1d -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core rank1 -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core rejects_extra_or_duplicate_consts_in_lut_and_dense_adapters -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen dense -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_00797aed_checkpoint -- --nocapture`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary:
+  this is a local compiler-interface/proof cleanup only. It does not add
+  syntax, validation-roster members, generated HLS changes, manifest changes,
+  fresh EC2/Vitis evidence, board execution, generic rank-1 scheduling, tail
+  support, arbitrary load/store endpoint support, or broad Scala source
+  compatibility. The active vendor-HLS anchor remains
+  `docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
+
+---
+
 ## 2026-07-05 -- Rust rewrite Dram2d copy resolved-proof cleanup
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
