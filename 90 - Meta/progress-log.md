@@ -6633,3 +6633,37 @@ Boundary:
   timing closure, arbitrary row/column/K-tail support, inferred banking or
   schedule policy, generic Spatial `MemFold`, or broad Scala source
   compatibility.
+
+## 2026-07-05 -- Rust HLS render-plan lowering extraction
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Moved the `ProgramKind -> HlsRenderPlan` lowering ledger and harness-kind
+  selection out of `crates/spatial-rs-hls/src/emit.rs` into a crate-private
+  `spatial_rs_hls::render` module.
+- Kept `emit.rs` responsible for public artifact IO, kernel/harness body-plan
+  dispatch, host HLS shims, and Vitis dry-run project writing.
+- Added an architecture regression that fails if `emit.rs` grows a local
+  `lower_hls_render_plan` function again.
+
+Proof:
+- Red test first:
+  `cargo test --locked -p spatial-rs-hls emit_module_delegates_render_plan_lowering -- --nocapture`
+  failed while `emit.rs` still owned `lower_hls_render_plan`.
+- Green/focused gates passed:
+  `cargo test --locked -p spatial-rs-hls emit_module_delegates_render_plan_lowering -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls render_hls_artifacts_matches_public_kernel_harness_and_manifest -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls render_hls_artifacts_preserves_lab3_vs_stencil_harness_selection -- --nocapture`,
+  and
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen vitis_dry_run_project_records_tool_profile_without_running_vendor_hls -- --nocapture`.
+
+Boundary:
+- This is a no-HLS-drift backend structure cleanup. It does not change source
+  syntax, checked IR, generated HLS C++, manifests, validation-program
+  membership, imported Vitis evidence, or any Spatial language support claim.
+- The next stronger implementation candidates identified by subagent review
+  are a shared rank-2 local product/accumulation proof helper, or a bounded
+  non-EE109 Tile-K shape-parameterization slice around the existing
+  `24x20x12 / tile8x5x4` canary.
