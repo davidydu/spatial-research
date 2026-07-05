@@ -9,6 +9,38 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 -- Rust rewrite raw Lab2 GEMM Tile-K proof authority cleanup
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `2a7fe3bb2798132b0aa506a1f059ed1e61844c88`
+  (`Retire duplicate raw GEMM tile proof`).
+- Removed the private raw-adapter `Lab2FixedGemmTileIoProof` /
+  `Lab2FixedGemmTileCopyProof` / `Lab2FixedGemmTileWindow` proof family and the
+  associated token-level tile-load/store role checker from
+  `source_adapter.rs`.
+- The quarantined raw Lab2 Part5/Part6 adapter now records only the matched raw
+  scaffold, normalized `Accel` body, generated frontend source, and expected
+  Tile-K profile; the frontend/HIR Tile-K classifier remains the semantic
+  authority for rank-2 tile-copy/access-role proof.
+- Regression coverage kept the accepted raw wrappers, K-tail and
+  row/column/K-tail profiles, generated frontend boundary, expected Tile-K HIR
+  profile check, and tile-I/O drift rejection green.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core source_adapter::tests::lab2_fixed_gemm -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core -- --nocapture`;
+  `cargo test --locked -p ee109-examples -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls -- --nocapture`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary: this is an internal proof-surface cleanup only. It does not change
+  accepted raw syntax, generated frontend source, checked IR, generated HLS,
+  manifests, validation membership, imported Vitis evidence, board execution,
+  implementation, timing closure, or generic Spatial support. No fresh
+  EC2/Vitis run was claimed.
+
 ## 2026-07-04 -- Rust rewrite Tile-K numel_k alias normalization
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

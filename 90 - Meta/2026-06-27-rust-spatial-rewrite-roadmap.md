@@ -45,7 +45,17 @@ exact roster
 only, not board execution, implementation, timing closure, performance
 optimality, generic Spatial compatibility, or broad Scala source
 compatibility.
-The latest local frontend source-admission cleanup is Rust commit `6830f993`
+The latest local frontend/HIR foundation cleanup is Rust commit `2a7fe3bb`
+(`Retire duplicate raw GEMM tile proof`). It removes the private raw-adapter
+Tile-K tile-I/O role proof object from `source_adapter.rs`; the quarantined
+raw Lab2 Part5/Part6 adapter now records only the matched scaffold, normalized
+`Accel` body, generated frontend source, and expected Tile-K profile. The
+frontend/HIR Tile-K classifier remains the semantic authority for rank-2
+tile-copy/access-role proof. Accepted raw syntax, generated frontend source,
+checked IR, generated HLS, manifests, validation membership, and imported
+Vitis evidence are unchanged, so no fresh EC2/Vitis run was claimed.
+The immediately preceding local frontend source-admission cleanup is Rust
+commit `6830f993`
 (`Accept normalized Tile-K numel_k aliases`). It accepts the Lab2-like Tile-K
 outer-K `numel_k` min alias with the existing
 `min(TILE_K.to[Int], K - kk)` spelling, reversed min arguments
