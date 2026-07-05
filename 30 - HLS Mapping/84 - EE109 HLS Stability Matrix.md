@@ -43,7 +43,24 @@ fixed-point-policy 37-program checkpoint, and also supersedes the earlier
 acceptance evidence, not board/resource-fit implementation evidence for the
 two over-DSP Tile-K schedules.
 
-Current local frontend/HIR cleanup, 2026-07-05: Rust commit `f9fd4ae1`
+Current local frontend/HIR cleanup, 2026-07-05: Rust commit `69b350ef`
+(`Resolve MemReduce fill proof facts`) moves `MemReduceFill v0` /
+`MemFoldFill v0` onto resolver-backed accumulator/temp/output symbols,
+length/step const-role symbols, resolved step count, fill length, final
+output-store length/count, temp-write loop/lane/count facts, and, for
+`MemFoldFill`, distinct zero-init loop/lane/write/length facts before checked
+IR emission. It preserves the same checked `MemReduceFill` / `MemFoldFill`
+payloads and HLS contract. Equal-valued length/step aliases now fail closed
+when the wrong const symbol is used for the reduction/fold bound, fill loop,
+zero-init loop, or final store range. Local core MemReduce/MemFold, HLS fill
+tests, example roster check, evidence-validator, full workspace, clippy, fmt,
+and diff checks pass.
+This does not add a validation roster member, fresh EC2/Vitis evidence,
+generated HLS changes, manifest changes, generic Spatial `MemReduce`/
+`MemFold`, arbitrary reducer/fold bodies, dynamic bounds, rank-2 reductions,
+scheduling/banking, board execution, or broader Scala source compatibility.
+
+Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `f9fd4ae1`
 (`Resolve FIFO proof facts`) moves `Fifo1dTileScalarMul v0` onto
 resolver-backed input/scalar/output port symbols, local FIFO symbols,
 outer/lane loop domains, static length/depth facts, load/store tile ranges,
@@ -59,7 +76,7 @@ generated HLS changes, manifest changes, generic FIFO/stream support,
 back-pressure modeling, arbitrary FIFO topology, board execution, or broader
 Scala source compatibility.
 
-Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `ce517499`
+Earlier local frontend/HIR cleanup, 2026-07-05: Rust commit `ce517499`
 (`Resolve Stencil2d proof facts`) moved `Stencil2d v0` and the exact Lab3
 Sobel adapter onto resolver-backed input/output/local-memory symbols,
 row/column/shift loop domains, row-range load/store index facts, `RegFile`
@@ -68,7 +85,7 @@ horizontal/vertical reducer-symbol identities before checked IR emission
 without changing generated HLS, manifests, validation-roster membership, or
 vendor-HLS evidence.
 
-Earlier local frontend/HIR cleanup, 2026-07-05: Rust commit `c344521b`
+Older local frontend/HIR cleanup, 2026-07-05: Rust commit `c344521b`
 (`Resolve ControlFsm proof facts`) moved `ControlFsm v0` and the exact Lab2
 FSM adapters onto resolver-backed output/scratch/reg/state symbols, FSM loop
 domain, scratch write effects, reg-value read facts, and final output

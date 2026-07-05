@@ -9,6 +9,50 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite MemReduce/MemFold resolved-proof cleanup
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `69b350efb8a09820dc7b1dfd530bf2a2743d7b56`
+  (`Resolve MemReduce fill proof facts`).
+- `MemReduceFill v0` / `MemFoldFill v0` now record resolver-backed
+  accumulator/temp/output symbols, length/step const-role symbols, resolved
+  step count, fill length, final output-store length/count, temp-write
+  loop/lane/count facts, and, for `MemFoldFill`, distinct zero-init
+  loop/lane/write/length facts before producing the same checked payloads.
+- New fail-closed coverage:
+  equal-valued length/step aliases now fail closed when the wrong const symbol
+  is used for the reduction/fold bound, fill loop, zero-init loop, or final
+  store range.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core memreduce -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core memfold -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core mem_reduction_fill_near_misses_stay_fail_closed -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core mem_reduction_shadowed_return_temp_stays_fail_closed -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls mem_reduction_fill -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen memreduce_fill_feature_emits_array_sum_loop_and_harness -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen memfold_fill_feature_emits_array_sum_loop_and_harness -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen mem_reduction_literal_two_fill_features_emit_fill_value_and_pass_harness -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen mem_reduction_general_literal_fill_features_emit_shape_and_pass_harness -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen mem_reduction_checked_ir_hls_keeps_length_parameterized -- --nocapture`;
+  `cargo test --locked -p ee109-examples validation_programs_include_supported_features_after_adapter_baseline -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_00797aed_checkpoint -- --nocapture`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary:
+  this is a local compiler-interface/proof cleanup only. It does not add
+  syntax, validation-roster members, generated HLS changes, manifest changes,
+  fresh EC2/Vitis evidence, board execution, generic Spatial `MemReduce`/
+  `MemFold`, arbitrary reducer/fold bodies, dynamic bounds, rank-2 reductions,
+  scheduling/banking, or broad Scala source compatibility. The active
+  vendor-HLS anchor remains
+  `docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
+
+---
+
 ## 2026-07-05 -- Rust rewrite FIFO resolved-proof cleanup
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
