@@ -9,6 +9,19 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 -- Rust rewrite evidence validation after plan-frame sweep
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial` at commit `871dd7de` (`Guard remaining HLS plan frames`).
+- Ran the standalone evidence validator against the active current-head Vitis
+  bundle:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-04-current-head-a62eb274-37-program`.
+- Result: accepted
+  `docs/vitis-validation/2026-07-04-current-head-a62eb274-37-program` with
+  `mode=both`, `execution=execute`, and `kernels=37`.
+- Boundary: this revalidated imported evidence under the current local code; it
+  did not rerun EC2/Vitis or create new vendor artifacts.
+
 ## 2026-07-04 -- Rust rewrite remaining HLS plan-frame guard sweep
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
