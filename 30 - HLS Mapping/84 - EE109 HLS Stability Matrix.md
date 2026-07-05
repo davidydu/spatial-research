@@ -56,6 +56,15 @@ reports/logs. The active 38-program bundle now validates with
 machine-readable quality boundary over the existing evidence, not a fresh
 EC2/Vitis execution or board-fit claim.
 
+Current one-off Vitis update, 2026-07-05: the exact non-roster
+`MatrixTileMemFoldTailFixPt5x7x5` canary now has compact EC2/Vitis 2025.1
+evidence in
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-fixpt-tail-oneoff/`.
+The single-kernel run passed `csim_design` and `csynth_design` with return code
+0, estimated Fmax 136.99 MHz, 10 ns target clock, 7.300 ns estimated clock, and
+resource fit true for `xc7z020-clg400-1`. This is not a validation-roster
+promotion, full roster refresh, board execution, or generic FixPt tail support.
+
 Current local no-fresh-Vitis update, 2026-07-05: Rust commit `4834a9c8`
 (`Recover dense MemFold tail bounds by role`) hardens the non-outer-K
 `Dense2dTileMemFold` classifier/proof boundary for the local

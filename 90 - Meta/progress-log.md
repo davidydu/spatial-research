@@ -9,6 +9,34 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite captures one-off Vitis proof for exact FixPt tail canary
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust source commit under test:
+  `2ed2ddecf1ec1af049b0ae41a544b93b0e1d75ea`
+  (`Add exact FixPt MemFold tail canary`).
+- Ran a one-kernel EC2/Vitis 2025.1 proof for
+  `MatrixTileMemFoldTailFixPt5x7x5` on
+  `[ec2-host — see private/ec2-lane.md]`
+  (`ip-172-31-37-7`) with Cargo 1.75.0 and
+  `/tools/Xilinx/2025.1/Vitis/settings64.sh`.
+- Command:
+  `cd /home/ubuntu/spatial-rs-runs/2026-07-05-fixpt-tail-oneoff/oneoff && cargo run --offline -- --mode both --out /home/ubuntu/spatial-rs-runs/2026-07-05-fixpt-tail-oneoff/vitis-oneoff`.
+- Result:
+  return code 0, `csim_design` passed, `csynth_design` passed,
+  estimated Fmax 136.99 MHz, target device `xc7z020-clg400-1`, 10 ns clock
+  target, 7.300 ns estimated clock, and resource fit true.
+- Imported compact evidence into the Rust repo at
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-fixpt-tail-oneoff/`:
+  generated kernel/harness/manifest, sidecar TCL, Vitis log, csynth report, and
+  one-row summary files.
+- Boundary:
+  this is real vendor-HLS evidence for the exact non-roster
+  `MatrixTileMemFoldTailFixPt5x7x5` canary, not a validation-roster promotion,
+  not a full 39-program refresh, not board execution, not generic FixPt tail
+  support, and not broader Spatial `MemFold` support.
+
 ## 2026-07-05 -- Rust rewrite Dense MemFold tail-bound role recovery
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
