@@ -43,7 +43,21 @@ fixed-point-policy 37-program checkpoint, and also supersedes the earlier
 acceptance evidence, not board/resource-fit implementation evidence for the
 two over-DSP Tile-K schedules.
 
-Current local frontend/HIR cleanup, 2026-07-05: Rust commit `35c6944a`
+Current local frontend/HIR cleanup, 2026-07-05: Rust commit `e358bfd1`
+(`Record rank2 local compute proofs`) promotes the shared rank-2 local-compute
+matchers from boolean gates into proof-producing helpers. Tile-K fold/update now
+carries `Rank2LocalPartialProductProof` for
+`partial[row,col] := lhs[row,k] * rhs[k,col]` and
+`Rank2LocalAccumulationUpdateProof` for
+`c[row,col] := c[row,col] + partial[row,col]`, while non-outer-K MemFold keeps
+using the same shared resolved-fact boundary after its own syntax guards. Local
+Tile-K fold/update, rank-2 local, Tile-K, Lab2 outer-K, HLS codegen, Vitis
+evidence-validator, full workspace, clippy, fmt, and diff checks pass.
+This does not add a validation roster member, generated HLS changes, manifest
+changes, board execution, Vivado
+implementation, timing closure, or automatic schedule lowering.
+
+Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `35c6944a`
 (`Move Tile-K proof tests into module`) moves the Tile-K proof/profile tests
 and Tile-K-local LHS/RHS/C preload/store matcher tests under
 `classifier/tiled2d/tile_k.rs`, then makes the Tile-K proof, matcher,
@@ -51,13 +65,7 @@ phase-spine, schedule, and payload-rebuild internals private to that module.
 The parent `tiled2d.rs` no longer imports Tile-K proof internals for tests; it
 keeps only the production classifier re-export plus shared rank-2/MemFold
 partial-product and C-accumulation tests that still cover non-outer-K
-`Dense2dTileMemFold`. The ownership architecture regression, local Tile-K,
-Lab2 outer-K, dense MemFold/rank-2 regressions, HLS Tile-K
-plan/codegen/validation tests, full workspace, clippy, fmt, and diff checks
-pass.
-This does not add a validation roster member, generated HLS changes, manifest
-changes, board execution, Vivado
-implementation, timing closure, or automatic schedule lowering.
+`Dense2dTileMemFold`.
 
 Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `32b3ac4b`
 (`Extract Tile-K matcher module`) moved the Tile-K-specific matcher/spec layer

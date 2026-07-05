@@ -9,6 +9,53 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite rank-2 local-compute proof records
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `e358bfd1`
+  (`Record rank2 local compute proofs`).
+- Promoted the shared rank-2 local-compute matchers from boolean gates into
+  proof-producing helpers:
+  `Rank2LocalPartialProductProof` records accepted
+  `partial[row,col] := lhs[row,k] * rhs[k,col]` evidence, and
+  `Rank2LocalAccumulationUpdateProof` records accepted
+  `c[row,col] := c[row,col] + partial[row,col]` evidence.
+- Threaded those proof records into `TileKFoldUpdateProof`, so Tile-K fold/update
+  now carries the accepted local compute evidence alongside update domains,
+  local tile roles, bounds, and partial-par facts.
+- Added RED/green coverage
+  `tile_k_fold_update_proof_records_rank2_local_compute_proofs`.
+- A six-agent GPT-5.5 xhigh review wave recommended this proof-boundary slice as
+  the smallest useful next step after the helper naming cleanup; optional HLS
+  helper extraction remains a lower-priority cleanup because this slice should
+  not change emitted C++.
+- Verification passed:
+  RED/green `cargo test --locked -p spatial-rs-core tile_k_fold_update_proof_records_rank2_local_compute_proofs -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core tile_k_fold_update -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core rank2_local -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core tile_k -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core rank2_tile_memfold_outer_k -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core parse_accel_lab2_outer_k -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen tile_memfold -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_35c6944a_checkpoint -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_39_checkpoint_distinguishes_hls_acceptance_from_resource_fit -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation active_docs_name_39_program_checkpoint_as_current_vendor_anchor -- --nocapture`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary:
+  this is a no-HLS-drift proof-boundary cleanup. It does not add accepted syntax,
+  checked payloads, generated HLS, manifest changes, validation-roster members,
+  imported Vitis evidence, board execution, or broader generic Spatial
+  `MemFold` support. The active vendor anchor remains
+  `docs/vitis-validation/2026-07-05-current-head-35c6944a-39-program/`.
+
+---
+
 ## 2026-07-05 -- Rust rewrite shared rank-2 local-compute helper naming
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
