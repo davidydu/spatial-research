@@ -9,6 +9,44 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 -- Rust rewrite Dense2d MemFold plan-frame guard
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `ff9a94a707b0be14c84c160d3a0122c1b2060207`
+  (`Guard Dense2d MemFold plan frames`).
+- Moved non-outer-K `Dense2dTileMemFold` plan-to-frame validation into
+  `spatial_rs_hls::memfold`, matching the earlier rank-2 copy and Tile-K frame
+  pattern.
+- New guard requires exact ordered ABI params before kernel or harness
+  rendering: split-output MemFold must be `[lhs, rhs, cin, out]`, and in-place
+  mutable-C MemFold must be `[lhs, rhs, c]` with `c_input == output`.
+- Red test:
+  `cargo test --locked -p spatial-rs-hls emit_dense2d_tile_memfold_kernel_plan_rejects_malformed_param_frames -- --nocapture`
+  first failed because swapped split-output params were accepted through
+  unordered `find_plan_param` lookups.
+- Review coverage: `gpt-5.5 xhigh` subagent confirmed the missing
+  `memfold_frame_from_plan`-style boundary, recommended split-output and
+  in-place malformed-plan cases, and called out the dangerous in-place
+  `c_in_place = true` / `c_input != output` mismatch.
+- Verification passed:
+  `cargo fmt --all -- --check`;
+  `cargo test --locked -p spatial-rs-hls memfold_frame_from_plan -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls emit_dense2d_tile_memfold_kernel_plan_rejects_malformed_param_frames -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls memfold -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen tile_memfold -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls -- --nocapture`;
+  `cargo test --locked -p ee109-examples -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core -- --nocapture`;
+  `cargo clippy -p spatial-rs-hls --all-targets --locked -- -D warnings`;
+  `cargo clippy -p spatial-rs-core -p ee109-examples --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary: this is internal HLS plan admissibility hardening only. Existing
+  exact HLS/manifest snapshot tests and Vitis evidence tests passed; generated
+  kernels, manifests, validation-program membership, and imported Vitis
+  evidence are unchanged, so no EC2/Vitis rerun was needed.
+
 ## 2026-07-04 -- Rust rewrite Vitis evidence stale-artifact guard
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
