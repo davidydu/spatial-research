@@ -412,8 +412,12 @@ existing AST operator guard. The C-accumulation migration is limited to
 write, C-tile read, and partial-tile read through resolver-owned access grouping,
 same parent statement, and row/column lane symbol identity while preserving the
 existing AST operator guard and accepting the Lab2 MemFold sugar's same-span
-sibling loop symbols. The fixed Tile-K phase spine is resolver-guarded, while
-broader Tile-K phase recognition beyond that spine still remains unsupported.
+sibling loop symbols. The fixed Tile-K phase spine is resolver-guarded, and the
+first bounded role-driven phase-recognition slice now identifies the covered
+pre-fold LHS load, RHS load, and C-preload roles through those same classifier
+matchers before the fold/store pair. Broader Tile-K phase discovery, fold/store
+reordering, structural statement recovery, and generic Spatial `MemFold` still
+remain unsupported.
 The exact raw Lab1 Part6 wrapper is different: it canonicalizes to the
 `SramTileFoldSum32` / `ScalarSramTileFold v0` structural canary, the 27th local
 validation member. The local validation list later grew to 35 programs after
@@ -680,13 +684,16 @@ rather than another ad hoc feature promotion. Current status: the compiler spine
 exists, `ResolvedHir` now carries loop/effect/affine/index facts, and the
 Tile-K LHS/RHS loads, C-preload, final-store, partial-product, and
 C-accumulation submatchers consume those facts. The fixed Tile-K phase spine has
-a resolver-backed guard, while broader phase recognition and structural
-statement recovery remain fail-closed/private. These fact-consumption slices do
-not change generated HLS/manifest output or validation membership. The current
-vendor-HLS anchor for the Tile-K compiler-foundation line is the 31-program
-`docs/vitis-validation/2026-07-03-tile-k-proof-current-head/` current-head
-refresh after Tile-K source-shape, phase-spine, access-role, and fold-schedule
-proof factoring. The earlier 28-program
+a resolver-backed guard, and a bounded role-driven phase-recognition slice now
+identifies the covered pre-fold LHS/RHS/C-preload roles before the fold/store
+pair. Broader phase discovery and structural statement recovery remain
+fail-closed/private. These fact-consumption and role-recognition slices do not
+change generated HLS/manifest output or validation membership. The current
+vendor-HLS anchor for the Tile-K compiler-foundation line is the 38-program
+`docs/vitis-validation/2026-07-05-current-head-par4x16-38-program/`
+Tile-K `par4x16` current-head refresh; the later resource-caveat reporting
+classifies that existing bundle rather than recording a fresh Vitis run. The
+earlier 28-program
 `docs/vitis-validation/2026-07-02-tile-k-facts-current-head/` run remains the
 anchor for the narrower fact-consumption and same-span loop-symbol cleanup. The
 structural Part6 source bridge is a later equivalence slice over the same

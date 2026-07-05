@@ -852,12 +852,15 @@ Generated-code hygiene:
   integration.
 - For the Rust rewrite, the explicitly listed accepted adapters,
   supported-feature representatives, and canaries through the exact alternate
-  Lab2 FSM canary have Vitis `csim_design` and `csynth_design` evidence through
-  the current 31-program
+  Lab2 FSM canary have historical Vitis `csim_design` and `csynth_design`
+  evidence through the 31-program
   `docs/vitis-validation/2026-07-02-lab2-fsm-alt-31-program/` checkpoint. The
-  previous scheduled Part6, Tile-K facts, post-refactor SRAM-tile fold, and
-  Lab3 raw-wrapper boundaries remain preserved under their earlier evidence
-  folders. Board execution, Vivado implementation, timing closure, generic
+  active Rust-rewrite vendor-stability anchor is now the 38-program
+  `docs/vitis-validation/2026-07-05-current-head-par4x16-38-program/`
+  checkpoint. The previous scheduled Part6, Tile-K facts, post-refactor
+  SRAM-tile fold, and Lab3 raw-wrapper boundaries remain preserved under their
+  earlier evidence folders. Board execution, Vivado implementation, timing
+  closure, generic
   Spatial `Fold`, arbitrary local-memory folds/effects, arbitrary K-tail shapes
   beyond the named serial and scheduled K-tail canaries, generic `par`,
   broad Scala source compatibility, and broad Spatial coverage remain pending.
@@ -884,12 +887,16 @@ For the Rust rewrite, the clean current-head EC2/Vitis checkpoint is now the
 it as the vendor-stability anchor for the current EE109 MVP roster.
 
 The latest validation-roster step promoted the exact full-K Tile-K `par4x16`
-schedule canary into the official roster with EC2/Vitis evidence. The natural
-next implementation action is Tile-K role-driven phase recognition or another
-bounded proof/helper-boundary slice with local equality gates. Do not spend the
-next step optimizing `par4x16` DSP use unless the research goal shifts toward
-board-fit implementation; the validator now keeps that caveat visible while
-the compiler surface continues to deepen.
+schedule canary into the official roster with EC2/Vitis evidence. The latest
+local compiler step completed a bounded Tile-K role-driven phase-recognition
+slice for the covered pre-fold LHS/RHS/C-preload roles before the fold/store
+pair. This is classifier hardening only: generated HLS, validation roster
+membership, and imported Vitis evidence remain unchanged. The natural next
+implementation action is another bounded proof/helper-boundary slice with local
+equality gates, or a fresh EC2/Vitis run only if generated HLS text or roster
+membership changes. Do not spend the next step optimizing `par4x16` DSP use
+unless the research goal shifts toward board-fit implementation; the validator
+now keeps that caveat visible while the compiler surface continues to deepen.
 Byte-stable refactors should keep using local equality, dry-run/plan, full
 test, clippy, and evidence-validator gates; any generated-HLS text change or
 validation-roster change should trigger a fresh EC2/Vitis execution.
