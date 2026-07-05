@@ -9,6 +9,45 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite Lab3 raw adapter bridge boundary
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `c36c6d9af59059db1ba1b74a986df6e8ecbb3637`
+  (`Move Lab3 raw adapter frontend into bridge`).
+- Moved the canonical Lab3 raw-adapter frontend source plus expected
+  `ProgramKind::Lab3Part1Convolution` into
+  `frontend::lab3_stencil_bridge`.
+- Kept raw Scala token proofing quarantined in `source_adapter.rs`, while the
+  parser now checks raw-adapter program-kind drift before accepting the
+  bridge-owned checked frontend source. Lab2 GEMM keeps its stronger Tile-K
+  profile guard.
+- Red check:
+  `cargo test --locked -p spatial-rs-core local_lab3_convolution_source_proof_carries_frontend_boundary -- --nocapture`
+  first failed on the missing `frontend::lab3_stencil_bridge` module, missing
+  Lab3 frontend proof field, and missing raw-adapter expected-kind accessor.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core local_lab3_convolution_source_proof_carries_frontend_boundary -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked local_lab3_convolution -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked parse_accel_accepts_local_raw_lab3 -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked raw_lab3_part1_convolution_near_misses_fail_closed -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked lab2_fixed_gemm_source_proof_records_tile_k_hir_profile -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab3_local_raw_convolution_preserves_hls_and_manifest -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab3_local_raw_convolution_static_kernel_border_preserves_hls_and_manifest -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab3_convolution_frontend_variant_preserves_exact_hls_kernel -- --nocapture`;
+  `cargo test --locked --quiet`;
+  `cargo fmt --all -- --check`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_a62eb274_checkpoint -- --nocapture`;
+  `cargo test --locked -p ee109-examples validation_programs_include_supported_features_after_adapter_baseline -- --nocapture`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary: no accepted raw Lab3 spelling changed, no generated HLS/manifest
+  drift was observed, no validation-roster change, and no fresh EC2/Vitis run.
+  The next natural slice is the separate Lab3 classifier-proof inversion around
+  `Stencil2dSobelProof`, which should be guarded against reserved-name
+  broadening.
+
 ## 2026-07-05 -- Rust rewrite shared HLS artifact rendering path
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
