@@ -6001,3 +6001,53 @@ Boundary:
   membership did not change.
 - The imported `a62eb274` 37-program current-head checkpoint remains the active
   vendor-HLS anchor.
+
+## 2026-07-05 -- Rust rewrite retires raw Lab2 GEMM Scala ingress
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `b91118f756d16edf610f890542c2684da6b74acb` (`Retire raw Lab2
+  GEMM Scala ingress`) closes the quarantined raw Scala adapter registry for
+  `Lab2Part5GEMM` and `Lab2Part6GEMM`.
+- Raw fixed32, K-tail34, and row/column/K-tail33x35x34 Scala wrappers now fail
+  closed in parser and HLS tests.
+- Canonical Rust-subset Tile-K support remains intact for serial/scheduled
+  full-K, K-tail, and row/column/K-tail GEMM canaries.
+- Removed the stale raw-adapter frontend-profile builder from
+  `frontend/lab2_gemm_bridge.rs`; the bridge still owns the Rust-subset shell,
+  offset-loop, `numel_*`, in-place C, and Part6 partial-par state.
+- Updated README, fixture matrix, MVP plan, architecture notes, and roadmap to
+  describe Lab2 GEMM support as Rust-subset Tile-K canaries rather than raw
+  Scala wrapper compatibility.
+
+Proof:
+- Red checks first failed because raw Lab2 GEMM wrappers still compiled:
+  `cargo test --locked -p spatial-rs-core parse_accel_rejects_retired_raw_lab2 -- --nocapture`
+  and
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part -- --nocapture`.
+- Focused green checks passed:
+  `cargo test --locked -p spatial-rs-core source_adapter -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core parse_accel_rejects_retired_raw_lab2 -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core lab2_outer_k -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part -- --nocapture`,
+  and
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k -- --nocapture`.
+- Broader local verification passed:
+  `cargo fmt --all -- --check`,
+  `cargo test --locked --quiet`,
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_a62eb274_checkpoint -- --nocapture`,
+  `cargo test --locked -p ee109-examples validation_programs_include_supported_features_after_adapter_baseline -- --nocapture`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  and `git diff --check` in the Rust repo.
+
+Boundary:
+- This intentionally removes source compatibility for the old Scala
+  `Lab2Part5GEMM` / `Lab2Part6GEMM` wrappers. The supported path is now the
+  Rust-subset frontend/HIR Tile-K surface.
+- Generated HLS and validation membership are expected to remain anchored by
+  existing canonical canaries; no fresh EC2/Vitis run was performed in this
+  slice.
+- The imported `a62eb274` 37-program current-head checkpoint remains the active
+  vendor-HLS anchor pending the next real Vitis refresh.
