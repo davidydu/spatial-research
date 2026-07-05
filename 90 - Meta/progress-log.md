@@ -5753,3 +5753,48 @@ Boundary:
   membership did not change.
 - The imported `a62eb274` 37-program current-head checkpoint remains the active
   vendor-HLS anchor.
+
+## 2026-07-05 -- Rust rewrite moves rank2 copy from-plan wrappers
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `0a1a0269ec8ac7c8ca004634febede30d323eb5e` (`Move rank2 copy
+  from-plan wrappers`) adds `rank2_copy_kernel_from_plan` and
+  `rank2_copy_harness_from_plan` to `spatial_rs_hls::rank2_copy`.
+- `emit.rs` now dispatches rank-2 copy kernel and harness generation through
+  those wrappers instead of performing `rank2_copy_frame_from_plan` plus render
+  calls itself.
+- The wrappers preserve the existing exact `[input, output]` param-order guard
+  and keep malformed swapped/extra-param internal plans fail-closed.
+- Updated the Rust rewrite roadmap to record the rank-2 copy `emit.rs`
+  orchestration cleanup.
+
+Proof:
+- The red check
+  `cargo test --locked -p spatial-rs-hls rank2_copy_from_plan --lib -- --nocapture`
+  initially failed at compile time because `rank2_copy_kernel_from_plan` and
+  `rank2_copy_harness_from_plan` did not exist.
+- Focused green checks passed:
+  `cargo test --locked -p spatial-rs-hls rank2_copy_from_plan --lib -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls rank2_copy --lib -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen matrix_copy_4x6_feature_emits_parameterized_rank2_copy_and_harness -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab3_row_major_copy_kernel_uses_cols_as_rank2_flatten_stride -- --nocapture`,
+  and `cargo test --locked -p spatial-rs-hls --quiet`.
+- Broader local verification passed:
+  `cargo test --locked --quiet`,
+  `cargo fmt --all -- --check`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  and `git diff --check` in the Rust repo.
+
+Boundary:
+- This is a backend helper-boundary cleanup for already-supported rank-2 copy
+  lowering. It does not add features, change validation membership, or widen
+  source acceptance.
+- MatrixCopy and Lab3 row-major copy HLS/harness guards preserved the generated
+  rank-2 copy output locally.
+- No fresh EC2/Vitis run was needed because HLS output and validation
+  membership did not change.
+- The imported `a62eb274` 37-program current-head checkpoint remains the active
+  vendor-HLS anchor.
