@@ -26,32 +26,34 @@ The current `spatial-rs` work should therefore be treated as a tracer slice:
 
 ## Current Position
 
-`spatial-rs` currently has a 37-program EE109 MVP validation roster covering
+`spatial-rs` currently has a 38-program EE109 MVP validation roster covering
 the lab fixtures plus narrow reusable representatives for scalar expressions,
 reductions/folds, SRAM tile fold, LUT lookup, rank-1/2 dense kernels, MemReduce
 / MemFold fill, FIFO tile scaling, ControlFsm, Stencil2d/Sobel, and named
-Tile-K GEMM/tail/schedule canaries.
+Tile-K GEMM/tail/schedule canaries, including the exact full-K `par4x16`
+schedule perturbation.
 
 Current Vitis status: the latest Rust rewrite vendor checkpoint is the
-2026-07-05 37-program current-head refresh after locking the explicit
-`FixPt[TRUE,_24,_8]` signed truncation/wrap HLS policy, captured in
-`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-fixpt-policy-current-head-37-program/`.
+2026-07-05 38-program current-head refresh after locking the explicit
+`FixPt[TRUE,_24,_8]` signed truncation/wrap HLS policy and promoting the
+`MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32` Tile-K schedule canary,
+captured in
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-par4x16-38-program/`.
 It keeps `MemReduceFives8` and `MemFoldSevens12` in the validation roster
-after the raw Lab2 Part5/Part6 GEMM Scala-ingress retirement and refreshes
-vendor evidence for the updated fixed-point alias. All 37 programs passed
+after the raw Lab2 Part5/Part6 GEMM Scala-ingress retirement, refreshes vendor
+evidence for the updated fixed-point alias, and adds the exact full-K `par4x16`
+schedule representative. All 38 programs passed
 EC2/Vitis 2025.1 `csim_design` and `csynth_design`; this proves vendor HLS
 acceptance for the exact roster
-only, not board execution, implementation, timing closure, performance
+only, not board execution, implementation, resource fit, timing closure, performance
 optimality, generic Spatial compatibility, or broad Scala source
 compatibility.
-Current local continuation after that vendor checkpoint: the exact full-K
-Tile-K schedule canary
-`MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32` now passes local
-parser/checker/HLS/host-harness tests. It preserves `partial_row_par=4` and
-`partial_col_par=16` through checked IR and lowers them into row-cyclic
-partitions plus row/column unroll pragmas when factors divide the static tile
-dimensions. Non-dividing schedule factors remain fail-closed. This has not yet
-been promoted into the validation roster or rerun on EC2/Vitis.
+The exact full-K Tile-K schedule canary
+`MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32` preserves
+`partial_row_par=4` and `partial_col_par=16` through checked IR and lowers them
+into row-cyclic partitions plus row/column unroll pragmas when factors divide
+the static tile dimensions. Non-dividing schedule factors remain fail-closed;
+the representative is now validation-roster and EC2/Vitis proven.
 The previous local frontend/HIR foundation cleanup is Rust commit `2a7fe3bb`
 (`Retire duplicate raw GEMM tile proof`). It removes the private raw-adapter
 Tile-K tile-I/O role proof object from `source_adapter.rs`; the quarantined
@@ -417,8 +419,7 @@ serial/scheduled K-tail members, `Lab2Part3BasicCondFSMAlt`,
 `33 35 34` Tile-K canaries. A then-current Tile-K HLS loop-body cleanup
 checkpoint captured 33-program EC2/Vitis `csim_design`/`csynth_design` evidence
 in `docs/vitis-validation/2026-07-03-tile-k-loop-body-current-head-33-program/`;
-the active current-head vendor anchor is now the fixed-point-policy 37-program
-refresh.
+the active current-head vendor anchor is now the par4x16 38-program refresh.
 The current Tile-K HLS backend-ledger cleanup has now moved K-loop bounds,
 local storage declarations, schedule/partition preflight, serial/scheduled
 tile-body rendering, and the kernel frame itself into crate-private HLS helper

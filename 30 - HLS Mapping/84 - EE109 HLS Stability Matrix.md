@@ -19,26 +19,33 @@ This note records the local stability state after the first EE109 HLS expansion 
 The supported claim is deliberately narrow: the selected EE109 examples compile
 through the local Spatial `--hls` lane into HLS-style C++, host-compile with
 the system `c++`, pass their generated harnesses, and for the current Rust
-rewrite 37-program roster pass EC2/Vitis `csim_design` and `csynth_design`.
+rewrite 38-program roster pass EC2/Vitis `csim_design` and `csynth_design`.
 This is still not board execution, Vivado implementation, timing closure, or a
 generic Spatial compatibility claim.
 
-Current Rust rewrite delta, 2026-07-05: the fixed-point-policy current-head
-refresh is now the active vendor-HLS checkpoint. The full 37-program roster
+Current Rust rewrite delta, 2026-07-05: the Tile-K `par4x16` current-head
+refresh is now the active vendor-HLS checkpoint. The full 38-program roster
 passed EC2/Vitis 2025.1 `csim_design` and `csynth_design` after locking
-`FixPt[TRUE,_24,_8]` lowering to signed truncation/wrap. Durable evidence:
-`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-fixpt-policy-current-head-37-program/`.
+`FixPt[TRUE,_24,_8]` lowering to signed truncation/wrap and promoting the exact
+full-K `MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32` schedule canary.
+Durable evidence:
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-par4x16-38-program/`.
 This supersedes older notes below that say the active anchor remains
-`a62eb274`, `7a350983`, `eb4f6236`, or `c862e57a`.
+`a62eb274`, `7a350983`, `eb4f6236`, `c862e57a`, `b91118f7`, or the
+fixed-point-policy 37-program checkpoint.
 
-Current local no-fresh-Vitis update, 2026-07-05: the Rust rewrite now accepts
-the exact full-K Tile-K schedule canary
+Current promoted Vitis update, 2026-07-05: the Rust rewrite now accepts
+and validates the exact full-K Tile-K schedule canary
 `MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32`. The checked payload
 preserves `partial_row_par=4` and `partial_col_par=16`; HLS lowering emits the
 matching row-cyclic array partitions, row/column unroll pragmas, and host
 harness. Non-dividing schedule factors such as `3x16` remain fail-closed.
-Local core Tile-K, HLS Tile-K, and full `m1_codegen` tests pass. This is not a
-validation-roster member yet and has no fresh EC2/Vitis evidence.
+Local core Tile-K, HLS Tile-K, full `m1_codegen`, validation-roster, and
+EC2/Vitis `csim_design` / `csynth_design` checks pass. The Vitis report reaches
+II=1 for the scheduled compute/update loops, but the final C writeback loop
+emits II-violation warnings and the report estimates 256 DSP against 220
+available, so this is HLS-acceptance evidence rather than resource-fit
+implementation evidence.
 
 Current local no-fresh-Vitis update, 2026-07-04: Rust commit `89b637ed`
 hardens the raw Lab2 fixed GEMM ingress. The `Lab2Part5GEMM` /
@@ -863,16 +870,16 @@ Generated-code hygiene:
 ## Recommended Next Action
 
 For the Rust rewrite, the clean current-head EC2/Vitis checkpoint is now the
-37-program fixed-point-policy current-head refresh, captured in
-`docs/vitis-validation/2026-07-05-fixpt-policy-current-head-37-program/`. Use
+38-program Tile-K `par4x16` current-head refresh, captured in
+`docs/vitis-validation/2026-07-05-current-head-par4x16-38-program/`. Use
 it as the vendor-stability anchor for the current EE109 MVP roster.
 
-The latest larger validation-roster step promoted the existing non-lab
-MemReduce/MemFold canaries into the official roster with EC2/Vitis evidence.
-The natural next implementation action is another bounded proof/helper-boundary
-slice with local equality gates, or a deliberately chosen next semantic canary
-that expands the reusable Rust compiler surface without widening raw Scala
-adapters by token matching.
+The latest validation-roster step promoted the exact full-K Tile-K `par4x16`
+schedule canary into the official roster with EC2/Vitis evidence. The natural
+next implementation action is another bounded proof/helper-boundary slice with
+local equality gates, or a deliberately chosen next semantic canary that
+expands the reusable Rust compiler surface without widening raw Scala adapters
+by token matching.
 Byte-stable refactors should keep using local equality, dry-run/plan, full
 test, clippy, and evidence-validator gates; any generated-HLS text change or
 validation-roster change should trigger a fresh EC2/Vitis execution.

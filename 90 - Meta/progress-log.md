@@ -6186,9 +6186,47 @@ Proof:
   and `git diff --check` in the vault.
 
 Boundary:
-- This is local parser/checker/HLS/host-harness evidence only.
-- The `par4x16` canary is not yet in the 37-program validation roster and has
-  no EC2/Vitis `csim_design` / `csynth_design` evidence yet.
+- This entry recorded the local-only state before the follow-up EC2/Vitis
+  promotion below.
 - This does not add generic Spatial scheduling, inferred banking, arbitrary
   K-tail schedules, broad Scala source compatibility, board execution, or
   timing evidence.
+
+## 2026-07-05 -- Rust rewrite promotes Tile-K par4x16 through EC2/Vitis
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Promoted `MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32` into the
+  EE109 validation roster as the 38th program.
+- The active vendor-HLS evidence anchor is now
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-par4x16-38-program/`.
+- The old 37-program fixed-point-policy bundle remains historical evidence,
+  but is no longer the active current-head roster.
+
+Proof:
+- Remote EC2 host:
+  `[ec2-host — see private/ec2-lane.md]`.
+- Remote run directory:
+  `/home/ubuntu/spatial-rs-runs/2026-07-05-par4x16-38-program/repo`.
+- EC2 preflight passed with `cargo 1.75.0`, `rustc 1.75.0`, Vitis settings at
+  `/tools/Xilinx/2025.1/Vitis/settings64.sh`, the 38-program roster unit test,
+  and 38 sidecar plans.
+- EC2 Vitis command:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --settings /tools/Xilinx/2025.1/Vitis/settings64.sh --out target/vitis-validation-current-head-par4x16-38-program`.
+- All 38 kernels passed Vitis 2025.1 `csim_design` and `csynth_design`,
+  including `MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32`.
+- The par4x16 Vitis log reports II=1 for the scheduled compute/update loops,
+  but the final C writeback loop emits II-violation warnings and settles at
+  final II=16. The csynth report estimates 256 DSP against 220 available on
+  `xc7z020-clg400-1`.
+- Local evidence validation passed:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-par4x16-38-program --mode both`.
+
+Boundary:
+- This proves Vitis C simulation and HLS synthesis for the exact 38-program
+  roster only.
+- It does not claim board execution, Vivado implementation, timing closure,
+  performance optimality, resource fit, generic Spatial scheduling, inferred
+  banking, arbitrary K-tail schedules, or broad Scala source compatibility.
