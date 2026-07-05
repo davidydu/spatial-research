@@ -55,6 +55,16 @@ This does not add a validation roster member, generated HLS changes, manifest
 changes, board execution, Vivado implementation, timing closure, or automatic
 schedule lowering.
 
+Current local frontend/HIR semantic slice, 2026-07-05: `Stencil2d v0`
+local-memory roles are now discovered by exact semantic shape rather than by
+declaration position. Valid Sobel sources may reorder the LineBuffer,
+horizontal LUT, vertical LUT, RegFile window, and row scratch SRAM declarations
+while rebuilding the same checked `Stmt::Stencil2d` payload. Duplicate Sobel
+LUT roles and extra local memories still fail closed. Local Stencil2d parser
+tests and m1 HLS equality/harness tests pass, proving no generated-HLS,
+manifest, validation-roster, or vendor-evidence drift. No fresh EC2/Vitis run
+is required unless generated validation HLS or roster membership changes.
+
 Current local frontend/HIR cleanup, 2026-07-05: Rust commit `e358bfd1`
 (`Record rank2 local compute proofs`) promotes the shared rank-2 local-compute
 matchers from boolean gates into proof-producing helpers. Tile-K fold/update now

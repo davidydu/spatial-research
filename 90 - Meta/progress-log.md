@@ -7710,6 +7710,52 @@ Boundary:
 - The active vendor anchor remains
   `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
 
+## 2026-07-05 -- Rust rewrite Stencil2d local-memory role discovery
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- The six-scout review first proposed several next slices. The Tile-K
+  row/column/K-tail canonical arrow-bulk candidate turned out to already parse
+  successfully; new parser regressions now pin the serial and Part6 scheduled
+  canonical bulk spellings instead of treating them as newly admitted behavior.
+- The implemented semantic-support slice is `Stencil2d v0` local-memory role
+  discovery. The classifier no longer depends on declaration order for the five
+  accepted local memories.
+- Valid Sobel sources may declare the LineBuffer, horizontal Sobel LUT,
+  vertical Sobel LUT, RegFile window, and row scratch SRAM in any order. The
+  classifier still requires exactly one matching role for each, so duplicate
+  Sobel LUT roles and extra local memories fail closed.
+- Reordered valid sources rebuild the same checked `Stmt::Stencil2d` payload
+  and preserve exact generated HLS and manifest output.
+- Updated repo README, EE109 MVP plan, Rust rewrite architecture, active
+  superpowers roadmap, this vault roadmap, and the HLS stability matrix.
+
+Proof:
+- Red test first:
+  - `cargo test -p spatial-rs-core --locked parse_accel_accepts_stencil2d_sobel_feature_with_reordered_local_declarations -- --nocapture`
+  - Expected failure observed: `spatial:E0407` with "stencil feature memories must match the narrow Sobel local-window shape".
+- Targeted green:
+  - `cargo test -p spatial-rs-core --locked stencil2d -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test m1_codegen stencil2d -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked tile_k_canonical_bulk_io_accepts -- --nocapture`
+- Full local gates:
+  - `cargo fmt --all -- --check`
+  - `git diff --check`
+  - `cargo clippy --all-targets --locked -- -D warnings`
+  - `cargo test --locked --workspace`
+
+Boundary:
+- No validation-roster, diagnostic-roster, generated-HLS, manifest, or vendor
+  evidence change.
+- No fresh EC2/Vitis execution was run or required because m1 HLS equality and
+  host-harness tests proved no emitted-HLS drift for the accepted reordered
+  source.
+- This is not generic Stencil2d v1, arbitrary LineBuffer/RegFile lowering,
+  arbitrary coefficients, broader `Reduce`, arbitrary `par`, or Scala source
+  compatibility.
+
 ## 2026-07-05 -- Rust rewrite refreshes 35c6944a current-head Vitis evidence
 
 Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

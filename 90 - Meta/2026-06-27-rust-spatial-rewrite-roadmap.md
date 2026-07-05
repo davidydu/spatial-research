@@ -73,6 +73,13 @@ outside the 39-program validation roster, but selected EC2/Vitis evidence in
 `docs/vitis-validation/2026-07-05-selected-par2x8-row-col-tail-f920a754/`
 validates the requested `partial_row_par=2` / `partial_col_par=8` schedule as
 `resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`.
+The current local semantic-support slice makes `Stencil2d v0` local-memory role
+discovery declaration-order-independent. The accepted Sobel shape still
+requires exactly one matching LineBuffer, horizontal LUT, vertical LUT, RegFile
+window, and row scratch SRAM; duplicate role candidates and extra local memories
+fail closed. Reordered valid sources rebuild the same checked `Stmt::Stencil2d`
+payload and preserve exact HLS/manifest output, so this does not change
+validation-roster membership or vendor-HLS evidence.
 The latest local frontend/HIR cleanup is Rust commit `35c6944a` (`Move Tile-K
 proof tests into module`). Tile-K proof/profile tests and Tile-K-local
 LHS/RHS/C preload/store matcher tests now live under
