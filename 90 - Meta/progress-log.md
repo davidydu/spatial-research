@@ -9,6 +9,28 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite current-roster Vitis plan gate after Part6 aliases
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust head:
+  `76158dd7`
+  (`Accept Part6 bulk par aliases`).
+- Ran the local, non-executing Vitis validation planner after the Part6
+  canonical bulk par-alias bridge:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-current-plan-76158dd7`.
+- Result:
+  emitted 39 `PLAN ... both .../run_both.tcl` rows for the current validation
+  roster, ending with
+  `MatrixTileMemFoldOuterKRowColTailInPlacePar4x8FixPt33x35x34`.
+- Boundary:
+  this is a local sidecar/summary planning gate only. It did not invoke Vitis,
+  run EC2, produce new `csim_design`/`csynth_design` evidence, change the
+  validation roster, or supersede the active vendor anchor
+  `docs/vitis-validation/2026-07-05-current-head-35c6944a-39-program/`.
+
+---
+
 ## 2026-07-05 -- Rust rewrite Part6 canonical bulk par-alias bridge
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
