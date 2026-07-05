@@ -7585,6 +7585,57 @@ Boundary:
 - The active vendor anchor remains
   `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
 
+## 2026-07-05 -- Tile-K proof tests module ownership
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `35c6944a2a459531ac06f7f5f079c39b85b5e8ef` (`Move Tile-K proof
+  tests into module`) moves the Tile-K proof/profile tests and Tile-K-local
+  LHS/RHS/C preload/store matcher tests under
+  `classifier/tiled2d/tile_k.rs`.
+- The parent `classifier/tiled2d.rs` no longer imports Tile-K proof internals
+  for tests; it re-exports only the Tile-K classifier entry point for
+  production dispatch.
+- Tile-K proof, matcher, phase-spine, schedule, and payload-rebuild structs,
+  fields, and helpers are now private to `tile_k.rs`.
+- The shared partial-product and C-accumulation helpers and tests remain in
+  the parent because non-outer-K `Dense2dTileMemFold` still uses them.
+- A new architecture regression asserts that Tile-K proof tests stay
+  module-owned instead of drifting back into the parent.
+
+Proof:
+- Red test first:
+  - `cargo test --locked -p spatial-rs-core tile_k_proof_tests_are_module_owned -- --nocapture`
+- Targeted green:
+  - `cargo test --locked -p spatial-rs-core tile_k_proof_tests_are_module_owned -- --nocapture`
+  - `cargo test --locked -p spatial-rs-core tile_k -- --nocapture`
+  - `cargo test --locked -p spatial-rs-core dense2d_memfold -- --nocapture`
+  - `cargo test --locked -p spatial-rs-core rank2_local -- --nocapture`
+  - `cargo test --locked -p spatial-rs-core rank2_tile_copy_role -- --nocapture`
+  - `cargo test --locked -p spatial-rs-core parse_accel_lab2_outer_k -- --nocapture`
+  - `cargo test --locked -p spatial-rs-hls tile_k_memfold_plan_exposes -- --nocapture`
+  - `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k -- --nocapture`
+  - `cargo test --locked -p spatial-rs-hls --test m1_codegen tile_k -- --nocapture`
+  - `cargo test --locked -p spatial-rs-hls --test vitis_validation outer_k_memfold -- --nocapture`
+  - `cargo test --locked -p spatial-rs-hls --test vitis_validation lab2_part6_scheduled -- --nocapture`
+- Full local gates:
+  - `cargo test --locked --workspace`
+  - `cargo clippy --all-targets --locked -- -D warnings`
+  - `cargo fmt --all -- --check`
+  - `git diff --check`
+
+Boundary:
+- No accepted syntax, checked IR, generated HLS, manifest, validation-roster,
+  diagnostic-roster, or imported vendor-evidence change.
+- No fresh EC2/Vitis execution was run for this checkpoint.
+- The active vendor anchor remains
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
+- Parent-side shared helper tests remain intentionally because the next useful
+  cleanup there is a careful rename/extraction of shared local
+  partial-product/C-accumulation helpers, not another Tile-K ownership move.
+
 ## 2026-07-05 -- Tile-K matcher module extraction
 
 Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
