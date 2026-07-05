@@ -1138,16 +1138,15 @@ The latest validation-roster steps promoted the exact full-K Tile-K `par4x16`
 schedule canary and the non-Part6 `par4x8` row/column/K-tail canary into the
 official roster with EC2/Vitis evidence. The latest local compiler steps
 completed bounded no-HLS-drift structural-recovery and proof/equality slices,
-then added Rust commit `26611e17`, which makes the Lab2 shell-alias bridge
-source-boundary explicit: exact alias-name tokens do not activate the bridge
-unless they occur in local SRAM alias declarations. Par2x8 remains
-diagnostic-only unless we explicitly decide to promote it and pay for a fresh
-full-roster EC2/Vitis refresh. The next implementation action is therefore
-compiler-interface expansion while leaving Par2x8 diagnostic-only. The
-strongest near-term candidates are Tile-K proof-module extraction and the
-rank-2 GEMM HLS access-plan helper; the shell-alias source-boundary guard is
-now complete. Do not spend the next step optimizing
-`par4x16` DSP use unless the research goal shifts toward board-fit
+then added Rust commit `2e0ad39e`, which gives the shared rank-2
+partial-product and accumulation-update fact matchers neutral parent-side names
+instead of Tile-K-only names. Par2x8 remains diagnostic-only unless we
+explicitly decide to promote it and pay for a fresh full-roster EC2/Vitis
+refresh. The next implementation action is therefore compiler-interface
+expansion while leaving Par2x8 diagnostic-only. The strongest near-term
+candidates are the rank-2 GEMM HLS access-plan helper and the next bounded
+frontend/HIR proof boundary for EE109-style kernels. Do not spend the next step
+optimizing `par4x16` DSP use unless the research goal shifts toward board-fit
 implementation; the validator now keeps that caveat visible while the compiler
 surface continues to deepen.
 

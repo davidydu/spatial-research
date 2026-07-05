@@ -9,6 +9,49 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite shared rank-2 local-compute helper naming
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `2e0ad39e`
+  (`Rename shared rank2 local compute helpers`).
+- Renamed the parent-side shared rank-2 MemFold local-compute helpers away from
+  Tile-K-only vocabulary:
+  `Rank2LocalPartialProductSpec`,
+  `rank2_local_partial_product_matches_resolved_facts`, and
+  `rank2_local_accumulation_update_matches_resolved_facts` now make clear that
+  both non-outer-K `Dense2dTileMemFold` and Tile-K use the same resolved-fact
+  boundary after their own syntax/schedule guards.
+- Added a string-contract regression
+  `shared_rank2_local_compute_helpers_are_neutrally_named` so stale
+  `TileKPartialProductSpec` / Tile-K-only matcher names cannot return to the
+  shared parent-side helper boundary.
+- A GPT-5.5 xhigh review subagent independently confirmed this should remain a
+  shared parent-side helper and that no fresh Vitis run is needed for a private
+  rename with unchanged generated HLS/manifests.
+- Verification passed:
+  RED/green `cargo test --locked -p spatial-rs-core shared_rank2_local_compute_helpers_are_neutrally_named -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core rank2_local -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core tile_k -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core dense2d_memfold -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen tile_memfold -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_35c6944a_checkpoint -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation active_docs_name -- --nocapture`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary:
+  this is a no-HLS-drift structural cleanup. It does not add accepted syntax,
+  checked payloads, generated HLS, manifest changes, validation-roster members,
+  imported Vitis evidence, board execution, or broader generic Spatial
+  `MemFold` support. The active vendor anchor remains
+  `docs/vitis-validation/2026-07-05-current-head-35c6944a-39-program/`.
+
+---
+
 ## 2026-07-05 -- Rust rewrite Tile-K resource-fit policy
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
