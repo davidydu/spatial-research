@@ -9,6 +9,32 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 -- Rust rewrite reversed tail-min HLS equality pin
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `5c8a10ea4dd511e08b3b7af08a3f4af9827e9a65`
+  (`Pin reversed tail min HLS equality`).
+- Added generated-HLS and manifest equality tests proving that reversed
+  `min(...)` tail-bound spellings normalize to the same output as the
+  canonical source for the non-outer-K MemFold tail, serial Tile-K K-tail,
+  serial row/column/K-tail, and scheduled Part6 row/column/K-tail cases.
+- Refreshed Rust-repo and vault docs so the accepted source surface is described
+  as tile-size-first or remaining-first `min(...)`, not only the older exact
+  `min(TILE_K, remaining)` order.
+- Verification passed:
+  `cargo fmt --all -- --check`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen reversed_min`;
+  `cargo test --locked -p spatial-rs-core reversed`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_a62eb274_checkpoint`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `git diff --check` in the Rust repo and the research vault.
+- Boundary: no HLS generator change, no validation-roster change, and no new
+  EC2/Vitis run. The active vendor evidence anchor remains the imported
+  `a62eb274` 37-program checkpoint pending future HLS testing.
+
 ## 2026-07-04 -- Rust rewrite MemFold reversed tail-min source admission
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

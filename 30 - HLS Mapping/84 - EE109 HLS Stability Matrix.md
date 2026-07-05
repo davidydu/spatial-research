@@ -605,8 +605,8 @@ source compatibility.
 
 Later on 2026-07-02, the Rust rewrite added a local structural source bridge
 for that same scheduled Part6 payload. The Lab2-like outer-K frontend/HIR path
-now accepts infix tile IO, static offset-loop spelling, and the exact static
-`numel_k = min(TILE_K.to[Int], K - kk)` spelling when the kernel name is the
+now accepts infix tile IO, static offset-loop spelling, and tile-size-first or
+remaining-first static `numel_k = min(...)` spelling when the kernel name is the
 scheduled Part6 canary and the partial-tile fill loops carry literal `par 2`
 and `par 16`. Local parser/HIR/classifier tests prove equality with the raw
 Part6 scheduled payload, and HLS tests prove generated C++ and manifest
@@ -1120,8 +1120,8 @@ static exact outer-K canary:
 - `MemFold(tileC_sram)(0 until TILE_K by 1) { k_idx => ... }{_+_}`
 - a declared static `numel_k` alias equal to `TILE_K` inside K tile ranges and
   the MemFold bound
-- exact static `val numel_k = min(TILE_K.to[Int], K - kk);` spelling under the
-  same offset-loop proof
+- tile-size-first or remaining-first static `val numel_k = min(...);` spelling
+  under the same offset-loop proof
 - exact fixed raw dimension/tile aliases (`M/N=32`,
   `tileM/tileN/tileK=16`) in declarations, DRAM/SRAM dimensions, offset loops,
   and `min(tileK.to[Int], K - kk)`, canonicalized back to `ROWS/COLS` and

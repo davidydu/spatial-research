@@ -45,7 +45,7 @@ exact roster
 only, not board execution, implementation, timing closure, performance
 optimality, generic Spatial compatibility, or broad Scala source
 compatibility.
-The latest local frontend/HIR foundation cleanup is Rust commit `2a7fe3bb`
+The previous local frontend/HIR foundation cleanup is Rust commit `2a7fe3bb`
 (`Retire duplicate raw GEMM tile proof`). It removes the private raw-adapter
 Tile-K tile-I/O role proof object from `source_adapter.rs`; the quarantined
 raw Lab2 Part5/Part6 adapter now records only the matched scaffold, normalized
@@ -54,7 +54,14 @@ frontend/HIR Tile-K classifier remains the semantic authority for rank-2
 tile-copy/access-role proof. Accepted raw syntax, generated frontend source,
 checked IR, generated HLS, manifests, validation membership, and imported
 Vitis evidence are unchanged, so no fresh EC2/Vitis run was claimed.
-The immediately preceding local frontend source-admission cleanup is Rust
+The current local frontend source-admission cleanup is Rust commit
+`ef07ea51` (`Accept reversed MemFold tail min bounds`). It accepts
+tile-size-first or remaining-first `min(...)` argument order for the bounded
+non-outer-K MemFold tail, Tile-K K-tail, and Tile-K row/column/K-tail profiles.
+Local tests prove identical checked payloads, generated HLS, and manifests for
+those source spellings; generated HLS, manifests, validation membership, and
+the active Vitis evidence anchor are unchanged.
+The preceding local frontend source-admission cleanup is Rust
 commit `6830f993`
 (`Accept normalized Tile-K numel_k aliases`). It accepts the Lab2-like Tile-K
 outer-K `numel_k` min alias with the existing
@@ -139,6 +146,9 @@ C-accumulation resolved-fact checks pass. Accepted syntax, checked payloads,
 generated HLS, manifests, validation membership, and imported Vitis evidence
 were unchanged; the then-active `7a350983` vendor-HLS anchor is now superseded
 by the `a62eb274` 37-program refresh.
+The follow-up `ef07ea51` source-admission slice adds fold/update-level
+fail-closed tests for resolved partial-product lane drift and C-accumulation
+lane drift without changing production proof behavior.
 The quarantined raw Lab2 GEMM source adapter has also been tightened locally:
 Rust commit `38c5ebfddcc984d4c1af5407824d0246cf11f3e0` records exact A/B/C
 preload and C-store rank-2 tile-I/O role/window facts in the private raw source
@@ -318,7 +328,7 @@ MemFold, and Stencil2d proof checks without changing generated HLS or the
 validation roster.
 The serial Tile-K MemFold path now has a named local K-tail canary,
 `MatrixTileMemFoldOuterKTailInPlaceFixPt32x32x34`: the Lab2-like offset-loop
-`numel_k = min(TILE_K.to[Int], K - kk)` spelling is preserved as checked
+`numel_k = min(...)` spelling, in tile-size-first or remaining-first order, is preserved as checked
 `k_bound` for `K=34`, `K_TILES=3`, and `TILE_K=16`, and HLS emits runtime
 bounded K loops while local A/B storage remains statically `TILE_K` wide. This
 is now the 29th validation-program member with EC2/Vitis `csim_design` and
@@ -340,8 +350,8 @@ For the exact `33 35 34` profile, raw Part5/Part6 canonicalize to the existing
 serial/scheduled row/column/K-tail canaries with generated HLS/manifest
 equality.
 The structural Lab2-like outer-K bridge now reaches that same scheduled Part6
-payload for infix tile IO, static offset-loop, and exact static
-`numel_k = min(TILE_K.to[Int], K - kk)` source shapes when the partial-tile fill
+payload for infix tile IO, static offset-loop, and tile-size-first or
+remaining-first static `numel_k = min(...)` source shapes when the partial-tile fill
 loops carry literal `par 2` / `par 16`. This remains an equality bridge with no
 new validation-program member or emitted-HLS surface, but the exact bridge
 commit now has a full 28-program EC2/Vitis refresh in
