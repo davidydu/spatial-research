@@ -43,7 +43,20 @@ fixed-point-policy 37-program checkpoint, and also supersedes the earlier
 acceptance evidence, not board/resource-fit implementation evidence for the
 two over-DSP Tile-K schedules.
 
-Current local frontend/HIR cleanup, 2026-07-05: Rust commit `be8511c9`
+Current local frontend/HIR cleanup, 2026-07-05: Rust commit `26611e17`
+(`Guard Lab2 shell alias activation`) tightens `Lab2GemmBridge` so Lab2 shell
+alias canonicalization activates only for actual local SRAM alias declarations
+such as `val tileA_sram = SRAM[...]`, not for exact alias names used as
+ordinary ports or assignment targets. An ordinary rank-2 copy output named
+`tileA_sram` now remains a `Dram2dCopy`, while the accepted Lab2 shell-alias
+buffer and infix tile-I/O forms preserve their existing checked payloads,
+generated HLS, and manifests. Full workspace tests, clippy, fmt, and diff
+checks pass.
+This does not add a validation roster member, fresh EC2/Vitis evidence,
+generated HLS changes, manifest changes, board execution, Vivado
+implementation, timing closure, or automatic schedule lowering.
+
+Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `be8511c9`
 (`Enforce Tile-K schedule label factors`) keeps explicit Tile-K `ParRxC`
 kernel labels tied to the proven schedule facts. A shared parser extracts only
 explicit `Par<row>x<col>` labels; the classifier and checked-IR validation now
@@ -51,13 +64,9 @@ reject payloads whose `partial_row_par` / `partial_col_par` facts disagree with
 that label. The same commit adds a Vitis evidence-policy invariant tying
 `tile_k_resource_fit_policy()` to the recorded 39-program and selected
 Par4x16/Par4x8/Par2x8 evidence so a clean lower-par diagnostic cannot silently
-replace the requested validation schedules. Full workspace tests, clippy, fmt,
-and diff checks pass.
-This does not add a validation roster member, fresh EC2/Vitis evidence,
-generated HLS changes, manifest changes, board execution, Vivado
-implementation, timing closure, or automatic schedule lowering.
+replace the requested validation schedules.
 
-Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `51de4c05`
+Earlier local frontend/HIR cleanup, 2026-07-05: Rust commit `51de4c05`
 (`Record Tile-K resource-fit policy`) codifies the Tile-K schedule/resource
 policy in `tile_k_resource_fit_policy()`. The policy records `par4x16` and
 `par4x8` as requested validation-roster schedules with over-budget evidence,
@@ -1106,17 +1115,15 @@ The latest validation-roster steps promoted the exact full-K Tile-K `par4x16`
 schedule canary and the non-Part6 `par4x8` row/column/K-tail canary into the
 official roster with EC2/Vitis evidence. The latest local compiler steps
 completed bounded no-HLS-drift structural-recovery and proof/equality slices,
-then added Rust commit `be8511c9`, which makes explicit Tile-K `ParRxC` labels
-match the resolved/proven `partial_row_par` / `partial_col_par` facts at both
-classifier and checked-IR gates. It also locks the resource-fit policy to the
-recorded Vitis evidence quality, keeping `par4x16` and `par4x8` as requested
-validation schedules with over-budget evidence while `par2x8` remains a
-selected diagnostic resource-fit candidate. The next implementation action is
-therefore compiler-interface expansion while leaving Par2x8 diagnostic-only,
-unless we explicitly decide to promote Par2x8 and pay for a fresh full-roster
-EC2/Vitis refresh. The strongest near-term candidates are the Lab2 shell-alias
-source-boundary guard, Tile-K proof-module extraction, and the rank-2 GEMM HLS
-access-plan helper. Do not spend the next step optimizing
+then added Rust commit `26611e17`, which makes the Lab2 shell-alias bridge
+source-boundary explicit: exact alias-name tokens do not activate the bridge
+unless they occur in local SRAM alias declarations. Par2x8 remains
+diagnostic-only unless we explicitly decide to promote it and pay for a fresh
+full-roster EC2/Vitis refresh. The next implementation action is therefore
+compiler-interface expansion while leaving Par2x8 diagnostic-only. The
+strongest near-term candidates are Tile-K proof-module extraction and the
+rank-2 GEMM HLS access-plan helper; the shell-alias source-boundary guard is
+now complete. Do not spend the next step optimizing
 `par4x16` DSP use unless the research goal shifts toward board-fit
 implementation; the validator now keeps that caveat visible while the compiler
 surface continues to deepen.

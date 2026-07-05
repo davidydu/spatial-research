@@ -72,14 +72,20 @@ outside the 39-program validation roster, but selected EC2/Vitis evidence in
 `docs/vitis-validation/2026-07-05-selected-par2x8-row-col-tail-f920a754/`
 validates the requested `partial_row_par=2` / `partial_col_par=8` schedule as
 `resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`.
-The latest local frontend/HIR cleanup is Rust commit `be8511c9` (`Enforce
+The latest local frontend/HIR cleanup is Rust commit `26611e17` (`Guard Lab2
+shell alias activation`). Lab2 shell-alias canonicalization now activates only
+for actual local SRAM alias declarations, not for exact alias-name tokens used
+as ordinary ports or assignment targets. Ordinary rank-2 copy sources with a
+name like `tileA_sram` remain ordinary copies, while the accepted Lab2
+shell-alias buffer and infix tile-I/O bridges preserve their checked payloads,
+generated HLS, and manifests. This does not change validation-roster
+membership or vendor-HLS evidence.
+The previous local frontend/HIR cleanup is Rust commit `be8511c9` (`Enforce
 Tile-K schedule label factors`). Explicit Tile-K `ParRxC` labels now have to
 match the proven `partial_row_par` / `partial_col_par` schedule facts at both
 classifier and checked-IR gates, and the resource-fit policy is tied to the
-recorded 39-program plus selected Par4x16/Par4x8/Par2x8 Vitis evidence. This
-does not change generated HLS, manifests, validation-roster membership, or
-vendor-HLS evidence.
-The previous local frontend/HIR cleanup is Rust commit `51de4c05` (`Record
+recorded 39-program plus selected Par4x16/Par4x8/Par2x8 Vitis evidence.
+The earlier local frontend/HIR cleanup is Rust commit `51de4c05` (`Record
 Tile-K resource-fit policy`). `tile_k_resource_fit_policy()` records
 `par4x16` and `par4x8` as requested validation-roster schedules with
 over-budget evidence and `par2x8` as a separate selected diagnostic
@@ -854,13 +860,20 @@ structural Part6 source bridge is a later equivalence slice over the same
 scheduled HLS surface, and its exact commit has its own 28-program vendor-HLS
 refresh in `docs/vitis-validation/2026-07-02-part6-structural-408e21c/`.
 
-Current local foundation continuation: Rust commit `be8511c9` (`Enforce
-Tile-K schedule label factors`) makes explicit Tile-K `ParRxC` schedule labels
-fail closed when they disagree with resolved/proven schedule facts, and locks
-the Par4x16/Par4x8/Par2x8 resource policy to recorded Vitis evidence quality
+Current local foundation continuation: Rust commit `26611e17` (`Guard Lab2
+shell alias activation`) makes the Lab2 shell-alias bridge source-boundary
+explicit: exact alias-name tokens do not activate canonicalization unless they
+occur in local SRAM alias declarations. This preserves accepted Lab2
+shell-alias buffer and infix tile-I/O behavior while keeping ordinary rank-2
+copy sources with names like `tileA_sram` outside the Lab2 bridge.
+
+Previous foundation continuation: Rust commit `be8511c9` (`Enforce Tile-K
+schedule label factors`) makes explicit Tile-K `ParRxC` schedule labels fail
+closed when they disagree with resolved/proven schedule facts, and locks the
+Par4x16/Par4x8/Par2x8 resource policy to recorded Vitis evidence quality
 without changing generated HLS, validation membership, or vendor evidence.
 
-Previous foundation continuation: the Tile-K MemFold classifier has a
+Earlier foundation continuation: the Tile-K MemFold classifier has a
 private proof path on Rust commit
 `24eb75b9d3a33003e1806fab5ea55055817deebe`. The classifier entrypoint preserves
 the old cheap candidate precheck before resolver work, then routes true Tile-K

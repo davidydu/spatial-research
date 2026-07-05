@@ -7586,3 +7586,41 @@ Boundary:
   `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
 - Par2x8 remains selected diagnostic evidence only, not a validation-roster
   replacement for the requested Par4x16 or Par4x8 schedules.
+
+## 2026-07-05 -- Lab2 shell-alias source-boundary guard
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `26611e17` (`Guard Lab2 shell alias activation`) tightens
+  `Lab2GemmBridge::detect_shell_alias`.
+- Lab2 shell-alias canonicalization now activates only for actual local SRAM
+  alias declarations such as `val tileA_sram = SRAM[...]`.
+- Exact alias-name tokens used as ordinary ports or assignment targets no
+  longer activate the bridge; the regression case keeps an ordinary
+  `Dram2dCopy` output named `tileA_sram` as a copy instead of rewriting it to
+  undeclared `lhs_tile`.
+- Existing accepted Lab2 shell-alias buffer and infix tile-I/O forms preserve
+  their checked payload, generated HLS, and manifest snapshots.
+
+Proof:
+- Red tests first:
+  - `cargo test --locked -p spatial-rs-core lab2_gemm_bridge_shell_alias_requires_sram_alias_declaration -- --nocapture`
+  - `cargo test --locked -p spatial-rs-core lab2_shell_alias_gate_preserves_exact_alias_names_without_sram_declarations -- --nocapture`
+- Targeted green:
+  - `cargo test --locked -p spatial-rs-core lab2_shell_alias -- --nocapture`
+  - `cargo test --locked -p spatial-rs-core parse_accel_lab2_outer_k -- --nocapture`
+  - `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_shell_alias -- --nocapture`
+  - `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k -- --nocapture`
+- Full local gates:
+  - `cargo test --locked --workspace`
+  - `cargo clippy --all-targets --locked -- -D warnings`
+  - `cargo fmt --all -- --check`
+  - `git diff --check`
+
+Boundary:
+- No generated HLS, manifest, validation-roster, or diagnostic-roster change.
+- No fresh EC2/Vitis execution was run for this checkpoint.
+- The active vendor anchor remains
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
