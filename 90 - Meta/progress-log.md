@@ -9,6 +9,48 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite Part6 canonical bulk par-alias bridge
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `76158dd7`
+  (`Accept Part6 bulk par aliases`).
+- Extended the exact canonical Rust-subset arrow bulk Tile-K full-K Part6
+  source spelling so the partial-product loops may use `ROW_PAR=2` /
+  `COL_PAR=16` constants as HIR par factors, not only literal `par 2` /
+  `par 16`.
+- Kept the bridge deliberately narrow: it requires the exact scheduled Part6
+  kernel family, exact alias values, and actual alias use in the parsed HIR par
+  factors. Wrong values and unused alias constants remain fail-closed, including
+  the Lab2 infix near-miss case that initially caught an overly broad guard.
+- Added parser and HLS equality coverage proving the alias spelling normalizes
+  to the existing `MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32`
+  checked payload and preserves the literal spelling's generated HLS and
+  manifest JSON.
+- Verification passed:
+  `cargo test -p spatial-rs-core --locked parse_accel_tile_k_canonical_bulk_io_accepts_part6_partial_par_aliases -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked lab2_outer_k_infix_tile_io_near_misses_fail_closed -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked tile_k_canonical_bulk_io -- --nocapture`;
+  `cargo test -p spatial-rs-hls --test m1_codegen --locked tile_k_part6_canonical_bulk_io_preserves_scheduled_hls_and_manifest -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked tile_k -- --nocapture`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`;
+  `cargo run -p ee109-examples --locked`;
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`.
+- Boundary:
+  this is a local no-HLS-drift source-spelling bridge. It does not add Lab2
+  infix alias broadening, generated-HLS changes, manifest changes,
+  validation-roster members, imported Vitis evidence, board execution, Vivado
+  implementation, timing closure, or broader generic Spatial schedule lowering.
+  No fresh EC2/Vitis execution was run for this checkpoint; the active vendor
+  anchor remains
+  `docs/vitis-validation/2026-07-05-current-head-35c6944a-39-program/`.
+
+---
+
 ## 2026-07-05 -- Rust rewrite rank-2 HLS access-plan helper
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

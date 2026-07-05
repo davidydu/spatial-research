@@ -79,6 +79,18 @@ changed table values or dimensions, validation-roster membership, fresh
 EC2/Vitis evidence, board execution, Vivado implementation, or timing-closure
 evidence.
 
+Current local frontend/HIR source-spelling slice, 2026-07-05: Rust commit
+`76158dd7` (`Accept Part6 bulk par aliases`) accepts the exact canonical
+Rust-subset arrow bulk Tile-K full-K Part6 spelling when the partial-product
+loops use `ROW_PAR=2` and `COL_PAR=16` constants instead of literal `par 2` /
+`par 16`. The bridge requires the exact scheduled Part6 kernel family, exact
+alias values, and actual use of those aliases as HIR par factors; wrong values
+and unused alias constants remain fail-closed. The HLS equality test proves the
+literal and alias spellings emit the same kernel and manifest as the canonical
+adapter. This does not add Lab2 infix alias broadening, validation-roster
+membership, generated-HLS drift, fresh EC2/Vitis evidence, board execution,
+Vivado implementation, or timing-closure evidence.
+
 Current local frontend/HIR semantic slice, 2026-07-05: `Stencil2d v0`
 local-memory roles are now discovered by exact semantic shape rather than by
 declaration position. Valid Sobel sources may reorder the LineBuffer,
