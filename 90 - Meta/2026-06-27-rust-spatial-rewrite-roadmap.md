@@ -150,11 +150,12 @@ The follow-up `ef07ea51` source-admission slice adds fold/update-level
 fail-closed tests for resolved partial-product lane drift and C-accumulation
 lane drift without changing production proof behavior.
 The quarantined raw Lab2 GEMM source adapter has also been tightened locally:
-Rust commit `38c5ebfddcc984d4c1af5407824d0246cf11f3e0` records exact A/B/C
-preload and C-store rank-2 tile-I/O role/window facts in the private raw source
-proof before retaining the normalized `Accel`-body equality guard. This is a
-source-adapter proof cleanup only; accepted raw syntax, checked payloads,
-generated HLS, validation membership, and imported Vitis evidence are
+Rust commit `38c5ebfddcc984d4c1af5407824d0246cf11f3e0` was an intermediate
+proof-boundary cleanup that matched the fixed raw scaffold, normalized `Accel`
+body, and generated frontend source before retaining the equality guard; later
+frontend/HIR Tile-K classifier work now owns the rank-2 tile-I/O role/window
+and access-role facts instead of the raw adapter. Accepted raw syntax, checked
+payloads, generated HLS, validation membership, and imported Vitis evidence are
 unchanged. Follow-up Rust commit
 `47f9baa43f455f6078a514098f25ad7815a58298` completed that bridge by moving the
 Tile-K profile vocabulary into checked IR as neutral
@@ -301,14 +302,14 @@ scheduled Part6 outer-K, serial and scheduled K-tail, serial and scheduled
 row/column/K-tail Tile-K canaries, plus the Lab1 Part6 `SramTileFoldSum32`
 SRAM-tile fold canary through Vitis 2025.1
 `csim_design` and `csynth_design`.
-Current exact raw-wrapper ingress remains only for Lab2 Part1/Part2
-MemReduce/MemFold, fixed Lab2 Part5, fixed Lab2 Part6, and the local Lab3
-convolution teaching source. The old raw Lab1 Part4 FIFO, Lab1 Part6 fold,
-Lab2 Part3 alternate FSM, and Lab2 Part4 square/non-square LUT wrappers are
-retired; their Rust-subset or canonical payloads remain the regression
-anchors. The Lab2 Part1/Part2 memory-reduction wrappers now generate bounded
-Rust frontend source for `MemReduceOnes16` / `MemFoldOnes16` and compile
-through the existing frontend/HIR/classifier path.
+Current exact raw-wrapper ingress remains only for fixed Lab2 Part5, fixed
+Lab2 Part6, and the local Lab3 convolution teaching source. The old raw Lab1
+Part4 FIFO, Lab1 Part6 fold, Lab2 Part1/Part2 memory-reduction, Lab2 Part3
+alternate FSM, and Lab2 Part4 square/non-square LUT wrappers are retired;
+their Rust-subset or canonical payloads remain the regression anchors. The
+Lab2 Part1/Part2 memory-reduction behavior stays covered by
+`MemReduceOnes16` / `MemFoldOnes16` and the promoted `MemReduceFill v0` /
+`MemFoldFill v0` family, while the old raw lab class names remain reserved.
 The Rust-subset `MemReduceFill v0` / `MemFoldFill v0` frontend now accepts
 supported static rank-1 lengths beyond the 16-lane lab representative and
 arbitrary integer literal temp fills. `MemReduceTwos16` / `MemFoldTwos16`
@@ -316,12 +317,13 @@ remain the validation-member literal-`2` canaries with EC2/Vitis 2025.1
 `csim_design`/`csynth_design` evidence, while local non-roster canaries such as
 `MemReduceFives8` and `MemFoldSevens12` prove the broader static
 length/literal-fill path through parser/classifier payloads and local HLS
-harness execution. The raw Lab2 wrappers remain the exact all-ones 16-lane
-shape.
+harness execution. The retired raw Lab2 class names remain reserved, while
+`MemReduceOnes16` / `MemFoldOnes16` remain the all-ones 16-lane
+representatives.
 The classifier now also proves the same narrow rank-1 memory-reduction shape
 through resolved HIR loop/symbol facts, so equivalent Rust-subset static
-length/step aliases are accepted without changing raw Lab2 wrapper matching,
-checked payloads, generated HLS, manifests, or wrapper semantics.
+length/step aliases are accepted without changing checked payloads, generated
+HLS, manifests, validation membership, or the reserved raw-name boundary.
 The follow-up affine HIR helper cleanup centralizes lane, constant, and
 tile-plus-lane index predicates on `IndexUseFact` for rank-1, rank-2 Tile-K /
 MemFold, and Stencil2d proof checks without changing generated HLS or the

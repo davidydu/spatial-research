@@ -5533,3 +5533,57 @@ Boundary:
   HLS validation.
 - It does not imply board execution, Vivado implementation, timing closure, or
   completion of the full Spatial rewrite.
+
+## 2026-07-05 -- Rust rewrite retired raw Lab2 memory-reduction wrappers
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `a645e6133ba1e593ed973fdb1b0a5757f050d72a` (`Retire raw Lab2
+  mem reductions`) removes the quarantined raw Scala ingress for
+  `Lab2Part1SimpleMemReduce` and `Lab2Part2SimpleMemFold`.
+- The supported behavior remains available through the Rust-subset
+  `MemReduceOnes16` / `MemFoldOnes16` all-ones canaries and the promoted
+  `MemReduceFill v0` / `MemFoldFill v0` static-length/integer-fill family.
+- The old raw lab class names remain reserved: parser and checked-IR tests now
+  prove they fail closed instead of silently re-entering through raw source
+  compatibility.
+- Updated the Rust README, fixture matrix, EE109 MVP plan, architecture note,
+  superpowers roadmap, vault HLS stability matrix, vault roadmap, and this
+  progress log to reflect the current retired-wrapper boundary.
+
+Proof:
+- Red checks were run first for the retired-wrapper expectations:
+  `cargo test --locked -p spatial-rs-core retired_lab2_memory_reduction_wrappers -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core parse_accel_rejects_retired_raw_lab2_part -- --nocapture`,
+  and
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part1_simple_memreduce_is_retired -- --nocapture`
+  all failed before the production adapter removal.
+- Focused green checks passed:
+  `cargo test --locked -p spatial-rs-core source_adapter -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core parse_accel_rejects_retired_raw_lab2_part -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core parse_accel_accepts_lab2_simple_memory_reduction_spatialish_sugar_without_raw_adapter -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core checked_ir_rejects_retired_raw_lab2_mem_reduction_adapter_names -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen memreduce_fill -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen memfold_fill -- --nocapture`,
+  `cargo test --locked -p ee109-examples validation_programs_include_supported_features_after_adapter_baseline -- --nocapture`,
+  and
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_a62eb274_checkpoint -- --nocapture`.
+- Broader local verification passed:
+  `cargo fmt --all -- --check`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  `cargo test --locked`,
+  `git diff --check` in the Rust repo,
+  and `git diff --check` in the vault.
+
+Boundary:
+- This is a raw-adapter retirement and compiler-boundary cleanup slice.
+- It does not add validation-program membership, change generated validation
+  HLS, or create fresh EC2/Vitis evidence; the imported
+  `a62eb274` 37-program checkpoint remains the active vendor-HLS anchor.
+- It does not imply generic Spatial `MemReduce`/`MemFold`, arbitrary reducer
+  bodies, dynamic bounds, rank-2 reductions, scheduling, banking, broad Scala
+  source compatibility, board execution, Vivado implementation, timing closure,
+  or completion of the full Spatial rewrite.

@@ -615,29 +615,28 @@ emitted HLS surface, but the exact bridge commit was rerun through the full
 28-program EC2/Vitis lane; compact evidence is captured in
 `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-02-part6-structural-408e21c/`.
 
-On 2026-07-01, the Rust rewrite added source adapters for the
+On 2026-07-01, the Rust rewrite added temporary source adapters for the
 known local `Lab2Part1SimpleMemReduce` and `Lab2Part2SimpleMemFold` lab
-classes. These wrappers canonicalize to the existing `MemReduceOnes16` and
-`MemFoldOnes16` payloads and local tests prove generated HLS/manifest equality.
-The current adapter is accelerator-shape based rather than whole-file-token
-based: it requires the exact class name, `out = DRAM[Int](16)` declaration, a
-single exact all-ones `Accel` body, and explicit zero initialization for
-`MemFold`, while allowing host-side print/gold scaffolding to vary. This is not
-new Vitis evidence and does not broaden the historical MemReduce/MemFold Vitis
-checkpoint. Changed output shape, changed accelerator body, generic Spatial
-`MemReduce`/`MemFold`, arbitrary reducer/fold bodies, dynamic bounds, rank-2
-reductions, scheduling, banking, broad Scala source compatibility, board
-execution, Vivado implementation, place-and-route, and timing closure remain
-unsupported.
+classes, canonicalizing those wrappers to the existing `MemReduceOnes16` and
+`MemFoldOnes16` payloads with generated HLS/manifest equality tests. That path
+has since been superseded: the raw Scala Lab2 Part1/Part2 memory-reduction
+wrappers are retired from quarantined ingress, the old class names remain
+reserved, and `MemReduceOnes16` / `MemFoldOnes16` remain the Rust-subset
+all-ones representatives. This is not new Vitis evidence and does not broaden
+the historical MemReduce/MemFold Vitis checkpoint. Changed output shape,
+changed accelerator body, generic Spatial `MemReduce`/`MemFold`, arbitrary
+reducer/fold bodies, dynamic bounds, rank-2 reductions, scheduling, banking,
+broad Scala source compatibility, board execution, Vivado implementation,
+place-and-route, and timing closure remain unsupported.
 
 On 2026-07-02, the Rust-subset `MemReduceFill v0` / `MemFoldFill v0`
 classifier was hardened to consume resolved HIR loop/symbol facts for the same
 narrow rank-1 `Int` shape. Equivalent static length/step aliases are now
-accepted in the Rust-subset source, while the raw Lab2 wrappers remain exact
-all-ones adapters to `MemReduceOnes16` / `MemFoldOnes16`. This is a local
-classifier/frontend-HIR foundation cleanup only: checked payloads, generated
-HLS, manifests, validation membership, and existing Vitis evidence are
-unchanged.
+accepted in the Rust-subset source, while the retired raw Lab2 wrapper names
+remain reserved and the all-ones semantics stay represented by
+`MemReduceOnes16` / `MemFoldOnes16`. This is a local classifier/frontend-HIR
+foundation cleanup only: checked payloads, generated HLS, manifests,
+validation membership, and existing Vitis evidence are unchanged.
 
 On 2026-07-01, the Rust rewrite also added an exact raw source adapter for the
 known local teaching `Lab3Part1Convolution` wrapper from
