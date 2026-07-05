@@ -72,21 +72,27 @@ outside the 39-program validation roster, but selected EC2/Vitis evidence in
 `docs/vitis-validation/2026-07-05-selected-par2x8-row-col-tail-f920a754/`
 validates the requested `partial_row_par=2` / `partial_col_par=8` schedule as
 `resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`.
-The latest local frontend/HIR cleanup is Rust commit `c797cbd9` (`Resolve
+The latest local frontend/HIR cleanup is Rust commit `51de4c05` (`Record
+Tile-K resource-fit policy`). `tile_k_resource_fit_policy()` now records
+`par4x16` and `par4x8` as requested validation-roster schedules with
+over-budget evidence and `par2x8` as a separate selected diagnostic
+resource-fit candidate. This does not change generated HLS, manifests,
+validation-roster membership, or vendor-HLS evidence.
+The previous local frontend/HIR cleanup is Rust commit `c797cbd9` (`Resolve
 Dense2d FixPt tail proof facts`). The exact
 `MatrixTileMemFoldTailFixPt5x7x5` canary now requires exact `ROWS`/`COLS`
 total-symbol provenance, rejects the FixPt canary name with non-FixPt payloads,
 and keeps dropped non-outer-K partial `par` schedules fail-closed until those
 schedule facts are represented in checked IR. This does not change generated
 HLS, manifests, validation-roster membership, or vendor-HLS evidence.
-The previous local frontend/HIR cleanup is Rust commit `69b350ef` (`Resolve
+The earlier local frontend/HIR cleanup is Rust commit `69b350ef` (`Resolve
 MemReduce fill proof facts`). `MemReduceFill v0` / `MemFoldFill v0` records
 resolver-backed accumulator/temp/output symbols, length/step const-role
 symbols, resolved step count, fill length, final output-store length/count,
 temp-write loop/lane/count facts, and MemFold zero-init loop/lane/write/length
 facts before checked IR emission without changing generated HLS, manifests,
 validation-roster membership, or vendor-HLS evidence.
-The earlier local frontend/HIR cleanup is Rust commit `f9fd4ae1` (`Resolve
+The older local frontend/HIR cleanup is Rust commit `f9fd4ae1` (`Resolve
 FIFO proof facts`). `Fifo1dTileScalarMul v0` records resolver-backed
 input/scalar/output ports, local FIFO symbols, outer/lane loop domains, static
 length/depth facts, load/store tile ranges, dequeue/enqueue effect counts,

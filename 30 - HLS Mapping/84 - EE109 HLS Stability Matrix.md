@@ -43,7 +43,21 @@ fixed-point-policy 37-program checkpoint, and also supersedes the earlier
 acceptance evidence, not board/resource-fit implementation evidence for the
 two over-DSP Tile-K schedules.
 
-Current local frontend/HIR cleanup, 2026-07-05: Rust commit `c797cbd9`
+Current local frontend/HIR cleanup, 2026-07-05: Rust commit `51de4c05`
+(`Record Tile-K resource-fit policy`) codifies the Tile-K schedule/resource
+policy in `tile_k_resource_fit_policy()`. The policy records `par4x16` and
+`par4x8` as requested validation-roster schedules with over-budget evidence,
+and records `par2x8` as a selected diagnostic resource-fit candidate only. The
+new test coverage checks the policy table, `validation_programs()`, and
+`diagnostic_programs()` so a clean lower-par run cannot silently weaken the
+requested `par4x16` / `par4x8` HLS contracts. Local policy, selected-diagnostic
+planning, selected Par2x8 evidence validation, Par4 HLS schedule preservation,
+full workspace, clippy, fmt, and diff checks pass.
+This does not add a validation roster member, fresh EC2/Vitis evidence,
+generated HLS changes, manifest changes, board execution, Vivado
+implementation, timing closure, or automatic schedule lowering.
+
+Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `c797cbd9`
 (`Resolve Dense2d FixPt tail proof facts`) tightens the exact
 `MatrixTileMemFoldTailFixPt5x7x5` proof boundary. `row_limit` must use the
 exact `ROWS` symbol rather than any equal-valued total such as `K`, the FixPt
@@ -59,7 +73,7 @@ generated HLS changes, manifest changes, generic Spatial `MemFold`,
 non-outer-K scheduled MemFold HLS, arbitrary tail shapes, scheduling/banking,
 board execution, or broader Scala source compatibility.
 
-Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `69b350ef`
+Earlier local frontend/HIR cleanup, 2026-07-05: Rust commit `69b350ef`
 (`Resolve MemReduce fill proof facts`) moves `MemReduceFill v0` /
 `MemFoldFill v0` onto resolver-backed accumulator/temp/output symbols,
 length/step const-role symbols, resolved step count, fill length, final
@@ -72,7 +86,7 @@ zero-init loop, or final store range. Local core MemReduce/MemFold, HLS fill
 tests, example roster check, evidence-validator, full workspace, clippy, fmt,
 and diff checks pass.
 
-Earlier local frontend/HIR cleanup, 2026-07-05: Rust commit `f9fd4ae1`
+Older local frontend/HIR cleanup, 2026-07-05: Rust commit `f9fd4ae1`
 (`Resolve FIFO proof facts`) moves `Fifo1dTileScalarMul v0` onto
 resolver-backed input/scalar/output port symbols, local FIFO symbols,
 outer/lane loop domains, static length/depth facts, load/store tile ranges,
@@ -1099,11 +1113,13 @@ host compile/run. It also has one-kernel EC2/Vitis evidence in
 `docs/vitis-validation/2026-07-05-fixpt-tail-oneoff/`, and the Rust validator
 now revalidates that proof as selected diagnostic evidence with
 `resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`. It remains outside
-the 39-program validation roster. The next implementation action should be the
-Par2x8 resource-fit policy slice: define requested schedule vs board-fit
-candidate semantics, keep `par4x8`/`par4x16` from silently weakening, and decide
-whether the clean selected Par2x8 evidence should stay diagnostic-only or
-become a roster/evidence refresh item. Do not spend the next step optimizing
+the 39-program validation roster. The Par2x8 resource-fit policy is now
+codified in Rust commit `51de4c05`: `par4x16` and `par4x8` remain requested
+validation schedules with over-budget evidence, while `par2x8` remains a
+selected diagnostic resource-fit candidate. The next implementation action is
+therefore either an explicit Par2x8 roster-promotion decision with a fresh
+full-roster EC2/Vitis refresh, or continuing compiler-interface expansion while
+leaving Par2x8 diagnostic-only. Do not spend the next step optimizing
 `par4x16` DSP use unless the research goal shifts toward board-fit
 implementation; the validator now keeps that caveat visible while the compiler
 surface continues to deepen.
@@ -1118,7 +1134,8 @@ roster, but selected EC2/Vitis evidence in
 `docs/vitis-validation/2026-07-05-selected-par2x8-row-col-tail-f920a754/`
 validates it as `resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`.
 Use it as the lower-par resource diagnostic before changing the existing
-`par4x16` or `par4x8` schedules.
+`par4x16` or `par4x8` schedules; do not treat it as replacement evidence for
+those requested schedules.
 Byte-stable refactors should keep using local equality, dry-run/plan, full
 test, clippy, and evidence-validator gates; any generated-HLS text change or
 validation-roster change should trigger a fresh EC2/Vitis execution.

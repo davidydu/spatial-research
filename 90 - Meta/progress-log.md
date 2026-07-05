@@ -9,6 +9,45 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite Tile-K resource-fit policy
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `51de4c05d78e12b8c44aac7f739bf2903b943521`
+  (`Record Tile-K resource-fit policy`).
+- Added an executable `tile_k_resource_fit_policy()` table that records the
+  current Tile-K schedule policy: `par4x16` and `par4x8` are requested
+  validation-roster schedules with over-budget evidence, while `par2x8` is a
+  selected diagnostic resource-fit candidate only.
+- New policy coverage:
+  `tile_k_resource_fit_policy_keeps_requested_schedules_distinct_from_diagnostics`
+  asserts that the policy preserves each schedule's own `partial_row_par` /
+  `partial_col_par`, keeps `par2x8` out of `validation_programs()`, and keeps
+  it reachable through `diagnostic_programs()`.
+- Verification passed:
+  `cargo test --locked -p ee109-examples tile_k_resource_fit_policy_keeps_requested_schedules_distinct_from_diagnostics -- --nocapture`;
+  `cargo test --locked -p ee109-examples --test run_vitis_validation run_vitis_validation_plan_only_accepts_selected_diagnostic_kernel_without_roster_promotion -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k_par4x8_row_col_k_tail_emits_parametric_guarded_hls_and_harness -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k_par4x16_schedule_emits_parametric_hls_and_manifest -- --nocapture`;
+  `cargo test --locked -p ee109-examples --test run_vitis_validation run_vitis_validation_validate_evidence_reports_selected_par2x8_tail_clean -- --nocapture`;
+  `cargo test --locked -p ee109-examples validation_programs_include_supported_features_after_adapter_baseline -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation selected_par2x8_row_col_k_tail_vitis_evidence_is_clean_one_kernel_checkpoint -- --nocapture`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary:
+  this is a local policy/documentation/test cleanup only. It does not add a
+  validation-roster member, generated HLS changes, manifest changes, fresh
+  EC2/Vitis evidence, board execution, Vivado implementation, timing closure,
+  or automatic schedule lowering. `par2x8` remains a separate selected
+  diagnostic and must not be used as implicit evidence for `par4x16` or
+  `par4x8` resource fit. The active vendor-HLS anchor remains
+  `docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
+
+---
+
 ## 2026-07-05 -- Rust rewrite Dense2d FixPt tail proof cleanup
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
