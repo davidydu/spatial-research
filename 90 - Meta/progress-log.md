@@ -9,6 +9,52 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 -- Rust rewrite MemFold reversed tail-min source admission
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commits:
+  `e4669d896470f73df589e130e0f8eb1576124582`
+  (`Refresh raw GEMM proof docs`) and
+  `ef07ea51e4e5c4f3da42f6d38cdd0a3aa10a7795`
+  (`Accept reversed MemFold tail min bounds`).
+- Corrected stale Rust-repo docs so the raw Lab2 GEMM adapter no longer claims
+  ownership of duplicate tile-I/O role/window proof. The generated
+  frontend/HIR Tile-K classifier remains the semantic authority.
+- Confirmed the suspected Tile-K fold/update mismatch class is already a real
+  fail-closed boundary: added fold/update-level negative tests for resolved
+  partial-product lane drift and C-accumulation lane drift, both of which pass
+  without production logic changes.
+- Widened the shared MemFold tail-bound matcher to accept both
+  `min(tile_size, total - tile_index * tile_size)` and
+  `min(total - tile_index * tile_size, tile_size)` while preserving the same
+  constant-value and affine-extent checks.
+- New acceptance coverage pins reversed `min` argument order for non-outer-K
+  `MatrixTileMemFoldTail5x7x5`, serial Tile-K K-tail, and scheduled Tile-K
+  row/column/K-tail profiles. The payload profile, generated HLS, manifests,
+  validation roster, and current Vitis evidence boundary remain unchanged.
+- Red check:
+  `cargo test --locked -p spatial-rs-core reversed` first failed on the three
+  new reversed-tail classifier tests before the matcher normalization.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core reversed`;
+  `cargo test --locked -p spatial-rs-core tile_k_fold_update`;
+  `cargo test --locked -p spatial-rs-core tile_k_contract`;
+  `cargo test --locked -p spatial-rs-core dense2d_memfold_proof`;
+  `cargo test --locked -p spatial-rs-core parse_accel_lab2_outer_k`;
+  `cargo test --locked -p spatial-rs-core lab2_fixed_gemm_source_proof_records_tile_k_hir_profile`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_a62eb274_checkpoint`;
+  `cargo test --locked`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo fmt --all`;
+  `git diff --check`.
+- Boundary: this is a no-HLS-drift source-admission and proof-coverage slice.
+  It does not add generic Spatial `MemFold`, arbitrary dynamic tails, broader
+  `par` scheduling, inferred banking, board execution, implementation, timing
+  closure, or a new EC2/Vitis run.
+
 ## 2026-07-04 -- Rust rewrite raw Lab2 GEMM Tile-K proof authority cleanup
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
