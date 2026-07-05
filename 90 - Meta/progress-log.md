@@ -9,6 +9,47 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite selected full-K Tile-K EC2/Vitis proof
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust source commit under test:
+  `38ade9d2`
+  (`Support selected Vitis validation kernels`).
+- Ran the new selected-kernel Vitis lane for
+  `MatrixTileMemFoldOuterKInPlaceFixPt32x32x32` on
+  `[ec2-host — see private/ec2-lane.md]`
+  (`ip-172-31-37-7`) with Cargo 1.75.0 and Vitis 2025.1.
+- Remote run directory:
+  `/home/ubuntu/spatial-rs-runs/2026-07-05-selected-kernel-38ade9d2`.
+- Command:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --kernel MatrixTileMemFoldOuterKInPlaceFixPt32x32x32 --out target/vitis-validation-selected-outerk-38ade9d2-run`.
+- Result:
+  return code 0, `csim_design` passed, `csynth_design` passed,
+  estimated Fmax 136.99 MHz, target device `xc7z020-clg400-1`, 10 ns clock
+  target, 7.300 ns estimated clock, and resource fit true.
+- Exact one-kernel evidence validation passed:
+  `VALIDATED ... kernels=1 resource_fit=1/1 over_budget=0 ii_caveated=0`.
+- Imported compact evidence into the Rust repo at
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-selected-outerk-38ade9d2/`:
+  generated kernel/harness/manifest, sidecar TCL, Vitis log, csynth report,
+  one-row summary files, and README.
+- Added a Rust evidence-regression test:
+  `selected_outer_k_vitis_evidence_validator_accepts_one_kernel_checkpoint`.
+- Verification passed:
+  remote selected runner tests on EC2;
+  remote selected Vitis execute;
+  remote selected evidence validation;
+  remote EC2 toolchain compatibility;
+  local selected evidence CLI validation;
+  local selected runner tests;
+  local full `spatial-rs-hls --test vitis_validation`.
+- Boundary:
+  this is a selected one-kernel vendor-HLS proof and workflow validation for
+  the resource-fit full-K Tile-K canary. It is not a replacement for the
+  current 38-program vendor anchor, not board execution, not Vivado
+  implementation, and not broader Spatial language support.
+
 ## 2026-07-05 -- Rust rewrite selected-kernel Vitis validation runner
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
