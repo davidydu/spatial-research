@@ -26,33 +26,38 @@ The current `spatial-rs` work should therefore be treated as a tracer slice:
 
 ## Current Position
 
-`spatial-rs` currently has a 38-program EE109 MVP validation roster covering
+`spatial-rs` currently has a 39-program EE109 MVP validation roster covering
 the lab fixtures plus narrow reusable representatives for scalar expressions,
 reductions/folds, SRAM tile fold, LUT lookup, rank-1/2 dense kernels, MemReduce
 / MemFold fill, FIFO tile scaling, ControlFsm, Stencil2d/Sobel, and named
 Tile-K GEMM/tail/schedule canaries, including the exact full-K `par4x16`
-schedule perturbation.
+schedule perturbation and the non-Part6 `par4x8` row/column/K-tail schedule
+canary.
 
 Current Vitis status: the latest Rust rewrite vendor checkpoint is the
-2026-07-05 38-program current-head refresh after locking the explicit
-`FixPt[TRUE,_24,_8]` signed truncation/wrap HLS policy and promoting the
+2026-07-05 39-program current-head refresh after locking the explicit
+`FixPt[TRUE,_24,_8]` signed truncation/wrap HLS policy, promoting the
 `MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32` Tile-K schedule canary,
-captured in
-`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-par4x16-38-program/`.
+and promoting the
+`MatrixTileMemFoldOuterKRowColTailInPlacePar4x8FixPt33x35x34` Tile-K
+row/column/K-tail schedule canary, captured in
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-746d9ec5-39-program/`.
 It keeps `MemReduceFives8` and `MemFoldSevens12` in the validation roster
 after the raw Lab2 Part5/Part6 GEMM Scala-ingress retirement, refreshes vendor
-evidence for the updated fixed-point alias, and adds the exact full-K `par4x16`
-schedule representative. All 38 programs passed
-EC2/Vitis 2025.1 `csim_design` and `csynth_design`; this proves vendor HLS
-acceptance for the exact roster
-only, not board execution, implementation, resource fit, timing closure, performance
-optimality, generic Spatial compatibility, or broad Scala source
-compatibility.
+evidence for the updated fixed-point alias, and adds the exact scheduled Tile-K
+representatives. All 39 programs passed EC2/Vitis 2025.1 `csim_design` and
+`csynth_design`. The imported evidence validates as
+`resource_fit=37/39`, `over_budget=2`, and `ii_caveated=14`, so this proves
+vendor HLS acceptance for the exact roster only, not board execution,
+implementation, resource fit for the two over-DSP Tile-K schedules, timing
+closure, performance optimality, generic Spatial compatibility, or broad Scala
+source compatibility.
 Follow-up Rust commit `88c7df1a` (`Report Vitis resource quality caveats`)
 does not rerun Vitis, but makes that boundary machine-readable: the local
 evidence validator now parses stable csynth reports and Vitis logs and reports
-the active bundle as `resource_fit=37/38`, `over_budget=1`, and
-`ii_caveated=14`.
+that 38-program bundle as `resource_fit=37/38`, `over_budget=1`, and
+`ii_caveated=14`; the active 39-program bundle now reports
+`resource_fit=37/39`, `over_budget=2`, and `ii_caveated=14`.
 The exact full-K Tile-K schedule canary
 `MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32` preserves
 `partial_row_par=4` and `partial_col_par=16` through checked IR and lowers them
@@ -475,7 +480,8 @@ serial/scheduled K-tail members, `Lab2Part3BasicCondFSMAlt`,
 `33 35 34` Tile-K canaries. A then-current Tile-K HLS loop-body cleanup
 checkpoint captured 33-program EC2/Vitis `csim_design`/`csynth_design` evidence
 in `docs/vitis-validation/2026-07-03-tile-k-loop-body-current-head-33-program/`;
-the active current-head vendor anchor is now the par4x16 38-program refresh.
+the active current-head vendor anchor is now the 39-program
+`docs/vitis-validation/2026-07-05-current-head-746d9ec5-39-program/` refresh.
 The current Tile-K HLS backend-ledger cleanup has now moved K-loop bounds,
 local storage declarations, schedule/partition preflight, serial/scheduled
 tile-body rendering, and the kernel frame itself into crate-private HLS helper
@@ -744,10 +750,11 @@ principle to the local `MatrixTileMemFoldTail5x7x5` canary: canonical
 `row_limit`/`col_limit` lets may appear in either declaration order, but phase
 order, Int-only tail scope, checked payloads, generated HLS, manifests,
 validation membership, and imported Vitis evidence remain fixed. The current
-vendor-HLS anchor for the Tile-K compiler-foundation line is the 38-program
-`docs/vitis-validation/2026-07-05-current-head-par4x16-38-program/`
-Tile-K `par4x16` current-head refresh; the later resource-caveat reporting
-classifies that existing bundle rather than recording a fresh Vitis run. The
+vendor-HLS anchor for the Tile-K compiler-foundation line is the 39-program
+`docs/vitis-validation/2026-07-05-current-head-746d9ec5-39-program/`
+current-head refresh; the earlier 38-program Tile-K `par4x16` refresh and
+resource-caveat reporting remain historical evidence for the pre-`par4x8`
+roster. The
 earlier 28-program
 `docs/vitis-validation/2026-07-02-tile-k-facts-current-head/` run remains the
 anchor for the narrower fact-consumption and same-span loop-symbol cleanup. The
