@@ -9,6 +9,37 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite selected-kernel Vitis validation runner
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `38ade9d2`
+  (`Support selected Vitis validation kernels`).
+- Added an exact, case-sensitive `--kernel NAME` filter to
+  `run-vitis-validation` so plan-only and execute runs can target a single
+  EE109 validation member instead of always iterating the full 38-program
+  roster.
+- The no-filter default remains the full current validation roster.
+- `--validate-evidence DIR --kernel NAME` now validates an exact one-kernel
+  evidence bundle using the same selected-roster lookup. A selected validation
+  against the full 38-program checkpoint fails closed with a kernel-count
+  mismatch, preserving the stale-artifact guard.
+- Updated the Rust README with selected-kernel plan, execute, and evidence
+  validation commands for the EC2/Vitis workflow.
+- Verification passed:
+  `cargo test -p ee109-examples --locked --test run_vitis_validation selected_kernel -- --nocapture`;
+  `cargo test -p ee109-examples --locked --test run_vitis_validation -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_par4x16_checkpoint -- --nocapture`;
+  `cargo test --locked -p ee109-examples --test ec2_toolchain_compat -- --nocapture`;
+  `cargo fmt --all -- --check`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary: this is validation-runner workflow hardening only. It is not a
+  fresh EC2/Vitis execution, not a new validation-roster member, not board
+  execution, and not a broader Spatial language feature.
+
 ## 2026-07-05 -- Rust rewrite captures one-off Vitis proof for exact FixPt tail canary
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

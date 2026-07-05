@@ -65,6 +65,15 @@ The single-kernel run passed `csim_design` and `csynth_design` with return code
 resource fit true for `xc7z020-clg400-1`. This is not a validation-roster
 promotion, full roster refresh, board execution, or generic FixPt tail support.
 
+Current validation-tooling update, 2026-07-05: Rust commit `38ade9d2`
+(`Support selected Vitis validation kernels`) adds an exact `--kernel NAME`
+filter to `run-vitis-validation`. Selected plan-only and execute runs now use
+the same validation-program lookup as the full roster, and
+`--validate-evidence DIR --kernel NAME` validates exact one-kernel evidence
+bundles while rejecting a full 38-program checkpoint for selected validation.
+This is EC2/Vitis workflow hardening only; it adds no new HLS semantics, no
+new validation member, and no fresh vendor run by itself.
+
 Current local no-fresh-Vitis update, 2026-07-05: Rust commit `4834a9c8`
 (`Recover dense MemFold tail bounds by role`) hardens the non-outer-K
 `Dense2dTileMemFold` classifier/proof boundary for the local
