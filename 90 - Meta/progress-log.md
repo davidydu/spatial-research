@@ -9,6 +9,39 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite ScalarExpr resolved-proof cleanup
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `879e8c21`
+  (`Resolve ScalarExpr proof facts`).
+- `ScalarExpr v0` now records resolver-backed scalar input/output roles,
+  symbols, `Int` types, port ordinals, expression read symbols, integer
+  expression counts, and zero memory access/effect facts before producing the
+  same checked `ScalarExpr` payload. Accepted syntax is not broadened.
+- New fail-closed coverage:
+  the proof asserts the `ScalarAffine4` read symbols match the accepted scalar
+  inputs in source order, that the scalar output is distinct, and that duplicate
+  input/output names fail through resolver diagnostics with `spatial:E0302`.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core scalar_expr -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen scalar -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_00797aed_checkpoint -- --nocapture`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary:
+  this is a local compiler-interface/proof cleanup only. It does not add
+  syntax, validation-roster members, generated HLS changes, manifest changes,
+  fresh EC2/Vitis evidence, board execution, broader scalar syntax, memory
+  support inside `ScalarExpr`, or broad Scala source compatibility. The active
+  vendor-HLS anchor remains
+  `docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
+
+---
+
 ## 2026-07-05 -- Rust rewrite LUT resolved-proof cleanup
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

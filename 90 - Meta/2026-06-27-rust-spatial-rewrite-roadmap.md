@@ -72,12 +72,17 @@ outside the 39-program validation roster, but selected EC2/Vitis evidence in
 `docs/vitis-validation/2026-07-05-selected-par2x8-row-col-tail-f920a754/`
 validates the requested `partial_row_par=2` / `partial_col_par=8` schedule as
 `resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`.
-The latest local frontend/HIR cleanup is Rust commit `5b6d9d3c` (`Resolve LUT
-proof facts`). `LutLookup v0` and the Lab2 LUT adapters now record
-resolver-backed table/input/row/column/output symbols plus rank-2 table read
-index facts before checked IR emission. This does not change generated HLS,
-manifests, validation-roster membership, or vendor-HLS evidence.
-The previous local frontend/HIR cleanup is Rust commit `98d0d3fe` (`Resolve
+The latest local frontend/HIR cleanup is Rust commit `879e8c21` (`Resolve
+ScalarExpr proof facts`). `ScalarExpr v0` now records resolver-backed scalar
+input/output roles, symbols, `Int` types, port ordinals, expression read
+symbols, integer expression counts, and zero memory access/effect facts before
+checked IR emission. This does not change generated HLS, manifests,
+validation-roster membership, or vendor-HLS evidence.
+The previous local frontend/HIR cleanup is Rust commit `5b6d9d3c` (`Resolve LUT
+proof facts`). `LutLookup v0` and the Lab2 LUT adapters record resolver-backed
+table/input/row/column/output symbols plus rank-2 table read index facts before
+checked IR emission.
+The earlier local frontend/HIR cleanup is Rust commit `98d0d3fe` (`Resolve
 Dense1d proof facts`). `Dense1dScalarMul v0` records resolver-backed outer/lane
 loop domains, input/scalar/output symbols, input/output tile symbols, rank-1
 remote load/store range facts, and local lane read/write facts before checked

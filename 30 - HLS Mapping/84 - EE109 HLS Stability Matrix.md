@@ -43,18 +43,25 @@ fixed-point-policy 37-program checkpoint, and also supersedes the earlier
 acceptance evidence, not board/resource-fit implementation evidence for the
 two over-DSP Tile-K schedules.
 
-Current local frontend/HIR cleanup, 2026-07-05: Rust commit `5b6d9d3c`
-(`Resolve LUT proof facts`) moves `LutLookup v0` and the Lab2 LUT adapters onto
-resolver-backed table/input/row/column/output symbols plus rank-2 table read
-index facts before checked IR emission. It preserves the same checked payload
-and HLS contract. The resolver now explicitly proves the table read indices map
-to the accepted row/column scalar ports; duplicate or shadowing LUT names are
-covered by resolver diagnostics with `spatial:E0302` at the resolver layer.
-Local core, HLS equality, evidence-validator, full workspace, clippy, fmt, and
-diff checks pass.
+Current local frontend/HIR cleanup, 2026-07-05: Rust commit `879e8c21`
+(`Resolve ScalarExpr proof facts`) moves `ScalarExpr v0` onto resolver-backed
+scalar input/output roles, symbols, `Int` types, port ordinals, expression read
+symbols, integer expression counts, and zero memory access/effect facts before
+checked IR emission. It preserves the same checked payload and HLS contract.
+The resolver now explicitly proves the `ScalarAffine4` reads map to the
+accepted scalar input ports in source order, the scalar output is distinct, and
+duplicate input/output names fail with `spatial:E0302` at the resolver layer.
+Local core, HLS scalar equality, evidence-validator, full workspace, clippy,
+fmt, and diff checks pass.
 This does not add a validation roster member, fresh EC2/Vitis evidence,
-generated HLS changes, manifest changes, broader LUT syntax, dynamic indexing
-support, board execution, or broader Scala source compatibility.
+generated HLS changes, manifest changes, broader scalar syntax, memory support
+inside `ScalarExpr`, board execution, or broader Scala source compatibility.
+
+Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `5b6d9d3c`
+(`Resolve LUT proof facts`) moved `LutLookup v0` and the Lab2 LUT adapters onto
+resolver-backed table/input/row/column/output symbols plus rank-2 table read
+index facts before checked IR emission without changing generated HLS,
+manifests, validation-roster membership, or vendor-HLS evidence.
 
 Current promoted Vitis update, 2026-07-05: the Rust rewrite now accepts
 and validates the exact full-K Tile-K schedule canary
