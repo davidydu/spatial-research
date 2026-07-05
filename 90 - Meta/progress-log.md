@@ -7710,6 +7710,54 @@ Boundary:
 - The active vendor anchor remains
   `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
 
+## 2026-07-05 -- Lab2Part4 flat LUT value-spelling bridge
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `ddee5dda` (`Accept Lab2Part4 flat LUT value spelling`) adds a
+  narrow source-spelling bridge for the square and non-square Lab2 Part4 LUT
+  teaching forms:
+  `accel { val lut = LUT[Int](R, C)(...); out := in.value + lut(i.value, j.value); }`.
+- The frontend parser now accepts uppercase `LUT`, bracketed element type
+  syntax `LUT[Int]`, flat row-major LUT literal calls, and body-local LUT
+  declarations inside `accel` for these adapter names, then hoists the LUT to
+  the canonical top-level memory before HIR/classification.
+- The parser canonicalizes `in -> input`, `M/N -> ROWS/COLS`, and
+  `rows/cols -> ROWS/COLS` only for the Lab2 Part4 LUT adapters.
+- The LUT classifier now accepts either the previous top-level assignment or a
+  single-assign `Accel` body for the same exact square/non-square checked
+  payload.
+- Swapped index order remains fail-closed, and the HLS test proves the
+  Spatial-ish square/non-square sources emit the same kernels and manifests as
+  the canonical LUT adapters.
+- Repo docs now record this as a no-HLS-drift accepted-adapter bridge rather
+  than raw Scala wrapper ingress or generic LUT syntax support.
+
+Proof:
+- Targeted green:
+  - `cargo test -p spatial-rs-core --locked lab2_part4_lut_spatialish -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked nonsquare_spatialish_flat_lut_value_source -- --nocapture`
+  - `cargo test -p spatial-rs-hls --test m1_codegen --locked lut_spatialish_flat_lut_value_variants_preserve_exact_hls_and_manifest -- --nocapture`
+- Full local gates:
+  - `cargo test --locked --workspace`
+  - `cargo clippy --all-targets --locked -- -D warnings`
+  - `cargo fmt --all -- --check`
+  - `git diff --check`
+  - `cargo run -p ee109-examples --locked`
+  - `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`
+
+Boundary:
+- No validation-roster, generated-HLS snapshot, manifest schema, imported
+  vendor-evidence, board execution, Vivado implementation, or timing-closure
+  change.
+- No fresh EC2/Vitis execution was run for this checkpoint; the active vendor
+  anchor remains the 2026-07-05 39-program current-head bundle.
+- This is not raw Scala source compatibility, arbitrary LUT arithmetic,
+  changed Lab2 table contents or dimensions, generic LUT syntax, dynamic LUT
+  indexing, or non-`Int` LUT support.
+
 ## 2026-07-05 -- Lab1Part1 accel scalar alias bridge
 
 Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

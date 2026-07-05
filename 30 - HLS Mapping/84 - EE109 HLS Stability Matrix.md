@@ -66,6 +66,19 @@ not add generic Scala `ArgIn`/`ArgOut` frontend support, general register
 `.value` lowering, validation-roster membership, fresh EC2/Vitis evidence,
 board execution, Vivado implementation, or timing-closure evidence.
 
+Current local frontend/HIR source-spelling slice, 2026-07-05: Rust commit
+`ddee5dda` (`Accept Lab2Part4 flat LUT value spelling`) accepts the narrow
+teaching-style Lab2 Part4 LUT form with an `accel` block, a local
+`LUT[Int](rows, cols)(flat row-major values)` declaration, scalar `.value`
+reads, and adapter-local `in`/dimension aliases before normalizing to the
+existing square or non-square Lab2 LUT checked payload. The HLS equality test
+proves the Spatial-ish square and non-square spellings emit the same kernels
+and manifests as the canonical adapters, and swapped index order remains
+fail-closed. This does not add raw Scala wrapper ingress, generic LUT syntax,
+changed table values or dimensions, validation-roster membership, fresh
+EC2/Vitis evidence, board execution, Vivado implementation, or timing-closure
+evidence.
+
 Current local frontend/HIR semantic slice, 2026-07-05: `Stencil2d v0`
 local-memory roles are now discovered by exact semantic shape rather than by
 declaration position. Valid Sobel sources may reorder the LineBuffer,
