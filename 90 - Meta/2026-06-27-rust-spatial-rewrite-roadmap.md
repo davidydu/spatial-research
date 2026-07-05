@@ -53,7 +53,14 @@ carry retired-kernel leftovers while claiming the exact current roster. The
 active `a62eb274` 37-program evidence bundle still validates; generated HLS,
 manifests, validation membership, and imported Vitis evidence are unchanged, so
 no fresh EC2/Vitis run was claimed.
-The latest local backend-structure cleanup is Rust commit `ff9a94a7` (`Guard
+The latest local backend-structure cleanup is Rust commit `1810b21e` (`Guard
+mem reduction fill plan frames`). It moves `MemReduceFill v0` / `MemFoldFill
+v0` plan-to-frame validation into `spatial_rs_hls::mem_reduction_fill`,
+rejecting malformed internal plans unless there is exactly one output ABI param
+whose name matches the `MemReductionFillPlan` output. Accepted syntax,
+generated HLS, manifests, validation membership, and imported Vitis evidence
+are unchanged; no fresh EC2/Vitis run was claimed.
+An earlier local backend-structure cleanup is Rust commit `ff9a94a7` (`Guard
 Dense2d MemFold plan frames`). It moves non-outer-K `Dense2dTileMemFold`
 plan-to-frame validation into `spatial_rs_hls::memfold`, rejecting malformed
 internal split-output frames unless params are exactly `[lhs, rhs, cin, out]`

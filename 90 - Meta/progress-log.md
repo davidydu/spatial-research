@@ -9,6 +9,41 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 -- Rust rewrite MemReduce/MemFold fill plan-frame guard
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `1810b21ea7be30fe0aafaa704d0756fd94561485`
+  (`Guard mem reduction fill plan frames`).
+- Moved `MemReduceFill v0` / `MemFoldFill v0` plan-to-frame validation into
+  `spatial_rs_hls::mem_reduction_fill`.
+- New guard requires exactly one output ABI param whose name matches the
+  `MemReductionFillPlan` output before kernel or harness rendering.
+- Red tests:
+  `cargo test --locked -p spatial-rs-hls mem_reduction_fill_ -- --nocapture`
+  first exposed that kernel rendering accepted an extra output param through
+  unordered lookup and harness rendering ignored wrong output params entirely.
+- Review coverage: `gpt-5.5 xhigh` subagent confirmed the missing
+  `mem_reduction_fill_frame_from_plan` boundary, recommended missing/wrong/extra
+  output-param cases, and confirmed no `plan.rs` or fresh Vitis work was needed
+  if valid generated output stayed identical.
+- Verification passed:
+  `cargo fmt --all -- --check`;
+  `cargo test --locked -p spatial-rs-hls mem_reduction_fill_ -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen mem_reduction -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen fill -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls -- --nocapture`;
+  `cargo test --locked -p ee109-examples -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core -- --nocapture`;
+  `cargo clippy -p spatial-rs-hls --all-targets --locked -- -D warnings`;
+  `cargo clippy -p spatial-rs-core -p ee109-examples --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary: this is internal HLS plan admissibility hardening only. Existing
+  fill codegen/harness snapshots and Vitis evidence tests passed; generated
+  kernels, manifests, validation-program membership, and imported Vitis
+  evidence are unchanged, so no EC2/Vitis rerun was needed.
+
 ## 2026-07-04 -- Rust rewrite Dense2d MemFold plan-frame guard
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
