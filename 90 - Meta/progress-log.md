@@ -7710,6 +7710,50 @@ Boundary:
 - The active vendor anchor remains
   `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
 
+## 2026-07-05 -- Lab1Part1 accel scalar alias bridge
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `70269502` (`Accept Lab1Part1 accel scalar aliases`) adds a
+  narrow source-spelling bridge for the two-input `Lab1Part1RegExample`
+  teaching form:
+  `accel { val argRegIn0Value = argRegIn0.value; val argRegIn1Value = argRegIn1.value; argRegOut := argRegIn0Value + argRegIn1Value; }`.
+- The frontend parser now distinguishes block-local `val` expression
+  statements from local `Sram`/`Reg` declarations.
+- The scalar adapter classifier alone normalizes canonical scalar input
+  `.value` aliases inside one `accel` block to the existing scalar input reads,
+  then reuses the previous left-associated add gate and checked IR lowering.
+- Alias-order drift remains fail-closed with `spatial:E0401`, and the HLS test
+  proves the Spatial-ish source emits the same kernel and manifest as the
+  canonical scalar adapter.
+- Repo docs now record this as a no-HLS-drift accepted-adapter bridge rather
+  than generic Scala `ArgIn`/`ArgOut` source compatibility.
+
+Proof:
+- Red test first:
+  - `cargo test -p spatial-rs-core --locked parse_accel_accepts_lab1_part1_accel_scalar_value_alias_source -- --nocapture`
+- Targeted green:
+  - `cargo test -p spatial-rs-core --locked lab1_part1_accel_scalar -- --nocapture`
+  - `cargo test -p spatial-rs-hls --test m1_codegen --locked scalar_accel_value_alias_variant_preserves_exact_hls_and_manifest -- --nocapture`
+- Full local gates:
+  - `cargo fmt --all -- --check`
+  - `cargo test --locked --workspace`
+  - `cargo clippy --all-targets --locked -- -D warnings`
+  - `git diff --check`
+  - `cargo run -p ee109-examples --locked`
+  - `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`
+
+Boundary:
+- No validation-roster, generated-HLS snapshot, manifest schema, imported
+  vendor-evidence, board execution, Vivado implementation, or timing-closure
+  change.
+- No fresh EC2/Vitis execution was run for this checkpoint; the active vendor
+  anchor remains the 2026-07-05 39-program current-head bundle.
+- This is not generic Scala source compatibility, generic `ArgIn`/`ArgOut`
+  lowering, or general register `.value` semantics.
+
 ## 2026-07-05 -- Lab1Part2 Spatial-ish dense spelling bridge
 
 Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

@@ -55,6 +55,17 @@ This does not add a validation roster member, generated HLS changes, manifest
 changes, board execution, Vivado implementation, timing closure, or automatic
 schedule lowering.
 
+Current local frontend/HIR source-spelling slice, 2026-07-05: Rust commit
+`70269502` (`Accept Lab1Part1 accel scalar aliases`) accepts the narrow
+teaching-style scalar register form with an `accel` block, `val` aliases, and
+canonical scalar input `.value` reads before normalizing to the existing
+two-input scalar-add checked payload. The HLS equality test proves the
+Spatial-ish spelling emits the same kernel and manifest as the canonical
+adapter, and the alias-order drift regression remains fail-closed. This does
+not add generic Scala `ArgIn`/`ArgOut` frontend support, general register
+`.value` lowering, validation-roster membership, fresh EC2/Vitis evidence,
+board execution, Vivado implementation, or timing-closure evidence.
+
 Current local frontend/HIR semantic slice, 2026-07-05: `Stencil2d v0`
 local-memory roles are now discovered by exact semantic shape rather than by
 declaration position. Valid Sobel sources may reorder the LineBuffer,
