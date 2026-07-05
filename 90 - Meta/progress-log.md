@@ -9,6 +9,39 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 -- Rust rewrite DotAccum plan-frame guard
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `851586fb96063373a35ff6749db93cb56a6d0408`
+  (`Guard DotAccum plan frames`).
+- Moved `Dense2dTileDotAccum v0` plan-to-frame validation into
+  `spatial_rs_hls::dot_accum`.
+- New guard requires exact ordered ABI params `[lhs, rhs, output]` before
+  kernel or harness rendering.
+- Red test:
+  `cargo test --locked -p spatial-rs-hls emit_dense2d_tile_dot_accum_kernel_plan_rejects_malformed_param_frames -- --nocapture`
+  first failed because swapped DotAccum params were accepted through unordered
+  `find_plan_param` lookups.
+- Review coverage: `gpt-5.5 xhigh` subagent ranked `Dense2dTileDotAccum` as
+  the highest-risk remaining HLS plan-frame guard because it has three DRAM
+  params, two same-typed inputs, and both kernel and harness had ad hoc lookup
+  paths.
+- Verification passed:
+  `cargo fmt --all -- --check`;
+  `cargo test --locked -p spatial-rs-hls dot_accum -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls -- --nocapture`;
+  `cargo test --locked -p ee109-examples -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core -- --nocapture`;
+  `cargo clippy -p spatial-rs-hls --all-targets --locked -- -D warnings`;
+  `cargo clippy -p spatial-rs-core -p ee109-examples --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary: this is internal HLS plan admissibility hardening only. Existing
+  DotAccum codegen/harness snapshots and Vitis evidence tests passed; generated
+  kernels, manifests, validation-program membership, and imported Vitis
+  evidence are unchanged, so no EC2/Vitis rerun was needed.
+
 ## 2026-07-04 -- Rust rewrite MemReduce/MemFold fill plan-frame guard
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
