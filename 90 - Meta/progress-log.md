@@ -5648,3 +5648,58 @@ Boundary:
   did not change.
 - The imported `a62eb274` 37-program current-head checkpoint remains the active
   vendor-HLS anchor.
+
+## 2026-07-05 -- Rust rewrite guards reserved lab labels in checked IR
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `6738960456650327c2d76206246f1858a1815294` (`Guard reserved
+  lab labels in checked IR`) adds a central checked-IR preflight that rejects
+  reserved EE109 adapter labels when the checked `ProgramKind` does not match
+  that label's canonical checked-IR kind.
+- Canonical adapter paths remain accepted when the kind and shape are correct;
+  broad or generic feature reuse of lab labels now fails early with
+  `spatial:E0104`.
+- A hard-coded Lab2 Part5/Part6 Tile-K checked-IR fallthrough guard now proves
+  those GEMM labels cannot be reused as generic Tile-K feature names. The
+  parser already had matching Lab2 GEMM reserved-name near-miss coverage.
+- Updated the Rust rewrite roadmap to mark this sub-slice complete while
+  leaving the broader reserved-label removal audit open.
+
+Proof:
+- The red check
+  `cargo test --locked -p spatial-rs-core checked_ir_rejects_reserved_lab_labels_as_generic_feature_names -- --nocapture`
+  initially failed because reserved labels reached the older
+  `spatial:E0300` unsupported-kind path instead of the new reserved-name
+  boundary.
+- Focused green checks passed:
+  `cargo test --locked -p spatial-rs-core checked_ir_rejects_reserved_lab_labels_as_generic_feature_names -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core validate::tests -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core checked_ir_rejects_lab2_gemm_reserved_labels_for_tile_k_memfold_feature_kind -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core lab2_outer_k_infix_tile_io_near_misses_fail_closed -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core parse_accel_accepts_exact_raw_lab2_part5_gemm_fixed_32 -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core parse_accel_accepts_exact_raw_lab2_part6_gemm_as_scheduled_payload -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core source_adapter -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part5_fixed_32_preserves_outer_k_hls_and_manifest -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part6_fixed_32_emits_scheduled_hls_and_manifest -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part -- --nocapture`,
+  and
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k_part6_structural_par_preserves_scheduled_hls_and_manifest -- --nocapture`.
+- Broader local verification passed:
+  `cargo test --locked --quiet`,
+  `cargo fmt --all -- --check`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  and `git diff --check` in the Rust repo.
+
+Boundary:
+- This is a compiler-boundary and diagnostic hardening slice. It does not
+  change the HLS or manifest output, validation roster, raw adapter surface, or
+  supported EE109 examples.
+- It does not remove any reserved labels; the parent candidate-specific
+  fallthrough audit remains open for future label removals.
+- No fresh EC2/Vitis run was needed for this slice because generated HLS and
+  validation membership did not change.
+- The imported `a62eb274` 37-program current-head checkpoint remains the active
+  vendor-HLS anchor.
