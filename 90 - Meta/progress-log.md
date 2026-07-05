@@ -6793,3 +6793,56 @@ Boundary:
 - The stale next-candidate note from the previous render-plan checkpoint is now
   superseded: the rank-2 local-compute helper and non-EE109 Tile-K
   `24x20x12 / tile8x5x4` canary are already covered locally.
+
+## 2026-07-05 -- Selected Par4x8 row/column/K-tail Vitis proof
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Source commit `5f684f2a` (`Add generic scheduled row-col Tile-K canary`) was
+  copied to the EC2 Vitis host and used to run
+  `MatrixTileMemFoldOuterKRowColTailInPlacePar4x8FixPt33x35x34` through the
+  selected-kernel Vitis lane.
+- The selected run passed Vitis 2025.1 `csim_design` and `csynth_design` for
+  `xc7z020-clg400-1`.
+- Durable compact evidence is captured in
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-selected-par4x8-row-col-tail-5f684f2a/`.
+- The result proves HLS acceptance for the new 39th local validation-program
+  member, but not resource-fit implementation on the recorded Zynq-7020 part.
+
+Proof:
+- EC2 selected execute:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --kernel MatrixTileMemFoldOuterKRowColTailInPlacePar4x8FixPt33x35x34 --out target/vitis-validation-selected-par4x8-row-col-tail-5f684f2a-run`
+- Local imported evidence validator:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-selected-par4x8-row-col-tail-5f684f2a --kernel MatrixTileMemFoldOuterKRowColTailInPlacePar4x8FixPt33x35x34 --mode both`
+- Validator result:
+  `kernels=1 resource_fit=0/1 over_budget=1 ii_caveated=0`.
+- Focused local tests passed:
+  `cargo test -p ee109-examples --locked --test run_vitis_validation run_vitis_validation_validate_evidence_reports_selected_par4x8_tail_resource_caveat -- --nocapture`,
+  `cargo test -p spatial-rs-hls --locked --test vitis_validation selected_par4x8_row_col_k_tail_vitis_evidence_records_dsp_caveat -- --nocapture`, and
+  `cargo test -p spatial-rs-hls --locked --test vitis_validation active_docs_name_par4x16_as_current_vendor_anchor -- --nocapture`.
+- Full local gates passed after evidence/docs updates:
+  `cargo test --locked --workspace`,
+  `cargo fmt --all -- --check`,
+  `cargo clippy --all-targets --locked -- -D warnings`, and
+  `git diff --check`.
+
+Measured HLS result:
+- Return code 0.
+- `csim_design` passed with `CSim done with 0 errors`.
+- `csynth_design` finished.
+- Estimated Fmax 136.99 MHz.
+- Estimated clock 7.300 ns against a 10.00 ns target.
+- Resource summary: 110 BRAM_18K, 259 DSP, 32513 FF, 21666 LUT, 0 URAM.
+- DSP over budget: 259 used against 220 available.
+- No selected-run II caveats were reported.
+
+Boundary:
+- This proves the selected-run Vitis lane for the exact fixed `33x35x34`,
+  `partial_row_par=4` / `partial_col_par=8` scheduled row/column/K-tail Tile-K
+  profile with runtime `row_limit`, `col_limit`, and `numel_k` guards.
+- It is not a full-roster refresh, board execution, Vivado implementation,
+  timing closure, resource-fit implementation evidence, arbitrary
+  row/column/K-tail support, inferred banking or schedule policy, generic
+  Spatial `MemFold`, or broad Scala source compatibility.
