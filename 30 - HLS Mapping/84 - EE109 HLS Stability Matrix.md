@@ -43,22 +43,30 @@ fixed-point-policy 37-program checkpoint, and also supersedes the earlier
 acceptance evidence, not board/resource-fit implementation evidence for the
 two over-DSP Tile-K schedules.
 
-Current local frontend/HIR cleanup, 2026-07-05: Rust commit `aafc0980`
-(`Extract Tile-K proof module`) moves the Tile-K classifier entry point,
-candidate precheck, proof orchestration, proof structs, payload-to-proof
-rebuild helpers, and Tile-K-local bound helper into
-`classifier/tiled2d/tile_k.rs`. The parent `tiled2d.rs` still owns the shared
-rank-2 helpers and remaining Tile-K-specific matcher/spec layer for now; that
-matcher/test extraction is the next structure cleanup before tightening the
-parent-visible proof-test surface. The architecture regression now guards the
-entry/proof contract location, and local Tile-K, Lab2 outer-K, HLS plan,
-M1 codegen, captured Vitis-evidence, full workspace, clippy, fmt, and diff
-checks pass.
+Current local frontend/HIR cleanup, 2026-07-05: Rust commit `32b3ac4b`
+(`Extract Tile-K matcher module`) moves the Tile-K-specific matcher/spec layer
+into `classifier/tiled2d/tile_k.rs`: local stride/index helpers, LHS/RHS/C
+preload/store specs, phase-spine matching, Tile-K MemFold wrapping, and partial
+schedule matching now live beside the Tile-K proof facade. The parent
+`tiled2d.rs` deliberately still owns shared rank-2/MemFold helpers, including
+the historically Tile-K-named partial-product and C-accumulation helpers,
+because non-outer-K `Dense2dTileMemFold` still uses them. The next structure
+cleanup is to move Tile-K proof tests under `tile_k.rs` and then tighten the
+parent-visible `pub(super)` proof-test surface. The matcher-contract
+architecture regression, local Tile-K, Lab2 outer-K, dense MemFold/rank-2
+regressions, HLS Tile-K plan/codegen/validation tests, full workspace, clippy,
+fmt, and diff checks pass.
 This does not add a validation roster member, fresh EC2/Vitis evidence,
 generated HLS changes, manifest changes, board execution, Vivado
 implementation, timing closure, or automatic schedule lowering.
 
-Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `26611e17`
+Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `aafc0980`
+(`Extract Tile-K proof module`) moved the Tile-K classifier entry point,
+candidate precheck, proof orchestration, proof structs, payload-to-proof
+rebuild helpers, and Tile-K-local bound helper into
+`classifier/tiled2d/tile_k.rs`.
+
+Earlier local frontend/HIR cleanup, 2026-07-05: Rust commit `26611e17`
 (`Guard Lab2 shell alias activation`) tightens `Lab2GemmBridge` so Lab2 shell
 alias canonicalization activates only for actual local SRAM alias declarations
 such as `val tileA_sram = SRAM[...]`, not for exact alias names used as

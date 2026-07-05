@@ -7585,6 +7585,58 @@ Boundary:
 - The active vendor anchor remains
   `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
 
+## 2026-07-05 -- Tile-K matcher module extraction
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `32b3ac4b6cdf58d063b65e856a7274c1606e981c` (`Extract Tile-K
+  matcher module`) moves the remaining Tile-K-specific matcher/spec layer into
+  `classifier/tiled2d/tile_k.rs`.
+- The Tile-K module now owns the local row/column stride helpers, LHS/RHS/C
+  preload/store specs and fact matchers, phase-spine matcher, Tile-K MemFold
+  wrapper, partial schedule matcher, and Tile-K local index predicates beside
+  the Tile-K proof facade.
+- The parent `classifier/tiled2d.rs` deliberately keeps the shared
+  rank-2/MemFold helpers, including the historically Tile-K-named
+  partial-product and C-accumulation helpers, because non-outer-K
+  `Dense2dTileMemFold` still uses them.
+- A new architecture regression asserts that the Tile-K matcher/spec contract
+  remains module-owned instead of drifting back into the parent.
+- The remaining local structure cleanup is to move Tile-K proof tests under
+  `tile_k.rs` and then reduce parent-visible `pub(super)` proof-test internals.
+
+Proof:
+- Red test first:
+  - `cargo test --locked -p spatial-rs-core tile_k_matcher_contract_is_module_owned -- --nocapture`
+- Targeted green:
+  - `cargo test --locked -p spatial-rs-core tile_k_matcher_contract_is_module_owned -- --nocapture`
+  - `cargo test --locked -p spatial-rs-core tile_k -- --nocapture`
+  - `cargo test --locked -p spatial-rs-core parse_accel_lab2_outer_k -- --nocapture`
+  - `cargo test --locked -p spatial-rs-core dense2d_memfold -- --nocapture`
+  - `cargo test --locked -p spatial-rs-core rank2_local -- --nocapture`
+  - `cargo test --locked -p spatial-rs-core rank2_tile_copy_role -- --nocapture`
+  - `cargo test --locked -p spatial-rs-hls tile_k_memfold_plan_exposes -- --nocapture`
+  - `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k -- --nocapture`
+  - `cargo test --locked -p spatial-rs-hls --test m1_codegen tile_k -- --nocapture`
+  - `cargo test --locked -p spatial-rs-hls --test vitis_validation outer_k_memfold -- --nocapture`
+  - `cargo test --locked -p spatial-rs-hls --test vitis_validation lab2_part6_scheduled -- --nocapture`
+- Full local gates:
+  - `cargo test --locked --workspace`
+  - `cargo clippy --all-targets --locked -- -D warnings`
+  - `cargo fmt --all -- --check`
+  - `git diff --check`
+
+Boundary:
+- No accepted syntax, checked IR, generated HLS, manifest, validation-roster,
+  diagnostic-roster, or imported vendor-evidence change.
+- No fresh EC2/Vitis execution was run for this checkpoint.
+- The active vendor anchor remains
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
+- Par2x8 remains selected diagnostic evidence only, not a validation-roster
+  replacement for the requested Par4x16 or Par4x8 schedules.
+
 ## 2026-07-05 -- Tile-K proof module extraction
 
 Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

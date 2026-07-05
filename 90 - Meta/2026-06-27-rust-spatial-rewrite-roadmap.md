@@ -72,16 +72,22 @@ outside the 39-program validation roster, but selected EC2/Vitis evidence in
 `docs/vitis-validation/2026-07-05-selected-par2x8-row-col-tail-f920a754/`
 validates the requested `partial_row_par=2` / `partial_col_par=8` schedule as
 `resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`.
-The latest local frontend/HIR cleanup is Rust commit `aafc0980` (`Extract
+The latest local frontend/HIR cleanup is Rust commit `32b3ac4b` (`Extract
+Tile-K matcher module`). Tile-K local stride/index helpers, LHS/RHS/C
+preload/store specs, phase-spine matching, the Tile-K MemFold wrapper, and
+partial-schedule matching now live in `classifier/tiled2d/tile_k.rs` beside the
+Tile-K proof facade. The parent `tiled2d.rs` still keeps shared rank-2/MemFold
+helpers, including historically Tile-K-named partial-product and
+C-accumulation helpers, because non-outer-K `Dense2dTileMemFold` uses them.
+The next structure cleanup is to move Tile-K proof tests under the Tile-K
+module before reducing the parent-visible `pub(super)` proof-test surface.
+This does not change accepted syntax, checked IR, generated HLS,
+validation-roster membership, or vendor-HLS evidence.
+The previous local frontend/HIR cleanup is Rust commit `aafc0980` (`Extract
 Tile-K proof module`). Tile-K entry/precheck/proof orchestration, proof
 structs, payload-to-proof rebuild helpers, and the Tile-K-local bound helper
-now live in `classifier/tiled2d/tile_k.rs`. The parent `tiled2d.rs` still keeps
-the shared rank-2 helpers and remaining Tile-K-specific matcher/spec layer for
-now, so the next structure cleanup is to move those matchers and Tile-K proof
-tests under the Tile-K module before reducing the parent-visible `pub(super)`
-proof-test surface. This does not change accepted syntax, checked IR,
-generated HLS, validation-roster membership, or vendor-HLS evidence.
-The previous local frontend/HIR cleanup is Rust commit `26611e17` (`Guard Lab2
+now live in `classifier/tiled2d/tile_k.rs`.
+The earlier local frontend/HIR cleanup is Rust commit `26611e17` (`Guard Lab2
 shell alias activation`). Lab2 shell-alias canonicalization now activates only
 for actual local SRAM alias declarations, not for exact alias-name tokens used
 as ordinary ports or assignment targets. Ordinary rank-2 copy sources with a
