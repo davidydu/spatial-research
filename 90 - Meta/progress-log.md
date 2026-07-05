@@ -7555,3 +7555,34 @@ Boundary:
 - The important limitation is explicit: Vitis can compile and synthesize the
   current roster, but two Tile-K schedules still exceed the selected part's DSP
   budget and fourteen kernels still need II-quality follow-up.
+
+## 2026-07-05 -- Tile-K schedule label/factor guard
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `be8511c9` (`Enforce Tile-K schedule label factors`) keeps
+  explicit Tile-K `ParRxC` kernel labels tied to the proven schedule facts.
+- The shared schedule-label parser recognizes only explicit
+  `Par<row>x<col>` labels. The Tile-K classifier and checked-IR validation now
+  reject payloads whose `partial_row_par` / `partial_col_par` facts disagree
+  with that label.
+- The HLS evidence-policy invariant now ties `tile_k_resource_fit_policy()` to
+  the recorded 39-program plus selected Par4x16/Par4x8/Par2x8 Vitis evidence
+  so the clean lower-par diagnostic cannot silently replace the requested
+  validation schedules.
+
+Proof:
+- `cargo test --locked --workspace`
+- `cargo clippy --all-targets --locked -- -D warnings`
+- `cargo fmt --all -- --check`
+- `git diff --check`
+
+Boundary:
+- No generated HLS, manifest, validation-roster, or diagnostic-roster change.
+- No fresh EC2/Vitis execution was run for this checkpoint.
+- The active vendor anchor remains
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
+- Par2x8 remains selected diagnostic evidence only, not a validation-roster
+  replacement for the requested Par4x16 or Par4x8 schedules.

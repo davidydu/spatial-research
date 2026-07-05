@@ -43,21 +43,30 @@ fixed-point-policy 37-program checkpoint, and also supersedes the earlier
 acceptance evidence, not board/resource-fit implementation evidence for the
 two over-DSP Tile-K schedules.
 
-Current local frontend/HIR cleanup, 2026-07-05: Rust commit `51de4c05`
-(`Record Tile-K resource-fit policy`) codifies the Tile-K schedule/resource
-policy in `tile_k_resource_fit_policy()`. The policy records `par4x16` and
-`par4x8` as requested validation-roster schedules with over-budget evidence,
-and records `par2x8` as a selected diagnostic resource-fit candidate only. The
-new test coverage checks the policy table, `validation_programs()`, and
-`diagnostic_programs()` so a clean lower-par run cannot silently weaken the
-requested `par4x16` / `par4x8` HLS contracts. Local policy, selected-diagnostic
-planning, selected Par2x8 evidence validation, Par4 HLS schedule preservation,
-full workspace, clippy, fmt, and diff checks pass.
+Current local frontend/HIR cleanup, 2026-07-05: Rust commit `be8511c9`
+(`Enforce Tile-K schedule label factors`) keeps explicit Tile-K `ParRxC`
+kernel labels tied to the proven schedule facts. A shared parser extracts only
+explicit `Par<row>x<col>` labels; the classifier and checked-IR validation now
+reject payloads whose `partial_row_par` / `partial_col_par` facts disagree with
+that label. The same commit adds a Vitis evidence-policy invariant tying
+`tile_k_resource_fit_policy()` to the recorded 39-program and selected
+Par4x16/Par4x8/Par2x8 evidence so a clean lower-par diagnostic cannot silently
+replace the requested validation schedules. Full workspace tests, clippy, fmt,
+and diff checks pass.
 This does not add a validation roster member, fresh EC2/Vitis evidence,
 generated HLS changes, manifest changes, board execution, Vivado
 implementation, timing closure, or automatic schedule lowering.
 
-Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `c797cbd9`
+Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `51de4c05`
+(`Record Tile-K resource-fit policy`) codifies the Tile-K schedule/resource
+policy in `tile_k_resource_fit_policy()`. The policy records `par4x16` and
+`par4x8` as requested validation-roster schedules with over-budget evidence,
+and records `par2x8` as a selected diagnostic resource-fit candidate only. The
+test coverage checks the policy table, `validation_programs()`, and
+`diagnostic_programs()` so a clean lower-par run cannot silently weaken the
+requested `par4x16` / `par4x8` HLS contracts.
+
+Earlier local frontend/HIR cleanup, 2026-07-05: Rust commit `c797cbd9`
 (`Resolve Dense2d FixPt tail proof facts`) tightens the exact
 `MatrixTileMemFoldTailFixPt5x7x5` proof boundary. `row_limit` must use the
 exact `ROWS` symbol rather than any equal-valued total such as `K`, the FixPt
@@ -1096,30 +1105,18 @@ the two over-DSP Tile-K schedules separately from HLS acceptance.
 The latest validation-roster steps promoted the exact full-K Tile-K `par4x16`
 schedule canary and the non-Part6 `par4x8` row/column/K-tail canary into the
 official roster with EC2/Vitis evidence. The latest local compiler steps
-completed bounded no-HLS-drift structural-recovery and
-proof/equality slices: Tile-K pre-fold/tail-bound role recovery for the covered
-profiles, non-outer-K `Dense2dTileMemFold` `row_limit`/`col_limit` role
-recovery for the local `MatrixTileMemFoldTail5x7x5` canary, and the
-non-roster `MatrixTileMemFoldOuterKInPlaceFixPt24x20x12Tile8x5x4` Tile-K
-parameter perturbation proof gate. The newest local proof cleanup is Rust
-commit `c797cbd9`, which keeps the exact
-`MatrixTileMemFoldTailFixPt5x7x5` canary fail-closed on total-symbol
-provenance, FixPt name/type pairing, and dropped non-outer-K partial `par`
-schedules without changing generated HLS or evidence. The newest local
-semantic canary remains
-`MatrixTileMemFoldTailFixPt5x7x5`, which proves exact FixPt non-outer-K tail
-MemFold locally through parser, classifier proof, checked IR, HLS/manifest, and
-host compile/run. It also has one-kernel EC2/Vitis evidence in
-`docs/vitis-validation/2026-07-05-fixpt-tail-oneoff/`, and the Rust validator
-now revalidates that proof as selected diagnostic evidence with
-`resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`. It remains outside
-the 39-program validation roster. The Par2x8 resource-fit policy is now
-codified in Rust commit `51de4c05`: `par4x16` and `par4x8` remain requested
-validation schedules with over-budget evidence, while `par2x8` remains a
+completed bounded no-HLS-drift structural-recovery and proof/equality slices,
+then added Rust commit `be8511c9`, which makes explicit Tile-K `ParRxC` labels
+match the resolved/proven `partial_row_par` / `partial_col_par` facts at both
+classifier and checked-IR gates. It also locks the resource-fit policy to the
+recorded Vitis evidence quality, keeping `par4x16` and `par4x8` as requested
+validation schedules with over-budget evidence while `par2x8` remains a
 selected diagnostic resource-fit candidate. The next implementation action is
-therefore either an explicit Par2x8 roster-promotion decision with a fresh
-full-roster EC2/Vitis refresh, or continuing compiler-interface expansion while
-leaving Par2x8 diagnostic-only. Do not spend the next step optimizing
+therefore compiler-interface expansion while leaving Par2x8 diagnostic-only,
+unless we explicitly decide to promote Par2x8 and pay for a fresh full-roster
+EC2/Vitis refresh. The strongest near-term candidates are the Lab2 shell-alias
+source-boundary guard, Tile-K proof-module extraction, and the rank-2 GEMM HLS
+access-plan helper. Do not spend the next step optimizing
 `par4x16` DSP use unless the research goal shifts toward board-fit
 implementation; the validator now keeps that caveat visible while the compiler
 surface continues to deepen.
