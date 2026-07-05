@@ -83,6 +83,18 @@ evidence in
 `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-fixpt-tail-oneoff/`.
 It is still not a validation-roster member; a roster promotion would need an
 explicit roster decision and full roster refresh.
+The latest local frontend source-admission cleanup is Rust commit `5b428158`
+(`Accept canonical Tile-K bulk IO`). It accepts canonical Rust-subset arrow
+bulk rank-2 tile IO for the exact full-K
+`MatrixTileMemFoldOuterKInPlaceFixPt32x32x32` Tile-K canary:
+`load lhs_tile <- lhs[...]`, `load rhs_tile <- rhs[...]`,
+`load c_tile <- c[...]`, `memfold c_tile with partial_tile over k_idx in
+0..TILE_K`, and `store c[...] <- c_tile`. This path lowers to the same checked
+Tile-K payload as the expanded loop canary and preserves exact generated
+HLS/manifest equality. Lab2 shell aliases remain on the older Lab2 bridge
+paths; `numel_k`, Part6 `par`, and tail semantics remain outside this
+canonical full-K source spelling. Validation membership and Vitis evidence are
+unchanged.
 The preceding local proof/equality cleanup is Rust commit `3a4d753f`
 (`Record parameterized Tile-K proof gate`). It promotes the existing local
 non-roster `MatrixTileMemFoldOuterKInPlaceFixPt24x20x12Tile8x5x4`

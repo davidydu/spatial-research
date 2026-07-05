@@ -6437,3 +6437,44 @@ Boundary:
 - This is not raw Scala compatibility, generic Spatial `MemFold`, arbitrary
   tail support, arbitrary fixed-point widths, inferred banking, scheduling,
   board execution, resource fit, or timing evidence.
+
+## 2026-07-05 -- Rust rewrite accepts canonical Tile-K bulk IO
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `5b428158cbe12b0d6a30c993c64bbfc709cfb3db` (`Accept canonical
+  Tile-K bulk IO`).
+- Added canonical Rust-subset arrow bulk tile IO for the exact full-K
+  `MatrixTileMemFoldOuterKInPlaceFixPt32x32x32` Tile-K canary:
+  `load lhs_tile <- lhs[...]`, `load rhs_tile <- rhs[...]`,
+  `load c_tile <- c[...]`, canonical `memfold c_tile with partial_tile over
+  k_idx in 0..TILE_K`, and `store c[...] <- c_tile`.
+- The frontend now distinguishes Tile-K bulk-index normalization from the older
+  Lab2 shell-alias bridge. Canonical Tile-K arrow bulk IO stays on canonical
+  names, while the existing non-outer-K Lab2 shell-alias arrow bridge and the
+  Lab2 outer-K infix bridge remain intact.
+- Local tests prove the new source spelling lowers to the same checked
+  Tile-K payload as the expanded loop canary and preserves exact HLS/manifest
+  equality.
+- Updated Rust README, fixture matrix, MVP plan, architecture notes, vault
+  roadmap, stability matrix, and this progress log.
+
+Proof:
+- `cargo test -p spatial-rs-core --locked tile_k_canonical_bulk_io -- --nocapture`
+- `cargo test -p spatial-rs-hls --locked --test m1_codegen tile_k_canonical_bulk_io -- --nocapture`
+- `cargo test -p spatial-rs-core --locked parse_accel_lab2_shell_alias_buffer_matches_expanded_fixpt_canary -- --nocapture`
+- `cargo test -p spatial-rs-core --locked lab2_shell_alias_buffer_near_misses_fail_closed -- --nocapture`
+- `cargo test --locked --workspace`
+- `cargo clippy --all-targets --locked -- -D warnings`
+- `cargo fmt --all -- --check`
+- `git diff --check`
+
+Boundary:
+- No validation-roster member was added, and no fresh EC2/Vitis run was needed:
+  the generated HLS and manifest are exactly equal to the existing expanded
+  full-K Tile-K canary.
+- This is not raw Scala compatibility, generic Spatial `MemFold`, `numel_k`
+  tail semantics, Part6 `par`, inferred banking, dynamic dimensions, board
+  execution, resource fit, or timing evidence.

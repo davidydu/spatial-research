@@ -75,6 +75,16 @@ manifest, validation roster, and imported Vitis evidence remain unchanged.
 This is local fail-closed guard work only, not a new Vitis execution or broader
 tail-support claim.
 
+Current local no-fresh-Vitis update, 2026-07-05: Rust commit `5b428158`
+(`Accept canonical Tile-K bulk IO`) accepts canonical Rust-subset arrow bulk
+tile IO for the exact full-K
+`MatrixTileMemFoldOuterKInPlaceFixPt32x32x32` Tile-K canary. The accepted
+source lowers to the same checked payload and exact generated HLS/manifest as
+the expanded loop canary. The old Lab2 shell aliases remain confined to the
+Lab2 bridge paths, and `numel_k`, Part6 `par`, and tail semantics remain
+outside this canonical full-K source spelling. Validation roster membership,
+imported Vitis evidence, and vendor-HLS claims are unchanged.
+
 Current local no-fresh-Vitis update, 2026-07-04: Rust commit `89b637ed`
 hardens the raw Lab2 fixed GEMM ingress. The `Lab2Part5GEMM` /
 `Lab2Part6GEMM` adapter now proves runtime profile facts and the exact `Accel`
