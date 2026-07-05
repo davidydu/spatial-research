@@ -45,6 +45,16 @@ exact roster
 only, not board execution, implementation, timing closure, performance
 optimality, generic Spatial compatibility, or broad Scala source
 compatibility.
+The latest local frontend source-admission cleanup is Rust commit `6830f993`
+(`Accept normalized Tile-K numel_k aliases`). It accepts the Lab2-like Tile-K
+outer-K `numel_k` min alias with the existing
+`min(TILE_K.to[Int], K - kk)` spelling, reversed min arguments
+`min(K - kk, TILE_K.to[Int])`, and plain `min(TILE_K, K - kk)` tile-extent
+spelling while the active K-offset loop proof is in scope. These forms lower to
+the same checked Tile-K HIR/HLS payloads as the existing canaries. Wrong
+offsets, missing `TILE_K`, duplicate aliases, and surrounding invalid Lab2
+shapes remain fail-closed; generated HLS, manifests, validation membership, and
+imported Vitis evidence are unchanged, so no fresh EC2/Vitis run was claimed.
 The latest local evidence-validation cleanup is Rust commit `ba388096`
 (`Reject stale Vitis evidence artifacts`). It makes the repo-local evidence
 validator reject unexpected stable artifacts for kernels outside the expected

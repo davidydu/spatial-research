@@ -9,6 +9,38 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 -- Rust rewrite Tile-K numel_k alias normalization
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `6830f9935dc99086587788d41255923d80a8a3e3`
+  (`Accept normalized Tile-K numel_k aliases`).
+- Widened the normal Rust frontend, not the raw Scala adapter, so Lab2-like
+  Tile-K outer-K sources now accept equivalent `numel_k` min aliases:
+  `min(TILE_K.to[Int], K - kk)`, `min(K - kk, TILE_K.to[Int])`, and plain
+  `min(TILE_K, K - kk)`.
+- The alias remains guarded by the active K-offset loop proof; wrong offsets,
+  missing `TILE_K`, duplicate aliases, and surrounding invalid Lab2 shapes stay
+  fail-closed.
+- Red check:
+  `cargo test --locked -p spatial-rs-core numel_k_min -- --nocapture` first
+  failed on the reversed and plain-`TILE_K` tests.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core numel_k_min -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core lab2_outer_k_infix_tile_io_near_misses_fail_closed -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core -- --nocapture`;
+  `cargo test --locked -p ee109-examples -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls -- --nocapture`;
+  `cargo clippy -p spatial-rs-core -p spatial-rs-hls -p ee109-examples --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary: this is a no-HLS-drift frontend source-admission slice. The new
+  accepted spellings lower to existing checked Tile-K HIR/HLS payloads, and
+  generated kernels, manifests, validation membership, imported Vitis evidence,
+  board execution, implementation, timing closure, and generic Spatial support
+  are unchanged. No fresh EC2/Vitis run was claimed.
+
 ## 2026-07-04 -- Rust rewrite evidence validation after plan-frame sweep
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
