@@ -991,6 +991,16 @@ helper-boundary cleanup with local equality gates. Do not spend the next step
 optimizing `par4x16` DSP use unless the research goal shifts toward
 board-fit implementation; the validator now keeps that caveat visible while the
 compiler surface continues to deepen.
+
+Current local diagnostic update: the Rust branch now also has
+`MatrixTileMemFoldOuterKRowColTailInPlacePar2x8FixPt33x35x34`, a selected-plan
+only lower-par Tile-K canary for the same 33x35x34 row/column/K-tail profile.
+It preserves `partial_row_par=2` and `partial_col_par=8`, emits factor-2 row
+partitions plus factor-2/factor-8 unroll pragmas, and is reachable through
+`run-vitis-validation --kernel`. It is not part of the 39-program validation
+roster and has no imported EC2/Vitis evidence yet; use it next to test whether
+DSP pressure follows requested lane count before changing the existing
+`par4x16` or `par4x8` schedules.
 Byte-stable refactors should keep using local equality, dry-run/plan, full
 test, clippy, and evidence-validator gates; any generated-HLS text change or
 validation-roster change should trigger a fresh EC2/Vitis execution.

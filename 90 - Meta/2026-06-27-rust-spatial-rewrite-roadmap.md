@@ -64,6 +64,11 @@ The exact full-K Tile-K schedule canary
 into row-cyclic partitions plus row/column unroll pragmas when factors divide
 the static tile dimensions. Non-dividing schedule factors remain fail-closed;
 the representative is now validation-roster and EC2/Vitis proven.
+The current lower-par resource diagnostic is
+`MatrixTileMemFoldOuterKRowColTailInPlacePar2x8FixPt33x35x34`. It is selected
+Vitis-plan capable and locally emits the requested `partial_row_par=2` /
+`partial_col_par=8` schedule, but it intentionally remains outside the
+39-program validation roster until selected EC2/Vitis evidence exists.
 The previous local frontend/HIR foundation cleanup is Rust commit `2a7fe3bb`
 (`Retire duplicate raw GEMM tile proof`). It removes the private raw-adapter
 Tile-K tile-I/O role proof object from `source_adapter.rs`; the quarantined
