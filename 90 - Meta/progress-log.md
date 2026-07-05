@@ -9,6 +9,44 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite reserved-label fallthrough audit
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `ad2ca35cda7afa59715e29e4deadbb4eb5a9bb23`
+  (`Audit reserved label fallthrough guards`).
+- Added table-independent parser coverage proving every hard-coded EE109 lab
+  label rejects instead of falling through to a generic scalar feature if a
+  future edit weakens the reserved-name table.
+- Hardened checked-IR coverage so the hard-coded EE109 lab-label set rejects
+  as generic `ScalarExpr`, Lab2 FSM labels reject as generic `ControlFsm`, and
+  `Lab3Part1Convolution` rejects as generic `Stencil2d`.
+- Red check:
+  `cargo test --locked -p spatial-rs-core reserved_ee109_labels_cannot_fall_through_to_generic_scalar_expr -- --nocapture`
+  first failed when the new parser test expected only `spatial:E0001`; the
+  corrected test now accepts any fail-closed diagnostic and still panics on
+  generic fallback.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core reserved_ee109_labels_cannot_fall_through_to_generic_scalar_expr -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core checked_ir_rejects_reserved_lab_labels_as_generic_feature_names -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core checked_ir_rejects_reserved_lab2_fsm_labels_for_control_fsm_feature_kind -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core checked_ir_rejects_lab3_label_for_stencil2d_feature_kind -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core parses_accepted_ee109_fixture_examples -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core lab2_fsm -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core stencil2d -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core registry_lists_current_raw_scala_course_adapters_with_retirement_targets -- --nocapture`;
+  `cargo fmt --all -- --check`;
+  `cargo test --locked --quiet`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_a62eb274_checkpoint -- --nocapture`;
+  `cargo test --locked -p ee109-examples validation_programs_include_supported_features_after_adapter_baseline -- --nocapture`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary: test-only hardening plus roadmap update; no accepted syntax, HLS
+  output, manifest, validation roster, raw Scala adapter support, or fresh
+  EC2/Vitis evidence changed. The active vendor anchor remains the imported
+  `a62eb274` 37-program checkpoint pending future HLS testing.
+
 ## 2026-07-05 -- Rust rewrite Lab3 classifier proof inversion
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
