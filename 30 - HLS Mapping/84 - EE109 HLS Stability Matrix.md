@@ -86,6 +86,20 @@ Durable evidence:
 This is supplemental selected-run evidence and does not replace the current
 38-program vendor anchor.
 
+Current selected-run caveat update, 2026-07-05: Rust commit `6d461260`
+(`Record selected outer-k Vitis evidence`) was used to run the known
+over-resource-budget
+`MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32` canary through the
+selected-kernel EC2/Vitis lane. The selected run passed `csim_design` and
+`csynth_design` with return code 0 and estimated Fmax 136.99 MHz, but the
+selected evidence validator reports
+`kernels=1 resource_fit=0/1 over_budget=1 ii_caveated=1`. The report records
+256 DSP against 220 available, and the log records six II-violation warnings
+with max final II 16 on the final C writeback loop. Durable evidence:
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-selected-par4x16-6d461260/`.
+This proves selected-run caveat accounting; it is still HLS-acceptance
+evidence, not board-fit implementation evidence.
+
 Current local no-fresh-Vitis update, 2026-07-05: Rust commit `4834a9c8`
 (`Recover dense MemFold tail bounds by role`) hardens the non-outer-K
 `Dense2dTileMemFold` classifier/proof boundary for the local

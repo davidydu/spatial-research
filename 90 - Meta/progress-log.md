@@ -9,6 +9,43 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite selected par4x16 EC2/Vitis caveat proof
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust source commit under test:
+  `6d461260`
+  (`Record selected outer-k Vitis evidence`).
+- Ran the selected-kernel Vitis lane for the known over-resource-budget
+  `MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32` canary on
+  `[ec2-host — see private/ec2-lane.md]`
+  (`ip-172-31-37-7`) with Cargo 1.75.0 and Vitis 2025.1.
+- Remote run directory:
+  `/home/ubuntu/spatial-rs-runs/2026-07-05-selected-par4x16-6d461260`.
+- Command:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --kernel MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32 --out target/vitis-validation-selected-par4x16-6d461260-run`.
+- Result:
+  return code 0, `csim_design` passed, `csynth_design` passed,
+  estimated Fmax 136.99 MHz, target device `xc7z020-clg400-1`, 10 ns clock
+  target, 7.300 ns estimated clock, and HLS acceptance despite resource and II
+  caveats.
+- Exact one-kernel evidence validation passed:
+  `VALIDATED ... kernels=1 resource_fit=0/1 over_budget=1 ii_caveated=1`.
+- Imported compact evidence into the Rust repo at
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-selected-par4x16-6d461260/`:
+  generated kernel/harness/manifest, sidecar TCL, Vitis log, csynth report,
+  one-row summary files, and README.
+- The selected report records 10 BRAM_18K, 256 DSP, 24921 FF, 18634 LUT,
+  0 URAM; DSP is over budget against 220 available. The selected log records
+  six II-violation warnings and max final II 16 on the final C writeback loop.
+- Added Rust evidence-regression coverage for both the HLS validator and CLI
+  selected-evidence path.
+- Boundary:
+  this proves selected `--kernel` execution/validation and one-kernel caveat
+  accounting for the exact `par4x16` canary. It is HLS acceptance evidence,
+  not resource-fit implementation evidence, board execution, Vivado
+  implementation, timing closure, or broader Spatial language support.
+
 ## 2026-07-05 -- Rust rewrite selected full-K Tile-K EC2/Vitis proof
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
