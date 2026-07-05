@@ -7710,6 +7710,52 @@ Boundary:
 - The active vendor anchor remains
   `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
 
+## 2026-07-05 -- Lab1Part2 Spatial-ish dense spelling bridge
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `2e8977b7ef807fb70f2666f87b38352803b637ac`
+  (`Accept Lab1Part2 Spatial-ish dense spelling`) adds a narrow frontend bridge
+  for the selected course-like Lab1Part2 kernel spelling.
+- Accepted source spelling now includes `const tileSize: usize = 16`,
+  `Sequential.Foreach(N by tileSize)`, local `val b1 = SRAM[T](tileSize)` /
+  `val b2 = SRAM[T](tileSize)`, rank-1 infix dense load/store ranges
+  `i::i+tileSize`, and paren-indexed compute `b2(ii) = b1(ii) * x`.
+- The bridge normalizes this source to the existing checked
+  `Lab1Part2DramSramExample` Dense1d payload; no new classifier payload or HLS
+  renderer path was added.
+- Parser regressions keep tile-size drift and range drift fail-closed, while
+  the HLS regression asserts generated C++ plus manifest equality against the
+  canonical `sequential_foreach` source.
+- The repo-local `docs/ee109-mvp-plan.md` records this as a local-only
+  source-spelling bridge, not a new vendor-HLS evidence checkpoint.
+
+Proof:
+- Red test first:
+  - `cargo test -p spatial-rs-core --locked parse_accel_accepts_lab1_part2_spatialish_dense_source -- --nocapture`
+- Targeted green:
+  - `cargo test -p spatial-rs-core --locked lab1_part2_spatialish -- --nocapture`
+  - `cargo test -p spatial-rs-hls --test m1_codegen --locked dense_spatialish_variant_preserves_exact_hls_and_manifest -- --nocapture`
+- Full local gates:
+  - `cargo fmt --all -- --check`
+  - `cargo test --locked --workspace`
+  - `cargo clippy --all-targets --locked -- -D warnings`
+  - `git diff --check`
+  - `cargo run -p ee109-examples --locked`
+  - `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`
+
+Boundary:
+- No accepted validation-program roster change, no generated-HLS surface change,
+  and no manifest drift.
+- No fresh EC2/Vitis `csim_design` or `csynth_design` execution was run for
+  this checkpoint.
+- This is not broad raw Scala wrapper parsing: `@spatial class`, `type T = Int`,
+  host `ArgIn`/`DRAM` allocation scaffolding, `setMem`/`getMem`, dynamic tile
+  sizes, tail tiles, non-`Int` types, banking, scheduling, board execution,
+  Vivado implementation, and timing closure remain outside this slice.
+
 ## 2026-07-05 -- Rust rewrite Stencil2d local-memory role discovery
 
 Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
