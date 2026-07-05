@@ -72,19 +72,27 @@ outside the 39-program validation roster, but selected EC2/Vitis evidence in
 `docs/vitis-validation/2026-07-05-selected-par2x8-row-col-tail-f920a754/`
 validates the requested `partial_row_par=2` / `partial_col_par=8` schedule as
 `resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`.
-The latest local frontend/HIR cleanup is Rust commit `ce517499` (`Resolve
-Stencil2d proof facts`). `Stencil2d v0` and the exact Lab3 Sobel adapter now
-record resolver-backed local-window symbols, row/column/shift loop domains,
-row-range load/store facts, reset/shift effects, line-buffer and line-output
-accesses, and exact horizontal/vertical reducer-symbol identities before
-checked IR emission. This does not change generated HLS, manifests,
+The latest local frontend/HIR cleanup is Rust commit `f9fd4ae1` (`Resolve FIFO
+proof facts`). `Fifo1dTileScalarMul v0` now records resolver-backed
+input/scalar/output ports, local FIFO symbols, outer/lane loop domains, static
+length/depth facts, load/store tile ranges, dequeue/enqueue effect counts,
+parent blocks, lexical order, and effect loop ids before checked IR emission.
+Both FIFO effects must belong to the exact proven inner lane loop, not just an
+arbitrary loop-depth-two shape. This does not change generated HLS, manifests,
 validation-roster membership, or vendor-HLS evidence.
-The previous local frontend/HIR cleanup is Rust commit `c344521b` (`Resolve
+The previous local frontend/HIR cleanup is Rust commit `ce517499` (`Resolve
+Stencil2d proof facts`). `Stencil2d v0` and the exact Lab3 Sobel adapter record
+resolver-backed local-window symbols, row/column/shift loop domains, row-range
+load/store facts, reset/shift effects, line-buffer and line-output accesses,
+and exact horizontal/vertical reducer-symbol identities before checked IR
+emission without changing generated HLS, manifests, validation-roster
+membership, or vendor-HLS evidence.
+The earlier local frontend/HIR cleanup is Rust commit `c344521b` (`Resolve
 ControlFsm proof facts`). `ControlFsm v0` and the exact Lab2 FSM adapters
 record resolver-backed output/scratch/reg/state symbols, the FSM loop domain,
 scratch write effects, reg-value read facts, and final output store-range facts
 before checked IR emission.
-The earlier local frontend/HIR cleanup is Rust commit `879e8c21` (`Resolve
+The older local frontend/HIR cleanup is Rust commit `879e8c21` (`Resolve
 ScalarExpr proof facts`). `ScalarExpr v0` records resolver-backed scalar
 input/output roles, symbols, `Int` types, port ordinals, expression read
 symbols, integer expression counts, and zero memory access/effect facts before

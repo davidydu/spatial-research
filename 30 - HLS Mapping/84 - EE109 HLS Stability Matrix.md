@@ -43,30 +43,39 @@ fixed-point-policy 37-program checkpoint, and also supersedes the earlier
 acceptance evidence, not board/resource-fit implementation evidence for the
 two over-DSP Tile-K schedules.
 
-Current local frontend/HIR cleanup, 2026-07-05: Rust commit `ce517499`
-(`Resolve Stencil2d proof facts`) moves `Stencil2d v0` and the exact Lab3
+Current local frontend/HIR cleanup, 2026-07-05: Rust commit `f9fd4ae1`
+(`Resolve FIFO proof facts`) moves `Fifo1dTileScalarMul v0` onto
+resolver-backed input/scalar/output port symbols, local FIFO symbols,
+outer/lane loop domains, static length/depth facts, load/store tile ranges,
+FIFO dequeue/enqueue counts, parent blocks, lexical order, and effect loop ids
+before checked IR emission. It preserves the same checked
+`FifoTileScalarMul` payload and HLS contract. The ordered FIFO effect proof now
+requires both dequeue and enqueue effects to belong to the exact proven inner
+lane loop instead of accepting any loop-depth-two effect pair. Local core FIFO,
+HLS FIFO equality, evidence-validator, full workspace, clippy, fmt, and diff
+checks pass.
+This does not add a validation roster member, fresh EC2/Vitis evidence,
+generated HLS changes, manifest changes, generic FIFO/stream support,
+back-pressure modeling, arbitrary FIFO topology, board execution, or broader
+Scala source compatibility.
+
+Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `ce517499`
+(`Resolve Stencil2d proof facts`) moved `Stencil2d v0` and the exact Lab3
 Sobel adapter onto resolver-backed input/output/local-memory symbols,
 row/column/shift loop domains, row-range load/store index facts, `RegFile`
 reset/shift effects, line-buffer shift reads, line-output writes, and exact
-horizontal/vertical reducer-symbol identities before checked IR emission. It
-preserves the same checked payloads and HLS contract. The resolver now
-explicitly rejects swapped Sobel reduce-index facts such as
-`sr[yh, xh] * kh[yh, xh]` against the canonical local-window proof. Local
-core Stencil2d/Lab3, HLS Stencil2d/Lab3 equality, evidence-validator, full
-workspace, clippy, fmt, and diff checks pass.
-This does not add a validation roster member, fresh EC2/Vitis evidence,
-generated HLS changes, manifest changes, generic `LineBuffer`/`RegFile`/
-`Reduce` lowering, broader Sobel variants, board execution, or broader Scala
-source compatibility.
+horizontal/vertical reducer-symbol identities before checked IR emission
+without changing generated HLS, manifests, validation-roster membership, or
+vendor-HLS evidence.
 
-Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `c344521b`
+Earlier local frontend/HIR cleanup, 2026-07-05: Rust commit `c344521b`
 (`Resolve ControlFsm proof facts`) moved `ControlFsm v0` and the exact Lab2
 FSM adapters onto resolver-backed output/scratch/reg/state symbols, FSM loop
 domain, scratch write effects, reg-value read facts, and final output
 store-range facts before checked IR emission without changing generated HLS,
 manifests, validation-roster membership, or vendor-HLS evidence.
 
-Earlier local frontend/HIR cleanup, 2026-07-05: Rust commit `879e8c21`
+Older local frontend/HIR cleanup, 2026-07-05: Rust commit `879e8c21`
 (`Resolve ScalarExpr proof facts`) moved `ScalarExpr v0` onto resolver-backed
 scalar input/output roles, symbols, `Int` types, port ordinals, expression read
 symbols, integer expression counts, and zero memory access/effect facts before

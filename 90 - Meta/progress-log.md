@@ -9,6 +9,41 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite FIFO resolved-proof cleanup
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `f9fd4ae1946d55d9089f2751514a28b5becdd75a`
+  (`Resolve FIFO proof facts`).
+- `Fifo1dTileScalarMul v0` now records resolver-backed input/scalar/output
+  port symbols, local FIFO symbols, outer/lane loop domains, static
+  length/depth facts, load/store tile ranges, FIFO dequeue/enqueue counts,
+  parent blocks, lexical order, and effect loop ids before producing the same
+  checked `FifoTileScalarMul` payload.
+- New fail-closed coverage:
+  the ordered FIFO effect proof now binds both dequeue and enqueue effects to
+  the exact proven inner lane loop instead of accepting any loop-depth-two
+  effect pair.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core fifo_tile_scalar_mul_proof -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core fifo -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen fifo -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_00797aed_checkpoint -- --nocapture`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo test --locked --workspace`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary:
+  this is a local compiler-interface/proof cleanup only. It does not add
+  syntax, validation-roster members, generated HLS changes, manifest changes,
+  fresh EC2/Vitis evidence, board execution, generic FIFO/stream support,
+  back-pressure modeling, arbitrary FIFO topology, or broad Scala source
+  compatibility. The active vendor-HLS anchor remains
+  `docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
+
+---
+
 ## 2026-07-05 -- Rust rewrite Stencil2d resolved-proof cleanup
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
