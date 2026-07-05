@@ -6705,3 +6705,49 @@ Boundary:
   are a shared rank-2 local product/accumulation proof helper, or a bounded
   non-EE109 Tile-K shape-parameterization slice around the existing
   `24x20x12 / tile8x5x4` canary.
+
+## 2026-07-05 -- Rust HLS render ownership cleanup
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Source commit `a45019ee` (`Move HLS render ownership out of emit`).
+- Moved HLS artifact rendering, manifest checking, and kernel/harness
+  body-plan dispatch out of `crates/spatial-rs-hls/src/emit.rs` into
+  `crates/spatial-rs-hls/src/render.rs`.
+- Kept `emit.rs` focused on public artifact entry points, filesystem writes,
+  host HLS shims, and Vitis dry-run project generation.
+- Moved renderer-coupled unit tests into `crates/spatial-rs-hls/src/render_tests.rs`.
+- Added an architecture regression that fails if `emit.rs` re-imports backend
+  renderer modules.
+- Subagent review found no production behavior blocker and flagged the old
+  test-only renderer coupling; this cleanup addresses that finding.
+
+Proof:
+- Red test first:
+  `cargo test -p spatial-rs-hls --locked render_module_renders_public_artifact_bundle -- --nocapture`
+  failed while `render_hls_artifacts` did not exist in `render.rs`.
+- Focused green gates passed:
+  `cargo test -p spatial-rs-hls --locked render_module_renders_public_artifact_bundle -- --nocapture`,
+  `cargo test -p spatial-rs-hls --locked render_hls_artifacts -- --nocapture`,
+  `cargo test -p spatial-rs-hls --locked emit_module_delegates_artifact_and_plan_rendering -- --nocapture`,
+  `cargo test -p spatial-rs-hls --locked emit_dense2d_tile_memfold_kernel_plan_rejects_malformed_param_frames -- --nocapture`,
+  `cargo test -p spatial-rs-hls --locked --lib`,
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen tile_k -- --nocapture`, and
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen memfold -- --nocapture`.
+- Full local gates passed after docs/log updates:
+  `cargo test --locked --workspace`,
+  `cargo fmt --all -- --check`,
+  `cargo clippy --all-targets --locked -- -D warnings`, and
+  `git diff --check`.
+
+Boundary:
+- This is a no-HLS-drift backend structure cleanup. It does not change source
+  syntax, checked IR, generated HLS C++, manifests, validation-program
+  membership, imported Vitis evidence, or any Spatial language support claim.
+- No fresh EC2/Vitis run was needed because generated validation HLS and roster
+  membership did not change.
+- The stale next-candidate note from the previous render-plan checkpoint is now
+  superseded: the rank-2 local-compute helper and non-EE109 Tile-K
+  `24x20x12 / tile8x5x4` canary are already covered locally.
