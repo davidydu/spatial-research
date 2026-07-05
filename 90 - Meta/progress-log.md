@@ -6846,3 +6846,55 @@ Boundary:
   timing closure, resource-fit implementation evidence, arbitrary
   row/column/K-tail support, inferred banking or schedule policy, generic
   Spatial `MemFold`, or broad Scala source compatibility.
+
+## 2026-07-05 -- Current-head 39-program Vitis proof
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Source commit `746d9ec5` (`Record selected Par4x8 Tile-K Vitis evidence`)
+  was copied to the EC2 Vitis host and used for a full current-head validation
+  run.
+- Remote EC2 run directory:
+  `/home/ubuntu/spatial-rs-runs/2026-07-05-current-head-746d9ec5-39-program/`.
+- Durable compact evidence is captured in
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-746d9ec5-39-program/`.
+- The previous 38-program bundle remains useful history; the 39-program bundle
+  is now the active vendor-stability anchor.
+
+Proof:
+- EC2 plan-only:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-current-head-746d9ec5-39-program-plan`
+- EC2 full execute:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --out target/vitis-validation-current-head-746d9ec5-39-program-run`
+- Local imported evidence validator:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-746d9ec5-39-program --mode both`
+- Validator result:
+  `kernels=39 resource_fit=37/39 over_budget=2 ii_caveated=14`.
+- Full local gates passed after evidence/docs updates:
+  `cargo test --locked --workspace`,
+  `cargo fmt --all -- --check`,
+  `cargo clippy --all-targets --locked -- -D warnings`, and
+  `git diff --check`.
+
+Measured HLS result:
+- All 39 validation programs returned code 0.
+- All 39 passed `csim_design`.
+- All 39 completed `csynth_design`.
+- The final Par4x8 row/column/K-tail canary reported estimated Fmax
+  136.99 MHz.
+- Two kernels are DSP over budget on the recorded Zynq-7020 target:
+  `MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32` and
+  `MatrixTileMemFoldOuterKRowColTailInPlacePar4x8FixPt33x35x34`.
+- Fourteen kernels have reported II caveats.
+
+Boundary:
+- This proves current-head HLS acceptance for the 39-program EE109-oriented
+  validation roster under Vitis 2025.1.
+- It is not board execution, Vivado implementation, timing closure,
+  resource-fit implementation evidence, arbitrary Spatial source
+  compatibility, or a final scheduling/banking policy.
+- The important limitation is explicit: Vitis can compile and synthesize the
+  current roster, but two Tile-K schedules still exceed the selected part's DSP
+  budget and fourteen kernels still need II-quality follow-up.
