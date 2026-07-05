@@ -113,7 +113,17 @@ The Rust evidence validator now revalidates that proof as selected diagnostic
 evidence with `resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`. It is
 still not a validation-roster member; a roster promotion would need an explicit
 roster decision and full roster refresh.
-The latest local frontend source-admission cleanup is Rust commit `5b428158`
+The latest local frontend source-admission cleanup is Rust commit `00797aed`
+(`Accept scheduled Tile-K bulk IO`). It accepts the exact scheduled Part6
+full-K `MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32` canary
+through canonical Rust-subset arrow bulk rank-2 tile IO when only the
+partial-product loops carry literal `par 2` / `par 16`. The source lowers to
+the same checked scheduled Tile-K payload as the structural Part6 canary and
+preserves exact generated HLS/manifest equality. Generic `par`, symbolic
+canonical `par`, non-partial-loop `par`, `numel_k`, tails, raw Scala wrappers,
+and broad Spatial scheduling remain fail-closed outside the already documented
+bridge paths. Validation membership and Vitis evidence are unchanged.
+The preceding local frontend source-admission cleanup is Rust commit `5b428158`
 (`Accept canonical Tile-K bulk IO`). It accepts canonical Rust-subset arrow
 bulk rank-2 tile IO for the exact full-K
 `MatrixTileMemFoldOuterKInPlaceFixPt32x32x32` Tile-K canary:

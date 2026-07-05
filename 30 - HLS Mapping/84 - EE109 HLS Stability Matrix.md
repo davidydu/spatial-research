@@ -142,6 +142,17 @@ manifest, validation roster, and imported Vitis evidence remain unchanged.
 This is local fail-closed guard work only, not a new Vitis execution or broader
 tail-support claim.
 
+Current local no-fresh-Vitis update, 2026-07-05: Rust commit `00797aed`
+(`Accept scheduled Tile-K bulk IO`) accepts exact scheduled Part6 canonical
+arrow bulk tile IO for the full-K
+`MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32` Tile-K canary when
+only the partial-product loops carry literal `par 2` / `par 16`. The accepted
+source lowers to the same checked scheduled payload and exact generated
+HLS/manifest as the existing structural scheduled canary. Generic `par`,
+symbolic canonical `par`, non-partial-loop `par`, `numel_k`, tails, raw Scala
+wrappers, validation roster membership, imported Vitis evidence, and
+vendor-HLS claims are unchanged.
+
 Current local no-fresh-Vitis update, 2026-07-05: Rust commit `5b428158`
 (`Accept canonical Tile-K bulk IO`) accepts canonical Rust-subset arrow bulk
 tile IO for the exact full-K

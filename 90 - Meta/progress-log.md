@@ -6753,6 +6753,39 @@ Boundary:
   tail support, arbitrary fixed-point widths, inferred banking, scheduling,
   board execution, resource fit, or timing evidence.
 
+## 2026-07-05 -- Rust rewrite accepts scheduled canonical Tile-K bulk IO
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `00797aedfb2c9af7d2b25848dfa409e2569be72e` (`Accept scheduled
+  Tile-K bulk IO`).
+- The canonical Rust-subset arrow bulk tile IO source form now accepts the
+  exact scheduled Part6 full-K Tile-K profile when the partial-product loops
+  carry literal `par 2` / `par 16`.
+- That source normalizes to
+  `MatrixTileMemFoldOuterKInPlacePart6ScheduledFixPt32x32x32`, preserving the
+  same checked payload, generated HLS C++, and manifest JSON as the existing
+  scheduled structural canary.
+- Generic `par`, symbolic canonical `par`, non-partial-loop `par`, `numel_k`,
+  tails, raw Scala wrappers, and broad Spatial scheduling remain fail-closed
+  outside the already documented bridge paths.
+- Updated Rust README, fixture matrix, MVP plan, architecture notes, vault
+  roadmap, stability matrix, and this progress log.
+
+Proof:
+- `cargo fmt --all -- --check`
+- `git diff --check`
+- `cargo test --locked --workspace`
+- `cargo clippy --all-targets --locked -- -D warnings`
+
+Limit:
+- No fresh EC2/Vitis run was performed for this slice.
+- Validation-roster membership, imported Vitis evidence, and vendor-HLS claims
+  are unchanged. The active vendor-HLS anchor remains
+  `docs/vitis-validation/2026-07-05-current-head-746d9ec5-39-program/`.
+
 ## 2026-07-05 -- Rust rewrite accepts canonical Tile-K bulk IO
 
 Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
