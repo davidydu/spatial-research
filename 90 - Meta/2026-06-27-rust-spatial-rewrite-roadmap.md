@@ -35,15 +35,16 @@ schedule perturbation and the non-Part6 `par4x8` row/column/K-tail schedule
 canary.
 
 Current Vitis status: the latest Rust rewrite vendor checkpoint is the
-2026-07-05 39-program current-head refresh at Rust commit `00797aed` after
+2026-07-05 39-program current-head refresh at Rust commit `35c6944a` after
 locking the explicit
 `FixPt[TRUE,_24,_8]` signed truncation/wrap HLS policy, promoting the
 `MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32` Tile-K schedule canary,
 promoting the
 `MatrixTileMemFoldOuterKRowColTailInPlacePar4x8FixPt33x35x34` Tile-K
 row/column/K-tail schedule canary, and refreshing the scheduled canonical
-Tile-K bulk IO cleanup, captured in
-`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
+Tile-K bulk IO cleanup, then extracting the Tile-K matcher/proof module,
+captured in
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-35c6944a-39-program/`.
 It keeps `MemReduceFives8` and `MemFoldSevens12` in the validation roster
 after the raw Lab2 Part5/Part6 GEMM Scala-ingress retirement, refreshes vendor
 evidence for the updated fixed-point alias, and adds the exact scheduled Tile-K
@@ -80,8 +81,9 @@ and helpers are private to that module. The parent `tiled2d.rs` keeps only the
 production classifier re-export plus shared rank-2/MemFold
 partial-product/C-accumulation tests because non-outer-K
 `Dense2dTileMemFold` still uses those helpers. This does not change accepted
-syntax, checked IR, generated HLS, validation-roster membership, or vendor-HLS
-evidence.
+syntax, checked IR, generated HLS, or validation-roster membership; the fresh
+`35c6944a` current-head vendor checkpoint above proves the unchanged roster
+after this cleanup.
 The previous local frontend/HIR cleanup is Rust commit `32b3ac4b` (`Extract
 Tile-K matcher module`). Tile-K local stride/index helpers, LHS/RHS/C
 preload/store specs, phase-spine matching, the Tile-K MemFold wrapper, and
@@ -597,7 +599,7 @@ serial/scheduled K-tail members, `Lab2Part3BasicCondFSMAlt`,
 checkpoint captured 33-program EC2/Vitis `csim_design`/`csynth_design` evidence
 in `docs/vitis-validation/2026-07-03-tile-k-loop-body-current-head-33-program/`;
 the active current-head vendor anchor is now the 39-program
-`docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/` refresh.
+`docs/vitis-validation/2026-07-05-current-head-35c6944a-39-program/` refresh.
 The current Tile-K HLS backend-ledger cleanup has now moved K-loop bounds,
 local storage declarations, schedule/partition preflight, serial/scheduled
 tile-body rendering, and the kernel frame itself into crate-private HLS helper
@@ -867,7 +869,7 @@ principle to the local `MatrixTileMemFoldTail5x7x5` canary: canonical
 order, Int-only tail scope, checked payloads, generated HLS, manifests,
 validation membership, and imported Vitis evidence remain fixed. The current
 vendor-HLS anchor for the Tile-K compiler-foundation line is the 39-program
-`docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`
+`docs/vitis-validation/2026-07-05-current-head-35c6944a-39-program/`
 current-head refresh; the earlier 38-program Tile-K `par4x16` refresh and
 resource-caveat reporting remain historical evidence for the pre-`par4x8`
 roster. The

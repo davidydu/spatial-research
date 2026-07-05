@@ -7585,6 +7585,50 @@ Boundary:
 - The active vendor anchor remains
   `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
 
+## 2026-07-05 -- Rust rewrite refreshes 35c6944a current-head Vitis evidence
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `35c6944a2a459531ac06f7f5f079c39b85b5e8ef` (`Move Tile-K proof
+  tests into module`) now has full current-head EC2/Vitis evidence in
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-35c6944a-39-program/`.
+- This supersedes the previous active
+  `docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/` anchor
+  while keeping that bundle as historical evidence for the scheduled canonical
+  Tile-K bulk IO cleanup.
+- The run used the EC2 host
+  `[ec2-host — see private/ec2-lane.md]` with Vitis 2025.1 via
+  `/tools/Xilinx/2025.1/Vitis/settings64.sh` and `vitis-run`.
+- Remote run directory:
+  `/home/ubuntu/spatial-rs-runs/2026-07-05-current-head-35c6944a-39-program/repo`.
+
+Proof:
+- Remote command:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --out target/vitis-validation-current-head-35c6944a-39-program-run`.
+- Remote result: all 39 validation kernels reported `returncode=0`,
+  `csim=true`, and `csynth=true`.
+- Local evidence validation:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-35c6944a-39-program --mode both`.
+- Validator result: `kernels=39 resource_fit=37/39 over_budget=2
+  ii_caveated=14`.
+- Local gates:
+  - `cargo test --locked -p spatial-rs-hls --test vitis_validation -- --nocapture`
+  - `cargo test --locked -p ee109-examples --test run_vitis_validation -- --nocapture`
+  - `cargo test --locked --workspace`
+  - `cargo clippy --all-targets --locked -- -D warnings`
+  - `cargo fmt --all -- --check`
+  - `git diff --check`
+
+Boundary:
+- This is vendor HLS acceptance evidence for the exact 39-program EE109 MVP
+  roster at Rust commit `35c6944a`.
+- It is still not board execution, Vivado implementation, timing closure,
+  resource-fit implementation evidence for the two over-DSP Tile-K schedules,
+  generic Spatial compatibility, broad Scala source compatibility, inferred
+  banking, or an automatic schedule-lowering claim.
+
 ## 2026-07-05 -- Tile-K proof tests module ownership
 
 Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
