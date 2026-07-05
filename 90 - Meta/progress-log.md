@@ -9,6 +9,45 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite Lab3 classifier proof inversion
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `da54bcd6e82ce961d6734185c8bc3cc757121e8e`
+  (`Route Lab3 classifier through Stencil2d proof`).
+- Routed the reserved `Lab3Part1Convolution` classifier adapter through the
+  shared `Stencil2dSobelProof` semantic proof before applying a thin exact
+  Lab3 surface guard.
+- Extended the Stencil2d proof payload to record accumulator and reduce-loop
+  surface names, then removed the duplicate Lab3 body-walk matcher helpers.
+- Added a fail-closed regression showing a Sobel-shaped reserved Lab3 source
+  with renamed accumulator names still rejects as `spatial:E0406`, preventing
+  reserved-name broadening while sharing the semantic proof.
+- Red check:
+  `cargo test --locked -p spatial-rs-core lab3_convolution_adapter_proof_wraps_stencil2d_proof_and_pins_surface -- --nocapture`
+  first failed on the missing `lab3_convolution_adapter_proof` wrapper.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core lab3_convolution_adapter_proof_wraps_stencil2d_proof_and_pins_surface -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked lab3_classifier -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked stencil2d_sobel -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked parse_accel_routes_lab3_convolution_comment_variant_through_frontend_hir -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked raw_lab3_part1_convolution_near_misses_fail_closed -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked lab3_convolution_adapter -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab3_convolution -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen stencil2d_sobel -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked parse_accel_accepts_local_raw_lab3_convolution -- --nocapture`;
+  `cargo test --locked --quiet`;
+  `cargo fmt --all -- --check`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_a62eb274_checkpoint -- --nocapture`;
+  `cargo test --locked -p ee109-examples validation_programs_include_supported_features_after_adapter_baseline -- --nocapture`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary: no generated HLS/manifest drift was observed, no validation-roster
+  change, no new raw Lab3 spelling was accepted, and no fresh EC2/Vitis run.
+  The active vendor anchor remains the imported `a62eb274` 37-program
+  checkpoint pending future HLS testing.
+
 ## 2026-07-05 -- Rust rewrite Lab3 raw adapter bridge boundary
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
