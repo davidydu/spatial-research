@@ -9,6 +9,43 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite Stencil2d resolved-proof cleanup
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `ce517499cdd9ffd6c6bf5553469b627d47460778`
+  (`Resolve Stencil2d proof facts`).
+- `Stencil2d v0` and the fixed Lab3 Sobel adapter now record resolver-backed
+  input/output/local-memory symbols, row/column/shift loop domains, row-range
+  load/store index facts, `RegFile` reset/shift effects, line-buffer shift
+  reads, line-output writes, and horizontal/vertical reduce read groups before
+  producing the same checked Stencil2d or exact Lab3 payloads. Accepted syntax
+  is not broadened.
+- New fail-closed coverage:
+  the proof now pins Sobel window/LUT reduction reads to the exact
+  horizontal/vertical reducer symbols, so swapped reduce-index facts such as
+  `sr[yh, xh] * kh[yh, xh]` no longer satisfy the canonical local-window proof.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core stencil2d -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core lab3 -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen stencil -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab3_convolution -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_00797aed_checkpoint -- --nocapture`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo test --locked --workspace`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary:
+  this is a local compiler-interface/proof cleanup only. It does not add
+  syntax, validation-roster members, generated HLS changes, manifest changes,
+  fresh EC2/Vitis evidence, board execution, generic `LineBuffer`/`RegFile`/
+  `Reduce` lowering, broader Sobel variants, or broad Scala source
+  compatibility. The active vendor-HLS anchor remains
+  `docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
+
+---
+
 ## 2026-07-05 -- Rust rewrite ControlFsm resolved-proof cleanup
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

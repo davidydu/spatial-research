@@ -43,23 +43,30 @@ fixed-point-policy 37-program checkpoint, and also supersedes the earlier
 acceptance evidence, not board/resource-fit implementation evidence for the
 two over-DSP Tile-K schedules.
 
-Current local frontend/HIR cleanup, 2026-07-05: Rust commit `c344521b`
-(`Resolve ControlFsm proof facts`) moves `ControlFsm v0` and the exact Lab2
+Current local frontend/HIR cleanup, 2026-07-05: Rust commit `ce517499`
+(`Resolve Stencil2d proof facts`) moves `Stencil2d v0` and the exact Lab3
+Sobel adapter onto resolver-backed input/output/local-memory symbols,
+row/column/shift loop domains, row-range load/store index facts, `RegFile`
+reset/shift effects, line-buffer shift reads, line-output writes, and exact
+horizontal/vertical reducer-symbol identities before checked IR emission. It
+preserves the same checked payloads and HLS contract. The resolver now
+explicitly rejects swapped Sobel reduce-index facts such as
+`sr[yh, xh] * kh[yh, xh]` against the canonical local-window proof. Local
+core Stencil2d/Lab3, HLS Stencil2d/Lab3 equality, evidence-validator, full
+workspace, clippy, fmt, and diff checks pass.
+This does not add a validation roster member, fresh EC2/Vitis evidence,
+generated HLS changes, manifest changes, generic `LineBuffer`/`RegFile`/
+`Reduce` lowering, broader Sobel variants, board execution, or broader Scala
+source compatibility.
+
+Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `c344521b`
+(`Resolve ControlFsm proof facts`) moved `ControlFsm v0` and the exact Lab2
 FSM adapters onto resolver-backed output/scratch/reg/state symbols, FSM loop
 domain, scratch write effects, reg-value read facts, and final output
-store-range facts before checked IR emission. It preserves the same checked
-payloads and HLS contract. The resolver now explicitly proves the canonical
-feature body has three state-indexed scratch writes, one reg-value read, and
-one final full-range store, while the alternate Lab2 FSM body has four
-state-indexed scratch writes, zero reg-value reads, and the same final store.
-Local core, HLS ControlFsm equality, evidence-validator, full workspace,
-clippy, fmt, and diff checks pass.
-This does not add a validation roster member, fresh EC2/Vitis evidence,
-generated HLS changes, manifest changes, generic FSM scheduling, arbitrary
-registers/conditionals/effects, board execution, or broader Scala source
-compatibility.
+store-range facts before checked IR emission without changing generated HLS,
+manifests, validation-roster membership, or vendor-HLS evidence.
 
-Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `879e8c21`
+Earlier local frontend/HIR cleanup, 2026-07-05: Rust commit `879e8c21`
 (`Resolve ScalarExpr proof facts`) moved `ScalarExpr v0` onto resolver-backed
 scalar input/output roles, symbols, `Int` types, port ordinals, expression read
 symbols, integer expression counts, and zero memory access/effect facts before
@@ -71,6 +78,13 @@ Earlier local frontend/HIR cleanup, 2026-07-05: Rust commit `5b6d9d3c`
 resolver-backed table/input/row/column/output symbols plus rank-2 table read
 index facts before checked IR emission without changing generated HLS,
 manifests, validation-roster membership, or vendor-HLS evidence.
+
+Earlier local frontend/HIR cleanup, 2026-07-05: Rust commit `98d0d3fe`
+(`Resolve Dense1d proof facts`) moved `Dense1dTileScalarMul v0` and the Lab1
+DRAM/SRAM adapter onto resolver-backed input/output/scalar/tile/lane symbols
+and unit-stride tile load/store range facts before checked IR emission without
+changing generated HLS, manifests, validation-roster membership, or vendor-HLS
+evidence.
 
 Current promoted Vitis update, 2026-07-05: the Rust rewrite now accepts
 and validates the exact full-K Tile-K schedule canary
