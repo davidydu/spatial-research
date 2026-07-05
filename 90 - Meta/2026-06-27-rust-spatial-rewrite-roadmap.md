@@ -53,7 +53,15 @@ carry retired-kernel leftovers while claiming the exact current roster. The
 active `a62eb274` 37-program evidence bundle still validates; generated HLS,
 manifests, validation membership, and imported Vitis evidence are unchanged, so
 no fresh EC2/Vitis run was claimed.
-The latest local backend-structure cleanup is Rust commit `fd9c4de1` (`Guard
+The latest local backend-structure cleanup is Rust commit `871dd7de` (`Guard
+remaining HLS plan frames`). It completes the obvious HLS plan-frame guard
+sweep: `ControlFsm v0` now rejects malformed output-param frames; `ScalarFold
+v0` and `ScalarSramTileFold v0` reject malformed input-param frames; and the
+zero-DRAM `ScalarExpr v0`, `ScalarReduce v0`, and `LutLookup v0` families reject
+stale non-empty param frames before kernel or harness rendering. Accepted
+syntax, generated HLS, manifests, validation membership, and imported Vitis
+evidence are unchanged; no fresh EC2/Vitis run was claimed.
+An earlier local backend-structure cleanup is Rust commit `fd9c4de1` (`Guard
 scalar multiply plan frames`). It moves Dense1d, rank-2 tile-scalar, and FIFO
 plan-to-frame validation into their feature modules, rejecting malformed
 internal plans unless params are exactly `[input, output]` in order. Accepted

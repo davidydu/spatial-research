@@ -9,6 +9,60 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 -- Rust rewrite remaining HLS plan-frame guard sweep
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `871dd7decaddcd86fe5ade32d4be9fa198be299d`
+  (`Guard remaining HLS plan frames`).
+- Moved the remaining simple HLS plan-to-frame validation into feature modules:
+  `ControlFsm v0` requires exactly one output ABI param in
+  `spatial_rs_hls::control_fsm`; `ScalarFold v0` and `ScalarSramTileFold v0`
+  require exactly one input ABI param in `spatial_rs_hls::scalar`; and
+  `ScalarExpr v0`, `ScalarReduce v0`, and `LutLookup v0` now require empty
+  HLS param frames in `spatial_rs_hls::scalar` / `spatial_rs_hls::lut`.
+- Removed the remaining ad hoc `find_plan_param` path from `emit.rs`; malformed
+  internal plans now fail before kernel or harness rendering instead of
+  accepting stale, missing, wrong, swapped, or extra ABI params where those
+  shapes are invalid.
+- Red tests:
+  `cargo test --locked -p spatial-rs-hls emit_control_fsm_plans_reject_malformed_output_param_frames -- --nocapture`
+  first failed because the Control FSM harness accepted an extra output param;
+  `cargo test --locked -p spatial-rs-hls scalar_fold_plans_reject_malformed_input_param_frames -- --nocapture`
+  and
+  `cargo test --locked -p spatial-rs-hls scalar_sram_tile_fold_plans_reject_malformed_input_param_frames -- --nocapture`
+  first failed because fold harnesses ignored malformed input param frames; and
+  `cargo test --locked -p spatial-rs-hls scalar_assign_plans_reject_non_empty_param_frames -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls scalar_reduce_plans_reject_non_empty_param_frames -- --nocapture`,
+  plus
+  `cargo test --locked -p spatial-rs-hls lut_plans_reject_non_empty_param_frames -- --nocapture`
+  first failed because zero-DRAM families rendered C++ while carrying stale
+  params.
+- Review coverage: `gpt-5.5 xhigh` subagent first ranked ControlFsm,
+  Stencil/Lab3, and scalar-multiply families for the guard sequence; a later
+  read-only `gpt-5.5 xhigh` audit found the remaining zero-param
+  ScalarAssign/ScalarReduce/LUT hole after ControlFsm and fold guards were
+  green.
+- Verification passed:
+  `cargo fmt --all -- --check`;
+  `cargo test --locked -p spatial-rs-hls control_fsm -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls scalar_fold -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls scalar_sram_tile_fold -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls scalar_assign -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls scalar_reduce -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls lut -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls -- --nocapture`;
+  `cargo test --locked -p ee109-examples -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core -- --nocapture`;
+  `cargo clippy -p spatial-rs-hls --all-targets --locked -- -D warnings`;
+  `cargo clippy -p spatial-rs-core -p ee109-examples --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary: this is internal HLS plan admissibility hardening only. Existing
+  codegen/harness snapshots and Vitis evidence parser tests passed; generated
+  kernels, manifests, validation-program membership, and imported Vitis
+  evidence are unchanged, so no EC2/Vitis rerun was needed.
+
 ## 2026-07-04 -- Rust rewrite scalar-multiply plan-frame guards
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
