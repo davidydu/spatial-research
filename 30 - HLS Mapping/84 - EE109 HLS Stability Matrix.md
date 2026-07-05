@@ -56,6 +56,16 @@ reports/logs. The active 38-program bundle now validates with
 machine-readable quality boundary over the existing evidence, not a fresh
 EC2/Vitis execution or board-fit claim.
 
+Current local no-fresh-Vitis update, 2026-07-05: Rust commit `4834a9c8`
+(`Recover dense MemFold tail bounds by role`) hardens the non-outer-K
+`Dense2dTileMemFold` classifier/proof boundary for the local
+`MatrixTileMemFoldTail5x7x5` canary. The canonical `row_limit` and `col_limit`
+tail-bound lets are recovered by role in either declaration order while the
+five compute phases remain ordered and the checked payload, generated HLS,
+manifest, validation roster, and imported Vitis evidence remain unchanged.
+This is local fail-closed guard work only, not a new Vitis execution or broader
+tail-support claim.
+
 Current local no-fresh-Vitis update, 2026-07-04: Rust commit `89b637ed`
 hardens the raw Lab2 fixed GEMM ingress. The `Lab2Part5GEMM` /
 `Lab2Part6GEMM` adapter now proves runtime profile facts and the exact `Accel`
@@ -888,11 +898,10 @@ it as the vendor-stability anchor for the current EE109 MVP roster.
 
 The latest validation-roster step promoted the exact full-K Tile-K `par4x16`
 schedule canary into the official roster with EC2/Vitis evidence. The latest
-local compiler step completed a bounded Tile-K role-driven phase-recognition
-slice for the covered pre-fold LHS/RHS/C-preload roles before the fold/store
-pair, followed by a no-HLS-drift structural-recovery cleanup that recovers
-`row_limit` and `col_limit` tail-bound lets by role in either declaration order
-for the covered row/column/K-tail profiles. This is classifier hardening only:
+local compiler steps completed bounded no-HLS-drift structural-recovery slices:
+Tile-K pre-fold/tail-bound role recovery for the covered profiles, then
+non-outer-K `Dense2dTileMemFold` `row_limit`/`col_limit` role recovery for the
+local `MatrixTileMemFoldTail5x7x5` canary. This is classifier hardening only:
 generated HLS, validation roster membership, and imported Vitis evidence remain
 unchanged. The natural next implementation action is another bounded
 proof/helper-boundary slice with local equality gates, or a fresh EC2/Vitis run

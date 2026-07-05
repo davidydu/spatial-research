@@ -69,13 +69,20 @@ tile-copy/access-role proof. Accepted raw syntax, generated frontend source,
 checked IR, generated HLS, manifests, validation membership, and imported
 Vitis evidence are unchanged, so no fresh EC2/Vitis run was claimed.
 The current local frontend source-admission cleanup is Rust commit
+`4834a9c8` (`Recover dense MemFold tail bounds by role`). It accepts the two
+canonical non-outer-K `Dense2dTileMemFold` tail-bound lets, `row_limit` and
+`col_limit`, in either declaration order for the local
+`MatrixTileMemFoldTail5x7x5` canary. Local tests prove identical checked
+payloads, generated HLS, and manifests; generated HLS, manifests, validation
+membership, and the active Vitis evidence anchor are unchanged.
+The preceding local frontend source-admission cleanup is Rust commit
 `ef07ea51` (`Accept reversed MemFold tail min bounds`). It accepts
 tile-size-first or remaining-first `min(...)` argument order for the bounded
 non-outer-K MemFold tail, Tile-K K-tail, and Tile-K row/column/K-tail profiles.
 Local tests prove identical checked payloads, generated HLS, and manifests for
 those source spellings; generated HLS, manifests, validation membership, and
 the active Vitis evidence anchor are unchanged.
-The preceding local frontend source-admission cleanup is Rust
+The earlier local frontend source-admission cleanup is Rust
 commit `6830f993`
 (`Accept normalized Tile-K numel_k aliases`). It accepts the Lab2-like Tile-K
 outer-K `numel_k` min alias with the existing
@@ -694,6 +701,11 @@ order before the pre-fold phases. Broader phase discovery and arbitrary
 structural statement recovery remain fail-closed/private. These
 fact-consumption, role-recognition, and bound-recovery slices do not change
 generated HLS/manifest output or validation membership. The current
+non-outer-K `Dense2dTileMemFold` cleanup applies the same bounded role-recovery
+principle to the local `MatrixTileMemFoldTail5x7x5` canary: canonical
+`row_limit`/`col_limit` lets may appear in either declaration order, but phase
+order, Int-only tail scope, checked payloads, generated HLS, manifests,
+validation membership, and imported Vitis evidence remain fixed. The current
 vendor-HLS anchor for the Tile-K compiler-foundation line is the 38-program
 `docs/vitis-validation/2026-07-05-current-head-par4x16-38-program/`
 Tile-K `par4x16` current-head refresh; the later resource-caveat reporting

@@ -9,6 +9,41 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite Dense MemFold tail-bound role recovery
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `4834a9c8`
+  (`Recover dense MemFold tail bounds by role`).
+- Added a no-HLS-drift non-outer-K `Dense2dTileMemFold` classifier/proof
+  cleanup for the local `MatrixTileMemFoldTail5x7x5` canary: the canonical
+  `row_limit` and `col_limit` tail-bound lets are now recovered by role in
+  either declaration order.
+- The helper remains intentionally narrow: it inspects only the two leading
+  tail-bound lets, requires canonical `row_limit/TILE_R` and
+  `col_limit/TILE_C`, leaves the five compute phases ordered, and preserves the
+  existing Int-only tail boundary.
+- Added red/green canaries for proof-level role recovery, public classifier
+  normalization, HLS/manifest equality, and fail-closed duplicate/renamed or
+  formula-swapped bound-role near misses.
+- Updated Rust repo docs and vault status notes to record that checked payloads,
+  generated HLS, manifests, validation-roster membership, and imported Vitis
+  evidence are unchanged.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core dense2d_memfold -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core classifies_rank2_tile_memfold_tail -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core rank2_tile_memfold_tail_bound_role_near_misses_fail_closed -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core tile_k_contract -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen matrix_tile_memfold_tail -- --nocapture`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary: this is not generic tail support, FixPt tail support, K tiling,
+  `numel_k`, Part6 `par`, fold/store reordering, broad phase discovery, raw
+  Scala Lab2 compatibility, a validation-roster change, or a fresh EC2/Vitis
+  run.
+
 ## 2026-07-05 -- Rust rewrite Tile-K tail-bound role recovery
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
