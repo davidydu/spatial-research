@@ -9,6 +9,39 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite LUT resolved-proof cleanup
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `5b6d9d3c`
+  (`Resolve LUT proof facts`).
+- `LutLookup v0` and the Lab2 LUT adapters now record resolver-backed
+  table/input/row/column/output symbols plus rank-2 table read index facts
+  before producing the same checked LUT payload. Accepted syntax is not
+  broadened.
+- New fail-closed coverage:
+  the proof asserts the rank-2 table read resolves to the accepted row/column
+  scalar port symbols. Duplicate or shadowing LUT-related names are pinned at
+  the resolver layer with `spatial:E0302`.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core lut -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lut -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_00797aed_checkpoint -- --nocapture`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary:
+  this is a local compiler-interface/proof cleanup only. It does not add
+  syntax, validation-roster members, generated HLS changes, manifest changes,
+  fresh EC2/Vitis evidence, board execution, broader LUT syntax, dynamic
+  indexing support, or broad Scala source compatibility. The active vendor-HLS
+  anchor remains
+  `docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
+
+---
+
 ## 2026-07-05 -- Rust rewrite Dense1d resolved-proof cleanup
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

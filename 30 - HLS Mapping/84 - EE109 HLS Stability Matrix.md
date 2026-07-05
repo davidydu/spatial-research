@@ -43,22 +43,18 @@ fixed-point-policy 37-program checkpoint, and also supersedes the earlier
 acceptance evidence, not board/resource-fit implementation evidence for the
 two over-DSP Tile-K schedules.
 
-Current local frontend/HIR cleanup, 2026-07-05: Rust commit `98d0d3fe`
-(`Resolve Dense1d proof facts`) moves `Dense1dScalarMul v0` onto
-resolver-backed outer/lane loop domains, input/scalar/output symbols,
-input/output tile symbols, rank-1 remote load/store range facts, and local lane
-read/write facts before checked IR emission. It keeps the parser/structural
-tiled-I/O shell as the first accepted shape guard and preserves the same
-checked payload and HLS contract. Loop-index and local-memory names that shadow
-accepted Dense1d constants or ports now fail through resolver diagnostics with
-`spatial:E0302`; parseable lane drift remains fail-closed with
-`spatial:E0403`, while parser-bridge range-bound off-by-one variants fail
-before HIR with `spatial:E0002`. Local core, HLS equality, evidence-validator,
-full workspace, clippy, fmt, and diff checks pass.
+Current local frontend/HIR cleanup, 2026-07-05: Rust commit `5b6d9d3c`
+(`Resolve LUT proof facts`) moves `LutLookup v0` and the Lab2 LUT adapters onto
+resolver-backed table/input/row/column/output symbols plus rank-2 table read
+index facts before checked IR emission. It preserves the same checked payload
+and HLS contract. The resolver now explicitly proves the table read indices map
+to the accepted row/column scalar ports; duplicate or shadowing LUT names are
+covered by resolver diagnostics with `spatial:E0302` at the resolver layer.
+Local core, HLS equality, evidence-validator, full workspace, clippy, fmt, and
+diff checks pass.
 This does not add a validation roster member, fresh EC2/Vitis evidence,
-generated HLS changes, manifest changes, generic rank-1 scheduling, tail
-support, arbitrary load/store endpoint support, board execution, or broader
-Scala source compatibility.
+generated HLS changes, manifest changes, broader LUT syntax, dynamic indexing
+support, board execution, or broader Scala source compatibility.
 
 Current promoted Vitis update, 2026-07-05: the Rust rewrite now accepts
 and validates the exact full-K Tile-K schedule canary
