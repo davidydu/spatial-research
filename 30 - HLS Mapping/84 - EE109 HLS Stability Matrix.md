@@ -890,13 +890,16 @@ The latest validation-roster step promoted the exact full-K Tile-K `par4x16`
 schedule canary into the official roster with EC2/Vitis evidence. The latest
 local compiler step completed a bounded Tile-K role-driven phase-recognition
 slice for the covered pre-fold LHS/RHS/C-preload roles before the fold/store
-pair. This is classifier hardening only: generated HLS, validation roster
-membership, and imported Vitis evidence remain unchanged. The natural next
-implementation action is another bounded proof/helper-boundary slice with local
-equality gates, or a fresh EC2/Vitis run only if generated HLS text or roster
-membership changes. Do not spend the next step optimizing `par4x16` DSP use
-unless the research goal shifts toward board-fit implementation; the validator
-now keeps that caveat visible while the compiler surface continues to deepen.
+pair, followed by a no-HLS-drift structural-recovery cleanup that recovers
+`row_limit` and `col_limit` tail-bound lets by role in either declaration order
+for the covered row/column/K-tail profiles. This is classifier hardening only:
+generated HLS, validation roster membership, and imported Vitis evidence remain
+unchanged. The natural next implementation action is another bounded
+proof/helper-boundary slice with local equality gates, or a fresh EC2/Vitis run
+only if generated HLS text or roster membership changes. Do not spend the next
+step optimizing `par4x16` DSP use unless the research goal shifts toward
+board-fit implementation; the validator now keeps that caveat visible while the
+compiler surface continues to deepen.
 Byte-stable refactors should keep using local equality, dry-run/plan, full
 test, clippy, and evidence-validator gates; any generated-HLS text change or
 validation-roster change should trigger a fresh EC2/Vitis execution.

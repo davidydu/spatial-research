@@ -9,6 +9,37 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite Tile-K tail-bound role recovery
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `42167c03`
+  (`Recover Tile-K tail bounds by role`).
+- Added a no-HLS-drift Tile-K structural-recovery cleanup for the covered
+  row/column/K-tail profiles: `row_limit` and `col_limit` tail-bound lets are
+  now recovered by role in either declaration order before the pre-fold phases.
+- The helper still requires exactly one canonical `row_limit/TILE_R` bound and
+  one canonical `col_limit/TILE_C` bound, then leaves pre-fold role recovery and
+  the fixed fold/store ordering unchanged.
+- Added the red/green contract canary
+  `tile_k_contract_accepts_role_identified_row_col_tail_bound_order`.
+- Updated Rust repo docs and vault status notes to record that checked payloads,
+  generated HLS, manifests, validation-roster membership, and imported Vitis
+  evidence are unchanged.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core tile_k_contract -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core tile_k_phase_spine -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core parse_accel_lab2_outer_k`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k_part6_row_col_k_tail_reversed_min_preserves_exact_hls_and_manifest`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary: this is not broader Tile-K phase discovery, fold/store reordering,
+  arbitrary structural statement recovery, generic Spatial `MemFold`, arbitrary
+  tails, broad Scala compatibility, a validation-roster change, or a fresh
+  EC2/Vitis run.
+
 ## 2026-07-05 -- Rust rewrite Vitis evidence-quality classification
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
