@@ -9,6 +9,44 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite shared HLS artifact rendering path
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `a29db3397a6ef598da3e004e42be033785419236`
+  (`Share HLS artifact rendering path`).
+- Added a shared `RenderedHlsArtifacts` / `HlsRenderPlan` orchestration path so
+  host harness compilation and Vitis dry-run project emission write
+  `manifest.json`, `kernel.cpp`, and `harness.cpp` from the same checked
+  manifest and lowered HLS plan. Direct `emit_kernel` now shares the same
+  body-plan dispatcher.
+- Preserved explicit Lab3 versus reusable `Stencil2d` harness selection and
+  removed the obsolete private program-level wrapper functions left behind by
+  the refactor. Plan-level renderer helpers are now test-only.
+- Red check:
+  `cargo test --locked -p spatial-rs-hls render_hls_artifacts --lib -- --nocapture`
+  first failed on missing `render_hls_artifacts` before the shared helper was
+  implemented.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-hls render_hls_artifacts --lib -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls emit::tests --lib -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab3_convolution_harness_compares_full_256_pixel_oracle -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen stencil2d_sobel_feature_harness_compares_full_oracle -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen matrix_copy_4x6_feature_emits_parameterized_rank2_copy_and_harness -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen vitis_dry_run_project_records_tool_profile_without_running_vendor_hls -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_a62eb274_checkpoint -- --nocapture`;
+  `cargo test --locked -p ee109-examples validation_programs_include_supported_features_after_adapter_baseline -- --nocapture`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --out target/vitis-validation-plan-phase5-emit-artifacts`;
+  `cargo test --locked --quiet`;
+  `cargo fmt --all -- --check`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary: no source-acceptance widening, no validation-roster change, no
+  generated vendor-evidence promotion, and no fresh EC2/Vitis execution. The
+  active vendor anchor remains the imported `a62eb274` 37-program checkpoint
+  pending future HLS testing.
+
 ## 2026-07-04 -- Rust rewrite reversed tail-min HLS equality pin
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
