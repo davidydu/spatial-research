@@ -9,6 +9,45 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite Dense2d FixPt tail proof cleanup
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `c797cbd9d99b86fc438e39e61e0de1500acae4b1`
+  (`Resolve Dense2d FixPt tail proof facts`).
+- `Dense2dTileMemFold v0` now rejects exact FixPt tail near-misses that were
+  previously too permissive: `row_limit` must use the exact `ROWS` symbol
+  instead of any equal-valued total such as `K`, the
+  `MatrixTileMemFoldTailFixPt5x7x5` canary name requires
+  `FixPt[TRUE,_24,_8]` payloads, and non-outer-K partial `par` schedules stay
+  fail-closed until the checked IR payload can preserve schedule facts.
+- New fail-closed coverage:
+  equal-valued wrong total symbols, FixPt canary name with `Int` payloads, and
+  scheduled non-outer-K partial-product loops are rejected while the exact
+  `MatrixTileMemFoldTailFixPt5x7x5` canary remains accepted.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core dense2d_memfold -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core rank2_tile_memfold_tail -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core tail_fixpt -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core tile_k_contract -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen matrix_tile_memfold_tail_fixpt_5x7x5_feature_emits_ap_fixed_bounds_and_harness -- --nocapture`;
+  `cargo test --locked -p ee109-examples validation_programs_include_supported_features_after_adapter_baseline -- --nocapture`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary:
+  this is a local compiler-interface/proof cleanup only. It does not add
+  syntax, validation-roster members, generated HLS changes, manifest changes,
+  fresh EC2/Vitis evidence, board execution, broad FixPt support, generic
+  Spatial `MemFold`, non-outer-K scheduled MemFold HLS, arbitrary tail shapes,
+  banking, K tiling, or broad Scala source compatibility. The active vendor-HLS
+  anchor remains
+  `docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
+
+---
+
 ## 2026-07-05 -- Rust rewrite MemReduce/MemFold resolved-proof cleanup
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

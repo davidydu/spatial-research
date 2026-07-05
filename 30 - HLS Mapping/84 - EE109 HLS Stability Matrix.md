@@ -43,7 +43,23 @@ fixed-point-policy 37-program checkpoint, and also supersedes the earlier
 acceptance evidence, not board/resource-fit implementation evidence for the
 two over-DSP Tile-K schedules.
 
-Current local frontend/HIR cleanup, 2026-07-05: Rust commit `69b350ef`
+Current local frontend/HIR cleanup, 2026-07-05: Rust commit `c797cbd9`
+(`Resolve Dense2d FixPt tail proof facts`) tightens the exact
+`MatrixTileMemFoldTailFixPt5x7x5` proof boundary. `row_limit` must use the
+exact `ROWS` symbol rather than any equal-valued total such as `K`, the FixPt
+tail canary name now requires `FixPt[TRUE,_24,_8]` payloads, and non-outer-K
+partial `par` schedules fail closed until the checked IR payload can preserve
+schedule facts. It preserves the exact canary's checked payload, generated HLS,
+manifest contract, diagnostic-only evidence status, and validation-roster
+non-membership. Local dense MemFold/tail/FixPt/tile-K checks, HLS FixPt-tail
+codegen, example roster check, full workspace, clippy, fmt, and diff checks
+pass.
+This does not add a validation roster member, fresh EC2/Vitis evidence,
+generated HLS changes, manifest changes, generic Spatial `MemFold`,
+non-outer-K scheduled MemFold HLS, arbitrary tail shapes, scheduling/banking,
+board execution, or broader Scala source compatibility.
+
+Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `69b350ef`
 (`Resolve MemReduce fill proof facts`) moves `MemReduceFill v0` /
 `MemFoldFill v0` onto resolver-backed accumulator/temp/output symbols,
 length/step const-role symbols, resolved step count, fill length, final
@@ -55,12 +71,8 @@ when the wrong const symbol is used for the reduction/fold bound, fill loop,
 zero-init loop, or final store range. Local core MemReduce/MemFold, HLS fill
 tests, example roster check, evidence-validator, full workspace, clippy, fmt,
 and diff checks pass.
-This does not add a validation roster member, fresh EC2/Vitis evidence,
-generated HLS changes, manifest changes, generic Spatial `MemReduce`/
-`MemFold`, arbitrary reducer/fold bodies, dynamic bounds, rank-2 reductions,
-scheduling/banking, board execution, or broader Scala source compatibility.
 
-Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `f9fd4ae1`
+Earlier local frontend/HIR cleanup, 2026-07-05: Rust commit `f9fd4ae1`
 (`Resolve FIFO proof facts`) moves `Fifo1dTileScalarMul v0` onto
 resolver-backed input/scalar/output port symbols, local FIFO symbols,
 outer/lane loop domains, static length/depth facts, load/store tile ranges,
@@ -1075,19 +1087,26 @@ proof/equality slices: Tile-K pre-fold/tail-bound role recovery for the covered
 profiles, non-outer-K `Dense2dTileMemFold` `row_limit`/`col_limit` role
 recovery for the local `MatrixTileMemFoldTail5x7x5` canary, and the
 non-roster `MatrixTileMemFoldOuterKInPlaceFixPt24x20x12Tile8x5x4` Tile-K
-parameter perturbation proof gate. The newest local semantic canary is
+parameter perturbation proof gate. The newest local proof cleanup is Rust
+commit `c797cbd9`, which keeps the exact
+`MatrixTileMemFoldTailFixPt5x7x5` canary fail-closed on total-symbol
+provenance, FixPt name/type pairing, and dropped non-outer-K partial `par`
+schedules without changing generated HLS or evidence. The newest local
+semantic canary remains
 `MatrixTileMemFoldTailFixPt5x7x5`, which proves exact FixPt non-outer-K tail
 MemFold locally through parser, classifier proof, checked IR, HLS/manifest, and
 host compile/run. It also has one-kernel EC2/Vitis evidence in
 `docs/vitis-validation/2026-07-05-fixpt-tail-oneoff/`, and the Rust validator
 now revalidates that proof as selected diagnostic evidence with
 `resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`. It remains outside
-the 39-program validation roster. The next implementation action is either an
-explicit roster promotion with a full current-head refresh, or a bounded
-compiler-interface cleanup such as resolved-name reduction/fold facts. Do not
-spend the next step optimizing `par4x16` DSP use unless the research goal
-shifts toward board-fit implementation; the validator now keeps that caveat
-visible while the compiler surface continues to deepen.
+the 39-program validation roster. The next implementation action should be the
+Par2x8 resource-fit policy slice: define requested schedule vs board-fit
+candidate semantics, keep `par4x8`/`par4x16` from silently weakening, and decide
+whether the clean selected Par2x8 evidence should stay diagnostic-only or
+become a roster/evidence refresh item. Do not spend the next step optimizing
+`par4x16` DSP use unless the research goal shifts toward board-fit
+implementation; the validator now keeps that caveat visible while the compiler
+surface continues to deepen.
 
 Current local diagnostic update: the Rust branch now also has
 `MatrixTileMemFoldOuterKRowColTailInPlacePar2x8FixPt33x35x34`, a selected-plan
