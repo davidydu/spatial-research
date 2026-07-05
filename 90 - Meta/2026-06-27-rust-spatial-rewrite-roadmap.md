@@ -72,15 +72,23 @@ outside the 39-program validation roster, but selected EC2/Vitis evidence in
 `docs/vitis-validation/2026-07-05-selected-par2x8-row-col-tail-f920a754/`
 validates the requested `partial_row_par=2` / `partial_col_par=8` schedule as
 `resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`.
-The latest local frontend/HIR cleanup is Rust commit `26611e17` (`Guard Lab2
+The latest local frontend/HIR cleanup is Rust commit `aafc0980` (`Extract
+Tile-K proof module`). Tile-K entry/precheck/proof orchestration, proof
+structs, payload-to-proof rebuild helpers, and the Tile-K-local bound helper
+now live in `classifier/tiled2d/tile_k.rs`. The parent `tiled2d.rs` still keeps
+the shared rank-2 helpers and remaining Tile-K-specific matcher/spec layer for
+now, so the next structure cleanup is to move those matchers and Tile-K proof
+tests under the Tile-K module before reducing the parent-visible `pub(super)`
+proof-test surface. This does not change accepted syntax, checked IR,
+generated HLS, validation-roster membership, or vendor-HLS evidence.
+The previous local frontend/HIR cleanup is Rust commit `26611e17` (`Guard Lab2
 shell alias activation`). Lab2 shell-alias canonicalization now activates only
 for actual local SRAM alias declarations, not for exact alias-name tokens used
 as ordinary ports or assignment targets. Ordinary rank-2 copy sources with a
 name like `tileA_sram` remain ordinary copies, while the accepted Lab2
 shell-alias buffer and infix tile-I/O bridges preserve their checked payloads,
-generated HLS, and manifests. This does not change validation-roster
-membership or vendor-HLS evidence.
-The previous local frontend/HIR cleanup is Rust commit `be8511c9` (`Enforce
+generated HLS, and manifests.
+The earlier local frontend/HIR cleanup is Rust commit `be8511c9` (`Enforce
 Tile-K schedule label factors`). Explicit Tile-K `ParRxC` labels now have to
 match the proven `partial_row_par` / `partial_col_par` schedule facts at both
 classifier and checked-IR gates, and the resource-fit policy is tied to the

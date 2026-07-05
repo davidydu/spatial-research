@@ -43,18 +43,29 @@ fixed-point-policy 37-program checkpoint, and also supersedes the earlier
 acceptance evidence, not board/resource-fit implementation evidence for the
 two over-DSP Tile-K schedules.
 
-Current local frontend/HIR cleanup, 2026-07-05: Rust commit `26611e17`
+Current local frontend/HIR cleanup, 2026-07-05: Rust commit `aafc0980`
+(`Extract Tile-K proof module`) moves the Tile-K classifier entry point,
+candidate precheck, proof orchestration, proof structs, payload-to-proof
+rebuild helpers, and Tile-K-local bound helper into
+`classifier/tiled2d/tile_k.rs`. The parent `tiled2d.rs` still owns the shared
+rank-2 helpers and remaining Tile-K-specific matcher/spec layer for now; that
+matcher/test extraction is the next structure cleanup before tightening the
+parent-visible proof-test surface. The architecture regression now guards the
+entry/proof contract location, and local Tile-K, Lab2 outer-K, HLS plan,
+M1 codegen, captured Vitis-evidence, full workspace, clippy, fmt, and diff
+checks pass.
+This does not add a validation roster member, fresh EC2/Vitis evidence,
+generated HLS changes, manifest changes, board execution, Vivado
+implementation, timing closure, or automatic schedule lowering.
+
+Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `26611e17`
 (`Guard Lab2 shell alias activation`) tightens `Lab2GemmBridge` so Lab2 shell
 alias canonicalization activates only for actual local SRAM alias declarations
 such as `val tileA_sram = SRAM[...]`, not for exact alias names used as
 ordinary ports or assignment targets. An ordinary rank-2 copy output named
 `tileA_sram` now remains a `Dram2dCopy`, while the accepted Lab2 shell-alias
 buffer and infix tile-I/O forms preserve their existing checked payloads,
-generated HLS, and manifests. Full workspace tests, clippy, fmt, and diff
-checks pass.
-This does not add a validation roster member, fresh EC2/Vitis evidence,
-generated HLS changes, manifest changes, board execution, Vivado
-implementation, timing closure, or automatic schedule lowering.
+generated HLS, and manifests.
 
 Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `be8511c9`
 (`Enforce Tile-K schedule label factors`) keeps explicit Tile-K `ParRxC`

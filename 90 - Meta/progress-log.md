@@ -7584,6 +7584,51 @@ Boundary:
 - No fresh EC2/Vitis execution was run for this checkpoint.
 - The active vendor anchor remains
   `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
+
+## 2026-07-05 -- Tile-K proof module extraction
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `aafc09803b093b0f69583285c845e58eb3921070` (`Extract Tile-K
+  proof module`) moves the Tile-K classifier entry point, candidate precheck,
+  proof orchestration, proof structs, payload-to-proof rebuild helpers, and
+  Tile-K-local bound helper into `classifier/tiled2d/tile_k.rs`.
+- The parent `classifier/tiled2d.rs` now explicitly re-exports only the Tile-K
+  classifier entry point for production dispatch and imports proof internals
+  only under `#[cfg(test)]`.
+- A new architecture regression asserts that the Tile-K entry/proof contract
+  remains module-owned instead of drifting back into the parent.
+- Subagent review confirmed the important limitation: this is not the full
+  Tile-K matcher extraction. The remaining Tile-K-specific matcher/spec layer
+  and the Tile-K proof tests still live in the parent `tiled2d.rs` and should
+  be the next structure cleanup before reducing parent-visible `pub(super)`
+  proof internals.
+
+Proof:
+- Red test first:
+  - `cargo test --locked -p spatial-rs-core tile_k_proof_contract_is_module_owned -- --nocapture`
+- Targeted green:
+  - `cargo test --locked -p spatial-rs-core tile_k_proof_contract_is_module_owned -- --nocapture`
+  - `cargo test --locked -p spatial-rs-core tile_k -- --nocapture`
+  - `cargo test --locked -p spatial-rs-core parse_accel_lab2_outer_k -- --nocapture`
+  - `cargo test --locked -p spatial-rs-hls tile_k_memfold_plan_exposes -- --nocapture`
+  - `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k -- --nocapture`
+  - `cargo test --locked -p spatial-rs-hls --test vitis_validation outer_k_memfold -- --nocapture`
+  - `cargo test --locked -p spatial-rs-hls --test vitis_validation lab2_part6_scheduled -- --nocapture`
+- Full local gates:
+  - `cargo test --locked --workspace`
+  - `cargo clippy --all-targets --locked -- -D warnings`
+  - `cargo fmt --all -- --check`
+  - `git diff --check`
+
+Boundary:
+- No accepted syntax, checked IR, generated HLS, manifest, validation-roster,
+  diagnostic-roster, or imported vendor-evidence change.
+- No fresh EC2/Vitis execution was run for this checkpoint.
+- The active vendor anchor remains
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
 - Par2x8 remains selected diagnostic evidence only, not a validation-roster
   replacement for the requested Par4x16 or Par4x8 schedules.
 
