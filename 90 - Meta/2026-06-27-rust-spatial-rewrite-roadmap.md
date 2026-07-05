@@ -68,7 +68,19 @@ frontend/HIR Tile-K classifier remains the semantic authority for rank-2
 tile-copy/access-role proof. Accepted raw syntax, generated frontend source,
 checked IR, generated HLS, manifests, validation membership, and imported
 Vitis evidence are unchanged, so no fresh EC2/Vitis run was claimed.
-The latest local proof/equality cleanup is Rust commit `3a4d753f`
+The latest local semantic canary is Rust commit `2ed2ddec`
+(`Add exact FixPt MemFold tail canary`). It adds
+`MatrixTileMemFoldTailFixPt5x7x5` as the exact `FixPt[TRUE,_24,_8]`
+counterpart to the local non-outer-K `MatrixTileMemFoldTail5x7x5` Int
+tail/min-bound canary. The frontend, classifier proof, checked IR, HLS
+codegen, manifest, and host harness now accept the exact 5x7x5 / 2x3 split-C
+tail shape and emit `ap_fixed<32, 24, AP_TRN, AP_WRAP>` with runtime
+`row_limit`/`col_limit` loops. Wrong FixPt tail names/shapes remain
+fail-closed, as do raw Scala wrappers, generic Spatial `MemFold`, `par`,
+banking, K tiling, and arbitrary FixPt tails. This is a new generated-HLS local
+surface but is not a validation-roster member and has no EC2/Vitis evidence
+yet.
+The preceding local proof/equality cleanup is Rust commit `3a4d753f`
 (`Record parameterized Tile-K proof gate`). It promotes the existing local
 non-roster `MatrixTileMemFoldOuterKInPlaceFixPt24x20x12Tile8x5x4`
 Tile-K canary into an explicit classifier proof/equality gate: parser raw-alias

@@ -903,12 +903,15 @@ proof/equality slices: Tile-K pre-fold/tail-bound role recovery for the covered
 profiles, non-outer-K `Dense2dTileMemFold` `row_limit`/`col_limit` role
 recovery for the local `MatrixTileMemFoldTail5x7x5` canary, and the
 non-roster `MatrixTileMemFoldOuterKInPlaceFixPt24x20x12Tile8x5x4` Tile-K
-parameter perturbation proof gate. Generated HLS, validation roster
-membership, and imported Vitis evidence remain unchanged. The natural next
-implementation action is either the named FixPt tail `Dense2dTileMemFold`
-canary, which will require fresh vendor evidence before promotion, or one more
-bounded helper-boundary cleanup with local equality gates. Do not spend the
-next step optimizing `par4x16` DSP use unless the research goal shifts toward
+parameter perturbation proof gate. The newest local semantic canary is
+`MatrixTileMemFoldTailFixPt5x7x5`, which proves exact FixPt non-outer-K tail
+MemFold locally through parser, classifier proof, checked IR, HLS/manifest, and
+host compile/run. It is a new generated-HLS surface, but validation roster
+membership and imported Vitis evidence remain unchanged. The natural next
+implementation action is to run EC2/Vitis for this exact canary before any
+vendor-readiness or roster-promotion claim, or choose one bounded
+helper-boundary cleanup with local equality gates. Do not spend the next step
+optimizing `par4x16` DSP use unless the research goal shifts toward
 board-fit implementation; the validator now keeps that caveat visible while the
 compiler surface continues to deepen.
 Byte-stable refactors should keep using local equality, dry-run/plan, full

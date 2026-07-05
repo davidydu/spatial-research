@@ -6361,3 +6361,51 @@ Boundary:
 - Subagent review ranked the next substantive semantic slice as a named FixPt
   tail `Dense2dTileMemFold` canary; that can start locally, but needs fresh
   EC2/Vitis evidence before any vendor-HLS readiness or roster-promotion claim.
+
+## 2026-07-05 -- Rust rewrite adds exact FixPt MemFold tail canary
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `2ed2ddecf1ec1af049b0ae41a544b93b0e1d75ea` (`Add exact FixPt
+  MemFold tail canary`).
+- Added the exact local `MatrixTileMemFoldTailFixPt5x7x5` canary as the
+  `FixPt[TRUE,_24,_8]` counterpart to the Int
+  `MatrixTileMemFoldTail5x7x5` non-outer-K tail/min-bound canary.
+- Parser, classifier proof, checked IR, generated HLS, manifest, and host
+  compile/run now accept the exact 5x7x5 / 2x3 split-C tail shape.
+- HLS emits `ap_fixed<32, 24, AP_TRN, AP_WRAP>` storage plus runtime
+  `row_limit` / `col_limit` loops for this shape.
+- Wrong FixPt tail names/shapes remain fail-closed, along with raw Scala
+  wrappers, generic Spatial `MemFold`, `par`, banking, K tiling, and arbitrary
+  FixPt tails.
+
+Proof:
+- Focused gates passed:
+  `cargo test -p spatial-rs-core --locked parse_accel_accepts_rank2_tile_memfold_tail_fixpt_feature -- --nocapture`,
+  `cargo test -p spatial-rs-core --locked dense2d_memfold_proof_accepts_exact_fixpt_tail_canary -- --nocapture`,
+  `cargo test -p spatial-rs-core --locked checked_ir_accepts_exact_dense2d_tile_memfold_tail_fixpt_feature -- --nocapture`,
+  and
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen matrix_tile_memfold_tail_fixpt_5x7x5_feature_emits_ap_fixed_bounds_and_harness -- --nocapture`.
+- Negative gates passed:
+  `cargo test -p spatial-rs-core --locked spatialish_memfold_call_near_misses_fail_closed -- --nocapture`,
+  `cargo test -p spatial-rs-core --locked memfold_return_combiner_sugar_near_misses_fail_closed -- --nocapture`,
+  `cargo test -p spatial-rs-core --locked dense2d_memfold_proof_rejects_non_exact_fixpt_tail_canaries -- --nocapture`,
+  and
+  `cargo test -p spatial-rs-core --locked checked_ir_rejects_non_exact_dense2d_tile_memfold_tail_fixpt_features -- --nocapture`.
+- Broader gates passed:
+  `cargo test -p spatial-rs-core --locked rank2_tile_memfold -- --nocapture`,
+  `cargo test --locked --workspace`,
+  `cargo fmt --all -- --check`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  and `git diff --check`.
+
+Boundary:
+- This changes the local generated-HLS surface for one new named canary, but it
+  does not add validation-roster membership or EC2/Vitis evidence yet.
+- Do not claim vendor-HLS readiness for `MatrixTileMemFoldTailFixPt5x7x5`
+  until a fresh EC2/Vitis run is captured and validated.
+- This is not raw Scala compatibility, generic Spatial `MemFold`, arbitrary
+  tail support, arbitrary fixed-point widths, inferred banking, scheduling,
+  board execution, resource fit, or timing evidence.
