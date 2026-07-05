@@ -6097,3 +6097,53 @@ Boundary:
 - It does not reintroduce broad Scala source compatibility. Raw
   `Lab2Part5GEMM` / `Lab2Part6GEMM` wrappers remain retired; the supported
   GEMM path is still the Rust-subset Tile-K canary set.
+
+## 2026-07-05 -- Rust rewrite locks the FixPt HLS policy and refreshes Vitis
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- The supported `FixPt[TRUE,_24,_8]` type now has an explicit policy in core
+  metadata: signed, 32 total bits, 24 integer bits, 8 fractional bits,
+  `AP_TRN` rounding, and `AP_WRAP` overflow.
+- HLS generation now emits
+  `ap_fixed<32, 24, AP_TRN, AP_WRAP>` for
+  `spatial_fixpt_true_24_8_t`; the host-only `ap_fixed` shim accepts the same
+  rounding/overflow template form for local harness tests.
+- Manifest conversion policy for fixed-point DRAM buffers now records
+  `raw_ap_fixed_true_24_8_trn_wrap_v1`.
+- A fresh 37-program EC2/Vitis bundle is imported at
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-fixpt-policy-current-head-37-program/`.
+- README, fixture matrix, MVP plan, architecture notes, roadmap, and evidence
+  validator tests now treat the fixed-point-policy run as the active
+  vendor-HLS anchor; `b91118f7` remains historical.
+
+Proof:
+- Red checks first failed on the missing `fixpt_policy()` API, old two-argument
+  HLS alias, and old fixed-point manifest conversion-policy string.
+- Focused green checks passed:
+  `cargo test --locked -p spatial-rs-core fixpt_true_24_8_exposes_explicit_hls_numeric_policy -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen matrix_tile_memfold_fixpt_4x6x5_feature_emits_ap_fixed_types_and_harness -- --nocapture`,
+  and
+  `cargo test --locked -p spatial-rs-hls tile_k -- --nocapture`.
+- Full local gates passed:
+  `cargo fmt --all -- --check`,
+  `cargo test --locked --quiet`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  and `git diff --check`.
+- EC2 plan-only gate produced 37 planned validation programs.
+- EC2 Vitis 2025.1 execute run completed all 37 validation programs with
+  `returncode=0 csim=true csynth=true`; the fixed-point MemFold, in-place
+  MemFold, serial Tile-K, scheduled Tile-K, K-tail, and row/column/K-tail GEMM
+  canaries all passed with the explicit alias.
+- Repo-local evidence validation passed on EC2 and locally:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-fixpt-policy-current-head-37-program`.
+
+Boundary:
+- This locks the lowering policy for the single supported fixed-point canary
+  type only. It does not add decimal fixed-point literals, arbitrary
+  fixed-point widths, mixed `Int`/`FixPt` GEMM, generic fixed-point arithmetic,
+  or board/timing evidence.
+- Non-outer-K FixPt tail tiles remain fail-closed; the existing Tile-K tail
+  canaries remain the fixed-point tail coverage path.

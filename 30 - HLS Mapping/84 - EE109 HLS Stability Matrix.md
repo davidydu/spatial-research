@@ -23,13 +23,13 @@ rewrite 37-program roster pass EC2/Vitis `csim_design` and `csynth_design`.
 This is still not board execution, Vivado implementation, timing closure, or a
 generic Spatial compatibility claim.
 
-Current Rust rewrite delta, 2026-07-04: source snapshot `a62eb274` is now the
-active current-head vendor-HLS checkpoint. The full 37-program roster passed
-EC2/Vitis 2025.1 `csim_design` and `csynth_design` after promoting
-`MemReduceFives8` and `MemFoldSevens12` into validation. Durable evidence:
-`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-04-current-head-a62eb274-37-program/`.
+Current Rust rewrite delta, 2026-07-05: the fixed-point-policy current-head
+refresh is now the active vendor-HLS checkpoint. The full 37-program roster
+passed EC2/Vitis 2025.1 `csim_design` and `csynth_design` after locking
+`FixPt[TRUE,_24,_8]` lowering to signed truncation/wrap. Durable evidence:
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-fixpt-policy-current-head-37-program/`.
 This supersedes older notes below that say the active anchor remains
-`7a350983`, `eb4f6236`, or `c862e57a`.
+`a62eb274`, `7a350983`, `eb4f6236`, or `c862e57a`.
 
 Current local no-fresh-Vitis update, 2026-07-04: Rust commit `89b637ed`
 hardens the raw Lab2 fixed GEMM ingress. The `Lab2Part5GEMM` /
@@ -37,7 +37,7 @@ hardens the raw Lab2 fixed GEMM ingress. The `Lab2Part5GEMM` /
 island from the matched raw `@spatial class`, rejecting donor class/object
 bodies elsewhere in the same source. This is local fail-closed guard work only;
 generated HLS C++, manifests, validation-program membership, imported Vitis
-evidence, and the active `a62eb274` vendor-HLS anchor are unchanged.
+evidence, and the then-active `a62eb274` vendor-HLS anchor are unchanged.
 
 Current local no-fresh-Vitis update, 2026-07-04: Rust commit `5af91664`
 hardens the raw Lab2 simple `MemReduce` / `MemFold` ingress. The adapter now
@@ -854,9 +854,9 @@ Generated-code hygiene:
 ## Recommended Next Action
 
 For the Rust rewrite, the clean current-head EC2/Vitis checkpoint is now the
-37-program current-head refresh at source snapshot `a62eb274`, captured in
-`docs/vitis-validation/2026-07-04-current-head-a62eb274-37-program/`. Use it as
-the vendor-stability anchor for the current EE109 MVP roster.
+37-program fixed-point-policy current-head refresh, captured in
+`docs/vitis-validation/2026-07-05-fixpt-policy-current-head-37-program/`. Use
+it as the vendor-stability anchor for the current EE109 MVP roster.
 
 The latest larger validation-roster step promoted the existing non-lab
 MemReduce/MemFold canaries into the official roster with EC2/Vitis evidence.

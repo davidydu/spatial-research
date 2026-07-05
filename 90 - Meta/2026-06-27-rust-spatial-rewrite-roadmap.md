@@ -33,15 +33,14 @@ reductions/folds, SRAM tile fold, LUT lookup, rank-1/2 dense kernels, MemReduce
 Tile-K GEMM/tail/schedule canaries.
 
 Current Vitis status: the latest Rust rewrite vendor checkpoint is the
-2026-07-04 37-program current-head refresh at source snapshot `a62eb274`,
-captured in
-`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-04-current-head-a62eb274-37-program/`.
-It promotes `MemReduceFives8` and `MemFoldSevens12` into the validation roster
-after the earlier raw Lab2 row/column/K-tail adapter, raw Lab3 static-border
-adapter, affine-index helper cleanup, MemReduce/MemFold literal-fill widening,
-and documentation cleanup. All 37 programs passed EC2/Vitis 2025.1
-`csim_design` and `csynth_design`; this proves vendor HLS acceptance for the
-exact roster
+2026-07-05 37-program current-head refresh after locking the explicit
+`FixPt[TRUE,_24,_8]` signed truncation/wrap HLS policy, captured in
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-fixpt-policy-current-head-37-program/`.
+It keeps `MemReduceFives8` and `MemFoldSevens12` in the validation roster
+after the raw Lab2 Part5/Part6 GEMM Scala-ingress retirement and refreshes
+vendor evidence for the updated fixed-point alias. All 37 programs passed
+EC2/Vitis 2025.1 `csim_design` and `csynth_design`; this proves vendor HLS
+acceptance for the exact roster
 only, not board execution, implementation, timing closure, performance
 optimality, generic Spatial compatibility, or broad Scala source
 compatibility.
@@ -77,7 +76,7 @@ The latest local evidence-validation cleanup is Rust commit `ba388096`
 validator reject unexpected stable artifacts for kernels outside the expected
 roster under `sidecars/`, `logs/`, and `reports/`, so a bundle cannot silently
 carry retired-kernel leftovers while claiming the exact current roster. The
-active `a62eb274` 37-program evidence bundle still validates; generated HLS,
+then-active `a62eb274` 37-program evidence bundle still validates; generated HLS,
 manifests, validation membership, and imported Vitis evidence are unchanged, so
 no fresh EC2/Vitis run was claimed.
 The latest local backend-structure cleanup is Rust commit `871dd7de` (`Guard
@@ -410,7 +409,8 @@ serial/scheduled K-tail members, `Lab2Part3BasicCondFSMAlt`,
 `33 35 34` Tile-K canaries. A then-current Tile-K HLS loop-body cleanup
 checkpoint captured 33-program EC2/Vitis `csim_design`/`csynth_design` evidence
 in `docs/vitis-validation/2026-07-03-tile-k-loop-body-current-head-33-program/`;
-the active current-head vendor anchor is now the 37-program `a62eb274` refresh.
+the active current-head vendor anchor is now the fixed-point-policy 37-program
+refresh.
 The current Tile-K HLS backend-ledger cleanup has now moved K-loop bounds,
 local storage declarations, schedule/partition preflight, serial/scheduled
 tile-body rendering, and the kernel frame itself into crate-private HLS helper
