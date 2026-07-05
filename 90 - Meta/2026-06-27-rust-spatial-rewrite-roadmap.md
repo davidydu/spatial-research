@@ -92,8 +92,10 @@ banking, K tiling, and arbitrary FixPt tails. This is a new generated-HLS local
 surface and now has one-kernel EC2/Vitis `csim_design` / `csynth_design`
 evidence in
 `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-fixpt-tail-oneoff/`.
-It is still not a validation-roster member; a roster promotion would need an
-explicit roster decision and full roster refresh.
+The Rust evidence validator now revalidates that proof as selected diagnostic
+evidence with `resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`. It is
+still not a validation-roster member; a roster promotion would need an explicit
+roster decision and full roster refresh.
 The latest local frontend source-admission cleanup is Rust commit `5b428158`
 (`Accept canonical Tile-K bulk IO`). It accepts canonical Rust-subset arrow
 bulk rank-2 tile IO for the exact full-K

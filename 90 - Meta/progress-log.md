@@ -9,6 +9,29 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite FixPt tail diagnostic evidence revalidation
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Registered `MatrixTileMemFoldTailFixPt5x7x5` as a diagnostic-only selected
+  kernel for `run-vitis-validation --kernel`. This keeps the official
+  validation roster at 39 programs while making the existing one-kernel
+  EC2/Vitis proof locally revalidatable.
+- Added a narrow evidence-validator compatibility path for single-kernel
+  root-layout one-off evidence bundles. Standard selected/full bundles still use
+  the newer `sidecars/`, `logs/`, and `reports/` layout.
+- Revalidated
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-fixpt-tail-oneoff/`
+  as selected diagnostic evidence:
+  `resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`.
+- Boundary:
+  this is not a validation-roster promotion, not a new full current-head Vitis
+  refresh, not board execution, and not generic FixPt tail support. A roster
+  promotion for this canary still needs an explicit roster decision and a full
+  current-head refresh.
+
+---
+
 ## 2026-07-05 -- Rust rewrite generic scheduled row/column/K-tail Tile-K canary
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
@@ -24,9 +47,10 @@ Append-only, newest-first within day blocks. One line per discrete action when p
   `partial_col_par=8`) through checked IR, HLS row-cyclic partitions,
   pipeline/unroll pragmas, and the native host-C++ harness.
 - The EE109 local validation roster is now 39 programs. The previous
-  38-program par4x16 EC2/Vitis bundle remains the full vendor-stability
-  anchor; the new par4x8 row/column/K-tail canary is explicitly pending
-  selected Vitis evidence.
+  38-program par4x16 EC2/Vitis bundle was the full vendor-stability anchor at
+  this local-compiler checkpoint; later same-day EC2/Vitis evidence superseded
+  it with the 39-program `746d9ec5` current-head refresh and selected par4x8
+  evidence.
 - Tightened fail-closed boundaries after GPT-5.5 xhigh review:
   non-dividing generic schedules such as `4x7` are rejected, the reserved
   Part6 `2x16` row/column/K-tail schedule is rejected under generic names, and

@@ -69,7 +69,9 @@ evidence in
 `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-fixpt-tail-oneoff/`.
 The single-kernel run passed `csim_design` and `csynth_design` with return code
 0, estimated Fmax 136.99 MHz, 10 ns target clock, 7.300 ns estimated clock, and
-resource fit true for `xc7z020-clg400-1`. This is not a validation-roster
+resource fit true for `xc7z020-clg400-1`. The Rust evidence validator now
+revalidates this as selected diagnostic evidence with `resource_fit=1/1`,
+`over_budget=0`, and `ii_caveated=0`. This is not a validation-roster
 promotion, full roster refresh, board execution, or generic FixPt tail support.
 
 Current validation-tooling update, 2026-07-05: Rust commit `38ade9d2`
@@ -983,14 +985,16 @@ non-roster `MatrixTileMemFoldOuterKInPlaceFixPt24x20x12Tile8x5x4` Tile-K
 parameter perturbation proof gate. The newest local semantic canary is
 `MatrixTileMemFoldTailFixPt5x7x5`, which proves exact FixPt non-outer-K tail
 MemFold locally through parser, classifier proof, checked IR, HLS/manifest, and
-host compile/run. It is a new generated-HLS surface, but validation roster
-membership and imported Vitis evidence remain unchanged. The natural next
-implementation action is to run EC2/Vitis for this exact canary before any
-vendor-readiness or roster-promotion claim, or choose one bounded
-helper-boundary cleanup with local equality gates. Do not spend the next step
-optimizing `par4x16` DSP use unless the research goal shifts toward
-board-fit implementation; the validator now keeps that caveat visible while the
-compiler surface continues to deepen.
+host compile/run. It also has one-kernel EC2/Vitis evidence in
+`docs/vitis-validation/2026-07-05-fixpt-tail-oneoff/`, and the Rust validator
+now revalidates that proof as selected diagnostic evidence with
+`resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`. It remains outside
+the 39-program validation roster. The next implementation action is either an
+explicit roster promotion with a full current-head refresh, or a bounded
+compiler-interface cleanup such as resolved-name reduction/fold facts. Do not
+spend the next step optimizing `par4x16` DSP use unless the research goal
+shifts toward board-fit implementation; the validator now keeps that caveat
+visible while the compiler surface continues to deepen.
 
 Current local diagnostic update: the Rust branch now also has
 `MatrixTileMemFoldOuterKRowColTailInPlacePar2x8FixPt33x35x34`, a selected-plan
