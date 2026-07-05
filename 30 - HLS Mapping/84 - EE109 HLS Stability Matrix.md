@@ -47,6 +47,15 @@ emits II-violation warnings and the report estimates 256 DSP against 220
 available, so this is HLS-acceptance evidence rather than resource-fit
 implementation evidence.
 
+Current evidence-quality update, 2026-07-05: Rust commit `88c7df1a`
+(`Report Vitis resource quality caveats`) extends the local Vitis evidence
+parser and validator to read resource totals, available resources,
+utilization, II-violation warning counts, and max final II from the stable
+reports/logs. The active 38-program bundle now validates with
+`resource_fit=37/38`, `over_budget=1`, and `ii_caveated=14`. This is a
+machine-readable quality boundary over the existing evidence, not a fresh
+EC2/Vitis execution or board-fit claim.
+
 Current local no-fresh-Vitis update, 2026-07-04: Rust commit `89b637ed`
 hardens the raw Lab2 fixed GEMM ingress. The `Lab2Part5GEMM` /
 `Lab2Part6GEMM` adapter now proves runtime profile facts and the exact `Accel`
@@ -876,10 +885,11 @@ it as the vendor-stability anchor for the current EE109 MVP roster.
 
 The latest validation-roster step promoted the exact full-K Tile-K `par4x16`
 schedule canary into the official roster with EC2/Vitis evidence. The natural
-next implementation action is another bounded proof/helper-boundary slice with
-local equality gates, or a deliberately chosen next semantic canary that
-expands the reusable Rust compiler surface without widening raw Scala adapters
-by token matching.
+next implementation action is Tile-K role-driven phase recognition or another
+bounded proof/helper-boundary slice with local equality gates. Do not spend the
+next step optimizing `par4x16` DSP use unless the research goal shifts toward
+board-fit implementation; the validator now keeps that caveat visible while
+the compiler surface continues to deepen.
 Byte-stable refactors should keep using local equality, dry-run/plan, full
 test, clippy, and evidence-validator gates; any generated-HLS text change or
 validation-roster change should trigger a fresh EC2/Vitis execution.

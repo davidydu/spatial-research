@@ -48,6 +48,11 @@ acceptance for the exact roster
 only, not board execution, implementation, resource fit, timing closure, performance
 optimality, generic Spatial compatibility, or broad Scala source
 compatibility.
+Follow-up Rust commit `88c7df1a` (`Report Vitis resource quality caveats`)
+does not rerun Vitis, but makes that boundary machine-readable: the local
+evidence validator now parses stable csynth reports and Vitis logs and reports
+the active bundle as `resource_fit=37/38`, `over_budget=1`, and
+`ii_caveated=14`.
 The exact full-K Tile-K schedule canary
 `MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32` preserves
 `partial_row_par=4` and `partial_col_par=16` through checked IR and lowers them

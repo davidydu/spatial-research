@@ -9,6 +9,34 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite Vitis evidence-quality classification
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `88c7df1a`
+  (`Report Vitis resource quality caveats`).
+- Extended the Vitis log/report parser to capture II-violation warning counts,
+  max final II, resource totals, available resources, utilization percentages,
+  and over-budget resource names from the stable copied evidence.
+- Added a repo-local evidence-quality summary used by
+  `run-vitis-validation --validate-evidence`; the active 38-program bundle now
+  reports `resource_fit=37/38`, `over_budget=1`, and `ii_caveated=14`.
+- Added focused tests proving the `par4x16` evidence records 256 DSP against
+  220 available, is the only over-resource-budget kernel in the current
+  roster, and remains an HLS-accepted but not board-fit canary.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation par4x16 -- --nocapture`;
+  `cargo test --locked -p ee109-examples --test run_vitis_validation run_vitis_validation_validate_evidence_accepts_current_38_checkpoint -- --nocapture`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-par4x16-38-program --mode both`;
+  `cargo fmt --all -- --check`;
+  `cargo test --locked --quiet`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary: this is local evidence parsing and quality classification over the
+  existing 2026-07-05 Vitis evidence. It is not a fresh EC2/Vitis execution,
+  Vivado implementation, board-fit proof, or performance optimization.
+
 ## 2026-07-05 -- Rust rewrite raw Lab3 Scala ingress retirement
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
