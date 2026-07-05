@@ -9,6 +9,55 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite raw Lab3 Scala ingress retirement
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `22743e784955c8583e8694262f65b3af0a732a6d`
+  (`Retire raw Lab3 Scala ingress`).
+- Retired the local teaching raw
+  `@spatial class Lab3Part1Convolution` Scala wrapper from quarantined source
+  ingress, including the formerly accepted static-border spelling.
+- Removed the now-dead `frontend::lab3_stencil_bridge` module and deleted the
+  raw Lab3 shell/local-window proof island from `source_adapter.rs`; canonical
+  Rust frontend/HIR `kernel Lab3Part1Convolution` remains accepted.
+- Kept `Lab3Part1Convolution` reserved, kept the Lab3 classifier routed through
+  the shared `Stencil2dSobelProof`, and preserved generated HLS, manifest,
+  host-harness behavior, validation roster membership, and imported Vitis
+  evidence.
+- Red checks:
+  `cargo test --locked -p spatial-rs-core retired_low_value_raw_scala_wrappers_stay_outside_quarantined_registry -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core parse_accel_rejects_retired_raw_lab3_part1_convolution -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab3_raw_part1_convolution_is_retired_from_quarantined_source_ingress -- --nocapture`
+  first failed because raw Lab3 still canonicalized to the checked Lab3
+  payload.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core retired_low_value_raw_scala_wrappers_stay_outside_quarantined_registry -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core retired_local_lab3_static_border_wrapper_stays_outside_quarantined_registry -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core parse_accel_rejects_retired_raw_lab3_part1_convolution -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core parse_accel_rejects_retired_raw_lab3_static_kernel_border_expression -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab3_raw_part1_convolution_is_retired_from_quarantined_source_ingress -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab3_raw_part1_convolution_static_border_is_retired_from_quarantined_source_ingress -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core source_adapter -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core lab3 -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab3 -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core parse_accel_accepts_exact_raw_lab2_part5_gemm_fixed_32 -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core parse_accel_accepts_exact_raw_lab2_part6_gemm_as_scheduled_payload -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part5_fixed_32_preserves_outer_k_hls_and_manifest -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part6_fixed_32_emits_scheduled_hls_and_manifest -- --nocapture`;
+  `cargo fmt --all -- --check`;
+  `cargo test --locked --quiet`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_a62eb274_checkpoint -- --nocapture`;
+  `cargo test --locked -p ee109-examples validation_programs_include_supported_features_after_adapter_baseline -- --nocapture`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary: this is a Scala-ingress retirement and documentation update; it
+  does not change accepted canonical Rust Lab3 syntax, generated HLS,
+  manifests, validation roster membership, or fresh EC2/Vitis evidence. The
+  active vendor anchor remains the imported `a62eb274` 37-program checkpoint
+  pending future HLS testing.
+
 ## 2026-07-05 -- Rust rewrite reserved-label fallthrough audit
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
