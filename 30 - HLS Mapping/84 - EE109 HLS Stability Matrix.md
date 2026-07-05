@@ -43,21 +43,30 @@ fixed-point-policy 37-program checkpoint, and also supersedes the earlier
 acceptance evidence, not board/resource-fit implementation evidence for the
 two over-DSP Tile-K schedules.
 
-Current local frontend/HIR cleanup, 2026-07-05: Rust commit `879e8c21`
-(`Resolve ScalarExpr proof facts`) moves `ScalarExpr v0` onto resolver-backed
+Current local frontend/HIR cleanup, 2026-07-05: Rust commit `c344521b`
+(`Resolve ControlFsm proof facts`) moves `ControlFsm v0` and the exact Lab2
+FSM adapters onto resolver-backed output/scratch/reg/state symbols, FSM loop
+domain, scratch write effects, reg-value read facts, and final output
+store-range facts before checked IR emission. It preserves the same checked
+payloads and HLS contract. The resolver now explicitly proves the canonical
+feature body has three state-indexed scratch writes, one reg-value read, and
+one final full-range store, while the alternate Lab2 FSM body has four
+state-indexed scratch writes, zero reg-value reads, and the same final store.
+Local core, HLS ControlFsm equality, evidence-validator, full workspace,
+clippy, fmt, and diff checks pass.
+This does not add a validation roster member, fresh EC2/Vitis evidence,
+generated HLS changes, manifest changes, generic FSM scheduling, arbitrary
+registers/conditionals/effects, board execution, or broader Scala source
+compatibility.
+
+Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `879e8c21`
+(`Resolve ScalarExpr proof facts`) moved `ScalarExpr v0` onto resolver-backed
 scalar input/output roles, symbols, `Int` types, port ordinals, expression read
 symbols, integer expression counts, and zero memory access/effect facts before
-checked IR emission. It preserves the same checked payload and HLS contract.
-The resolver now explicitly proves the `ScalarAffine4` reads map to the
-accepted scalar input ports in source order, the scalar output is distinct, and
-duplicate input/output names fail with `spatial:E0302` at the resolver layer.
-Local core, HLS scalar equality, evidence-validator, full workspace, clippy,
-fmt, and diff checks pass.
-This does not add a validation roster member, fresh EC2/Vitis evidence,
-generated HLS changes, manifest changes, broader scalar syntax, memory support
-inside `ScalarExpr`, board execution, or broader Scala source compatibility.
+checked IR emission without changing generated HLS, manifests,
+validation-roster membership, or vendor-HLS evidence.
 
-Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `5b6d9d3c`
+Earlier local frontend/HIR cleanup, 2026-07-05: Rust commit `5b6d9d3c`
 (`Resolve LUT proof facts`) moved `LutLookup v0` and the Lab2 LUT adapters onto
 resolver-backed table/input/row/column/output symbols plus rank-2 table read
 index facts before checked IR emission without changing generated HLS,

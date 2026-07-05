@@ -9,6 +9,44 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite ControlFsm resolved-proof cleanup
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `c344521b`
+  (`Resolve ControlFsm proof facts`).
+- `ControlFsm v0` and the Lab2 FSM adapters now record resolver-backed
+  output/scratch/reg/state symbols, the FSM loop domain, scratch write effects,
+  reg-value read facts, and final output store-range facts before producing the
+  same checked ControlFsm or exact Lab2 FSM payloads. Accepted syntax is not
+  broadened.
+- New fail-closed coverage:
+  the proof asserts the canonical feature body has three state-indexed scratch
+  writes, one reg-value read, and one final full-range store, while the alternate
+  Lab2 FSM body has four state-indexed scratch writes, zero reg-value reads, and
+  the same final full-range store. Resolver diagnostics are consumed only after
+  the existing exact structural guard, preserving ControlFsm feature diagnostic
+  priority for malformed names/shapes.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core control_fsm_proof -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core control_fsm -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen control_fsm -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_00797aed_checkpoint -- --nocapture`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo test --locked --workspace`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary:
+  this is a local compiler-interface/proof cleanup only. It does not add
+  syntax, validation-roster members, generated HLS changes, manifest changes,
+  fresh EC2/Vitis evidence, board execution, generic FSM scheduling, arbitrary
+  registers/conditionals/effects, or broad Scala source compatibility. The
+  active vendor-HLS anchor remains
+  `docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
+
+---
+
 ## 2026-07-05 -- Rust rewrite ScalarExpr resolved-proof cleanup
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
