@@ -5703,3 +5703,53 @@ Boundary:
   validation membership did not change.
 - The imported `a62eb274` 37-program current-head checkpoint remains the active
   vendor-HLS anchor.
+
+## 2026-07-05 -- Rust rewrite moves Lab2 GEMM frontend profiles into bridge
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `edb27825c93e1057f9c3c788c7350bd499e08cbf` (`Move Lab2 GEMM
+  frontend bridge profiles`) moves the quarantined Lab2 GEMM raw-adapter
+  frontend source/profile construction into `frontend::lab2_gemm_bridge`.
+- `source_adapter` now proves the exact raw Scala wrapper/scaffold/body,
+  selects the Lab2 Part5/Part6 bridge target and fixed/K-tail/row-col-K-tail
+  profile, and delegates generated frontend source plus expected Tile-K
+  profile construction to the bridge.
+- Added a bridge-local test that parses all six Part5/Part6 raw-adapter
+  frontend profiles and checks the expected Tile-K profile for each.
+- Updated the Rust rewrite roadmap to record that Lab2 GEMM raw-adapter
+  frontend source/profile construction now belongs to the bridge boundary.
+
+Proof:
+- The red check
+  `cargo test --locked -p spatial-rs-core lab2_gemm_bridge_builds_raw_adapter_frontend_profiles -- --nocapture`
+  initially failed at compile time because the bridge-owned target/profile API
+  and frontend-profile builder did not exist.
+- Focused green checks passed:
+  `cargo test --locked -p spatial-rs-core lab2_gemm_bridge_builds_raw_adapter_frontend_profiles -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core lab2_fixed_gemm_source_proof_carries_frontend_boundary -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core lab2_fixed_gemm -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core lab2_gemm_bridge -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core source_adapter -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core parse_accel_lab2_outer_k -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_raw_part -- --nocapture`,
+  and
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k_part6_structural_par -- --nocapture`.
+- Broader local verification passed:
+  `cargo test --locked --quiet`,
+  `cargo fmt --all -- --check`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  and `git diff --check` in the Rust repo.
+
+Boundary:
+- This is a compiler-boundary cleanup for the already-supported Lab2 GEMM
+  profiles. It does not add new raw Scala spellings, new validated programs,
+  or new HLS features.
+- It preserves the existing Lab2 Part5/Part6 generated HLS and manifest
+  behavior under the local HLS regression tests.
+- No fresh EC2/Vitis run was needed because HLS output and validation
+  membership did not change.
+- The imported `a62eb274` 37-program current-head checkpoint remains the active
+  vendor-HLS anchor.
