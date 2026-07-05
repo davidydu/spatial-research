@@ -9,6 +9,41 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite rank-2 HLS access-plan helper
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `e360bd71`
+  (`Add rank2 HLS access plan helper`).
+- Added a shared HLS plan-layer `Rank2HlsAccessPlan` view for global
+  row/column/K expressions and the common local row-major tile offset used by
+  `Dense2dTileScalarMul`, `Dense2dTileDotAccum`, non-outer-K
+  `Dense2dTileMemFold`, and `Dense2dTileKMemFold`.
+- Replaced repeated plan-lowering offset setup with the shared helper while
+  preserving the existing renderer-facing strings (`lhs_index_expr`,
+  `rhs_index_expr`, C/output index expressions, and local index expressions).
+  Each lowered plan now debug-checks its public access view against the helper.
+- Added RED/green coverage
+  `rank2_hls_access_plan_helper_owns_shared_tile_offsets`.
+- Verification passed:
+  RED/green `cargo test --locked -p spatial-rs-hls rank2_hls_access_plan_helper_owns_shared_tile_offsets -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls plan::tests::rank2 -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation -- --nocapture`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary:
+  this is a no-HLS-drift HLS plan-helper cleanup. It does not add accepted
+  syntax, checked payloads, generated HLS, manifest changes,
+  validation-roster members, imported Vitis evidence, board execution, or
+  broader generic Spatial `MemFold` support. The active vendor anchor remains
+  `docs/vitis-validation/2026-07-05-current-head-35c6944a-39-program/`.
+
+---
+
 ## 2026-07-05 -- Rust rewrite rank-2 local-compute proof records
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

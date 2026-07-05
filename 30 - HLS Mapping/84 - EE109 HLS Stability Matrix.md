@@ -43,6 +43,18 @@ fixed-point-policy 37-program checkpoint, and also supersedes the earlier
 acceptance evidence, not board/resource-fit implementation evidence for the
 two over-DSP Tile-K schedules.
 
+Current local HLS plan cleanup, 2026-07-05: Rust commit `e360bd71`
+(`Add rank2 HLS access plan helper`) adds a shared `Rank2HlsAccessPlan` view for
+global row/column/K expressions and the common local row-major tile offset used
+by rank-2 tiled scalar-mul, dot-accum, non-outer-K MemFold, and Tile-K MemFold
+plan lowering. Existing renderer-facing index-expression fields stay in place,
+and each lowered plan debug-checks its access view against the helper. Rank-2
+plan tests, full HLS codegen snapshots, Vitis evidence validators, full
+workspace, clippy, fmt, and diff checks pass.
+This does not add a validation roster member, generated HLS changes, manifest
+changes, board execution, Vivado implementation, timing closure, or automatic
+schedule lowering.
+
 Current local frontend/HIR cleanup, 2026-07-05: Rust commit `e358bfd1`
 (`Record rank2 local compute proofs`) promotes the shared rank-2 local-compute
 matchers from boolean gates into proof-producing helpers. Tile-K fold/update now
@@ -1144,19 +1156,18 @@ the two over-DSP Tile-K schedules separately from HLS acceptance.
 
 The latest validation-roster steps promoted the exact full-K Tile-K `par4x16`
 schedule canary and the non-Part6 `par4x8` row/column/K-tail canary into the
-official roster with EC2/Vitis evidence. The latest local compiler steps
-completed bounded no-HLS-drift structural-recovery and proof/equality slices,
-then added Rust commit `2e0ad39e`, which gives the shared rank-2
-partial-product and accumulation-update fact matchers neutral parent-side names
-instead of Tile-K-only names. Par2x8 remains diagnostic-only unless we
-explicitly decide to promote it and pay for a fresh full-roster EC2/Vitis
-refresh. The next implementation action is therefore compiler-interface
-expansion while leaving Par2x8 diagnostic-only. The strongest near-term
-candidates are the rank-2 GEMM HLS access-plan helper and the next bounded
-frontend/HIR proof boundary for EE109-style kernels. Do not spend the next step
-optimizing `par4x16` DSP use unless the research goal shifts toward board-fit
-implementation; the validator now keeps that caveat visible while the compiler
-surface continues to deepen.
+official roster with EC2/Vitis evidence. The latest local compiler steps then
+finished the shared rank-2 local-compute naming cleanup, recorded rank-2
+local-compute proof objects inside the Tile-K fold/update proof, and added the
+rank-2 HLS access-plan helper at Rust commit `e360bd71`. Par2x8 remains
+diagnostic-only unless we explicitly decide to promote it and pay for a fresh
+full-roster EC2/Vitis refresh. The next implementation action should therefore
+be either a selected semantic-support slice with source corpus, fail-closed
+negative, host harness, dry-run/plan gate, and selected Vitis gate, or a
+deliberate evidence refresh when generated validation HLS or roster membership
+changes. Do not spend the next step optimizing `par4x16` DSP use unless the
+research goal shifts toward board-fit implementation; the validator now keeps
+that caveat visible while the compiler surface continues to deepen.
 
 Current local diagnostic update: the Rust branch now also has
 `MatrixTileMemFoldOuterKRowColTailInPlacePar2x8FixPt33x35x34`, a selected-plan
