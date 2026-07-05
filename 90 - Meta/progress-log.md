@@ -9,6 +9,39 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite scalar reduction/fold alias-bound cleanup
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `9797d162`
+  (`Accept scalar reduction alias bounds`).
+- `ScalarReduce v0` no longer requires the loop bound constants to be literally
+  named `N` and `P`. The classifier resolves the identifiers used by the
+  reduce expression itself, so equivalent Rust-subset spellings such as
+  `LEN`/`LANES` reach the same checked payload.
+- `ScalarFold v0` similarly resolves the fold length, tile step, inner reduce
+  tile bound, and `par` identifier from source facts, so equivalent spellings
+  such as `LEN`/`BLOCK`/`LANES` are accepted when the resolved values match the
+  existing narrow contract.
+- Added accept tests for both alias-bound spellings and fail-closed tests for
+  alias `LANES = 2`. Canonical `N`/`TILE`/`P` spellings still pass.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core resolved_alias_bounds -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core scalar_reduce -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core scalar_fold -- --nocapture`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary:
+  this is a frontend/HIR classifier cleanup only. It does not add generic
+  reductions, arbitrary reduce/fold bodies, non-unit `par`, tail tiles, new
+  validation-roster members, fresh EC2/Vitis evidence, board execution, or
+  broader Scala source compatibility.
+
+---
+
 ## 2026-07-05 -- Rust rewrite FixPt tail diagnostic evidence revalidation
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

@@ -647,13 +647,16 @@ Additional repo evidence:
 - `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-28-scalar-reduce-v0/`
 
 `ScalarReduce v0` covers exactly one scalar `Int` output assigned by
-`out := reduce i in 0..N par P { i }` with static `1 <= N <= 65536`,
-`P == 1`, no inputs, no DRAM ports, and no local memories. It rejects
-output-name collisions with generated HLS temporaries and overflow-sized `N`.
-It still does not claim generic `Reduce`, `Fold`, `MemReduce`, `MemFold`,
-arbitrary reduce bodies, input-DRAM reductions, non-unit `par`, unbounded `Int`
-accumulation, board execution, Vivado implementation, place-and-route, or
-timing closure.
+`out := reduce i in 0..<len> par <par> { i }` with resolved static constant
+values `1 <= len <= 65536` and `par == 1`, no inputs, no DRAM ports, and no
+local memories. The validation representative still spells those constants
+`N` and `P`, but Rust commit `9797d162` now accepts equivalent Rust-subset
+constant names such as `LEN` and `LANES` by resolving the identifiers used in
+the reduce syntax. It rejects output-name collisions with generated HLS
+temporaries and overflow-sized lengths. It still does not claim generic
+`Reduce`, `Fold`, `MemReduce`, `MemFold`, arbitrary reduce bodies, input-DRAM
+reductions, non-unit `par`, unbounded `Int` accumulation, board execution,
+Vivado implementation, place-and-route, or timing closure.
 
 Follow-up scalar-fold supported-feature run:
 
@@ -668,14 +671,18 @@ Additional repo evidence:
 
 - `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-06-28-scalar-fold-v0/`
 
-`ScalarFold v0` covers exactly one rank-1 `Dram<Int>[N]` input and one scalar
+`ScalarFold v0` covers exactly one rank-1 `Dram<Int>[len]` input and one scalar
 `Int` output assigned by a tiled fold around a rank-1 indexed reduction:
-`out := fold outer in 0..N step TILE { reduce inner in 0..TILE par P { src[outer + inner] } }`.
-It requires static `1 <= N <= 65536`, `TILE > 0`, `N % TILE == 0`, and
-`P == 1`. It still does not claim generic `Fold`, generic `Reduce`,
-`MemReduce`, `MemFold`, arbitrary bodies, tail tiles, rank-2 inputs,
-non-unit `par`, unbounded `Int` accumulation, board execution, Vivado
-implementation, place-and-route, or timing closure.
+`out := fold outer in 0..<len> step <tile> { reduce inner in 0..<tile> par <par> { src[outer + inner] } }`.
+It requires resolved static constant values `1 <= len <= 65536`, `tile > 0`,
+`len % tile == 0`, a matching inner reduce tile bound, and `par == 1`. The
+validation representative still spells those constants `N`, `TILE`, and `P`,
+but Rust commit `9797d162` now accepts equivalent Rust-subset names such as
+`LEN`, `BLOCK`, and `LANES` by resolving the identifiers used in the
+fold/reduce syntax. It still does not claim generic `Fold`, generic `Reduce`,
+`MemReduce`, `MemFold`, arbitrary bodies, tail tiles, rank-2 inputs, non-unit
+`par`, unbounded `Int` accumulation, board execution, Vivado implementation,
+place-and-route, or timing closure.
 
 Follow-up memory-reduction semantic-canary run:
 

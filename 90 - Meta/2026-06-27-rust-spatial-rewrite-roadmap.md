@@ -70,6 +70,12 @@ outside the 39-program validation roster, but selected EC2/Vitis evidence in
 `docs/vitis-validation/2026-07-05-selected-par2x8-row-col-tail-f920a754/`
 validates the requested `partial_row_par=2` / `partial_col_par=8` schedule as
 `resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`.
+The latest frontend/HIR cleanup is Rust commit `9797d162` (`Accept scalar
+reduction alias bounds`). `ScalarReduce v0` and `ScalarFold v0` now resolve the
+constant identifiers used in their reduce/fold syntax, accepting equivalent
+Rust-subset names such as `LEN`/`LANES` and `LEN`/`BLOCK`/`LANES` while keeping
+the same narrow checked payloads, canonical validation representatives, and
+historical Vitis evidence.
 The previous local frontend/HIR foundation cleanup is Rust commit `2a7fe3bb`
 (`Retire duplicate raw GEMM tile proof`). It removes the private raw-adapter
 Tile-K tile-I/O role proof object from `source_adapter.rs`; the quarantined
