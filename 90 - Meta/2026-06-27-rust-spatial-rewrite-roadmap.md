@@ -72,18 +72,17 @@ outside the 39-program validation roster, but selected EC2/Vitis evidence in
 `docs/vitis-validation/2026-07-05-selected-par2x8-row-col-tail-f920a754/`
 validates the requested `partial_row_par=2` / `partial_col_par=8` schedule as
 `resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`.
-The latest local frontend/HIR cleanup is Rust commit `c6f2096d` (`Resolve SRAM
-tile fold proof facts`). `ScalarSramTileFold v0` now records resolver-backed
+The latest local frontend/HIR cleanup is Rust commit `fcdfed4c` (`Resolve
+DRAM2d copy proof facts`). `Dram2dCopy v0` now records resolver-backed
+row/column loop domains, input/output symbols, static bounds, and same-statement
+rank-2 global-write/global-read access facts before checked IR emission.
+Loop-index names that shadow the `ROWS`/`COLS` constants now fail via resolver
+diagnostics. This does not change generated HLS, manifests, validation-roster
+membership, or vendor-HLS evidence.
+The previous local frontend/HIR cleanup is Rust commit `c6f2096d` (`Resolve
+SRAM tile fold proof facts`). `ScalarSramTileFold v0` records resolver-backed
 fold/reduce loop facts, the unit-stride DRAM tile-load range, and the inner
-`tile[inner]` read before checked IR emission. Loop-index names that shadow the
-length/tile constants now fail via resolver diagnostics, and literal
-`outer + 16` tile-load bounds remain fail-closed. This does not change
-generated HLS, manifests, validation-roster membership, or vendor-HLS evidence.
-The previous local frontend/HIR cleanup is Rust commit `7e221d11` (`Resolve
-scalar reduction proof facts`). `ScalarReduce v0` records resolver-backed
-reduce loop-domain and schedule facts, while `ScalarFold v0` records
-resolver-backed outer-fold / inner-reduce loop facts and validates the
-`src[outer + inner]` rank-1 input read through shared affine access facts.
+`tile[inner]` read before checked IR emission.
 The latest Lab2/Tile-K frontend cleanup is Rust commit `224d7a76` (`Accept
 hoisted Tile-K tail lhs load`). It accepts `row_limit` and `tileA_sram load` at
 tile-row scope before the column tile loop while keeping `col_limit`, B/C

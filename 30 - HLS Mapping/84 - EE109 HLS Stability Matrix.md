@@ -43,18 +43,19 @@ fixed-point-policy 37-program checkpoint, and also supersedes the earlier
 acceptance evidence, not board/resource-fit implementation evidence for the
 two over-DSP Tile-K schedules.
 
-Current local frontend/HIR cleanup, 2026-07-05: Rust commit `c6f2096d`
-(`Resolve SRAM tile fold proof facts`) moves `ScalarSramTileFold v0` onto
-resolver-backed fold/load/reduce proof facts before checked IR emission. It
-records the fold/reduce loop-domain facts, unit-stride DRAM tile-load range,
-and inner `tile[inner]` read while keeping the same checked payload and HLS
-contract. Loop-index names that shadow the length/tile constants now fail
-through the resolver with `spatial:E0302`, and literal `outer + 16` tile-load
-bounds remain fail-closed. Local core, HLS equality, validation-roster, dry-run,
-evidence-validator, full workspace, clippy, fmt, and diff checks pass.
+Current local frontend/HIR cleanup, 2026-07-05: Rust commit `fcdfed4c`
+(`Resolve DRAM2d copy proof facts`) moves `Dram2dCopy v0` onto
+resolver-backed row/column loop and rank-2 copy access facts before checked IR
+emission. It records the input/output symbols, loop domains, static bounds,
+and same-statement global-write/global-read access facts while keeping the same
+checked payload and HLS contract. Loop-index names that shadow the `ROWS` or
+`COLS` constants now fail through the resolver with `spatial:E0302`. Local
+core, HLS equality, evidence-validator, full workspace, clippy, fmt, and diff
+checks pass.
 This does not add a validation roster member, fresh EC2/Vitis evidence,
-generated HLS changes, manifest changes, generic Spatial `Fold`/`Reduce`,
-board execution, or broader Scala source compatibility.
+generated HLS changes, manifest changes, generic rank-2 memory lowering,
+aliases/in-place semantics, board execution, or broader Scala source
+compatibility.
 
 Current promoted Vitis update, 2026-07-05: the Rust rewrite now accepts
 and validates the exact full-K Tile-K schedule canary

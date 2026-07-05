@@ -9,6 +9,41 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite Dram2d copy resolved-proof cleanup
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `fcdfed4c`
+  (`Resolve DRAM2d copy proof facts`).
+- `Dram2dCopy v0` now records resolver-backed row/column loop-domain facts,
+  loop-index symbols, static row/column bounds, and a shared rank-2
+  global-write/global-read copy access fact before producing the same checked
+  `Dram2dCopy` payload. The original structural row-major shape guard remains
+  in place, so accepted syntax is not broadened.
+- New fail-closed coverage:
+  row or column loop indices that shadow the `ROWS`/`COLS` shape constants fail
+  through resolver diagnostics with `spatial:E0302` on both the private
+  classifier proof and public `parse_accel` path.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core dram2d -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core rank2_row_major_copy -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen matrix_copy -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_00797aed_checkpoint -- --nocapture`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary:
+  this is a local compiler-interface/proof cleanup only. It does not add
+  syntax, validation-roster members, generated HLS changes, manifest changes,
+  fresh EC2/Vitis evidence, board execution, generic rank-2 memory lowering,
+  aliases/in-place semantics, or broad Scala source compatibility. The active
+  vendor-HLS anchor remains
+  `docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
+
+---
+
 ## 2026-07-05 -- Rust rewrite SRAM tile-fold resolved-proof cleanup
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
