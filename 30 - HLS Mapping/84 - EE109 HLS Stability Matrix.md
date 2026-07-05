@@ -100,6 +100,19 @@ with max final II 16 on the final C writeback loop. Durable evidence:
 This proves selected-run caveat accounting; it is still HLS-acceptance
 evidence, not board-fit implementation evidence.
 
+Current selected-run scheduled-tail update, 2026-07-05: source commit
+`f2833216` was used to run
+`MatrixTileMemFoldOuterKRowColTailInPlacePart6ScheduledFixPt33x35x34` through
+the selected-kernel EC2/Vitis lane. The selected run passed `csim_design` and
+`csynth_design` with return code 0, estimated Fmax 136.99 MHz, 10 ns target
+clock, 7.300 ns estimated clock, and resource fit true on `xc7z020-clg400-1`.
+The local selected validator reports
+`kernels=1 resource_fit=1/1 over_budget=0 ii_caveated=0`. Durable evidence:
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-selected-scheduled-row-col-k-tail-f2833216/`.
+This proves selected-run evidence quality for the exact fixed `33x35x34`
+scheduled row/column/K-tail canary; it is not arbitrary tail support, a
+full-roster refresh, board execution, Vivado implementation, or timing closure.
+
 Current local no-fresh-Vitis update, 2026-07-05: Rust commit `4834a9c8`
 (`Recover dense MemFold tail bounds by role`) hardens the non-outer-K
 `Dense2dTileMemFold` classifier/proof boundary for the local

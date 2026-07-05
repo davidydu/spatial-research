@@ -6587,3 +6587,49 @@ Boundary:
 - This is not raw Scala compatibility, generic Spatial `MemFold`, `numel_k`
   tail semantics, Part6 `par`, inferred banking, dynamic dimensions, board
   execution, resource fit, or timing evidence.
+
+## 2026-07-05 -- Selected scheduled row/column/K-tail Vitis proof
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Source commit `f2833216` (`Record selected par4x16 Vitis caveats`) was used
+  to run
+  `MatrixTileMemFoldOuterKRowColTailInPlacePart6ScheduledFixPt33x35x34`
+  through the selected-kernel EC2/Vitis lane.
+- The run used the exact `run-vitis-validation --kernel` path and passed
+  `csim_design` plus `csynth_design` on Vitis 2025.1 for `xc7z020-clg400-1`.
+- Durable compact evidence is captured in
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-selected-scheduled-row-col-k-tail-f2833216/`.
+
+Proof:
+- EC2 selected plan-only:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --plan-only --mode both --kernel MatrixTileMemFoldOuterKRowColTailInPlacePart6ScheduledFixPt33x35x34 --out target/vitis-validation-selected-row-col-k-tail-part6-f2833216-plan`
+- EC2 selected execute:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --kernel MatrixTileMemFoldOuterKRowColTailInPlacePart6ScheduledFixPt33x35x34 --out target/vitis-validation-selected-row-col-k-tail-part6-f2833216-run`
+- EC2 selected validator:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence target/vitis-validation-selected-row-col-k-tail-part6-f2833216-run --kernel MatrixTileMemFoldOuterKRowColTailInPlacePart6ScheduledFixPt33x35x34 --mode both`
+- Validator result:
+  `kernels=1 resource_fit=1/1 over_budget=0 ii_caveated=0`.
+- EC2 compatibility smoke:
+  `cargo test --locked -p ee109-examples --test ec2_toolchain_compat -- --nocapture`
+
+Measured HLS result:
+- Return code 0.
+- `csim_design` passed with `CSim done with 0 errors`.
+- `csynth_design` finished.
+- Estimated Fmax 136.99 MHz.
+- Estimated clock 7.300 ns against a 10.00 ns target.
+- Resource summary: 58 BRAM_18K, 131 DSP, 19307 FF, 13628 LUT, 0 URAM.
+- No selected-run II caveats were reported.
+
+Boundary:
+- This proves the selected-run Vitis lane and evidence-quality accounting for
+  the fixed `33x35x34`, `partial_row_par=2` / `partial_col_par=16` scheduled
+  row/column/K-tail Tile-K profile with runtime `row_limit`, `col_limit`, and
+  `numel_k` guards.
+- It is not a full-roster refresh, board execution, Vivado implementation,
+  timing closure, arbitrary row/column/K-tail support, inferred banking or
+  schedule policy, generic Spatial `MemFold`, or broad Scala source
+  compatibility.
