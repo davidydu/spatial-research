@@ -9,6 +9,44 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite rank-2 local-compute proof helper cleanup
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `3e7bb919`
+  (`Share rank2 local compute lane proofs`).
+- Added shared rank-2 local compute proof helpers in
+  `crates/spatial-rs-core/src/classifier/rank2_access.rs`:
+  `rank2_local_product_lanes` for
+  `dst[row,col] := lhs[row,k] * rhs[k,col]`, and
+  `rank2_local_accumulation_lanes` for
+  `dst[row,col] := dst[row,col] + partial[row,col]`.
+- Routed the Tile-K partial-product and C-accumulation resolved-fact checks
+  through those helpers after the existing structural `*` / `+` syntax guards.
+- Added helper-level acceptance coverage for both Tile-K and non-outer-K
+  `Dense2dTileMemFold`, plus fail-closed negative tests for wrong RHS-K,
+  wrong LHS-K, wrong RHS-column, and wrong partial-read lanes.
+- A GPT-5.5 xhigh review subagent found no blocking issues and recommended the
+  two added product-lane negative tests.
+- Verification passed:
+  `cargo test -p spatial-rs-core --locked rank2_local_product_lanes -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked rank2_local_accumulation_lanes -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked tile_k_partial_product_fact -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked tile_k_c_accumulation_fact -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked tile_k_fold_update -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked rank2_tile_memfold -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen tile_k -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen memfold -- --nocapture`;
+  `cargo test --locked --workspace`;
+  `cargo fmt --all -- --check`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary:
+  this is a no-HLS-drift classifier reliability cleanup. It does not add new
+  accepted syntax, checked payloads, validation-program members, generated HLS,
+  imported Vitis evidence, or broader Spatial `MemFold` support.
+
 ## 2026-07-05 -- Rust rewrite selected par4x16 EC2/Vitis caveat proof
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
