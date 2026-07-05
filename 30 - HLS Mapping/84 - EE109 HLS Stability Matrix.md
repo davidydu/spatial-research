@@ -608,11 +608,13 @@ for that same scheduled Part6 payload. The Lab2-like outer-K frontend/HIR path
 now accepts infix tile IO, static offset-loop spelling, and tile-size-first or
 remaining-first static `numel_k = min(...)` spelling when the kernel name is the
 scheduled Part6 canary and the partial-tile fill loops carry literal `par 2`
-and `par 16`. Local parser/HIR/classifier tests prove equality with the raw
+and `par 16`, or parser-only `ROW_PAR` / `COL_PAR` aliases resolving to those
+same values. Local parser/HIR/classifier tests prove equality with the raw
 Part6 scheduled payload, and HLS tests prove generated C++ and manifest
-identity. This bridge does not add validation-program membership or a new
-emitted HLS surface, but the exact bridge commit was rerun through the full
-28-program EC2/Vitis lane; compact evidence is captured in
+identity. The alias widening is a no-HLS-drift source-admission slice: it does
+not add validation-program membership, change generated HLS/manifest output, or
+create fresh EC2/Vitis evidence. The earlier exact structural bridge commit was
+rerun through the full 28-program EC2/Vitis lane; compact evidence is captured in
 `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-02-part6-structural-408e21c/`.
 
 On 2026-07-01, the Rust rewrite added temporary source adapters for the

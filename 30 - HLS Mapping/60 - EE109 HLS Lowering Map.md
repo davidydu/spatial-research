@@ -53,7 +53,7 @@ This is the manager synthesis for the selected EE109 HLS MVP. The detailed evide
 | Comparisons and Boolean ops | Stage 3 | C++ boolean expressions. | Normalize `>` and `>=` as needed. | Mixed-type comparisons not normalized by staging. |
 | `mux` and scalar conditionals | Stage 3, Stage 4 | C++ ternary for side-effect-free values, structured `if` otherwise. | Preserve branch order when effects exist. | `OneHotMux` and priority mux policies. |
 | `abs` | Stage 4 | Signed integer ternary `(x < 0) ? -x : x`. | Use unsigned identity only when type evidence says unsigned. | Floating-point or rounding-sensitive absolute value. |
-| `par` | Stage 4 | Exact selected Part6 partial-tile loops lower to controller lane unrolling plus local-array partition pragmas. Other `par` sites remain fail-closed. | Rule-based partitioning from the checked lane count; current proven Part6 shape uses row `par 2` and column `par 16`. | Full Spatial alpha/N/B banking search, generic schedule inference, dynamic lane counts, and DSE parameter search. |
+| `par` | Stage 4 | Exact selected Part6 partial-tile loops lower to controller lane unrolling plus local-array partition pragmas. Source admission may use literal row `par 2` / column `par 16` or parser-only `ROW_PAR` / `COL_PAR` aliases resolving to those values. Other `par` sites remain fail-closed. | Rule-based partitioning from the checked lane count; current proven Part6 shape remains row `2` and column `16`. | Full Spatial alpha/N/B banking search, generic schedule inference, dynamic lane counts, and DSE parameter search. |
 
 ## Blocking Decisions Already Resolved For The MVP
 

@@ -5587,3 +5587,64 @@ Boundary:
   bodies, dynamic bounds, rank-2 reductions, scheduling, banking, broad Scala
   source compatibility, board execution, Vivado implementation, timing closure,
   or completion of the full Spatial rewrite.
+
+## 2026-07-05 -- Rust rewrite accepts const-backed Part6 par aliases
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `da2fa5905fa336bef5f62481b629a7c0387754ec` (`Accept
+  const-backed Part6 par aliases`) lets the narrow Lab2-like structural Part6
+  outer-K bridge accept parser-only `ROW_PAR` and `COL_PAR` constants for the
+  partial-tile MemFold `par` factors.
+- These aliases normalize to the existing checked schedule values,
+  `partial_row_par = 2` and `partial_col_par = 16`, before checked payload,
+  HLS generation, manifest comparison, and validation-roster handling.
+- The alias constants are filtered only when used by that bridge, preserving
+  the exact Tile-K classifier shape and preventing unused alias constants from
+  widening the accepted source surface.
+- Generic symbolic `par` factors such as `ROW_TILES` or `TILE_C`, unknown
+  aliases, unused alias constants, wrong alias values, one-sided partial par,
+  and outer-loop par remain fail-closed.
+- Updated the Rust README, fixture matrix, EE109 MVP plan, architecture note,
+  Tile-K contract design note, vault HLS lowering map, vault stability matrix,
+  vault roadmap, and this progress log.
+
+Proof:
+- Red checks first showed the old boundary was real:
+  `cargo test --locked -p spatial-rs-core parse_accel_lab2_outer_k_infix_tile_io_accepts_const_backed_part6_partial_par -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core parse_accel_lab2_outer_k_offset_loops_accept_const_backed_part6_partial_par -- --nocapture`,
+  and
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k_part6_structural_par_preserves_scheduled_hls_and_manifest -- --nocapture`
+  initially failed on the literal-only parser guard, then exposed the exact
+  nine-constant classifier gate before the alias filtering was added.
+- Focused green checks passed:
+  `cargo test --locked -p spatial-rs-core parse_accel_lab2_outer_k -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core parse_accel_accepts_exact_raw_lab2_part6_gemm_as_scheduled_payload -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core raw_lab2_part6_fixed_wrapper_near_misses_fail_closed -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core tile_k_fold_update -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core resolved_hir_records_foreach_schedule_facts -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls tile_k_memfold_plan_exposes -- --nocapture`,
+  `cargo test --locked -p ee109-examples validation_programs -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_a62eb274_checkpoint -- --nocapture`,
+  and
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation active_docs_name_a62eb274_as_current_vendor_anchor -- --nocapture`.
+- Broader local verification passed:
+  `cargo test --locked --quiet`,
+  `cargo fmt --all -- --check`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  `git diff --check` in the Rust repo,
+  and `git diff --check` in the vault.
+
+Boundary:
+- This is a parser/HIR compatibility slice for the already-supported Lab2
+  Part6 HLS schedule; it does not add generic symbolic `par`, generalized
+  scheduling, banking, arbitrary reduction bodies, new validation examples, or
+  any generated-HLS surface-area change.
+- No fresh EC2/Vitis run was needed for this slice because the accepted alias
+  source normalizes to the same checked payload and HLS/manifest as the
+  existing literal `par 2` / `par 16` Part6 program, and the validation roster
+  did not change.
+- The imported `a62eb274` 37-program current-head checkpoint remains the active
+  vendor-HLS anchor.

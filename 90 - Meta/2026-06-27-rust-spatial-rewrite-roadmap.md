@@ -354,9 +354,11 @@ equality.
 The structural Lab2-like outer-K bridge now reaches that same scheduled Part6
 payload for infix tile IO, static offset-loop, and tile-size-first or
 remaining-first static `numel_k = min(...)` source shapes when the partial-tile fill
-loops carry literal `par 2` / `par 16`. This remains an equality bridge with no
-new validation-program member or emitted-HLS surface, but the exact bridge
-commit now has a full 28-program EC2/Vitis refresh in
+loops carry literal `par 2` / `par 16` or parser-only `ROW_PAR` / `COL_PAR`
+aliases resolving to those values. This remains an equality bridge with no new
+validation-program member or emitted-HLS surface. The alias widening did not
+rerun vendor HLS; the earlier exact bridge commit has a full 28-program
+EC2/Vitis refresh in
 `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-02-part6-structural-408e21c/`.
 The next exact GEMM canary has landed locally as
 `MatrixTileMemFoldOuterKTailInPlacePart6ScheduledFixPt32x32x34`, combining the
