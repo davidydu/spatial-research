@@ -43,14 +43,18 @@ fixed-point-policy 37-program checkpoint, and also supersedes the earlier
 acceptance evidence, not board/resource-fit implementation evidence for the
 two over-DSP Tile-K schedules.
 
-Current local frontend/HIR cleanup, 2026-07-05: Rust commit `038fae29`
-(`Accept SRAM tile fold alias bounds`) accepts equivalent length/tile constant
-names for `SramTileFoldSum32` / `ScalarSramTileFold v0`, such as `LEN`/`BLOCK`,
-when they resolve to the same canonical `32`/`16` checked payload. Local parser,
-classifier, and HLS/manifest equality tests pass. This does not add a validation
-roster member, fresh EC2/Vitis evidence, generic Spatial `Fold`, arbitrary
-local-memory effects, tail tiles, dynamic bounds, non-`Int`, board execution, or
-broader Scala source compatibility.
+Current local frontend/HIR cleanup, 2026-07-05: Rust commit `7e221d11`
+(`Resolve scalar reduction proof facts`) moves `ScalarReduce v0` and
+`ScalarFold v0` onto resolver-backed proof facts before checked IR emission.
+`ScalarReduce v0` records the reduce loop-domain and schedule facts;
+`ScalarFold v0` records the outer fold / inner reduce loop facts and validates
+the `src[outer + inner]` rank-1 input read through shared affine access facts.
+Loop-index names that shadow the relevant constants now fail through the
+resolver with `spatial:E0302`. Local core, HLS equality, validation-roster,
+dry-run, evidence-validator, full workspace, clippy, fmt, and diff checks pass.
+This does not add a validation roster member, fresh EC2/Vitis evidence,
+generated HLS changes, manifest changes, generic Spatial `Fold`/`Reduce`,
+board execution, or broader Scala source compatibility.
 
 Current promoted Vitis update, 2026-07-05: the Rust rewrite now accepts
 and validates the exact full-K Tile-K schedule canary

@@ -9,6 +9,47 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite scalar reduction/fold resolved-proof cleanup
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `7e221d11`
+  (`Resolve scalar reduction proof facts`).
+- `ScalarReduce v0` now records resolver-backed reduce loop-domain and
+  schedule facts before producing the same checked `ScalarReduce` payload.
+  Shadowing the reduce loop index against a constant now fails through the
+  resolver with `spatial:E0302` instead of relying only on HIR identifier text.
+- `ScalarFold v0` now records resolver-backed outer-fold and inner-reduce loop
+  facts and validates the rank-1 `src[outer + inner]` read through a shared
+  affine rank-1 read helper before producing the same checked `ScalarFold`
+  payload. Shadowing the inner reduce index against the tile constant now fails
+  through `spatial:E0302`.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core scalar_reduce -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core scalar_fold -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core rank1_indexed_read_sum_lanes -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls render_tests`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen`;
+  `cargo test --locked -p ee109-examples validation_programs_include_supported_features_after_adapter_baseline`;
+  `cargo test --locked -p ee109-examples --test emit_vitis_dry_run emit_vitis_dry_run_binary_generates_m1_frontend_bundles`;
+  `cargo test --locked -p ee109-examples --test run_vitis_validation run_vitis_validation_plan_only_writes_sidecar_tcl_for_all_examples -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test vitis_validation current_head_vitis_evidence_validator_accepts_00797aed_checkpoint -- --nocapture`;
+  `cargo test --locked -p ee109-examples --test run_vitis_validation run_vitis_validation_validate_evidence_accepts_current_39_checkpoint -- --nocapture`;
+  `cargo test --locked -p ee109-examples --test ec2_toolchain_compat -- --nocapture`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary:
+  this is a compiler-interface/proof cleanup only. It does not add syntax,
+  validation-roster members, generated HLS changes, manifest changes, fresh
+  EC2/Vitis evidence, board execution, generic reductions/folds, or broad
+  Scala source compatibility. The active vendor-HLS anchor remains
+  `docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
+
+---
+
 ## 2026-07-05 -- Rust rewrite SRAM tile-fold alias-bound cleanup
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
