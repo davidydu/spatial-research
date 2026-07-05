@@ -9,6 +9,43 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-04 -- Rust rewrite scalar-multiply plan-frame guards
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `fd9c4de16f1e5a8d681d000828439dc168e61ad9`
+  (`Guard scalar multiply plan frames`).
+- Moved exact two-param plan-to-frame validation into
+  `spatial_rs_hls::dense1d_tile_scalar_mul`,
+  `spatial_rs_hls::tile_scalar_mul`, and `spatial_rs_hls::fifo`.
+- New guard requires exact ordered ABI params `[input, output]` before Dense1d,
+  rank-2 tile scalar, or FIFO kernel/harness rendering.
+- Red tests:
+  `cargo test --locked -p spatial-rs-hls emit_dense1d_plans_reject_malformed_param_frames -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls emit_dense2d_tile_scalar_mul_kernel_plan_rejects_malformed_param_frames -- --nocapture`,
+  and
+  `cargo test --locked -p spatial-rs-hls emit_fifo_tile_scalar_mul_kernel_plan_rejects_malformed_param_frames -- --nocapture`
+  first failed because swapped params were accepted through unordered
+  `find_plan_param` lookups.
+- Review coverage: `gpt-5.5 xhigh` subagent ranked the Dense1d,
+  Dense2dTileScalarMul, and FIFO two-param family as the next broad remaining
+  ABI surface after DotAccum and Stencil/Lab3.
+- Verification passed:
+  `cargo fmt --all -- --check`;
+  `cargo test --locked -p spatial-rs-hls "scalar_mul" -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls -- --nocapture`;
+  `cargo test --locked -p ee109-examples -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core -- --nocapture`;
+  `cargo clippy -p spatial-rs-hls --all-targets --locked -- -D warnings`;
+  `cargo clippy -p spatial-rs-core -p ee109-examples --all-targets --locked -- -D warnings`;
+  `git diff --check`.
+- Boundary: this is internal HLS plan admissibility hardening only. Existing
+  Dense1d, rank-2 tile scalar, and FIFO codegen/harness snapshots plus Vitis
+  evidence tests passed; generated kernels, manifests, validation-program
+  membership, and imported Vitis evidence are unchanged, so no EC2/Vitis rerun
+  was needed.
+
 ## 2026-07-04 -- Rust rewrite Stencil/Lab3 plan-frame guard
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
