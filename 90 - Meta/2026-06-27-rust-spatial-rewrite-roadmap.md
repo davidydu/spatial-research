@@ -70,6 +70,12 @@ outside the 39-program validation roster, but selected EC2/Vitis evidence in
 `docs/vitis-validation/2026-07-05-selected-par2x8-row-col-tail-f920a754/`
 validates the requested `partial_row_par=2` / `partial_col_par=8` schedule as
 `resource_fit=1/1`, `over_budget=0`, and `ii_caveated=0`.
+The latest local frontend/HIR cleanup is Rust commit `038fae29` (`Accept SRAM
+tile fold alias bounds`). `ScalarSramTileFold v0` now resolves the length/tile
+identifiers used by the accepted `SramTileFoldSum32` source, so equivalent
+Rust-subset names such as `LEN`/`BLOCK` reach the same canonical `32`/`16`
+checked payload and HLS/manifest output. This does not change the validation
+roster or vendor-HLS evidence boundary.
 The latest Lab2/Tile-K frontend cleanup is Rust commit `224d7a76` (`Accept
 hoisted Tile-K tail lhs load`). It accepts `row_limit` and `tileA_sram load` at
 tile-row scope before the column tile loop while keeping `col_limit`, B/C

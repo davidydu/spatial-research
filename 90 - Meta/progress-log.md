@@ -9,6 +9,37 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite SRAM tile-fold alias-bound cleanup
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `038fae29`
+  (`Accept SRAM tile fold alias bounds`).
+- `ScalarSramTileFold v0` no longer requires the length/tile constants used by
+  the accepted `SramTileFoldSum32` source to be literally named `N` and `TILE`.
+  The classifier resolves the fold length, fold step, load range bound, and
+  inner reduce bound from the source identifiers, accepting equivalent
+  Rust-subset spellings such as `LEN`/`BLOCK` when they resolve to the same
+  canonical `32`/`16` checked payload.
+- Added parser and classifier proof accept tests for the alias-bound spelling,
+  a fail-closed wrong-alias-tile test, and an HLS/manifest equality regression
+  proving the alias spelling emits the same artifacts as the canonical canary.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core sram_tile_fold -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen sram_tile_fold_alias_bounds -- --nocapture`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary:
+  this is a frontend/HIR classifier source-spelling cleanup only. It does not
+  add generic local-memory folds, arbitrary fold-load effects, tail tiles,
+  dynamic bounds, non-`Int`, new validation-roster members, fresh EC2/Vitis
+  evidence, board execution, or broader Scala source compatibility.
+
+---
+
 ## 2026-07-05 -- Rust rewrite hoisted-LHS row/column/K-tail Tile-K source shape
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

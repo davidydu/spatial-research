@@ -40,6 +40,15 @@ fixed-point-policy 37-program checkpoint. The bundle validates as
 acceptance evidence, not board/resource-fit implementation evidence for the two
 over-DSP Tile-K schedules.
 
+Current local frontend/HIR cleanup, 2026-07-05: Rust commit `038fae29`
+(`Accept SRAM tile fold alias bounds`) accepts equivalent length/tile constant
+names for `SramTileFoldSum32` / `ScalarSramTileFold v0`, such as `LEN`/`BLOCK`,
+when they resolve to the same canonical `32`/`16` checked payload. Local parser,
+classifier, and HLS/manifest equality tests pass. This does not add a validation
+roster member, fresh EC2/Vitis evidence, generic Spatial `Fold`, arbitrary
+local-memory effects, tail tiles, dynamic bounds, non-`Int`, board execution, or
+broader Scala source compatibility.
+
 Current promoted Vitis update, 2026-07-05: the Rust rewrite now accepts
 and validates the exact full-K Tile-K schedule canary
 `MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32`. The checked payload
