@@ -31,6 +31,15 @@ passed EC2/Vitis 2025.1 `csim_design` and `csynth_design` after locking
 This supersedes older notes below that say the active anchor remains
 `a62eb274`, `7a350983`, `eb4f6236`, or `c862e57a`.
 
+Current local no-fresh-Vitis update, 2026-07-05: the Rust rewrite now accepts
+the exact full-K Tile-K schedule canary
+`MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32`. The checked payload
+preserves `partial_row_par=4` and `partial_col_par=16`; HLS lowering emits the
+matching row-cyclic array partitions, row/column unroll pragmas, and host
+harness. Non-dividing schedule factors such as `3x16` remain fail-closed.
+Local core Tile-K, HLS Tile-K, and full `m1_codegen` tests pass. This is not a
+validation-roster member yet and has no fresh EC2/Vitis evidence.
+
 Current local no-fresh-Vitis update, 2026-07-04: Rust commit `89b637ed`
 hardens the raw Lab2 fixed GEMM ingress. The `Lab2Part5GEMM` /
 `Lab2Part6GEMM` adapter now proves runtime profile facts and the exact `Accel`

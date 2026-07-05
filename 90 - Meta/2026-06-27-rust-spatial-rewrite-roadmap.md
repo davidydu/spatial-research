@@ -44,6 +44,14 @@ acceptance for the exact roster
 only, not board execution, implementation, timing closure, performance
 optimality, generic Spatial compatibility, or broad Scala source
 compatibility.
+Current local continuation after that vendor checkpoint: the exact full-K
+Tile-K schedule canary
+`MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32` now passes local
+parser/checker/HLS/host-harness tests. It preserves `partial_row_par=4` and
+`partial_col_par=16` through checked IR and lowers them into row-cyclic
+partitions plus row/column unroll pragmas when factors divide the static tile
+dimensions. Non-dividing schedule factors remain fail-closed. This has not yet
+been promoted into the validation roster or rerun on EC2/Vitis.
 The previous local frontend/HIR foundation cleanup is Rust commit `2a7fe3bb`
 (`Retire duplicate raw GEMM tile proof`). It removes the private raw-adapter
 Tile-K tile-I/O role proof object from `source_adapter.rs`; the quarantined

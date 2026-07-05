@@ -6147,3 +6147,48 @@ Boundary:
   or board/timing evidence.
 - Non-outer-K FixPt tail tiles remain fail-closed; the existing Tile-K tail
   canaries remain the fixed-point tail coverage path.
+
+## 2026-07-05 -- Rust rewrite lands the Tile-K par4x16 local canary
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Added the exact full-K schedule canary
+  `MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32`.
+- The frontend/checker now accepts positive exact full-K Tile-K schedule
+  factors that divide the static tile dimensions, while preserving the strict
+  named Part6 and tail profiles.
+- HLS lowering now carries `partial_row_par=4` / `partial_col_par=16` into
+  `TileKMemFoldSchedule::PartialTile`, row-cyclic array partitions, row/column
+  unroll pragmas, and the generated host harness.
+- A non-dividing `3x16` exact full-K schedule remains fail-closed.
+
+Proof:
+- Red canary first failed with `spatial:E0300` on the unsupported `4x16`
+  schedule.
+- Focused green checks passed:
+  `cargo test --locked -p spatial-rs-core checked_ir_accepts_generic_exact_tile_k_par4x16_schedule -- --nocapture`,
+  `cargo test --locked -p spatial-rs-core checked_ir_rejects_generic_exact_tile_k_nondividing_schedule -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls tile_k_memfold_plan_exposes_generic_par4x16_schedule_and_partitions -- --nocapture`,
+  and
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab2_outer_k_par4x16_schedule_emits_parametric_hls_and_manifest -- --nocapture`.
+- Broader focused gates passed:
+  `cargo test --locked -p spatial-rs-core tile_k -- --nocapture`,
+  `cargo test --locked -p spatial-rs-hls tile_k -- --nocapture`,
+  and
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen -- --nocapture`.
+- Full local gates passed after docs:
+  `cargo fmt --all -- --check`,
+  `cargo test --locked --quiet`,
+  `cargo clippy --all-targets --locked -- -D warnings`,
+  `git diff --check` in the Rust repo,
+  and `git diff --check` in the vault.
+
+Boundary:
+- This is local parser/checker/HLS/host-harness evidence only.
+- The `par4x16` canary is not yet in the 37-program validation roster and has
+  no EC2/Vitis `csim_design` / `csynth_design` evidence yet.
+- This does not add generic Spatial scheduling, inferred banking, arbitrary
+  K-tail schedules, broad Scala source compatibility, board execution, or
+  timing evidence.
