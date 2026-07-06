@@ -9,6 +9,42 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite extracts Stencil2d classifier module
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `163cf24c`
+  (`Extract Stencil2d classifier module`).
+- Moved the Stencil2d/Lab3 classifier entry points, proof structs, local-window
+  fact gate, Sobel shape helpers, and Lab3 adapter wrapper out of the
+  monolithic `classifier.rs` into
+  `crates/spatial-rs-core/src/classifier/stencil2d.rs`.
+- Added an architecture regression,
+  `stencil2d_proof_contract_is_module_owned`, so the Stencil2d proof contract
+  does not drift back into the parent dispatcher file.
+- Verification passed:
+  `cargo test --locked -p spatial-rs-core stencil2d_proof_contract_is_module_owned -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core stencil2d -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen stencil2d -- --nocapture`;
+  `cargo test --locked -p spatial-rs-hls --test m1_codegen lab3 -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core control_fsm -- --nocapture`;
+  `cargo test --locked -p spatial-rs-core lab3_convolution -- --nocapture`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`;
+  `cargo run -p ee109-examples --locked`;
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program --mode both`.
+- Boundary:
+  no accepted syntax, checked IR, generated HLS, manifest, validation-roster,
+  diagnostic-roster, imported vendor evidence, or EC2/Vitis execution change.
+  This is a frontend/HIR foundation cleanup before any later `Stencil2d v1`
+  semantic expansion.
+
+---
+
 ## 2026-07-05 -- Rust rewrite clarifies selected Vitis evidence anchors
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
