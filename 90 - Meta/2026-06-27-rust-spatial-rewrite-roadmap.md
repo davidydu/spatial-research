@@ -1046,6 +1046,12 @@ sources preserve the same checked payload, HLS, and manifests, while width
 constants such as `COLS`, `CMAX`, and `LINE_COLS` still fail closed as invalid
 load-par roles. This is also local-only and does not change validation-roster
 membership or vendor-HLS evidence.
+The next Stencil2d reduce-role source-shape canary accepts swapped declaration
+order for the horizontal and vertical Sobel reduce lets. The classifier still
+recovers roles from the LUT each reduce reads and still requires the canonical
+`abs(horizontal) + abs(vertical)` row-output expression, so reordered Sobel and
+Lab3 sources preserve the same checked payload, HLS, and manifests without
+claiming generic `Reduce` or arbitrary stencil lowering.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked

@@ -8487,3 +8487,44 @@ Boundary:
   gates show generated-artifact drift.
 - This is not generic const-role inference, generic `par`, generic stencil, or
   broad Scala source compatibility.
+
+## 2026-07-05 -- Stencil2d reduce-role order canary
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- The Stencil2d/Lab3 classifier no longer assumes the horizontal Sobel reduce
+  let appears before the vertical Sobel reduce let.
+- Reordered-reduce `SobelStencil12x20` and `Lab3Part1Convolution` sources now
+  normalize to the same checked payloads as their canonical forms.
+- The reduce roles remain fail-closed: the classifier recovers horizontal and
+  vertical roles from the LUT each reduce reads, still requires one horizontal
+  Sobel LUT and one vertical Sobel LUT, and still requires the canonical
+  `abs(horizontal) + abs(vertical)` output expression.
+
+Proof so far:
+- Red test first:
+  - `cargo test -p spatial-rs-core --locked reordered_reduces -- --nocapture`
+- Targeted green:
+  - `cargo test -p spatial-rs-core --locked reordered_reduces -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test m1_codegen reordered_reduces -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked stencil2d -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked lab3_convolution -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test m1_codegen stencil2d -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test m1_codegen lab3_convolution -- --nocapture`
+- Full local gates:
+  - `cargo fmt --all --check`
+  - `cargo test --locked`
+  - `cargo clippy --all-targets --locked -- -D warnings`
+  - `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`
+  - `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --out target/vitis-validation-plan`
+  - `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program --mode both`
+
+Boundary:
+- No generated HLS, manifest, validation-roster, or dry-run roster change is
+  intended.
+- No fresh EC2/Vitis execution is expected unless final local equality/dry-run
+  gates show generated-artifact drift.
+- This is not generic `Reduce`, arbitrary stencil, commuted output arithmetic,
+  alternate border policy, or broad Scala source compatibility.

@@ -1680,3 +1680,26 @@ Evidence boundary:
   manifest output, or roster membership changes in final gates.
 - This does not claim generic `par`, generic const inference, generic stencil,
   or broad Scala source compatibility.
+
+## 2026-07-05 Rust Rewrite Stencil2d Reduce-Role Order Canary
+
+The Rust rewrite accepted a second concrete Stencil2d/Lab3 source-shape
+perturbation without changing the HLS-facing surface.
+
+Status:
+- The horizontal and vertical Sobel reduce lets may appear in either
+  declaration order.
+- Their checked roles are recovered from the LUT each reduce reads, not from
+  statement position.
+- Reordered-reduce `SobelStencil12x20` and `Lab3Part1Convolution` sources
+  preserve the same checked payloads as their canonical forms.
+- The accepted subset still requires one horizontal Sobel LUT role, one
+  vertical Sobel LUT role, and `abs(horizontal) + abs(vertical)` output
+  arithmetic.
+
+Evidence boundary:
+- Targeted parser and HLS/manifest equality tests cover the new source order.
+- No fresh EC2/Vitis execution is expected unless generated validation HLS,
+  manifest output, or roster membership changes in final gates.
+- This does not claim generic `Reduce`, arbitrary stencil, commuted output
+  arithmetic, alternate border policy, or broad Scala source compatibility.
