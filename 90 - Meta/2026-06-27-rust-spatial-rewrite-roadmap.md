@@ -1040,6 +1040,12 @@ from stringly checked IR toward explicit proof-carrying payloads: the checked
 `Stencil2dWindow` roles, validation rejects forged local-window role shape/type
 metadata, and manifests still expose only the row SRAM plus Sobel LUTs. It is
 no-HLS-drift and does not claim generic `LineBuffer` or `RegFile` lowering.
+The subsequent Stencil2d const-role/order hardening removes the positional
+`hir.consts[5]` load-par dependency. Reordered Sobel and Lab3 convolution
+sources preserve the same checked payload, HLS, and manifests, while width
+constants such as `COLS`, `CMAX`, and `LINE_COLS` still fail closed as invalid
+load-par roles. This is also local-only and does not change validation-roster
+membership or vendor-HLS evidence.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked

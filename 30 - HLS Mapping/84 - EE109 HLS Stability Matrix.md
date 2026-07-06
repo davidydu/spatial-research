@@ -1660,3 +1660,23 @@ Evidence boundary:
   membership, and the dry-run roster did not change.
 - This does not claim generic `LineBuffer`, `RegFile`, `Reduce`, arbitrary
   stencil, dynamic dimension, or broader local-memory lowering support.
+
+## 2026-07-05 Rust Rewrite Stencil2d Const-Role Order Hardening
+
+The Rust rewrite removed the remaining positional constant-order dependency in
+the accepted Stencil2d/Lab3 Sobel path.
+
+Status:
+- `LB_PAR` / `LOAD_PAR` is discovered by the identifier used in the row load
+  `par` clause rather than by const declaration index.
+- Reordered-const `SobelStencil12x20` and `Lab3Part1Convolution` sources
+  preserve the same checked payloads as their canonical forms.
+- Width and line-width constants remain fail-closed as load-par roles because
+  the accepted subset requires `0 < load_par < COLS`.
+
+Evidence boundary:
+- Targeted parser and HLS/manifest equality tests cover the new source order.
+- No fresh EC2/Vitis execution is expected unless generated validation HLS,
+  manifest output, or roster membership changes in final gates.
+- This does not claim generic `par`, generic const inference, generic stencil,
+  or broad Scala source compatibility.

@@ -8453,3 +8453,37 @@ Boundary:
 - No fresh EC2/Vitis execution was run for this checkpoint.
 - The active full-roster vendor anchor remains
   `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program/`.
+
+## 2026-07-05 -- Stencil2d const-role order hardening
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- The Stencil2d/Lab3 classifier no longer assumes `LB_PAR` / `LOAD_PAR` is the
+  sixth constant declaration.
+- Reordered-const `SobelStencil12x20` and `Lab3Part1Convolution` sources now
+  normalize to the same checked payloads as their canonical forms.
+- The load-par role remains fail-closed: it must be a positive sub-row factor,
+  so width/line-width constants such as `COLS`, `W`, `CMAX`, and `LINE_COLS`
+  cannot stand in for the dedicated load-par constant.
+
+Proof so far:
+- Red test first:
+  - `cargo test -p spatial-rs-core --locked reordered_consts -- --nocapture`
+- Targeted green:
+  - `cargo test -p spatial-rs-core --locked reordered_consts -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked stencil2d_near_misses_fail_closed_with_targeted_diagnostic -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked stencil2d -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked lab3_convolution_with_reordered_consts -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test m1_codegen reordered_consts -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test m1_codegen stencil2d -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test m1_codegen lab3_convolution -- --nocapture`
+
+Boundary:
+- No generated HLS, manifest, validation-roster, or dry-run roster change is
+  intended.
+- No fresh EC2/Vitis execution is expected unless final local equality/dry-run
+  gates show generated-artifact drift.
+- This is not generic const-role inference, generic `par`, generic stencil, or
+  broad Scala source compatibility.
