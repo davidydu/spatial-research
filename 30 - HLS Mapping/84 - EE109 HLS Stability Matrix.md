@@ -1754,6 +1754,32 @@ Evidence boundary:
 - No generated HLS, manifest output, validation-program membership, dry-run
   roster, or vendor-HLS evidence change is claimed.
 
+## 2026-07-06 Rust Rewrite Loop-Domain Helper Migration
+
+The Rust rewrite finished migrating remaining exact loop-index-to-domain helper
+copies in 1-D tiled and reduction classifiers onto `ResolvedHir`.
+
+Status:
+- `ResolvedHir::single_loop_domain_for_index` now resolves a `HirIdent` to one
+  exact loop domain without a `LoopKind` filter.
+- `tiled1d` and reduction classifiers now call `ResolvedHir` for exact
+  `HirIdent + LoopKind` and exact `HirIdent` loop-domain uniqueness.
+- Kind-only loop-domain discovery remains local where no concrete source
+  identifier is being bound.
+
+Evidence boundary:
+- A resolver regression pins kindless exact loop-domain lookup on same-named
+  sibling loop identifiers.
+- A source-contract test prevents migrated classifiers from reintroducing local
+  exact loop-domain helper copies.
+- Targeted 1-D tiled, reduction, and resolver tests cover the migrated call
+  sites before full local gates.
+- Full local gates passed: format, full `cargo test --locked`, clippy,
+  dry-run emission, plan-only validation, current 39-program evidence
+  validation, and diff hygiene.
+- No generated HLS, manifest output, validation-program membership, dry-run
+  roster, or vendor-HLS evidence change is claimed.
+
 ## 2026-07-06 Rust Rewrite Rank-2 Tile-Copy Helper Cleanup
 
 The Rust rewrite moved the shared rank-2 local/global tile-copy fact predicate

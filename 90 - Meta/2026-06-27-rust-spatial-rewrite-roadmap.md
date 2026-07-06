@@ -1065,7 +1065,10 @@ while keeping feature-local syntax, schedule, const-symbol, and payload gates
 in the classifiers. A second exact-binding migration now removes the remaining
 classifier-local exact ident/span helper copies from scalar, LUT, 1-D tiled,
 and reduction classifiers; those paths use `ResolvedHir::symbol_for_ident` /
-`symbol_id_for_ident`, while name-only uniqueness helpers remain local.
+`symbol_id_for_ident`, while name-only uniqueness helpers remain local. The
+same cleanup line now centralizes remaining exact loop-index-to-domain lookups
+for 1-D tiled and reduction classifiers in `ResolvedHir`; kind-only loop-domain
+discovery remains local where no concrete source identifier is being bound.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked

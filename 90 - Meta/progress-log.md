@@ -8611,6 +8611,44 @@ Boundary:
   validation-roster membership, dry-run roster, or vendor-HLS evidence changes
   are claimed.
 
+## 2026-07-06 -- Loop-domain helper migration
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- `ResolvedHir::single_loop_domain_for_index` now centralizes exact
+  `HirIdent` to unique loop-domain lookup without a `LoopKind` filter.
+- `tiled1d` and reduction classifiers now use `ResolvedHir` for exact
+  `HirIdent + LoopKind` and exact `HirIdent` loop-domain lookup.
+- Kind-only loop-domain discovery remains local because those paths do not bind
+  a concrete source identifier.
+- A source-contract test pins this helper-ownership boundary.
+
+Proof:
+- Red test first:
+  - `cargo test -p spatial-rs-core --locked resolved_hir_exact_loop_domain_uses_identifier_binding_not_name_only -- --nocapture`
+- Targeted green:
+  - `cargo test -p spatial-rs-core --locked resolved_hir_exact_loop_domain_uses_identifier_binding_not_name_only -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked classifier_loop_domain_lookup_uses_resolved_hir_helpers -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked classifier::tiled1d::tests -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked classifier::reductions::tests -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked resolved_hir_exact -- --nocapture`
+- Full local gates:
+  - `cargo fmt --all --check`
+  - `cargo test --locked`
+  - `cargo clippy --all-targets --locked -- -D warnings`
+  - `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`
+  - `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --out target/vitis-validation-plan`
+  - `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program --mode both`
+  - `git diff --check`
+
+Boundary:
+- This is a no-HLS-drift frontend/HIR foundation cleanup.
+- No accepted syntax, checked IR payload, generated HLS, manifest,
+  validation-roster membership, dry-run roster, or vendor-HLS evidence changes
+  are claimed.
+
 ## 2026-07-06 -- Rank-2 tile-copy helper-boundary cleanup
 
 Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
