@@ -1069,6 +1069,11 @@ and reduction classifiers; those paths use `ResolvedHir::symbol_for_ident` /
 same cleanup line now centralizes remaining exact loop-index-to-domain lookups
 for 1-D tiled and reduction classifiers in `ResolvedHir`; kind-only loop-domain
 discovery remains local where no concrete source identifier is being bound.
+The following rank-2 local-compute helper-boundary cleanup moves the shared
+partial-product/C-accumulation proof wrapper layer into `rank2_access.rs` as
+well, while `tiled2d.rs` and `tiled2d/tile_k.rs` keep `TilePhase`, MemFold
+syntax guards, Tile-K schedule checks, and checked-payload construction. This
+is still no-HLS-drift compiler-foundation work.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked

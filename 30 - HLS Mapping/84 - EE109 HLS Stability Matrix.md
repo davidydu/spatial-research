@@ -1805,3 +1805,32 @@ Evidence boundary:
   roster, or vendor-HLS evidence change is claimed.
 - No fresh EC2/Vitis execution is expected unless generated artifacts or roster
   membership drift in final local gates.
+
+## 2026-07-06 Rust Rewrite Rank-2 Local-Compute Helper Boundary
+
+The Rust rewrite moved the remaining shared rank-2 local-compute proof wrapper
+layer into `classifier/rank2_access.rs`.
+
+Status:
+- `rank2_access.rs` now owns the proof records, specs, expression-index
+  extractors, and resolved-fact matchers for
+  `partial[row,col] := lhs[row,k] * rhs[k,col]` and
+  `c[row,col] := c[row,col] + partial[row,col]`.
+- `tiled2d.rs` and `tiled2d/tile_k.rs` still own `TilePhase`, MemFold syntax,
+  Tile-K schedule checks, and checked-payload construction.
+- A source-contract test keeps the shared proof wrapper layer in
+  `rank2_access.rs` and keeps `TilePhase` / MemFold syntax out of that helper
+  module.
+
+Evidence boundary:
+- Targeted rank-2 local, Tile-K partial-product, Tile-K C-accumulation,
+  fold-update, and non-outer-K MemFold fold matcher tests passed.
+- HLS smoke tests for full-K scheduled Tile-K snapshots and selected Vitis
+  evidence validators passed.
+- Full local gates passed: format, full `cargo test --locked`, clippy,
+  dry-run emission, plan-only validation, current 39-program evidence
+  validation, and diff hygiene.
+- Current imported evidence still validates as
+  `kernels=39 resource_fit=37/39 over_budget=2 ii_caveated=14`.
+- No generated HLS, manifest output, validation-program membership, dry-run
+  roster, or vendor-HLS evidence change is claimed.

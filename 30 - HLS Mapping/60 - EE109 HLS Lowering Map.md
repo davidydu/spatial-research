@@ -78,6 +78,15 @@ The Wave 1 artifacts reduce the active blocker set to five local policies:
 | Explicit banking hints | "Explicit banking hints are deferred; the MVP uses rule-derived HLS partitions only for selected shapes such as the exact scheduled Part6 canary." |
 | DSE/runtime latency model | "Functional HLS generation does not depend on Spatial runtime-model parity." |
 
+## Current Implementation Note
+
+The 2026-07-06 rank-2 local-compute helper-boundary cleanup does not change
+this lowering map. It moves the shared partial-product/C-accumulation proof
+wrapper layer into `classifier/rank2_access.rs`, while keeping MemFold syntax,
+Tile-K schedule checks, and checked-payload construction in the feature
+classifiers. Generated HLS, manifests, validation membership, dry-run roster,
+and imported Vitis evidence remain unchanged.
+
 ## Next Build Cut
 
 The next implementation cut should be Stage 0 only:

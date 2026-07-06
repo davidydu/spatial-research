@@ -8700,3 +8700,57 @@ Boundary:
   are claimed.
 - No fresh EC2/Vitis execution is expected unless final local gates show
   generated-artifact drift.
+
+## 2026-07-06 -- Rank-2 local-compute helper-boundary cleanup
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Rust commit:
+- `472c9019` (`Move rank2 local compute helpers`).
+
+Checkpoint:
+- The shared rank-2 local-compute proof wrapper layer now lives in
+  `classifier/rank2_access.rs`.
+- Moved proof records/specs/matchers for:
+  - `partial[row,col] := lhs[row,k] * rhs[k,col]`
+  - `c[row,col] := c[row,col] + partial[row,col]`
+- `tiled2d.rs` and `tiled2d/tile_k.rs` still own `TilePhase`, MemFold syntax,
+  Tile-K schedule checks, and checked-payload construction.
+- A source-contract test pins this ownership boundary and prevents
+  `TilePhase` / MemFold syntax from moving into `rank2_access.rs`.
+
+Proof:
+- Red test first:
+  - `cargo test -p spatial-rs-core --locked shared_rank2_local_compute_helpers_live_in_rank2_access -- --nocapture`
+  - Failed before implementation because `Rank2LocalPartialProductProof` was
+    still defined in `tiled2d.rs`.
+- Targeted green:
+  - `cargo test -p spatial-rs-core --locked shared_rank2_local_compute_helpers_live_in_rank2_access -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked rank2_local_ -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked tile_k_partial_product_fact_matcher -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked tile_k_c_accumulation_fact_matcher -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked tile_k_fold_update_proof_ -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked dense2d_memfold_fold_fact_matcher -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_outer_k_part6_structural_fixed_32_matches_stable_scheduled_hls_snapshot -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_outer_k_part6_structural_par_preserves_scheduled_hls_and_manifest -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test vitis_validation selected_outer_k_vitis_evidence_validator_accepts_one_kernel_checkpoint -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test vitis_validation selected_scheduled_row_col_k_tail_vitis_evidence_is_clean_one_kernel_checkpoint -- --nocapture`
+- Full local gates:
+  - `cargo fmt --all --check`
+  - `cargo test --locked`
+  - `cargo clippy --all-targets --locked -- -D warnings`
+  - `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`
+  - `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --out target/vitis-validation-plan`
+  - `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program --mode both`
+  - `git diff --check`
+- Evidence validator result:
+  `kernels=39 resource_fit=37/39 over_budget=2 ii_caveated=14`.
+
+Boundary:
+- This is a no-HLS-drift classifier-foundation cleanup.
+- No accepted syntax, checked IR payload, generated HLS, manifest,
+  validation-roster membership, dry-run roster, or vendor-HLS evidence changes
+  are claimed.
+- No fresh EC2/Vitis execution was run; the existing 39-program evidence was
+  parsed and validated locally.
