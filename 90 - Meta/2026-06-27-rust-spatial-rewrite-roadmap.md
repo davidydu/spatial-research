@@ -82,6 +82,14 @@ window, and row scratch SRAM; duplicate role candidates and extra local memories
 fail closed. Reordered valid sources rebuild the same checked `Stmt::Stencil2d`
 payload and preserve exact HLS/manifest output, so this does not change
 validation-roster membership or vendor-HLS evidence.
+The current `Stencil2d v1` source-spelling slice is Rust commit `8916d3f1`
+(`Accept Stencil2d kernel-bound border spelling`). It admits the same top-left
+zero border as matched kernel-bound-minus-one expressions such as
+`rr < KROWS - 1 || cc < KCOLS - 1`, including commuted OR form, while rejecting
+crossed row/column provenance. The accepted sources rebuild the same checked
+`Stmt::Stencil2d` payload and exact HLS/manifest output as the alias-constant
+representative, so validation-roster membership and vendor-HLS evidence remain
+unchanged.
 The recent local frontend/HIR cleanup at Rust commit `35c6944a` (`Move Tile-K
 proof tests into module`). Tile-K proof/profile tests and Tile-K-local
 LHS/RHS/C preload/store matcher tests now live under

@@ -105,6 +105,17 @@ tests and m1 HLS equality/harness tests pass, proving no generated-HLS,
 manifest, validation-roster, or vendor-evidence drift. No fresh EC2/Vitis run
 is required unless generated validation HLS or roster membership changes.
 
+Current local Stencil2d v1 source-spelling slice, 2026-07-05: Rust commit
+`8916d3f1` (`Accept Stencil2d kernel-bound border spelling`) accepts matched
+kernel-bound-minus-one border expressions for the existing Sobel top-left zero
+policy. The accepted forms include `rr < KROWS - 1 || cc < KCOLS - 1` and the
+commuted OR spelling, but reject crossed row/column provenance. The HLS equality
+test proves these sources rebuild the same checked payload, generated HLS, and
+manifest as `SobelStencilAlias12x20`. The unchanged 39-program dry-run roster
+and evidence-validator pass against
+`docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program/` keep this
+a no-new-Vitis checkpoint.
+
 Current local frontend/HIR cleanup, 2026-07-05: Rust commit `e358bfd1`
 (`Record rank2 local compute proofs`) promotes the shared rank-2 local-compute
 matchers from boolean gates into proof-producing helpers. Tile-K fold/update now

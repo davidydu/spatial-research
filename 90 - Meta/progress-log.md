@@ -7952,6 +7952,50 @@ Boundary:
 - The active vendor anchor remains
   `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
 
+## 2026-07-05 -- Stencil2d v1 kernel-bound border spelling
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Rust commit `8916d3f1` (`Accept Stencil2d kernel-bound border spelling`)
+  adds the first bounded `Stencil2d v1` source-spelling canary.
+- The existing top-left zero border may now be written as matched
+  kernel-bound-minus-one expressions, such as
+  `rr < KROWS - 1 || cc < KCOLS - 1`, including commuted OR form.
+- The classifier records the row and column reduction-bound identifiers and
+  accepts the symbolic border only when row/column provenance matches.
+- Crossed provenance, such as `rr < KCOLS - 1 || cc < KROWS - 1`, remains a
+  fail-closed `spatial:E0407` near miss.
+- Accepted symbolic forms rebuild the same checked `Stmt::Stencil2d` payload
+  and preserve exact HLS/manifest output against `SobelStencilAlias12x20`.
+
+Proof:
+- Red tests first:
+  - `cargo test -p spatial-rs-core --locked parse_accel_accepts_stencil2d_kernel_bound_minus_one_border -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test m1_codegen stencil2d_kernel_bound_minus_one_border_preserves_exact_hls_and_harness -- --nocapture`
+- Targeted green:
+  - `cargo test -p spatial-rs-core --locked stencil2d -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test m1_codegen stencil2d -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test vitis_validation captured_stencil2d_v0_vitis_evidence_parses_for_fourteen_program_validation_set -- --nocapture`
+- Full local gates:
+  - `cargo test --locked --workspace`
+  - `cargo clippy --all-targets --locked -- -D warnings`
+  - `cargo fmt --all -- --check`
+  - `cargo run -p ee109-examples --locked`
+  - `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`
+  - `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program --mode both`
+  - `git diff --check`
+
+Boundary:
+- No generated HLS, manifest, validation-roster, or diagnostic-roster change.
+- No fresh EC2/Vitis execution was run for this checkpoint.
+- The active vendor anchor remains
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program/`.
+- This is not generic Spatial `LineBuffer`, `RegFile`, `Reduce`, `par`,
+  arbitrary coefficient, dynamic-dimension, alternate-border, optimized
+  scheduling, board-execution, implementation, or timing-closure support.
+
 ## 2026-07-05 -- Lab2Part4 flat LUT value-spelling bridge
 
 Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
