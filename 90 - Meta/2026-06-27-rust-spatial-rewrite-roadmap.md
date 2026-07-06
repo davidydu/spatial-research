@@ -1053,6 +1053,15 @@ recovers roles from the LUT each reduce reads and still requires the canonical
 Lab3 sources preserve the same checked payload, HLS, and manifests without
 claiming generic `Reduce` or arbitrary stencil lowering.
 
+The next small frontend/HIR foundation cleanup moves exact identifier binding
+queries into `ResolvedHir`: symbol lookup by `HirIdent` plus `SymbolKind`,
+symbol-id lookup, and single loop-domain lookup by loop-index identifier plus
+`LoopKind`. `Dram2dCopy`, `ControlFsm`, and `Stencil2d` now share that
+fail-closed helper surface while retaining their feature-local syntax, role,
+schedule, and payload gates. The higher-leverage follow-up remains Tile-K
+rank-2 tile-copy/helper extraction, where the same fail-closed proof style can
+reduce duplicated classifier logic without moving the HLS boundary.
+
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
 `Program` as the HLS contract, reserves resolver diagnostics to

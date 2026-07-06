@@ -8528,3 +8528,46 @@ Boundary:
   gates show generated-artifact drift.
 - This is not generic `Reduce`, arbitrary stencil, commuted output arithmetic,
   alternate border policy, or broad Scala source compatibility.
+
+## 2026-07-06 -- ResolvedHir exact-binding helper cleanup
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- Exact identifier-to-symbol and loop-index-to-domain binding queries now live
+  in `ResolvedHir`.
+- The helpers require same source id, declaration-span containment, exact
+  `SymbolKind` / `LoopKind`, and a unique match.
+- `Dram2dCopy`, `ControlFsm`, and `Stencil2d` use the shared helper instead of
+  local duplicate implementations.
+- Feature-local syntax, access-role, lane, schedule, and checked-payload gates
+  remain in their classifiers.
+
+Proof:
+- Red test first:
+  - `cargo test -p spatial-rs-core --locked resolved_hir_exact -- --nocapture`
+- Targeted green:
+  - `cargo test -p spatial-rs-core --locked resolved_hir_exact -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked dram2d -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked control_fsm -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked stencil2d -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked rank2_copy_feature -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked rank2_copy_plan -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test m1_codegen matrix_copy_4x6_feature_emits_parameterized_rank2_copy_and_harness -- --nocapture`
+  - `cargo test -p ee109-examples --locked validation_programs_include_supported_features_after_adapter_baseline -- --nocapture`
+- Full local gates:
+  - `cargo fmt --all --check`
+  - `cargo test --locked`
+  - `cargo clippy --all-targets --locked -- -D warnings`
+  - `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`
+  - `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --out target/vitis-validation-plan`
+  - `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program --mode both`
+  - `git diff --check`
+
+Boundary:
+- This is a no-HLS-drift compiler-foundation cleanup.
+- No accepted syntax, checked IR payload, generated HLS, manifest,
+  validation-roster membership, or vendor-HLS evidence changes are claimed.
+- No fresh EC2/Vitis execution is expected unless final local gates show
+  generated-artifact drift.

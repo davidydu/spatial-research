@@ -1703,3 +1703,28 @@ Evidence boundary:
   manifest output, or roster membership changes in final gates.
 - This does not claim generic `Reduce`, arbitrary stencil, commuted output
   arithmetic, alternate border policy, or broad Scala source compatibility.
+
+## 2026-07-06 Rust Rewrite ResolvedHir Exact-Binding Helper Cleanup
+
+The Rust rewrite moved exact identifier and loop-domain binding queries into
+`ResolvedHir` without changing the HLS-facing surface.
+
+Status:
+- `ResolvedHir::symbol_for_ident` and `symbol_id_for_ident` resolve a
+  `HirIdent` to one exact symbol of the requested `SymbolKind`.
+- `ResolvedHir::single_loop_domain_for_index_kind` resolves a loop-index
+  identifier to one exact loop domain of the requested `LoopKind`.
+- The helpers require same source id, declaration-span containment, and a
+  unique exact match.
+- `Dram2dCopy`, `ControlFsm`, and `Stencil2d` now reuse the shared helper while
+  keeping their feature-local guards.
+
+Evidence boundary:
+- Targeted core/HLS tests cover the helper behavior and migrated classifiers.
+- Full local gates passed: format, full `cargo test --locked`, clippy,
+  dry-run emission, plan-only validation, current 39-program evidence
+  validation, and diff hygiene.
+- No generated HLS, manifest output, validation-program membership, dry-run
+  roster, or vendor-HLS evidence change is claimed.
+- No fresh EC2/Vitis execution is expected unless generated artifacts or roster
+  membership drift in final local gates.
