@@ -1058,9 +1058,11 @@ queries into `ResolvedHir`: symbol lookup by `HirIdent` plus `SymbolKind`,
 symbol-id lookup, and single loop-domain lookup by loop-index identifier plus
 `LoopKind`. `Dram2dCopy`, `ControlFsm`, and `Stencil2d` now share that
 fail-closed helper surface while retaining their feature-local syntax, role,
-schedule, and payload gates. The higher-leverage follow-up remains Tile-K
-rank-2 tile-copy/helper extraction, where the same fail-closed proof style can
-reduce duplicated classifier logic without moving the HLS boundary.
+schedule, and payload gates. The follow-up rank-2 tile-copy helper-boundary
+cleanup now moves the shared local/global copy-role predicate into
+`rank2_access.rs` for non-outer-K MemFold and Tile-K C preload/store paths,
+while keeping feature-local syntax, schedule, const-symbol, and payload gates
+in the classifiers.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked

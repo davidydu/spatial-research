@@ -8468,7 +8468,7 @@ Checkpoint:
   so width/line-width constants such as `COLS`, `W`, `CMAX`, and `LINE_COLS`
   cannot stand in for the dedicated load-par constant.
 
-Proof so far:
+Proof:
 - Red test first:
   - `cargo test -p spatial-rs-core --locked reordered_consts -- --nocapture`
 - Targeted green:
@@ -8569,5 +8569,57 @@ Boundary:
 - This is a no-HLS-drift compiler-foundation cleanup.
 - No accepted syntax, checked IR payload, generated HLS, manifest,
   validation-roster membership, or vendor-HLS evidence changes are claimed.
+- No fresh EC2/Vitis execution is expected unless final local gates show
+  generated-artifact drift.
+
+## 2026-07-06 -- Rank-2 tile-copy helper-boundary cleanup
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- The shared rank-2 tile-copy local/global copy-role predicate now lives in
+  `classifier/rank2_access.rs`.
+- `tiled2d.rs` keeps the `TilePhase` syntax wrapper, local/global target-name
+  checks, loop-symbol lookup, and stride const-symbol lookup before calling the
+  fact helper.
+- Non-outer-K MemFold and Tile-K C preload/store paths reuse the same
+  `rank2_tile_copy_matches_expected` helper.
+- New Tile-K reversed-direction tests pin C preload/store direction through the
+  extracted helper.
+
+Proof so far:
+- Red test first:
+  - `cargo test -p spatial-rs-core --locked shared_rank2_tile_copy_helper_lives_in_rank2_access -- --nocapture`
+- Targeted green:
+  - `cargo test -p spatial-rs-core --locked shared_rank2_tile_copy_helper_lives_in_rank2_access -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked rank2_tile_copy_role -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked tile_k_c_preload_fact -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked tile_k_c_store_fact -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked tile_k_access_roles_helper_rejects_split_parent_store -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked tile_k_phase_spine -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked tile_k_fold_update_proof -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked parse_accel_lab2_outer_k -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked parse_accel_tile_k_canonical_bulk_io -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_outer_k_part6_structural_fixed_32_matches_stable_scheduled_hls_snapshot -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_outer_k_part6_structural_par_preserves_scheduled_hls_and_manifest -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test m1_codegen tile_k_part6_canonical_bulk_io_preserves_scheduled_hls_and_manifest -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test vitis_validation captured_tile_k_facts_current_head_vitis_evidence_parses_for_twenty_eight_program_validation_set -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test vitis_validation selected_outer_k_vitis_evidence_validator_accepts_one_kernel_checkpoint -- --nocapture`
+  - `cargo test -p ee109-examples --locked validation_programs_include_supported_features_after_adapter_baseline -- --nocapture`
+- Full local gates:
+  - `cargo fmt --all --check`
+  - `cargo test --locked`
+  - `cargo clippy --all-targets --locked -- -D warnings`
+  - `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`
+  - `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --out target/vitis-validation-plan`
+  - `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program --mode both`
+  - `git diff --check`
+
+Boundary:
+- This is a no-HLS-drift classifier-foundation cleanup.
+- No accepted syntax, checked IR payload, generated HLS, manifest,
+  validation-roster membership, dry-run roster, or vendor-HLS evidence changes
+  are claimed.
 - No fresh EC2/Vitis execution is expected unless final local gates show
   generated-artifact drift.

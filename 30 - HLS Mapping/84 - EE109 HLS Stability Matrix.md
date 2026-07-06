@@ -1728,3 +1728,29 @@ Evidence boundary:
   roster, or vendor-HLS evidence change is claimed.
 - No fresh EC2/Vitis execution is expected unless generated artifacts or roster
   membership drift in final local gates.
+
+## 2026-07-06 Rust Rewrite Rank-2 Tile-Copy Helper Cleanup
+
+The Rust rewrite moved the shared rank-2 local/global tile-copy fact predicate
+into `classifier/rank2_access.rs` for non-outer-K MemFold and Tile-K C
+preload/store paths.
+
+Status:
+- `rank2_access::rank2_tile_copy_matches_expected` now owns the direction,
+  shared parent/access grouping, local lane equality, and global
+  tile-plus-lane fact checks.
+- Classifier wrappers still own `TilePhase` syntax, local/global target-name
+  checks, loop-symbol lookup, stride const-symbol lookup, schedules, and checked
+  payload construction.
+- Tile-K C preload/store now have explicit reversed-direction guard tests
+  through the shared helper.
+
+Evidence boundary:
+- Targeted core/HLS tests cover the shared helper and migrated callers.
+- Full local gates passed: format, full `cargo test --locked`, clippy,
+  dry-run emission, plan-only validation, current 39-program evidence
+  validation, and diff hygiene.
+- No generated HLS, manifest output, validation-program membership, dry-run
+  roster, or vendor-HLS evidence change is claimed.
+- No fresh EC2/Vitis execution is expected unless generated artifacts or roster
+  membership drift in final local gates.
