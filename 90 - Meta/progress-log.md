@@ -9,6 +9,27 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite clarifies selected Vitis evidence anchors
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `0ba899be`
+  (`Clarify selected Vitis evidence anchors`).
+- Updated five selected one-kernel Vitis evidence READMEs so they no longer
+  name stale moving full-roster anchors such as `35c6944a`.
+- The selected evidence remains supplemental one-kernel evidence; each README
+  now points readers to the repo README or HLS stability matrix for the active
+  full-roster anchor.
+- Verification passed:
+  `rg -n "35c6944a|current-head-35" docs/vitis-validation/2026-07-05-selected-*`
+  returned no matches, and `git diff --check` passed.
+- Boundary:
+  docs-only cleanup. No generated HLS, manifest, validation-roster, imported
+  vendor evidence, or EC2/Vitis execution change.
+
+---
+
 ## 2026-07-05 -- Rust rewrite constrains scalar value sugar to bridges
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
