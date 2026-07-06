@@ -57,6 +57,16 @@ explicit-zero `MemReduceOnes16` source preserves the canonical checked payload,
 generated HLS, and manifest. The 39-program dry-run roster and imported Vitis
 evidence remain unchanged; no fresh EC2/Vitis run is claimed.
 
+Current local MemReduce source-spelling proof slice, 2026-07-06: Rust commit
+`6b40b395` (`Pin Spatialish MemReduce zero init`) pins the combined spelling
+where the narrow Spatial-ish uppercase `MemReduce(acc)(...)` bridge also
+includes `Foreach(16 by 1) { j => acc(j) = 0 }` immediately before the
+reduction. The parser and HLS/manifest equality tests passed immediately
+against canonical `MemReduceOnes16`, so this records already-supported
+behavior rather than adding new production behavior. The 39-program dry-run
+roster and imported Vitis evidence remain unchanged; no fresh EC2/Vitis run is
+claimed.
+
 Current local Part6 alias proof slice, 2026-07-06: Rust commit `1bce30c7`
 (`Pin Part6 row-col tail par aliases`) pins the same exact `ROW_PAR=2` /
 `COL_PAR=16` canonical arrow-bulk alias rule for

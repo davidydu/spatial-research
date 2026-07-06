@@ -87,6 +87,13 @@ payload, generated HLS, manifest, dry-run roster, and imported Vitis evidence.
 Generic `MemReduce`, arbitrary reduction bodies, and new initialization
 semantics remain outside the MVP lowering contract.
 
+The 2026-07-06 Spatial-ish MemReduce explicit-zero proof slice also does not
+change this lowering map. It pins already-supported `Foreach(16 by 1)` zero
+initialization immediately before uppercase `MemReduce(acc)(...)` for the
+canonical `MemReduceOnes16` bridge and proves equality with the canonical
+source. Generated HLS, manifests, validation membership, dry-run roster, and
+imported Vitis evidence remain unchanged.
+
 The 2026-07-06 Part6 row/column/K-tail par-alias proof slice also does not
 change this lowering map. It pins already-supported exact `ROW_PAR=2` /
 `COL_PAR=16` source aliases for the scheduled

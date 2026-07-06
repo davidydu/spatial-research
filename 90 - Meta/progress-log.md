@@ -9,6 +9,42 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-06 -- Rust rewrite pins Spatial-ish MemReduce explicit zero-init
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `6b40b395`
+  (`Pin Spatialish MemReduce zero init`).
+- Added proof-only coverage that the narrow Spatial-ish Lab2 memory-reduction
+  spelling may include `Foreach(16 by 1) { j => acc(j) = 0 }` immediately
+  before uppercase `MemReduce(acc)(-5 until 5 by 1) { ... }{_+_}`.
+- The parser and HLS equality tests passed immediately, so this was a missing
+  evidence/docs pin over already-supported behavior, not a production compiler
+  change.
+- Added an HLS/manifest equality regression proving the combined
+  uppercase-`MemReduce` plus explicit-zero spelling preserves the canonical
+  `MemReduceOnes16` checked payload, HLS C++, and manifest.
+- Verification passed:
+  `cargo test -p spatial-rs-core --locked parse_accel_accepts_spatialish_memreduce_with_explicit_zero_init -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen memreduce_spatialish_explicit_zero_init_preserves_canonical_hls_and_manifest -- --nocapture`;
+  `cargo test --locked`;
+  `cargo fmt --all --check`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --out target/vitis-validation-plan`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program --mode both`;
+  `git diff --check`.
+- Imported Vitis evidence still validates as
+  `kernels=39`, `resource_fit=37/39`, `over_budget=2`, and `ii_caveated=14`.
+- Boundary:
+  no production code change, generated HLS change, manifest change,
+  validation-roster change, diagnostic-roster change, imported vendor-evidence
+  change, generic `MemReduce` support, arbitrary initialization semantics, raw
+  Scala wrapper ingress, or fresh EC2/Vitis run.
+
+---
+
 ## 2026-07-06 -- Rust rewrite pins Part6 row/column/K-tail par aliases
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

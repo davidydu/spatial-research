@@ -65,6 +65,14 @@ pre-reduction zero-init role, preserves the canonical checked payload and exact
 HLS/manifest output, and keeps nonzero explicit init fail-closed. This is an
 `hls-eq` source-recognition step only: validation membership, dry-run roster,
 imported Vitis evidence, and generic Spatial `MemReduce` support are unchanged.
+Follow-up Rust commit `6b40b395` (`Pin Spatialish MemReduce zero init`) pins
+the combined Spatial-ish source spelling with `Foreach(16 by 1) { j => acc(j) = 0 }`
+immediately before uppercase `MemReduce(acc)(-5 until 5 by 1) { ... }{_+_}`.
+The parser and HLS equality tests passed immediately, proving this is missing
+coverage/docs over already-supported behavior rather than production expansion.
+Validation membership, generated HLS, manifest output, imported Vitis
+evidence, raw Scala ingress, generic initialization semantics, and generic
+`MemReduce` support remain unchanged.
 The latest local Part6 alias proof slice is Rust commit `1bce30c7`
 (`Pin Part6 row-col tail par aliases`). It pins exact `ROW_PAR=2` /
 `COL_PAR=16` aliases for the canonical arrow-bulk scheduled
