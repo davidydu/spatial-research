@@ -24,24 +24,26 @@ This is still not board execution, Vivado implementation, timing closure, or a
 generic Spatial compatibility claim.
 
 Current Rust rewrite delta, 2026-07-05: the 39-program current-head refresh at
-Rust commit `35c6944a` is now the active vendor-HLS checkpoint. The full
-39-program roster passed EC2/Vitis 2025.1 `csim_design` and `csynth_design`
-after locking `FixPt[TRUE,_24,_8]` lowering to signed truncation/wrap,
-promoting the exact full-K
+source Rust commit `76158dd7` is now the active vendor-HLS checkpoint, imported
+in Rust repo commit `9c966dd6`. The full 39-program roster passed EC2/Vitis
+2025.1 `csim_design` and `csynth_design` after locking
+`FixPt[TRUE,_24,_8]` lowering to signed truncation/wrap, promoting the exact
+full-K
 `MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32` schedule canary,
 promoting the non-Part6
 `MatrixTileMemFoldOuterKRowColTailInPlacePar4x8FixPt33x35x34`
 row/column/K-tail schedule canary, and refreshing the scheduled canonical
-Tile-K bulk IO cleanup, then extracting the Tile-K matcher/proof module.
-Durable evidence:
-`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-35c6944a-39-program/`.
+Tile-K bulk IO cleanup, extracting the Tile-K matcher/proof module, and adding
+the Part6 canonical bulk `ROW_PAR`/`COL_PAR` source bridge. Durable evidence:
+`/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program/`.
 This supersedes older notes below that say the active anchor remains
 `a62eb274`, `7a350983`, `eb4f6236`, `c862e57a`, `b91118f7`, or the
 fixed-point-policy 37-program checkpoint, and also supersedes the earlier
-`746d9ec5` and `00797aed` 39-program current-head bundles. The bundle validates as
-`resource_fit=37/39`, `over_budget=2`, and `ii_caveated=14`, so this is HLS
-acceptance evidence, not board/resource-fit implementation evidence for the
-two over-DSP Tile-K schedules.
+`746d9ec5`, `00797aed`, and `35c6944a` 39-program current-head bundles. The
+bundle was trimmed to stable summaries, sidecars, logs, and reports, then
+validated as `resource_fit=37/39`, `over_budget=2`, and `ii_caveated=14`, so
+this is HLS acceptance evidence, not board/resource-fit implementation
+evidence for the two over-DSP Tile-K schedules.
 
 Current local HLS plan cleanup, 2026-07-05: Rust commit `e360bd71`
 (`Add rank2 HLS access plan helper`) adds a shared `Rank2HlsAccessPlan` view for
@@ -88,8 +90,10 @@ alias values, and actual use of those aliases as HIR par factors; wrong values
 and unused alias constants remain fail-closed. The HLS equality test proves the
 literal and alias spellings emit the same kernel and manifest as the canonical
 adapter. This does not add Lab2 infix alias broadening, validation-roster
-membership, generated-HLS drift, fresh EC2/Vitis evidence, board execution,
-Vivado implementation, or timing-closure evidence.
+membership, generated-HLS drift, board execution, Vivado implementation, or
+timing-closure evidence. The later active current-head EC2/Vitis refresh at
+source commit `76158dd7` proves the unchanged 39-program roster with this
+bridge present.
 
 Current local frontend/HIR semantic slice, 2026-07-05: `Stencil2d v0`
 local-memory roles are now discovered by exact semantic shape rather than by
@@ -1168,7 +1172,7 @@ Generated-code hygiene:
   evidence through the 31-program
   `docs/vitis-validation/2026-07-02-lab2-fsm-alt-31-program/` checkpoint. The
   active Rust-rewrite vendor-stability anchor is now the 39-program
-  `docs/vitis-validation/2026-07-05-current-head-35c6944a-39-program/`
+  `docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program/`
   checkpoint. The previous scheduled Part6, Tile-K facts, post-refactor
   SRAM-tile fold, Lab3 raw-wrapper, fixed-point-policy, and par4x16 boundaries
   remain preserved under their earlier evidence folders. Board execution,
@@ -1196,7 +1200,7 @@ Generated-code hygiene:
 
 For the Rust rewrite, the clean current-head EC2/Vitis checkpoint is now the
 39-program current-head refresh, captured in
-`docs/vitis-validation/2026-07-05-current-head-35c6944a-39-program/`. Use it
+`docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program/`. Use it
 as the vendor-stability anchor for the current EE109 MVP roster, while tracking
 the two over-DSP Tile-K schedules separately from HLS acceptance.
 
@@ -1204,10 +1208,12 @@ The latest validation-roster steps promoted the exact full-K Tile-K `par4x16`
 schedule canary and the non-Part6 `par4x8` row/column/K-tail canary into the
 official roster with EC2/Vitis evidence. The latest local compiler steps then
 finished the shared rank-2 local-compute naming cleanup, recorded rank-2
-local-compute proof objects inside the Tile-K fold/update proof, and added the
-rank-2 HLS access-plan helper at Rust commit `e360bd71`. Par2x8 remains
-diagnostic-only unless we explicitly decide to promote it and pay for a fresh
-full-roster EC2/Vitis refresh. The next implementation action should therefore
+local-compute proof objects inside the Tile-K fold/update proof, added the
+rank-2 HLS access-plan helper at Rust commit `e360bd71`, and added the exact
+Part6 canonical bulk `ROW_PAR`/`COL_PAR` alias bridge at source commit
+`76158dd7`. Par2x8 remains diagnostic-only unless we explicitly decide to
+promote it and pay for a fresh full-roster EC2/Vitis refresh. The next
+implementation action should therefore
 be either a selected semantic-support slice with source corpus, fail-closed
 negative, host harness, dry-run/plan gate, and selected Vitis gate, or a
 deliberate evidence refresh when generated validation HLS or roster membership

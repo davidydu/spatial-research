@@ -9,6 +9,49 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite refreshes 76158dd7 current-head Vitis evidence
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Source Rust commit:
+  `76158dd7`
+  (`Accept Part6 bulk par aliases`).
+- Evidence/import Rust commit:
+  `9c966dd6`
+  (`Record current-head Vitis evidence for 76158dd7`).
+- Ran a fresh full-roster EC2/Vitis 2025.1 execution after the Part6 canonical
+  bulk par-alias bridge, using
+  `[ec2-host — see private/ec2-lane.md]` and
+  `/tools/Xilinx/2025.1/Vitis/settings64.sh`.
+- Remote run directory:
+  `/home/ubuntu/spatial-rs-runs/current-head-76158dd7-20260705/spatial-rs`.
+- Imported durable evidence into:
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program/`.
+- The imported bundle was trimmed to stable summaries, sidecars, logs, and
+  reports; bulky Vitis `project/` and `work/` trees are not retained.
+- Remote result:
+  all 39 validation kernels reported `returncode=0`, `csim=true`, and
+  `csynth=true`.
+- Local evidence validation:
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program --mode both`.
+- Validator result:
+  `kernels=39 resource_fit=37/39 over_budget=2 ii_caveated=14`.
+- Local gates:
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`.
+- Boundary:
+  this supersedes the prior active
+  `docs/vitis-validation/2026-07-05-current-head-35c6944a-39-program/`
+  anchor. It proves vendor HLS acceptance for the exact 39-program EE109 MVP
+  roster at source commit `76158dd7`, not board execution, Vivado
+  implementation, timing closure, resource-fit implementation evidence for the
+  two over-DSP Tile-K schedules, generic Spatial compatibility, broad Scala
+  source compatibility, inferred banking, or automatic schedule lowering.
+
+---
+
 ## 2026-07-05 -- Rust rewrite current-roster Vitis plan gate after Part6 aliases
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
@@ -26,8 +69,10 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 - Boundary:
   this is a local sidecar/summary planning gate only. It did not invoke Vitis,
   run EC2, produce new `csim_design`/`csynth_design` evidence, change the
-  validation roster, or supersede the active vendor anchor
-  `docs/vitis-validation/2026-07-05-current-head-35c6944a-39-program/`.
+  validation roster, or supersede the then-active vendor anchor
+  `docs/vitis-validation/2026-07-05-current-head-35c6944a-39-program/`. The
+  later current-head EC2/Vitis refresh at source commit `76158dd7` now
+  supersedes it.
 
 ---
 
@@ -67,9 +112,10 @@ Append-only, newest-first within day blocks. One line per discrete action when p
   infix alias broadening, generated-HLS changes, manifest changes,
   validation-roster members, imported Vitis evidence, board execution, Vivado
   implementation, timing closure, or broader generic Spatial schedule lowering.
-  No fresh EC2/Vitis execution was run for this checkpoint; the active vendor
-  anchor remains
-  `docs/vitis-validation/2026-07-05-current-head-35c6944a-39-program/`.
+  No fresh EC2/Vitis execution was run inside this local source-spelling
+  checkpoint. The later current-head EC2/Vitis refresh at source commit
+  `76158dd7` now covers the unchanged 39-program roster with this bridge
+  present.
 
 ---
 
