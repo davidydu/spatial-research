@@ -9,6 +9,42 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite pins Lab1 three-input scalar alias spelling
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `db684282`
+  (`Pin Lab1 three-input scalar alias spelling`).
+- Confirmed that the narrow Lab1Part1 three-input teaching spelling with
+  `accel`, scalar `.value` aliases, and exact `(argRegIn0 + argRegIn1) +
+  argRegIn2` shape was already accepted by the existing frontend/HIR path.
+- Added explicit parser regression coverage for the accepted
+  `Lab1Part1RegThreeInputExample` `.value` alias source and for fail-closed
+  alias-order drift.
+- Added HLS/manifest equality coverage proving the alias spelling preserves the
+  canonical three-input adapter output.
+- Updated the Rust repo fixture matrix and MVP plan to record this as
+  regression-pinned existing behavior, not a new source expansion.
+- Verification passed:
+  `cargo test -p spatial-rs-core --locked lab1_part1_three_input_accel_scalar -- --nocapture`;
+  `cargo test -p spatial-rs-hls --test m1_codegen --locked scalar_add3_accel_value_alias_variant_preserves_exact_hls_and_manifest -- --nocapture`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`;
+  `cargo run -p ee109-examples --locked`;
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`.
+- Boundary:
+  no production parser/lowering change was needed. This does not add a
+  validation-roster member, generated-HLS drift, fresh EC2/Vitis evidence,
+  board execution, Vivado implementation, timing closure, generic
+  `ArgIn`/`ArgOut` parsing, or general register `.value` lowering. The active
+  vendor anchor remains
+  `docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program/`.
+
+---
+
 ## 2026-07-05 -- Rust rewrite refreshes 76158dd7 current-head Vitis evidence
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
