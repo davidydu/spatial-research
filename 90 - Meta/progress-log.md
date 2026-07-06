@@ -9,6 +9,44 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-06 -- Rust rewrite pins Part6 row/column/K-tail par aliases
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `1bce30c7`
+  (`Pin Part6 row-col tail par aliases`).
+- Added proof-only coverage that the canonical Rust-subset arrow bulk
+  `MatrixTileMemFoldOuterKRowColTailInPlacePart6ScheduledFixPt33x35x34`
+  source may use exact `ROW_PAR=2` / `COL_PAR=16` constants for its partial
+  row/column `par` factors and still parse to the same scheduled Tile-K
+  checked payload as the literal `par 2` / `par 16` source.
+- The RED parser and HLS-equality tests passed immediately, so this was a
+  missing evidence/docs pin over already-supported behavior, not a production
+  compiler change.
+- Added an HLS/manifest equality regression proving the alias spelling
+  preserves the literal scheduled row/column/K-tail Part6 HLS output and
+  manifest.
+- Verification passed:
+  `cargo test -p spatial-rs-core --locked tile_k_canonical_bulk_io -- --nocapture`;
+  `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_outer_k_part6_row_col_k_tail -- --nocapture`;
+  `cargo test -p ee109-examples --locked validation_programs_include_supported_features_after_adapter_baseline -- --nocapture`;
+  `cargo test --locked`;
+  `cargo fmt --all --check`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --out target/vitis-validation-plan`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program --mode both`;
+  `git diff --check`.
+- Imported Vitis evidence still validates as
+  `kernels=39`, `resource_fit=37/39`, `over_budget=2`, and `ii_caveated=14`.
+- Boundary:
+  no production code change, generated HLS change, manifest change,
+  validation-roster change, diagnostic-roster change, imported vendor-evidence
+  change, inferred schedule support, banking support, or fresh EC2/Vitis run.
+
+---
+
 ## 2026-07-06 -- Rust rewrite accepts explicit zero-init before MemReduce
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

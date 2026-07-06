@@ -87,6 +87,14 @@ payload, generated HLS, manifest, dry-run roster, and imported Vitis evidence.
 Generic `MemReduce`, arbitrary reduction bodies, and new initialization
 semantics remain outside the MVP lowering contract.
 
+The 2026-07-06 Part6 row/column/K-tail par-alias proof slice also does not
+change this lowering map. It pins already-supported exact `ROW_PAR=2` /
+`COL_PAR=16` source aliases for the scheduled
+`MatrixTileMemFoldOuterKRowColTailInPlacePart6ScheduledFixPt33x35x34`
+canonical arrow-bulk canary and proves equality with the literal scheduled
+source. Generated HLS, manifests, validation membership, dry-run roster, and
+imported Vitis evidence remain unchanged.
+
 The 2026-07-06 rank-2 local-compute helper-boundary cleanup does not change
 this lowering map. It moves the shared partial-product/C-accumulation proof
 wrapper layer into `classifier/rank2_access.rs`, while keeping MemFold syntax,

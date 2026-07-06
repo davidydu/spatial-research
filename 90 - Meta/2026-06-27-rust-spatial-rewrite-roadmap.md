@@ -65,6 +65,14 @@ pre-reduction zero-init role, preserves the canonical checked payload and exact
 HLS/manifest output, and keeps nonzero explicit init fail-closed. This is an
 `hls-eq` source-recognition step only: validation membership, dry-run roster,
 imported Vitis evidence, and generic Spatial `MemReduce` support are unchanged.
+The latest local Part6 alias proof slice is Rust commit `1bce30c7`
+(`Pin Part6 row-col tail par aliases`). It pins exact `ROW_PAR=2` /
+`COL_PAR=16` aliases for the canonical arrow-bulk scheduled
+row/column/K-tail Part6 canary and proves equality with the literal `par 2` /
+`par 16` source. The parser and HLS equality tests passed immediately, so this
+is missing coverage/docs over already-supported behavior, not a production
+expansion. Validation membership, generated HLS, manifest output, imported
+Vitis evidence, inferred scheduling, and banking support remain unchanged.
 Follow-up Rust commit `88c7df1a` (`Report Vitis resource quality caveats`)
 does not rerun Vitis, but makes that boundary machine-readable: the local
 evidence validator now parses stable csynth reports and Vitis logs and reports
