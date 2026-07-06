@@ -57,6 +57,14 @@ vendor HLS acceptance for the exact roster only, not board execution,
 implementation, resource fit for the two over-DSP Tile-K schedules, timing
 closure, performance optimality, generic Spatial compatibility, or broad Scala
 source compatibility.
+The latest local MemReduce source-recognition slice is Rust commit `2f09cc44`
+(`Accept explicit zero init before MemReduce`). It admits an explicit
+accumulator zero-initialization foreach immediately before `memreduce` for the
+existing `MemReduceFill v0` shape, proves that write as a separate
+pre-reduction zero-init role, preserves the canonical checked payload and exact
+HLS/manifest output, and keeps nonzero explicit init fail-closed. This is an
+`hls-eq` source-recognition step only: validation membership, dry-run roster,
+imported Vitis evidence, and generic Spatial `MemReduce` support are unchanged.
 Follow-up Rust commit `88c7df1a` (`Report Vitis resource quality caveats`)
 does not rerun Vitis, but makes that boundary machine-readable: the local
 evidence validator now parses stable csynth reports and Vitis logs and reports

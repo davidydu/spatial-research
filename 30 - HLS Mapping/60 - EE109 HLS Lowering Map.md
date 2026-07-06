@@ -80,6 +80,13 @@ The Wave 1 artifacts reduce the active blocker set to five local policies:
 
 ## Current Implementation Note
 
+The 2026-07-06 MemReduce explicit-zero-init source-recognition slice does not
+change this lowering map. It accepts a proven zero-initialization foreach before
+the existing `MemReduceFill v0` reduction shape and preserves the same checked
+payload, generated HLS, manifest, dry-run roster, and imported Vitis evidence.
+Generic `MemReduce`, arbitrary reduction bodies, and new initialization
+semantics remain outside the MVP lowering contract.
+
 The 2026-07-06 rank-2 local-compute helper-boundary cleanup does not change
 this lowering map. It moves the shared partial-product/C-accumulation proof
 wrapper layer into `classifier/rank2_access.rs`, while keeping MemFold syntax,

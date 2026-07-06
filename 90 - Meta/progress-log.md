@@ -9,6 +9,43 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-06 -- Rust rewrite accepts explicit zero-init before MemReduce
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `2f09cc44`
+  (`Accept explicit zero init before MemReduce`).
+- Added an `hls-eq` source-recognition slice for `MemReduceFill v0`: a source
+  may now include an explicit accumulator zero-initialization foreach
+  immediately before `memreduce`.
+- The parser now treats the pending accumulator zero-init form as valid before
+  either `memfold` or `memreduce`. The classifier remains fail-closed by
+  role-identifying exactly one accumulator SRAM, exactly one memory-reduction
+  op, exactly one final store, and zero-or-one proven zero-init loop for
+  `MemReduce`; `MemFold` still requires its proven zero-init.
+- Added fail-closed coverage for nonzero explicit accumulator initialization,
+  plus an HLS/manifest equality regression proving the explicit-zero
+  `MemReduceOnes16` source emits the same HLS and manifest as the canonical
+  source.
+- Verification passed:
+  `cargo test --locked`;
+  `cargo fmt --all --check`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --out target/vitis-validation-plan`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program --mode both`;
+  `git diff --check`.
+- Imported Vitis evidence still validates as
+  `kernels=39`, `resource_fit=37/39`, `over_budget=2`, and `ii_caveated=14`.
+- Boundary:
+  no generated HLS, manifest, validation-roster, diagnostic-roster, or imported
+  vendor-evidence change. No fresh EC2/Vitis execution was run because this is
+  source recognition over the existing canonical `MemReduceFill v0` payload,
+  not generic Spatial `MemReduce` support.
+
+---
+
 ## 2026-07-05 -- Rust rewrite extracts Stencil2d classifier module
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

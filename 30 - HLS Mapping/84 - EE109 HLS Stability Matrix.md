@@ -45,6 +45,18 @@ validated as `resource_fit=37/39`, `over_budget=2`, and `ii_caveated=14`, so
 this is HLS acceptance evidence, not board/resource-fit implementation
 evidence for the two over-DSP Tile-K schedules.
 
+Current local MemReduce source-recognition slice, 2026-07-06: Rust commit
+`2f09cc44` (`Accept explicit zero init before MemReduce`) accepts an explicit
+accumulator zero-initialization foreach immediately before `memreduce` for the
+existing `MemReduceFill v0` shape. The parser allows the pending zero-init
+before either memory-reduction op, while the classifier proves exact roles:
+one accumulator SRAM, optional proven zero-init for `MemReduce`, required
+proven zero-init for `MemFold`, one reduction op, and one final store.
+Nonzero explicit init remains fail-closed, and the HLS equality test proves the
+explicit-zero `MemReduceOnes16` source preserves the canonical checked payload,
+generated HLS, and manifest. The 39-program dry-run roster and imported Vitis
+evidence remain unchanged; no fresh EC2/Vitis run is claimed.
+
 Current local HLS plan cleanup, 2026-07-05: Rust commit `e360bd71`
 (`Add rank2 HLS access plan helper`) adds a shared `Rank2HlsAccessPlan` view for
 global row/column/K expressions and the common local row-major tile offset used
