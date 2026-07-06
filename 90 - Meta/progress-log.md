@@ -8411,3 +8411,45 @@ Boundary:
 - No fresh EC2/Vitis execution was run for this checkpoint.
 - The active vendor anchor remains
   `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-00797aed-39-program/`.
+
+## 2026-07-05 -- Stencil2d checked local-window role payload
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Checkpoint:
+- `Stmt::Stencil2d` now stores typed `Stencil2dLineBuffer` and
+  `Stencil2dWindow` role payloads instead of bare role-name strings.
+- The Stencil2d classifier records the accepted Sobel local-window roles as
+  `LineBuffer<Int>[3, COLS]` and `RegFile<Int>[3,3]`.
+- Checked IR now rejects forged local-window role metadata: wrong line-buffer
+  width, wrong window shape, or non-`Int` role element types fail before HLS or
+  manifest lowering.
+- The manifest guard proves these roles do not become manifest local memories;
+  the HLS-facing inventory remains the existing row SRAM plus two Sobel LUTs.
+
+Proof:
+- Red test first:
+  - `cargo test -p spatial-rs-core --locked checked_ir_rejects_stencil2d -- --nocapture`
+- Targeted green:
+  - `cargo test -p spatial-rs-core --locked parse_accel_accepts_stencil2d_sobel_feature_with_reordered_local_declarations -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked checked_ir_rejects_stencil2d -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked stencil2d -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test m1_codegen stencil2d -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test m1_codegen lab3_convolution -- --nocapture`
+  - `cargo test -p ee109-examples --locked validation_programs_include_supported_features_after_adapter_baseline -- --nocapture`
+- Full local gates:
+  - `cargo test --locked`
+  - `cargo clippy --all-targets --locked -- -D warnings`
+  - `cargo fmt --all --check`
+  - `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`
+  - `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --out target/vitis-validation-plan`
+  - `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program --mode both`
+
+Boundary:
+- No generic `LineBuffer`, `RegFile`, `Reduce`, arbitrary stencil, dynamic
+  dimension, or local-memory-lowering support is claimed.
+- No generated HLS, validation-program membership, or dry-run roster change.
+- No fresh EC2/Vitis execution was run for this checkpoint.
+- The active full-roster vendor anchor remains
+  `/Users/david/Documents/David_code/spatial-rs/docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program/`.

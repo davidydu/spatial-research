@@ -1635,3 +1635,28 @@ Evidence boundary:
   Part5/Part6 shell extraction, outer K tiling, `numel_k`, Part6 `par`,
   banking, generic Spatial `MemFold`, generic DMA, board execution, Vivado
   implementation, or timing closure.
+
+## 2026-07-05 Rust Rewrite Stencil2d Local-Window Role Payload
+
+The Rust rewrite hardened the existing Stencil2d Sobel checked IR without
+changing the HLS-facing surface.
+
+Status:
+- `Stmt::Stencil2d` now carries typed `Stencil2dLineBuffer` and
+  `Stencil2dWindow` role payloads.
+- Checked IR requires the accepted local-window roles to match
+  `LineBuffer<Int>[3, COLS]` and `RegFile<Int>[3,3]`.
+- Forged line-buffer width, window shape, or non-`Int` role metadata is
+  rejected before manifest/HLS lowering.
+- The manifest/HLS memory inventory remains the two Sobel LUTs plus one row
+  SRAM; local-window roles are not manifest local memories.
+
+Evidence boundary:
+- Local gates covered parser, checked IR, Stencil2d manifest/HLS snapshots,
+  Lab3 convolution snapshots, the EE109 validation roster, full workspace
+  tests, clippy, format, dry-run emission, plan-only validation, and captured
+  39-program evidence validation.
+- No fresh EC2/Vitis execution was run because generated HLS, validation
+  membership, and the dry-run roster did not change.
+- This does not claim generic `LineBuffer`, `RegFile`, `Reduce`, arbitrary
+  stencil, dynamic dimension, or broader local-memory lowering support.

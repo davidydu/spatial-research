@@ -1034,6 +1034,12 @@ array-partition pragma rendering now live in `spatial_rs_hls::tile_k` /
 HLS and outer-K equality tests remained green, the 33-program plan-only roster
 was regenerated, and vendor HLS was skipped because emitted artifacts and
 validation membership did not change.
+The later Stencil2d local-window role-payload slice keeps the rewrite moving
+from stringly checked IR toward explicit proof-carrying payloads: the checked
+`Stmt::Stencil2d` now stores typed `Stencil2dLineBuffer` and
+`Stencil2dWindow` roles, validation rejects forged local-window role shape/type
+metadata, and manifests still expose only the row SRAM plus Sobel LUTs. It is
+no-HLS-drift and does not claim generic `LineBuffer` or `RegFile` lowering.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
