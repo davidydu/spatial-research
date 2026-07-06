@@ -8810,3 +8810,64 @@ Boundary:
   are claimed.
 - No fresh EC2/Vitis execution was run for this local helper cleanup; the
   existing 39-program evidence was parsed and validated locally.
+
+## 2026-07-06 -- ResolvedHir const-symbol helper cleanup
+
+Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+`David/HLS-spatial`.
+
+Rust commit:
+- `83beca3d`
+  (`Move const symbol lookup into ResolvedHir`).
+
+Checkpoint:
+- The remaining Dense2D/Tile-K const-symbol/value lookup wrapper moved from
+  `classifier/tiled2d.rs` into `ResolvedHir`.
+- `ResolvedHir::const_symbol_and_i64_value` now owns unique
+  `SymbolKind::Const` lookup plus exact `usize -> i64` value recovery for
+  affine fact helpers.
+- Dense2D MemFold, Tile-K, dot-accum, tile-scalar, and tile-copy fact paths now
+  call the resolver helper instead of the local wrapper.
+- The affected local fact-spec structs no longer carry unused `hir` references
+  after the const lookup moved to `ResolvedHir`.
+
+Proof:
+- Red tests first:
+  - `cargo test -p spatial-rs-core --locked resolved_hir_const_symbol_and_i64_value_requires_const_symbol -- --nocapture`
+  - Failed before implementation because
+    `ResolvedHir::const_symbol_and_i64_value` did not exist.
+  - `cargo test -p spatial-rs-core --locked classifier_const_symbol_value_lookup_uses_resolved_hir_helper -- --nocapture`
+  - Also failed before implementation at the same missing method boundary.
+- Targeted green:
+  - `cargo test -p spatial-rs-core --locked resolved_hir_const_symbol_and_i64_value_requires_const_symbol -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked classifier_const_symbol_value_lookup_uses_resolved_hir_helper -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked dense2d_memfold_rhs_load_fact_matcher -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked dense2d_memfold_lhs_load_fact_matcher -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked tile_k_lhs_load_fact_matcher -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked tile_k_rhs_load_fact_matcher -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked rank2_tile_copy_role -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked dense2d_dot_accum_lhs_load_fact_matcher -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked dense2d_memfold_preload_fact_matcher -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked parse_accel_lab2_outer_k -- --nocapture`
+  - `cargo test -p spatial-rs-core --locked parse_accel_tile_k_canonical_bulk_io -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_outer_k_part6_structural_fixed_32_matches_stable_scheduled_hls_snapshot -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test m1_codegen lab2_outer_k_part6_structural_par_preserves_scheduled_hls_and_manifest -- --nocapture`
+  - `cargo test -p spatial-rs-hls --locked --test vitis_validation selected_outer_k_vitis_evidence_validator_accepts_one_kernel_checkpoint -- --nocapture`
+- Full local gates:
+  - `cargo fmt --all --check`
+  - `cargo test --locked`
+  - `cargo clippy --all-targets --locked -- -D warnings`
+  - `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`
+  - `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --out target/vitis-validation-plan`
+  - `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program --mode both`
+  - `git diff --check`
+- Evidence validator result:
+  `kernels=39 resource_fit=37/39 over_budget=2 ii_caveated=14`.
+
+Boundary:
+- This is a no-HLS-drift frontend/HIR foundation cleanup.
+- No accepted syntax, checked IR payload, generated HLS, manifest,
+  validation-roster membership, dry-run roster, or vendor-HLS evidence changes
+  are claimed.
+- No fresh EC2/Vitis execution was run for this local helper cleanup; the
+  existing 39-program evidence was parsed and validated locally.

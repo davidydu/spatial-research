@@ -1080,6 +1080,12 @@ The helper owns expected plain-lane and tile-plus-lane dimension checks; the
 feature classifiers still own source syntax, schedule/role guards,
 const-symbol lookup, and checked-payload construction. This remains
 no-HLS-drift foundation work, not a new Spatial syntax or HLS lowering feature.
+The following `ResolvedHir` helper cleanup moves that const-symbol/value lookup
+itself into the resolver layer. `ResolvedHir::const_symbol_and_i64_value` now
+owns unique `SymbolKind::Const` lookup plus exact `usize -> i64` recovery for
+affine proof helpers, while Dense2D MemFold, Tile-K, dot-accum, and tile-copy
+classifiers still own source syntax, role/schedule guards, checked-payload
+construction, and HLS emission.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked

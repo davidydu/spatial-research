@@ -95,6 +95,13 @@ and checked-payload construction in the feature classifiers. Generated HLS,
 manifests, validation membership, dry-run roster, and imported Vitis evidence
 remain unchanged.
 
+The 2026-07-06 `ResolvedHir` const-symbol helper cleanup also does not change
+this lowering map. It moves the remaining Dense2D/Tile-K const-symbol/value
+lookup wrapper from `classifier/tiled2d.rs` into `ResolvedHir`, while keeping
+source syntax, role/schedule guards, checked-payload construction, and HLS
+emission unchanged. Generated HLS, manifests, validation membership, dry-run
+roster, and imported Vitis evidence remain unchanged.
+
 ## Next Build Cut
 
 The next implementation cut should be Stage 0 only:

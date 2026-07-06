@@ -141,6 +141,17 @@ no-HLS-drift foundation cleanup: no validation roster member, generated HLS
 change, manifest change, board execution, Vivado implementation, timing
 closure, or automatic schedule lowering is claimed.
 
+Current local frontend/HIR cleanup, 2026-07-06: Rust commit `83beca3d`
+(`Move const symbol lookup into ResolvedHir`) moves the remaining Dense2D/Tile-K
+const-symbol/value lookup wrapper from
+`classifier/tiled2d.rs` into `ResolvedHir`. The resolver now owns unique
+`SymbolKind::Const` lookup and exact `usize -> i64` value recovery for affine
+fact helpers. Feature classifiers still own source syntax, role/schedule
+guards, checked-payload construction, and HLS emission. This is a
+no-HLS-drift foundation cleanup: no validation roster member, generated HLS
+change, manifest change, board execution, Vivado implementation, timing
+closure, or automatic schedule lowering is claimed.
+
 Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `35c6944a`
 (`Move Tile-K proof tests into module`) moves the Tile-K proof/profile tests
 and Tile-K-local LHS/RHS/C preload/store matcher tests under
