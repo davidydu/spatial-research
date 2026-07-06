@@ -87,6 +87,14 @@ Tile-K schedule checks, and checked-payload construction in the feature
 classifiers. Generated HLS, manifests, validation membership, dry-run roster,
 and imported Vitis evidence remain unchanged.
 
+The 2026-07-06 rank-2 tiled-load helper-boundary cleanup also does not change
+this lowering map. It moves the shared LHS/RHS local-write/global-read
+rank-2 load fact comparison into `classifier/rank2_access.rs`, while keeping
+MemFold and Tile-K source syntax, loop/schedule guards, const-symbol lookup,
+and checked-payload construction in the feature classifiers. Generated HLS,
+manifests, validation membership, dry-run roster, and imported Vitis evidence
+remain unchanged.
+
 ## Next Build Cut
 
 The next implementation cut should be Stage 0 only:

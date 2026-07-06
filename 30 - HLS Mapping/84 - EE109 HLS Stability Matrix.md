@@ -130,6 +130,17 @@ This does not add a validation roster member, generated HLS changes, manifest
 changes, board execution, Vivado
 implementation, timing closure, or automatic schedule lowering.
 
+Current local frontend/HIR cleanup, 2026-07-06: Rust commit `a7a092cd`
+(`Share rank2 tiled load fact helper`) moves the shared rank-2 tiled-load fact
+comparison for MemFold and Tile-K LHS/RHS loads into
+`classifier/rank2_access.rs`. The helper owns same-statement
+local-write/global-read grouping and expected local/global dimension checks for
+plain lanes or `tile * stride + lane`. MemFold and Tile-K still own their
+source syntax, schedule, const-symbol, and checked-payload gates. This is a
+no-HLS-drift foundation cleanup: no validation roster member, generated HLS
+change, manifest change, board execution, Vivado implementation, timing
+closure, or automatic schedule lowering is claimed.
+
 Previous local frontend/HIR cleanup, 2026-07-05: Rust commit `35c6944a`
 (`Move Tile-K proof tests into module`) moves the Tile-K proof/profile tests
 and Tile-K-local LHS/RHS/C preload/store matcher tests under

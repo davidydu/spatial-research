@@ -1074,6 +1074,12 @@ partial-product/C-accumulation proof wrapper layer into `rank2_access.rs` as
 well, while `tiled2d.rs` and `tiled2d/tile_k.rs` keep `TilePhase`, MemFold
 syntax guards, Tile-K schedule checks, and checked-payload construction. This
 is still no-HLS-drift compiler-foundation work.
+The next rank-2 tiled-load helper-boundary cleanup moves the shared MemFold and
+Tile-K LHS/RHS local-write/global-read fact comparison into `rank2_access.rs`.
+The helper owns expected plain-lane and tile-plus-lane dimension checks; the
+feature classifiers still own source syntax, schedule/role guards,
+const-symbol lookup, and checked-payload construction. This remains
+no-HLS-drift foundation work, not a new Spatial syntax or HLS lowering feature.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked
