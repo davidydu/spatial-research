@@ -9,6 +9,45 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-05 -- Rust rewrite constrains scalar value sugar to bridges
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit:
+  `82b6271b`
+  (`Constrain scalar value sugar to adapter bridges`).
+- Followed up on subagent review that found scalar input `.value` was being
+  accepted too broadly by the frontend as an ordinary scalar read.
+- Removed the frontend-global scalar-port `.value -> read` rule. Scalar
+  `.value` now lowers to `RegValue` by default, so generic `ScalarExpr v0` and
+  `Dense1dScalarMul v0` reject `a.value` / `scale.value` instead of silently
+  widening the supported language.
+- Kept the intended bridges intact: Lab1 scalar-adapter aliases still normalize
+  `.value` inside the scalar adapter classifier, and the Lab2 LUT bridge still
+  accepts `in.value + lut(i.value, j.value)` through the LUT proof path.
+- Updated Rust repo docs to state the bridge-local `.value` policy explicitly.
+- Verification passed:
+  `cargo test -p spatial-rs-core --locked value_sugar -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked lab1_part1_accel_scalar -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked lab1_part1_three_input_accel_scalar -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked lab2_part4_lut_spatialish_flat_lut_value_source -- --nocapture`;
+  `cargo test -p spatial-rs-core --locked lab2_part4_lut_nonsquare_spatialish_flat_lut_value_source -- --nocapture`;
+  `cargo test --locked --workspace`;
+  `cargo clippy --all-targets --locked -- -D warnings`;
+  `cargo fmt --all -- --check`;
+  `git diff --check`;
+  `cargo run -p ee109-examples --locked`;
+  `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`;
+  `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program --mode both`.
+- Boundary:
+  no generated HLS, manifest, validation-roster, diagnostic-roster, or imported
+  vendor-evidence change. No fresh EC2/Vitis execution was run because this is
+  an admission-boundary cleanup with preserved HLS snapshots. The active vendor
+  anchor remains
+  `docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program/`.
+
+---
+
 ## 2026-07-05 -- Rust rewrite pins Lab1 three-input scalar alias spelling
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
