@@ -1062,7 +1062,10 @@ schedule, and payload gates. The follow-up rank-2 tile-copy helper-boundary
 cleanup now moves the shared local/global copy-role predicate into
 `rank2_access.rs` for non-outer-K MemFold and Tile-K C preload/store paths,
 while keeping feature-local syntax, schedule, const-symbol, and payload gates
-in the classifiers.
+in the classifiers. A second exact-binding migration now removes the remaining
+classifier-local exact ident/span helper copies from scalar, LUT, 1-D tiled,
+and reduction classifiers; those paths use `ResolvedHir::symbol_for_ident` /
+`symbol_id_for_ident`, while name-only uniqueness helpers remain local.
 
 ResolvedHir update: the reviewed design now lives in the Rust repo as
 `docs/superpowers/specs/2026-06-28-resolved-hir-design.md`. It preserves checked

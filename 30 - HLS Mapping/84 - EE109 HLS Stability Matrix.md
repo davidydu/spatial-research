@@ -1729,6 +1729,31 @@ Evidence boundary:
 - No fresh EC2/Vitis execution is expected unless generated artifacts or roster
   membership drift in final local gates.
 
+## 2026-07-06 Rust Rewrite Classifier Exact-Binding Helper Migration
+
+The Rust rewrite finished migrating the remaining classifier-local exact
+identifier/span lookup copies onto `ResolvedHir`.
+
+Status:
+- Scalar, LUT, 1-D tiled, and reduction classifiers now use
+  `ResolvedHir::symbol_for_ident` / `symbol_id_for_ident` for exact
+  `HirIdent + SymbolKind` binding.
+- Local `source_span_contains` and `resolved_symbol_for_ident` copies are
+  removed from those classifiers.
+- Name-only uniqueness helpers stay local where they intentionally resolve by
+  name and kind rather than by concrete source identifier.
+
+Evidence boundary:
+- A source-contract test prevents those migrated classifiers from reintroducing
+  local exact ident/span helper copies.
+- Targeted scalar, LUT, 1-D tiled, and reduction classifier tests cover the
+  migrated call sites before full local gates.
+- Full local gates passed: format, full `cargo test --locked`, clippy,
+  dry-run emission, plan-only validation, current 39-program evidence
+  validation, and diff hygiene.
+- No generated HLS, manifest output, validation-program membership, dry-run
+  roster, or vendor-HLS evidence change is claimed.
+
 ## 2026-07-06 Rust Rewrite Rank-2 Tile-Copy Helper Cleanup
 
 The Rust rewrite moved the shared rank-2 local/global tile-copy fact predicate
