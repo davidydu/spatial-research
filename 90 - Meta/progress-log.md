@@ -9,6 +9,50 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-07 -- GEMM dynamic-dimension slice contract + first checklist slice
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit: `e934bd71` (`Name offending values in rank-1 divisibility
+  diagnostics`).
+- Direction: use the new lab-functionality MVP checklist to move MVP-B
+  forward. EC2 Vitis host `[ec2-alias]` was unreachable this session (SSH
+  timed out; instance likely stopped), so HLS-changing/vendor-tick slices are
+  deferred and this session did the contract + one HLS-neutral slice.
+- Slice contract (flagship): [[2026-07-07-rust-gemm-dynamic-dimension-slice-contract]]
+  specifies checklist item G8 dynamic GEMM dimensions in three stages (static
+  shape freedom, dynamic dims, par legality), with cited code touchpoints,
+  fail-closed boundary, red-first test plan, and EC2 evidence steps. This is
+  the one place the checked lab source (`Lab2GEMM.scala:12-17`, M/N/K as
+  `ArgIn`) does something spatial-rs cannot; it is the highest-value,
+  non-speculative MVP-B gap. Ready to execute from Stage A when EC2 is back.
+- First slice (implemented, HLS-neutral): enriched the Dense1d
+  (`spatial:E0403`) and FIFO (`spatial:E0412`) non-divisible-tile diagnostics
+  to name the offending N and TILE and the multiple-of-TILE requirement, for
+  teaching-quality errors. Ticks the G2 diagnostic box.
+  - Red first:
+    `cargo test -p spatial-rs-core --locked rejects_non_divisible_tiles -- --nocapture`
+    (2 tests failed because the messages named the requirement but not the
+    values and said "divisible" not "multiple").
+  - Green after enriching both labels; added
+    `fifo_feature_rejects_non_divisible_tiles`, strengthened
+    `dense_feature_rejects_non_divisible_tiles`.
+  - Full local gates: `cargo fmt --all --check`; `cargo test --locked`
+    (15 suites, 1068 passed, 0 failed); `cargo clippy --all-targets --locked
+    -- -D warnings`; `cargo run -p ee109-examples --locked --bin
+    emit-vitis-dry-run`; `cargo run -p ee109-examples --locked --bin
+    run-vitis-validation -- --validate-evidence
+    docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program --mode
+    both` -> `kernels=39 resource_fit=37/39 over_budget=2 ii_caveated=14`
+    (unchanged); `git diff --check`.
+- Boundary: no generated-HLS, manifest, validation-roster, or vendor-evidence
+  change; no fresh EC2/Vitis run. Active anchor remains
+  `docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program/`.
+- Resume guide: [[2026-07-07-session-resume-guide]].
+- Session note: solo Claude Fable 5 at the user's direction; no subagent
+  reviewers. Executing agents should re-enable gpt-5.5 xhigh reviewers per the
+  project rule.
+
 ## 2026-07-07 -- Lab-functionality MVP checklist added as acceptance ledger
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
