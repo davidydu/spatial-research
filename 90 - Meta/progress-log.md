@@ -9,6 +9,33 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-07 -- Lab-functionality MVP checklist added as acceptance ledger
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit: `639f2de9` (`Add lab-functionality MVP checklist`).
+- Added `docs/lab-functionality-mvp-checklist.md`: a living acceptance ledger
+  splitting the MVP goal into MVP-A (lab-program acceptance, complete at the
+  39-program `76158dd7` checkpoint) and MVP-B (lab-functionality acceptance,
+  open), with per-construct sections G1-G11, a six-point graduation standard,
+  an evidence policy, and pinned non-goals.
+- Motivation: the labs' GEMM reads `M`/`N`/`K` from `ArgIn` at runtime while
+  spatial-rs covers two static profiles; par factors, reducer bodies, and
+  LUT/stencil constants are similarly enumerated rather than free. The
+  checklist makes "MVP done" crisp so slice selection stops drifting into
+  spelling pins and refactors.
+- README planning list now links the checklist as the acceptance ledger.
+- Vault record: [[2026-07-07-lab-functionality-mvp-checklist]].
+- Verification: docs-only change; `git diff --check` clean before commit; no
+  code, test, generated-HLS, manifest, validation-roster, or vendor-evidence
+  change.
+- Boundary: the checklist itself claims no new support; every open box
+  requires its own slice with proof facts, fail-closed negatives, host gate,
+  and the stated Vitis evidence policy before it may be ticked.
+- Session note: authored solo in a Claude Fable 5 session at the user's
+  direction (no subagent reviewers); follow-up slices continue the existing
+  TDD/evidence conventions.
+
 ## 2026-07-06 -- Rust rewrite pins Spatial-ish MemReduce explicit zero-init
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
