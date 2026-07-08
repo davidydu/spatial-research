@@ -106,7 +106,7 @@ validation roster and run a full-roster refresh.
   `classify_dense2d_tile_k_memfold`, `tile_k_memfold_candidate_precheck`, and
   the staged proof helpers (`prove_tile_k_source_shape`,
   `prove_tile_k_phase_spine`, `prove_tile_k_access_roles`,
-  `prove_tile_k_fold_schedule`). Tile counts are already validated from loop
+  `prove_tile_k_fold_update`). Tile counts are already validated from loop
   bounds rather than source-shape matching, which is the hook dynamic dims
   builds on.
 - Frontend surface for runtime scalar dims: `crates/spatial-rs-core/src/frontend/`
@@ -149,9 +149,12 @@ Stage C:
 
 ## EC2 / Vitis Evidence Steps
 
-The EC2 host `[ec2-alias]` (see `~/.ssh/config`) was **unreachable on
-2026-07-07** (SSH to `[old-ec2-host — see private/ec2-lane.md]:22` timed out —
-instance likely stopped). Before claiming any G8 vendor tick:
+The EC2 host `[ec2-alias]` (see `~/.ssh/config`) was unreachable earlier on
+2026-07-07 and was **restored later the same day**: the alias now points at
+`[ec2-host — see private/ec2-lane.md]` (user `ubuntu`, key
+`[ssh-key — see private/ec2-lane.md]`), verified with Vitis 2025.1,
+cargo/rustc 1.75, and 74G free after clearing stale run workspaces. Before
+claiming any G8 vendor tick:
 
 1. Confirm the instance is running and reachable:
    `ssh [ec2-alias] "source /tools/Xilinx/2025.1/Vitis/settings64.sh; vitis-run --version"`.

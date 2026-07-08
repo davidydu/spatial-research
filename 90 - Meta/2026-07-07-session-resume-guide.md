@@ -56,10 +56,15 @@ expansion, not DSP tuning.
 ## EC2 / Vitis Lane
 
 - Host alias `[ec2-alias]` in `~/.ssh/config`
-  (`[old-ec2-host — see private/ec2-lane.md]`, user `ubuntu`, key
-  `~/.ssh/[old-ssh-key]`). **Was unreachable 2026-07-07 (SSH timeout) — instance
-  likely stopped; public IP is dynamic across stop/start unless an Elastic IP
-  is attached.**
+  (`[ec2-host — see private/ec2-lane.md]`, user `ubuntu`, key
+  `[ssh-key — see private/ec2-lane.md]`). **Restored 2026-07-07 (later
+  session): the old `[old-ec2-host — see private/ec2-lane.md]` / `[old-ssh-key]`
+  entry was dead; the live us-west-2 host has Vitis 2025.1 at
+  `/tools/Xilinx/2025.1`, cargo/rustc 1.75, and the bundle/run-script lane
+  layout under `~/`. Stale `~/spatial-rs-runs` workspaces and old bundles
+  (72G+) were deleted after confirming every checkpoint was already imported
+  under `docs/vitis-validation/`; disk is now ~70% used with 74G free. The IP
+  is still dynamic across stop/start unless an Elastic IP is attached.**
 - Reachability check:
   `ssh [ec2-alias] "source /tools/Xilinx/2025.1/Vitis/settings64.sh; vitis-run --version"`.
   If the hostname changed, update `~/.ssh/config` first.
