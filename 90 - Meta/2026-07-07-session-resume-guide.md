@@ -14,9 +14,9 @@ the checklist, then the flagship contract. This supplements, does not replace,
 ## Where Things Stand (2026-07-07)
 
 - Rust repo: `/Users/david/Documents/David_code/spatial-rs`, branch
-  `David/HLS-spatial`, clean tree at commit `d2f3e288`. (`.codex/` is an
-  untracked local loop artifact; leave it untracked unless David says
-  otherwise.)
+  `David/HLS-spatial`, clean tree at the dynamic-dim evidence commit (see
+  `git log`; latest slice is G8 Stage B / B1). (`.codex/` is an untracked
+  local loop artifact; leave it untracked unless David says otherwise.)
 - **MVP-A (every lab program → Vitis-validated): complete.** 39-program roster,
   anchor `docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program/`,
   `resource_fit=37/39`, `over_budget=2`, `ii_caveated=14`.
@@ -37,13 +37,23 @@ the checklist doc.
 
 ## Do Next (priority order)
 
-1. **G8 GEMM dynamic dimensions** — the flagship, the only checked-lab-source
-   gap. Stage A (static shape freedom) is **done and ticked** (`e2536a1b` +
-   `d2f3e288`); execute
-   [[2026-07-07-rust-gemm-dynamic-dimension-slice-contract]] from **Stage B
-   (dynamic dims)**, then Stage C (par legality — note the Stage A finding
-   that fixed small tiles blow the DSP budget via Vitis auto-unroll; Stage C
-   legality/QoR work should account for it).
+1. **G8 GEMM dynamic dimensions** — the flagship. Stage A (static shape
+   freedom) is **done and ticked**. Stage B is decomposed into B1/B2/B3 in
+   [[2026-07-07-rust-gemm-dynamic-dimension-slice-contract]]:
+   - **B1 (runtime-dimension backend) is DONE** (`330ed1b8`, `71b71f25`,
+     `5941c37c` + Vitis evidence): one Tile-K kernel takes `m`/`n`/`k` as
+     runtime scalar params, host-gate-swept over five shapes and Vitis-proven
+     (`resource_fit=1/1`, 28 DSP vs 220). Selected (non-roster) representative
+     `MatrixTileMemFoldOuterKRuntimeDimsFixPt`.
+   - **Do next: B2 (frontend ingress)** — accept `lhs: Dram<T>[m, k]` with
+     `m`/`k` scalar inputs so the classifier produces the B1 payload. Resolve
+     the anchor-representation open question in the contract first (leaning:
+     synthesize a tile-consistent anchor + a parallel `dim_symbols` field on
+     `HirPort`, not a `Vec<HirDim>` change). Reuses all of B1's backend.
+   - Then **B3** (roster promotion + full-roster refresh) and Stage C (par
+     legality — note the Stage A finding that fixed small tiles blow the DSP
+     budget via Vitis auto-unroll).
+   The G8 dynamic-dimension checklist box stays OPEN until B2+B3 land.
 2. **G7 LUT value/dim freedom, G6 FSM constant freedom, G9 stencil
    coefficient/dim freedom** — parameterize the exact-constant families. Each
    is a bounded, non-speculative slice with clear acceptance criteria in the

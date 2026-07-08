@@ -9,6 +9,55 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-08 -- G8 Stage B / B1: runtime-dimension GEMM backend proven
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commits (B1, the runtime-dimension backend, done in four green steps):
+  - `330ed1b8` — part 1: `Dense2dTileKMemFold` gains
+    `rows_dim`/`cols_dim`/`k_dim: Option<String>`; `validate.rs` accepts a
+    Tile-K program with exactly those runtime-dim scalar inputs in (row, col,
+    K) ordinal order, requiring each runtime extent to carry its tail guard.
+  - `71b71f25` — part 2: HLS lowering. Runtime dims become trailing `int`
+    kernel params with s_axilite pragmas; outer loops become runtime
+    `((dim + TILE - 1) / TILE)` ceils; tail guards and row-major strides use
+    the runtime extent (K drives the lhs stride, COLS the rhs/C strides, ROWS
+    only loop counts). The shared memory model gained
+    `row_major_offset_c_expr_with_stride(None)` = byte-identical default. The
+    host harness sweeps several `(m,n,k)` triples through one compiled kernel
+    vs the Rust oracle.
+  - `5941c37c` — part 3: `ee109_examples::dynamic_dimension_gemm_programs()`
+    selected pool, wired into `run-vitis-validation --kernel`; roster stays 39.
+  - `d2f3e288`-style evidence commit for the Vitis run (see below).
+- Design note: Stage B decomposed into B1 (backend, done), B2 (frontend
+  ingress), B3 (roster promotion + full refresh) in
+  [[2026-07-07-rust-gemm-dynamic-dimension-slice-contract]]. Reason:
+  `HirPort.dims` is `Vec<usize>` with ~100 readers and the frontend has no
+  scalar-driven-extent spelling, so the AST/HIR-invasive ingress is its own
+  slice. B1 built the representative through the checked-IR builders.
+- Red first: `checked_ir_accepts_runtime_dimension_tile_k_program` failed at
+  `spatial:E0300` (scalar ports forbidden) before the validate relaxation;
+  missing-scalar and swapped-ordinal negatives stay fail-closed.
+- Host gate: `tile_k_runtime_dimension_harness_sweeps_sizes_vs_oracle`
+  compiles the one runtime-dim kernel and runs five `(m,n,k)` shapes (anchor
+  `30x22x18`, single-tile `8x8x4`, exact `16x16x8`, and two small
+  non-multiples) against the oracle.
+- Vendor evidence (selected EC2/Vitis `--execute --mode both`, restored
+  us-west-2 lane, `xc7z020-clg400-1`): `MatrixTileMemFoldOuterKRuntimeDimsFixPt`
+  passes `csim` + `csynth` and **fits** — `resource_fit=1/1`, `over_budget=0`,
+  `ii_caveated=0`, 28 DSP vs 220, Fmax 136.99 MHz. The captured `kernel.cpp`
+  carries the `int m, int n, int k_total` ABI and runtime ceil loops.
+  `docs/vitis-validation/2026-07-08-selected-dynamic-dim-gemm-5941c37c/`.
+- Full local gates at each commit: `cargo fmt --all --check`;
+  `cargo test --locked` (1088 passed at part 3); `cargo clippy --all-targets
+  --locked -- -D warnings`; evidence validate on the 39-program anchor
+  unchanged (`kernels=39 resource_fit=37/39 over_budget=2 ii_caveated=14`);
+  `git diff --check`.
+- Boundary: static Tile-K generated HLS/manifests and the validation roster
+  are unchanged (existing snapshots pass; the `_with_stride(None)` path is
+  byte-identical). The G8 dynamic-dimension checklist box stays OPEN pending
+  B2 (source ingress) and B3 (roster promotion + full-roster refresh).
+
 ## 2026-07-07 -- G8 Stage A vendor evidence: static-shape family ticked
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

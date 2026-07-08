@@ -95,6 +95,11 @@ bakes row-major strides as literals from static extents, and `validate.rs`
 forbids scalar ports for Tile-K. To keep each commit green and each feature
 host-gate-verifiable, split Stage B into:
 
+**B1 status: COMPLETE (2026-07-08).** Commits `330ed1b8` (payload + validate),
+`71b71f25` (HLS ABI + sweeping harness), `5941c37c` (selected pool). Vendor
+evidence `docs/vitis-validation/2026-07-08-selected-dynamic-dim-gemm-5941c37c/`
+passes csim+csynth and fits (`resource_fit=1/1`, 28 DSP vs 220). Next: B2.
+
 - **B1 — runtime-dimension backend ABI + sweeping harness (the hard core).**
   Payload gains `rows_dim` / `cols_dim` / `k_dim: Option<String>`; when
   `Some(port)`, that extent is a runtime kernel parameter driven by that scalar
@@ -117,6 +122,22 @@ host-gate-verifiable, split Stage B into:
   runtime dim, HIR carries it, and the Tile-K classifier produces the same B1
   payload. Reuses all of B1's backend verbatim. This is the AST/HIR-invasive
   piece and gets its own red-first slice.
+
+  **Open design question to resolve first (brainstorm before coding):** the B1
+  payload keeps `rows`/`cols`/`k` as the concrete verification/sweep anchor,
+  but a source `Dram<T>[m, k]` carries no concrete extent — `m`/`k` are scalar
+  inputs. Options: (a) the runtime harness already derives its whole sweep
+  from the static tile sizes, so the classifier can synthesize a
+  tile-consistent anchor (e.g. one-tile `rows = tile_rows`) purely to satisfy
+  validate's coverage invariant, with the harness ignoring it beyond one sweep
+  entry; (b) require the source to also declare a representative anchor
+  (clunky, non-lab-like); (c) make the anchor optional in the payload and have
+  validate/harness treat runtime-dim coverage structurally rather than against
+  a concrete extent. Leaning (a) — smallest change, keeps the payload
+  invariant intact. Also decide `HirPort.dims` representation: keep
+  `Vec<usize>` (store the synthesized anchor, add a parallel
+  `dim_symbols: Vec<Option<HirIdent>>`) vs. change to `Vec<HirDim>` (~100
+  readers). The parallel-field approach is far less invasive.
 - **B3 — roster promotion + full refresh.** Promote one dynamic-dim
   representative (ideally source-ingressed from B2) into `validation_programs()`,
   run a full-roster `--execute --mode both` EC2/Vitis refresh, and re-anchor
