@@ -9,6 +9,47 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-07 -- G8 Stage A vendor evidence: static-shape family ticked
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit: `d2f3e288` (`Record selected Vitis evidence for the
+  static-shape family`), evidence for source commit `e2536a1b`.
+- Selected EC2/Vitis runs on the restored `[ec2-alias]` lane
+  (`[ec2-host — see private/ec2-lane.md]`, Vitis 2025.1, `xc7z020-clg400-1`), one
+  `--execute --mode both --kernel` run per family representative, all
+  `returncode=0 csim=true csynth=true`, Fmax 136.99 MHz:
+  - `MatrixTileMemFoldOuterKInPlaceFixPt40x24x16Tile8x8x8` — **over budget**
+    (256 DSP vs 220) — `docs/vitis-validation/2026-07-07-selected-family-fullk-fixpt-e2536a1b/`
+  - `MatrixTileMemFoldOuterKInPlace48x32x32Tile16x16x16` — fits (48 DSP) —
+    `docs/vitis-validation/2026-07-07-selected-family-fullk-int-e2536a1b/`
+  - `MatrixTileMemFoldOuterKTailInPlaceFixPt40x24x18Tile8x8x4` — **over
+    budget** (256 DSP vs 220) —
+    `docs/vitis-validation/2026-07-07-selected-family-k-tail-e2536a1b/`
+  - `MatrixTileMemFoldOuterKRowColTailInPlaceFixPt27x21x10Tile8x8x4` — fits
+    (7 DSP) —
+    `docs/vitis-validation/2026-07-07-selected-family-row-col-k-tail-e2536a1b/`
+- Finding worth keeping: fixed small tile trip counts (`8x8x8`, `8x8x4`)
+  trip Vitis 2025.1 small-loop auto-unrolling in the pipelined compute loops
+  and blow the DSP budget, while runtime tail bounds
+  (`row_limit`/`col_limit`) and 16x16 tiles do not. Resource-fit legality for
+  small fixed tiles is a real Stage C / G11 concern, not a hypothetical.
+- Each dir validates locally
+  (`--validate-evidence <dir> --kernel <K> --mode both`); results
+  `resource_fit=0/1 over_budget=1` for the two small-fixed-tile members,
+  `1/1` for the other two, `ii_caveated=0` for all four.
+- Checklist: the G8 **static shape freedom (serial)** box is ticked in
+  `docs/lab-functionality-mvp-checklist.md` in the same commit, caveats
+  named. Repo README selected-evidence list updated.
+- Full gates re-run after import: `cargo test --locked` 1080 passed / 0
+  failed; 39-program anchor unchanged
+  (`kernels=39 resource_fit=37/39 over_budget=2 ii_caveated=14`);
+  `git diff --check` clean.
+- Boundary: selected HLS-acceptance (and, for two members, resource-fit)
+  evidence only; no roster change, no full-roster refresh, no dynamic
+  dimensions, no scheduled-family claim. Stage B (dynamic dims) is next per
+  [[2026-07-07-rust-gemm-dynamic-dimension-slice-contract]].
+
 ## 2026-07-07 -- G8 Stage A: serial Tile-K static-shape parameter family
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

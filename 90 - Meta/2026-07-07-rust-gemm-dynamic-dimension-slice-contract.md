@@ -170,13 +170,21 @@ claiming any G8 vendor tick:
    `--execute --mode both` refresh, then update the current-head anchor in
    README, this contract, the checklist, and the progress log together.
 
-## Resume State (2026-07-07)
+## Resume State (2026-07-07, post-Stage-A)
 
-- Checklist and this contract are committed; no G8 code exists yet.
-- Start at Stage A. It is the smallest increment that generalizes real
-  machinery and is independently valuable even before dynamic dims.
-- The workspace is green at `639f2de9` plus the diagnostic-stability slice
-  committed the same day (see [[progress-log]] `2026-07-07`).
+- **Stage A is complete and ticked** (commits `e2536a1b` code,
+  `d2f3e288` evidence): serial static-shape parameter family accepted at
+  classifier/checked-IR (`SerialKTailCeilCoverage` /
+  `SerialRowColKTailCeilCoverage` in `validate.rs`), perturbation matrix +
+  host gate green, four selected EC2/Vitis csim+csynth runs imported under
+  `docs/vitis-validation/2026-07-07-selected-family-*-e2536a1b/`.
+  Caveat for Stage C planning: fixed small tiles (`8x8x8`, `8x8x4`) trip
+  Vitis small-loop auto-unroll and exceed the `xc7z020` DSP budget
+  (256 vs 220); runtime tail bounds and 16x16 tiles fit.
+- **Start at Stage B (dynamic dimensions)** — the lab's actual interface.
+  Scheduled (`par`) tails remain pinned to the named canaries until Stage C.
+- The workspace is green at `d2f3e288` (1080 tests), 39-program anchor
+  unchanged.
 - Keep gpt-5.5 xhigh reviewers in the loop per the project rule if executing
-  under a subagent workflow; this session ran solo on Claude Fable 5 at the
-  user's direction.
+  under a subagent workflow; the 2026-07-07 sessions ran solo on Claude
+  Fable 5 at the user's direction.

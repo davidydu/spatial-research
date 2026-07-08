@@ -14,7 +14,7 @@ the checklist, then the flagship contract. This supplements, does not replace,
 ## Where Things Stand (2026-07-07)
 
 - Rust repo: `/Users/david/Documents/David_code/spatial-rs`, branch
-  `David/HLS-spatial`, clean tree at commit `e934bd71`. (`.codex/` is an
+  `David/HLS-spatial`, clean tree at commit `d2f3e288`. (`.codex/` is an
   untracked local loop artifact; leave it untracked unless David says
   otherwise.)
 - **MVP-A (every lab program → Vitis-validated): complete.** 39-program roster,
@@ -22,8 +22,11 @@ the checklist, then the flagship contract. This supplements, does not replace,
   `resource_fit=37/39`, `over_budget=2`, `ii_caveated=14`.
 - **MVP-B (lab functionality/knobs): open.** Tracked by
   `docs/lab-functionality-mvp-checklist.md` sections G1-G11. G1 complete;
-  G2 complete; the rest open.
-- Full suite green: 15 suites, 1068 tests, 0 failures.
+  G2 complete; **G8 Stage A (serial static-shape family) ticked with four
+  selected Vitis evidence dirs
+  (`docs/vitis-validation/2026-07-07-selected-family-*-e2536a1b/`)**; the
+  rest open.
+- Full suite green: 15 suites, 1080 tests, 0 failures.
 
 ## The One Definition That Matters
 
@@ -35,10 +38,12 @@ the checklist doc.
 ## Do Next (priority order)
 
 1. **G8 GEMM dynamic dimensions** — the flagship, the only checked-lab-source
-   gap. Execute [[2026-07-07-rust-gemm-dynamic-dimension-slice-contract]] from
-   Stage A (static shape freedom), then Stage B (dynamic dims), then Stage C
-   (par legality). Highest value; also the real test of whether the proof-fact
-   infrastructure generalizes.
+   gap. Stage A (static shape freedom) is **done and ticked** (`e2536a1b` +
+   `d2f3e288`); execute
+   [[2026-07-07-rust-gemm-dynamic-dimension-slice-contract]] from **Stage B
+   (dynamic dims)**, then Stage C (par legality — note the Stage A finding
+   that fixed small tiles blow the DSP budget via Vitis auto-unroll; Stage C
+   legality/QoR work should account for it).
 2. **G7 LUT value/dim freedom, G6 FSM constant freedom, G9 stencil
    coefficient/dim freedom** — parameterize the exact-constant families. Each
    is a bounded, non-speculative slice with clear acceptance criteria in the
