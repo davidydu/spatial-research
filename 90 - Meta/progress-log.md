@@ -9,6 +9,61 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-07 -- G8 Stage A: serial Tile-K static-shape parameter family
+
+- Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
+  `David/HLS-spatial`.
+- Rust commit: `e2536a1b` (`Accept serial Tile-K static-shape parameter
+  family`).
+- Direction: execute Stage A of
+  [[2026-07-07-rust-gemm-dynamic-dimension-slice-contract]] (G8 static shape
+  freedom) after restoring the EC2 lane (see the lane-restoration vault commit
+  earlier today: live host is now `[ec2-host — see private/ec2-lane.md]`, alias
+  `[ec2-alias]`, key `[ssh-key]`; 74G free after clearing stale run
+  workspaces already imported under `docs/vitis-validation/`).
+- Slice: the checked-IR gate was `validate.rs`
+  `dense2d_tile_k_memfold_support_profile` — serial/scheduled full-K exact
+  coverage was already parametric, but serial K-tail and serial
+  row/column/K-tail were name+shape-pinned to the `32x32x34` / `33x35x34`
+  canaries. New `SerialKTailCeilCoverage` / `SerialRowColKTailCeilCoverage`
+  arms accept any consistent static shape for non-named-profile kernels
+  (ceil-coverage consistency was already enforced parametrically by the
+  tiling/coverage checks); pinned canary names keep their exact locks;
+  scheduled tails stay pinned pending Stage C par legality.
+- Red first:
+  - `cargo test -p spatial-rs-core --locked tile_k_support_profile_accepts_serial_static_shape_family`
+    failed at missing `SerialKTailCeilCoverage` / `SerialRowColKTailCeilCoverage`
+    variants (E0599), then at `spatial:E0300` for the K-tail payload.
+  - `checked_ir_accepts_serial_static_shape_family_sources` failed at
+    `spatial:E0300` on `MatrixTileMemFoldOuterKTailInPlaceFixPt40x24x18Tile8x8x4`.
+  - `tile_k_contract_accepts_parameterized_serial_k_tail_profile` and
+    `..._row_col_k_tail_profile` failed as near misses at the same checked-IR
+    gate (classifier proof round-trips through checked IR).
+- Perturbation matrix (all green after the arms landed): `40x24x16 / 8x8x8`
+  FixPt full-K, `48x32x32 / 16x16x16` Int full-K, `40x24x18 / 8x8x4` FixPt
+  K-tail, `27x21x10 / 8x8x4` FixPt row/col/K-tail; each classifier-proven
+  with payload facts and host-harness-run vs the Rust oracle
+  (`tile_k_static_shape_family_harness_matches_oracle`).
+- Fail-closed pins: pinned tail canary names reject other shapes
+  (`checked_ir_rejects_pinned_tail_names_for_other_static_shapes`), full-K
+  spelling with non-dividing K stays a near miss, mixed element types and
+  reserved lab names stay rejected.
+- Examples: new `static_shape_family_programs()` selected pool (four
+  representatives, roster untouched at 39), wired into
+  `run-vitis-validation --kernel`; unknown-kernel message now names the pool;
+  plan-gate test for the row/col/K-tail representative asserts
+  `row_limit`/`col_limit`/`numel_k` in the emitted kernel.cpp.
+- Full local gates: `cargo fmt --all --check`; `cargo test --locked`
+  (1080 passed, 0 failed); `cargo clippy --all-targets --locked -- -D
+  warnings`; `emit-vitis-dry-run`; full `run-vitis-validation --out` plan;
+  `--validate-evidence docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program
+  --mode both` -> `kernels=39 resource_fit=37/39 over_budget=2 ii_caveated=14`
+  (unchanged); `git diff --check`.
+- Boundary: no validation-roster, existing-member generated-HLS/manifest, or
+  imported-evidence change. The G8 static-shape checklist box stays OPEN until
+  selected EC2/Vitis `csim_design`/`csynth_design` evidence for the four family
+  representatives is imported (next step this session).
+
 ## 2026-07-07 -- GEMM dynamic-dimension slice contract + first checklist slice
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
