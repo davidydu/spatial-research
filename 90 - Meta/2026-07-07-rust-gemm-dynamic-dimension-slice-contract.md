@@ -87,6 +87,41 @@ static-shape box may be ticked.
 After a selected EC2/Vitis run, promote one dynamic-dim representative into the
 validation roster and run a full-roster refresh.
 
+#### Stage B sub-ladder (decided 2026-07-07 after reading the seams)
+
+Stage B is invasive: `HirPort.dims` is `Vec<usize>` with ~100 read sites, the
+frontend has no spelling for a scalar-driven extent, the HLS memory model
+bakes row-major strides as literals from static extents, and `validate.rs`
+forbids scalar ports for Tile-K. To keep each commit green and each feature
+host-gate-verifiable, split Stage B into:
+
+- **B1 — runtime-dimension backend ABI + sweeping harness (the hard core).**
+  Payload gains `rows_dim` / `cols_dim` / `k_dim: Option<String>`; when
+  `Some(port)`, that extent is a runtime kernel parameter driven by that scalar
+  input port, and `rows`/`cols`/`k` remain the concrete verification/sweep
+  anchor used by the oracle and harness. `validate.rs` relaxes `no_scalar_ports`
+  to allow exactly the named runtime-dim scalar inputs in ordinal order, and
+  keeps coverage/tail checks on the concrete anchor. Manifest records the
+  runtime-dim scalar ports. HLS threads `int` dim params into the kernel
+  signature after the buffers, emits `((dim + TILE - 1) / TILE)` runtime tile
+  loops and `min(TILE, dim - idx*TILE)` tail guards, and uses the param name as
+  the row-major stride for runtime dims — via a Tile-K-local index-expr helper
+  so the shared memory model is untouched and static-dim kernels stay
+  byte-identical. Harness sweeps several `(M,N,K)` triples (including
+  non-multiples of the tile) through one compiled kernel against the Rust
+  oracle. Built through the `Program` builder (no frontend yet), kept as a
+  selected (non-roster) member, proven by the host gate then a selected
+  EC2/Vitis run. This is where "dynamic dimensions" is actually proven to work.
+- **B2 — frontend ingress.** Accept the lab spelling `inputs { m: Int, ...
+  lhs: Dram<T>[m, k] }`: `resolve_dim` recognizes a scalar-input ident as a
+  runtime dim, HIR carries it, and the Tile-K classifier produces the same B1
+  payload. Reuses all of B1's backend verbatim. This is the AST/HIR-invasive
+  piece and gets its own red-first slice.
+- **B3 — roster promotion + full refresh.** Promote one dynamic-dim
+  representative (ideally source-ingressed from B2) into `validation_programs()`,
+  run a full-roster `--execute --mode both` EC2/Vitis refresh, and re-anchor
+  README + checklist + contract + progress log together.
+
 ### Stage C — Par legality over the parametric family
 
 - Extend the `ParRxC` name/factor coherence guard
