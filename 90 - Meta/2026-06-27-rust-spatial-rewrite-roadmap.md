@@ -13,6 +13,17 @@ related:
 
 # Rust Spatial Rewrite Roadmap
 
+> [!important] 2026-07-07 status
+> The [[2026-07-07-fundamental-design-review|fundamental design review]]
+> (David-adopted) reaffirmed this document's framing — especially "avoid
+> growing the compiler by adding endless exact lab recognizers" — and found
+> that the implementation mechanism never matched it: the semantic core
+> remained whole-program classification. Execution guidance now lives in
+> `spatial-rs/docs/superpowers/plans/2026-07-07-compositional-core-inversion-roadmap.md`
+> (controller-tree IR + interpreter + compositional backend; classifiers
+> retire into legality diagnostics and regression fixtures). Treat the phase
+> details below as historical record where they conflict with that plan.
+
 ## Framing
 
 The long-term goal is a Rust rewrite of Spatial with HLS C++ as the primary backend. EE109 labs are the first acceptance ladder because they are concrete teaching examples, but they are not the final compiler boundary.

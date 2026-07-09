@@ -9,6 +9,213 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-09 -- Compositional inversion design checkpoint committed
+
+Rust repo commit `f35a1bdb` (`Adopt compositional core inversion`) records the
+David-adopted fundamental review and successor roadmap on
+`David/HLS-spatial`. The checkpoint also routes README, architecture, EE109
+plan, MVP-B graduation language, and the superseded roadmap consistently
+toward the controller-tree IR + interpreter + structural backend.
+
+Review and corrections:
+- Six read-only `gpt-5.5`/xhigh Phase 0 lanes audited canonical syntax,
+  semantic/type rules, compatibility bridges, 39-program corpus migration,
+  metaprogramming policy, and host/runtime/CLI policy.
+- A final focused reviewer found two important routing problems: the MVP-B
+  graduation standard still named classifier acceptance, and the old roadmap
+  implied unfinished phases were complete. Both were corrected before commit.
+- Current milestone exclusions are now explicitly deferrals, not permanent
+  limits on the full Rust rewrite.
+- The G8 dynamic-dimension entry now distinguishes landed B1 checked-IR/HLS/
+  selected-Vitis proof from still-open canonical source ingress, diagnostics,
+  manifest role linkage, roster promotion, and full refresh.
+
+Phase 0 findings carried forward:
+- Canonical surface: lowercase controller/IO verbs, PascalCase hardware
+  memories, `..` ranges, arrow bulk IO, explicit `seq` / `pipe ii N`, and
+  `par` as a lane-count assertion whose legality is proved separately.
+- Metaprogramming: restricted compiler-owned named const evaluation, not a
+  staged Scala/Rust host language.
+- Host/runtime: file-based `spatial-rs check`, `build`, and later `run`; keep
+  the Rust API internal until the controller-tree boundary stabilizes.
+- Corpus: all 39 roster members originate from source; 32 are close to the
+  canonical surface and seven legacy GEMM spellings need equality-guarded
+  migration. The selected runtime-dimension GEMM remains the one checked-IR
+  builder awaiting general source ingress.
+
+Verification after all review fixes:
+- `cargo test --locked`: 1088 passed, 0 failed.
+- `cargo fmt --all --check`: passed.
+- `cargo clippy --all-targets --locked -- -D warnings`: passed.
+- `git diff --check`: passed.
+
+Boundary: documentation/design only. No accepted syntax, checked IR,
+generated HLS, manifest, validation roster, or vendor evidence changed. The
+pre-existing untracked `.codex/` directory was not touched. Next: write and
+execute the detailed Phase 0 language-contract plan.
+
+## 2026-07-08 -- Fundamental design review adopted: invert recognition into compilation
+
+Decision entry (docs-only). David asked for a design review against the true
+goal — full Rust rewrite of Spatial with teachable high-level abstraction
+syntax, EE109 labs as priority functionality — explicitly setting aside the
+MVP-A/B framing, then adopted the findings and directed recording them and
+updating stale plans. Vault-side record:
+[[2026-07-07-fundamental-design-review]]. Authoritative full text:
+`spatial-rs/docs/2026-07-07-fundamental-design-review.md`.
+
+Checkpoint:
+- Verdict: the verification stack (oracle, goldens, Vitis evidence +
+  validator, fail-closed diagnostics) is the durable asset and stays
+  wholesale; the semantic core is a whole-program recognizer (25-variant
+  `ProgramKind`, feature-payload `Stmt` with nullary `Lab3Part1Convolution`,
+  ~18K LOC classifiers) and cannot reach the goal by accretion because
+  patterns do not compose and per-variation cost never falls.
+- Surface syntax is drifting from teachability (canonical Tile-K GEMM is
+  seven nested foreach loops with manual index arithmetic; the abstraction is
+  the curriculum) and has accreted via bridges instead of being designed.
+- HLS leaks into core IR (`Type::hls_value_type`); emitters are per-family
+  string templates; no IR interpreter (per-family oracles instead); no
+  compile-time resource gate (extends the C1 finding below); no standalone
+  compile CLI.
+- Decision: **invert, don't restart** — controller-tree IR + interpreter
+  reference semantics + compositional backend behind a backend-neutral
+  boundary; classifiers retire family-by-family into legality diagnostics and
+  regression fixtures; surface spec written and frozen first. The recognition
+  phase is recorded as the right tracer strategy whose scaffolding job is
+  done, honoring the 2026-06-27 roadmap's own "no endless recognizers"
+  framing.
+
+Artifacts (repo, working tree — not yet committed):
+- New `docs/2026-07-07-fundamental-design-review.md` (full review, adopted).
+- New `docs/superpowers/plans/2026-07-07-compositional-core-inversion-roadmap.md`
+  (successor plan: Phase 0 surface freeze/spec, Phase 1 controller-tree IR +
+  interpreter with 39-program oracle parity, Phase 2 compositional backend
+  via `Dense1dScalarMul`, Phase 3 family-by-family classifier retirement,
+  Phase 4 par-legality + resource-model gates, Phase 5 student-facing CLI/
+  simulator/diagnostics; includes MVP-B box-by-box route mapping).
+- Updated `docs/superpowers/plans/2026-07-03-full-rust-spatial-rewrite-roadmap.md`
+  (superseded-in-part banner; history preserved).
+- Updated `docs/lab-functionality-mvp-checklist.md` ("2026-07-07 Route
+  Change" section — boxes, graduation standard, and evidence policy
+  unchanged; only the closing route changed).
+
+Artifacts (vault):
+- New [[2026-07-07-fundamental-design-review]] (this decision's design note).
+- Updated [[2026-07-07-session-resume-guide]] ("Do Next" now executes the
+  inversion phases; old B2→G7/G6/G9 ordering superseded).
+- Updated [[2026-06-27-rust-spatial-rewrite-roadmap]] (status callout).
+
+Route changes:
+- Paused in old form: G8 Stage B2/B3 as classifier-ingress slices (B1 backend
+  work + evidence carry over as runtime-valued bounds), G6/G7/G9 perturbation
+  slices against classifiers, new spelling pins/bridges, no-HLS-drift
+  refactors inside classifier modules slated for deletion.
+- Next work: inversion roadmap Phase 0, then Phase 1.
+
+Boundary:
+- No accepted syntax, checked IR, generated HLS, manifests, validation-roster
+  membership, or vendor evidence changed. No tests run (docs-only). Nothing
+  committed; repo changes await David/Codex review in the working tree.
+
+## 2026-07-08 -- G8 review: open concerns on the static-family + B1 work
+
+Review-only entry (no code, HLS, manifest, or evidence changed). Evaluated the
+Stage A static-shape family (`e2536a1b` / evidence `d2f3e288`) and the B1
+runtime-dimension backend (`330ed1b8`, `71b71f25`, `5941c37c`, evidence
+`c867328d`) against the MVP-B goal, via three parallel review subagents plus
+direct reads. Workspace confirmed green (`cargo test` exit 0, 99 in the ee109
+suite; 1088 workspace-wide per the B1 entry below). Verdict: high-quality,
+honestly-scoped, aimed at the right target (G8 is the flagship and dynamic dims
+is the one thing the checked lab source actually does); the concerns below are
+open risks to carry into B2/Stage C, not defects in the shipped slices. Related:
+[[2026-07-07-rust-gemm-dynamic-dimension-slice-contract]],
+`docs/lab-functionality-mvp-checklist.md` (G8, G10, G11).
+
+- **C1 (soundness, highest) -- unbounded family, no compile-time resource
+  gate.** `validate.rs` puts no upper bound on `ROWS`/`COLS`/`K` or
+  `TILE_R`/`TILE_C`/`TILE_K` (the tiling/coverage checks around
+  `validate.rs:1119-1155`), unlike other G-items which use documented caps
+  (`MEM_REDUCTION_MAX_LEN` etc., `validate.rs:8-9`). Resource fit is only
+  observed *after* Vitis, by `summarize_vitis_evidence_quality`
+  (`crates/spatial-rs-hls/src/vitis.rs:253`), never at classify/lower time. The
+  risk is demonstrated, not hypothetical: two of the four Stage A
+  representatives overshoot the `xc7z020` DSP budget (256 vs 220, 116%) at 8x8
+  tiles because Vitis 2025.1 auto-unrolls small pipelined compute loops. The
+  cause is structural, so it likely covers a broad swath of the *unbounded*
+  family, not just those two shapes. Today the classifier accepts programs that
+  cannot synthesize on the target part. This extends the Stage C / G11 note in
+  the 2026-07-07 evidence entry into a general contract leak. Recommended:
+  resource-aware legality diagnostic (or explicit documented "exploration-only"
+  label) before the family grows further.
+- **C2 (reachability) -- B1 is backend-only; the lab interface is not yet
+  reachable from source.** The classifier still forces
+  `rows_dim`/`cols_dim`/`k_dim: None`
+  (`crates/spatial-rs-core/src/classifier/tiled2d/tile_k.rs:917-921`); every
+  runtime-dim program is hand-built through the `Program` builder. So "supports
+  the lab's runtime M/N/K interface" is true of the checked IR + HLS backend,
+  not of any lab-like spelling, until B2 lands. This is by design (staged) and
+  is exactly why the G8 dynamic-dimension box stays OPEN -- recorded here so the
+  reachability gap is not mistaken for a shipped capability.
+- **C3 (deferred hazards, must land in B2) -- unguarded runtime arithmetic in
+  the emitted kernel.** The kernel emits signed-`int` ceil/tail arithmetic
+  (`((m + 8 - 1) / 8)`, `(m - (tile_r * 8))`) with no overflow guard (UB for
+  adversarial dims); there is no DRAM-capacity clamp (manifest buffers are
+  fixed-shape while indices are runtime, so a host passing larger sizes reads
+  out of bounds); and degenerate 0 / negative dims are unguarded and untested
+  (the sweep filters zero out). The Rust `checked_product`
+  (`tile_k.rs:708-710`) guards only the harness's own array sizing, not the
+  kernel's runtime arithmetic -- a false sense of safety. Latent only because
+  no host ingress exists yet; these are precisely the failure modes B2
+  introduces, so B2 must add the guards plus fail-closed negatives for them.
+- **C4 (diagnostic quality) -- runtime-dim negatives funnel to generic
+  `spatial:E0300`.** `checked_ir_rejects_runtime_dims_with_missing_scalar_port`
+  and `..._with_swapped_scalar_ordinals` both collapse to the generic
+  "does not match an accepted M1 adapter shape" code (`validate.rs:37-43`),
+  below the nearest-neighbor bar the same session raised for rank-1
+  divisibility (`e934bd71` names the offending values). Missing negatives:
+  missing tail guard, wrong scalar type, shaped port, extra non-dim scalar,
+  zero/negative dims.
+- **C5 (evidence depth) -- uneven csim coverage.** The four Stage A family
+  kernels each get exactly one csim test vector; only the dynamic kernel sweeps
+  five `(m,n,k)` shapes. All expected outputs are baked from the Rust oracle, so
+  a bug shared between oracle and lowering would pass silently. Mitigated
+  because the oracle is genuinely independent code (`oracle.rs:214` for the
+  runtime path, `oracle.rs:107-199` for the static path -- naive triple loops
+  with no shared code with the generator), but multi-vector / multi-seed csim
+  for the family would harden it.
+- **C6 (manifest fidelity) -- runtime-dim ports under-recorded.** Scalar inputs
+  appear only as generic `ArgIn` / `raw_scalar_integer_v1` entries with no role
+  linkage to which extent each drives, and DRAM buffers are recorded at the
+  static anchor shape. "Manifest records runtime-dim ports" is true only
+  literally; there is no runtime-dim role annotation. Separately, `manifest.json`
+  (`ee109_abi_manifest_v0`) carries no source-commit field -- provenance rests
+  on README prose + directory naming.
+
+- **Minor / hygiene.** Harness fork: `tile_k_runtime_dim_harness`
+  (`tile_k.rs:701`, early return at `tile_k.rs:615-616`) re-emits the type
+  prelude / `extern "C"` / `main` / PASS-FAIL scaffolding rather than sharing it
+  with the static harness. Fixture duplication: the 30x22x18 / tile 8x8x4
+  payload is triplicated across the `validate.rs` test, `m1_codegen.rs` test,
+  and `examples/ee109/src/lib.rs` builder. Evidence-tree readability: the root
+  `run_hls.tcl` in each dir shows `csim_design`/`csynth_design` commented out
+  (the executed script is `sidecars/<K>/run_both.tcl`), so a skimmer of the root
+  Tcl alone could wrongly conclude nothing ran; and the dir date convention
+  flips (07-08 UTC for the dynamic dir vs 07-07 local for the family dirs).
+- **Trajectory concern (not a defect).** G8 advanced deeply along one axis, but
+  G6 is fully open, G10 (a standalone `spatial-rs build <file>` compile command)
+  is untouched -- everything is still cargo-test-shaped rather than a compiler a
+  student invokes -- and G3/G4/G5/G7/G9 each carry open body/constant/dimension
+  knobs. Body-expression freedom is shared across G3/G4/G5 and constant/dim
+  freedom recurs across G6/G7/G9; these are candidates to close once as shared
+  machinery rather than one selected-Vitis-gated slice per gate, given the
+  per-slice cost of the six-rung standard.
+- **Recommended next action.** Prioritize the C1 compile-time resource gate: it
+  is a demonstrated correctness issue, spans both arcs, and is cheaper to add
+  now than after the accepted family grows. Then ensure B2 lands the C3 guards
+  (overflow, DRAM-capacity, degenerate sizes) with fail-closed negatives, since
+  B2 is what first feeds this ABI adversarial values.
+
 ## 2026-07-08 -- G8 Stage B / B1: runtime-dimension GEMM backend proven
 
 - Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on

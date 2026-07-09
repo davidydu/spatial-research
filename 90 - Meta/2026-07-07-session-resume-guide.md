@@ -8,14 +8,25 @@ date: 2026-07-07
 # Session Resume Guide (Rust Rewrite, MVP-B)
 
 For any Codex or Claude session picking up the Rust rewrite. Read this, then
-the checklist, then the flagship contract. This supplements, does not replace,
-[[workflow]] and [[progress-log]].
+[[2026-07-07-fundamental-design-review]], then the checklist. This
+supplements, does not replace, [[workflow]] and [[progress-log]].
 
-## Where Things Stand (2026-07-07)
+> [!important] 2026-07-07 route change (later session)
+> David adopted the [[2026-07-07-fundamental-design-review|fundamental design review]]:
+> the recognition/classifier architecture is being **inverted** into a
+> compositional compiler (controller-tree IR + interpreter + structural
+> backend). The "Do Next" list below was rewritten accordingly — the previous
+> version (B2 classifier ingress → G7/G6/G9 perturbation slices) is
+> superseded. MVP-B boxes and the evidence policy are unchanged; only the
+> route changed. Authoritative plan:
+> `spatial-rs/docs/superpowers/plans/2026-07-07-compositional-core-inversion-roadmap.md`.
+
+## Where Things Stand (2026-07-09)
 
 - Rust repo: `/Users/david/Documents/David_code/spatial-rs`, branch
-  `David/HLS-spatial`, clean tree at the dynamic-dim evidence commit (see
-  `git log`; latest slice is G8 Stage B / B1). (`.codex/` is an untracked
+  `David/HLS-spatial`, at `f35a1bdb` (`Adopt compositional core inversion`).
+  The adopted design review, successor roadmap, route-change checklist, and
+  corrected architecture routing are committed. (`.codex/` is an untracked
   local loop artifact; leave it untracked unless David says otherwise.)
 - **MVP-A (every lab program → Vitis-validated): complete.** 39-program roster,
   anchor `docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program/`,
@@ -26,7 +37,9 @@ the checklist, then the flagship contract. This supplements, does not replace,
   selected Vitis evidence dirs
   (`docs/vitis-validation/2026-07-07-selected-family-*-e2536a1b/`)**; the
   rest open.
-- Full suite green: 15 suites, 1080 tests, 0 failures.
+- Full suite green at the design checkpoint: 1088 tests, 0 failures;
+  `cargo fmt --all --check`, clippy with `-D warnings`, and `git diff --check`
+  also pass.
 
 ## The One Definition That Matters
 
@@ -35,38 +48,41 @@ Vitis as "done" — that is MVP-A and it is already finished. Every new slice
 must close a named checklist box under the six-point graduation standard in
 the checklist doc.
 
-## Do Next (priority order)
+## Do Next (priority order — rewritten 2026-07-07 after the design review)
 
-1. **G8 GEMM dynamic dimensions** — the flagship. Stage A (static shape
-   freedom) is **done and ticked**. Stage B is decomposed into B1/B2/B3 in
-   [[2026-07-07-rust-gemm-dynamic-dimension-slice-contract]]:
-   - **B1 (runtime-dimension backend) is DONE** (`330ed1b8`, `71b71f25`,
-     `5941c37c` + Vitis evidence): one Tile-K kernel takes `m`/`n`/`k` as
-     runtime scalar params, host-gate-swept over five shapes and Vitis-proven
-     (`resource_fit=1/1`, 28 DSP vs 220). Selected (non-roster) representative
-     `MatrixTileMemFoldOuterKRuntimeDimsFixPt`.
-   - **Do next: B2 (frontend ingress)** — accept `lhs: Dram<T>[m, k]` with
-     `m`/`k` scalar inputs so the classifier produces the B1 payload. Resolve
-     the anchor-representation open question in the contract first (leaning:
-     synthesize a tile-consistent anchor + a parallel `dim_symbols` field on
-     `HirPort`, not a `Vec<HirDim>` change). Reuses all of B1's backend.
-   - Then **B3** (roster promotion + full-roster refresh) and Stage C (par
-     legality — note the Stage A finding that fixed small tiles blow the DSP
-     budget via Vitis auto-unroll).
-   The G8 dynamic-dimension checklist box stays OPEN until B2+B3 land.
-2. **G7 LUT value/dim freedom, G6 FSM constant freedom, G9 stencil
-   coefficient/dim freedom** — parameterize the exact-constant families. Each
-   is a bounded, non-speculative slice with clear acceptance criteria in the
-   checklist.
-3. **G10 compile CLI** — `spatial-rs build <file>`; today the only entry
-   points are cargo test binaries. Needed for an actual student-facing MVP.
-4. **G11 evidence tier** — add `cosim_design` and one implementation/export
-   run on EC2 to convert csynth acceptance into board-fit truth.
+Execute `spatial-rs/docs/superpowers/plans/2026-07-07-compositional-core-inversion-roadmap.md`
+in phase order:
 
-Deliberately **not** next: more source-spelling alias pins, more no-HLS-drift
-refactors, speculative body generalizations the labs do not exercise. The
-iteration log already concluded the bottleneck is frontend/HIR interface
-expansion, not DSP tuning.
+1. **Phase 0 — freeze the surface.** Write `docs/language-spec.md` (grammar,
+   construct set, one canonical spelling per construct; the
+   `memfold ... with ... over ...` + arrow bulk-IO forms become canonical),
+   inventory every alias/spelling bridge with a retirement target, migrate
+   the 39-program corpus to canonical spellings, record the metaprogramming
+   and host-API ADRs.
+2. **Phase 1 — controller-tree IR + interpreter.** Backend-neutral core types
+   (parametric FixPt; HLS strings out of `ir::Type`), controller-tree IR with
+   static-or-runtime dimension bounds (absorbs the B1 design from
+   [[2026-07-07-rust-gemm-dynamic-dimension-slice-contract]]), interpreter
+   with oracle-parity tests over all 39 corpus programs. Dark-launched; no
+   shipped-artifact change.
+3. **Phase 2 — compositional backend, first family.** Structural C++
+   emission behind a backend trait; route `Dense1dScalarMul` end-to-end;
+   byte-equality or selected Vitis run per the unchanged evidence policy;
+   retire the Dense1d classifier into diagnostics + fixtures.
+4. **Phase 3+ — family-by-family migration** per the plan's order (scalar →
+   reduce/fold → memreduce/memfold → FIFO → LUT → FSM → rank-2/Tile-K with
+   runtime dims → stencil). G3-G9 boxes close as side effects; then Phase 4
+   (par legality + resource model gates) and Phase 5 (CLI, `spatial-rs run`
+   simulator, diagnostics catalog, tutorial).
+
+**Paused in their old form** (do not pick up): G8 B2/B3 as classifier-ingress
+slices, G6/G7/G9 perturbation slices against classifiers, new spelling
+pins/bridges, no-HLS-drift refactors inside classifier modules slated for
+deletion. B1's landed backend work and evidence carry over.
+
+Still true from the earlier iteration log: the bottleneck is the
+frontend/HIR/IR interface, not DSP tuning — the inversion is the systematic
+answer to that finding.
 
 ## EC2 / Vitis Lane
 
