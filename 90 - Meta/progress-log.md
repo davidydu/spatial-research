@@ -9,6 +9,18 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-09 -- Phase 0 language-contract plan ready
+
+Rust commit `a6562ddd99272c10a0771d4c0f55cc8a7029ea0b` (`Plan Phase 0 language contract`) on
+`David/HLS-spatial` records the reviewed execution plan for the contract half
+of inversion Phase 0. Six `gpt-5.6-sol`/ultra lanes reviewed grammar,
+semantics, all 39 source bridges, const/CLI ADRs, execution safety, and vault
+routing; all Critical/Important findings were corrected before commit.
+
+Boundary: plan/documentation only. No current parser, IR, HLS, manifest,
+roster, or vendor evidence changed. Next: create and review the four contract
+artifacts from the plan's artifact templates.
+
 ## 2026-07-09 -- Compositional inversion design checkpoint committed
 
 Rust repo commit `f35a1bdb` (`Adopt compositional core inversion`) records the
