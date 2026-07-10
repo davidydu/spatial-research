@@ -5,7 +5,7 @@ load_priority: high
 date: 2026-07-07
 ---
 
-# Session Resume Guide (Rust Rewrite, MVP-B)
+# Session Resume Guide (Rust Rewrite, EE109-First Inversion)
 
 For any Codex or Claude session picking up the Rust rewrite. Read this, then
 [[2026-07-07-fundamental-design-review]], then the checklist. This
@@ -24,10 +24,12 @@ supplements, does not replace, [[workflow]] and [[progress-log]].
 ## Where Things Stand (2026-07-09)
 
 - Rust repo: `/Users/david/Documents/David_code/spatial-rs`, branch
-  `David/HLS-spatial`, at `f35a1bdb` (`Adopt compositional core inversion`).
-  The adopted design review, successor roadmap, route-change checklist, and
-  corrected architecture routing are committed. (`.codex/` is an untracked
-  local loop artifact; leave it untracked unless David says otherwise.)
+  `David/HLS-spatial`, at `84991df280dc1248c96f3a2d4c3473ad3be8e1ee`
+  (`Route Spatial work through the language contract`). Phase 0's normative
+  contract is committed in `4505e7cf4fd463bdc7348c8e26478aa6ab489a2e`;
+  the reviewed execution plan is
+  `a6562ddd99272c10a0771d4c0f55cc8a7029ea0b`. (`.codex/` remains an untracked
+  local artifact; leave it untouched.)
 - **MVP-A (every lab program → Vitis-validated): complete.** 39-program roster,
   anchor `docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program/`,
   `resource_fit=37/39`, `over_budget=2`, `ii_caveated=14`.
@@ -37,28 +39,42 @@ supplements, does not replace, [[workflow]] and [[progress-log]].
   selected Vitis evidence dirs
   (`docs/vitis-validation/2026-07-07-selected-family-*-e2536a1b/`)**; the
   rest open.
-- Full suite green at the design checkpoint: 1088 tests, 0 failures;
-  `cargo fmt --all --check`, clippy with `-D warnings`, and `git diff --check`
-  also pass.
+- Full local gates are green at the language-contract checkpoint: format,
+  locked workspace tests, clippy with `-D warnings`, default examples,
+  39-member dry-run/plan, and imported-evidence validation.
+- **Inversion Phase 0 contract half: complete.** Language spec, 39-source
+  compatibility crosswalk, restricted-const ADR, and file/runtime ADR are
+  ratified. Source-spelling migration remains open; name/classifier retirement
+  is tracked for Phase 2/3. No current compiler behavior or vendor evidence
+  changed. See [[2026-07-09-phase0-language-contract]].
 
-## The One Definition That Matters
+## Two Completion Definitions
 
-"MVP done" = the MVP-B checklist. Do not treat any single lab program passing
-Vitis as "done" — that is MVP-A and it is already finished. Every new slice
-must close a named checklist box under the six-point graduation standard in
-the checklist doc.
+**EE109-first acceptance done** means the MVP-B checklist: every non-stretch
+lab-functionality box closes under its six-point graduation standard, G10's
+compile command exists, and current-roster Vitis evidence is refreshed where
+required. This is the first acceptance ladder.
+
+**Full Rust rewrite done** means the specified Spatial language families lower
+compositionally through backend-neutral controller IR, classifiers/
+`ProgramKind` are no longer the semantic boundary, the interpreter defines
+reference behavior, and expansion is governed by the full Spatial requirements
+corpus. MVP-B completion does not imply full-rewrite completion.
 
 ## Do Next (priority order — rewritten 2026-07-07 after the design review)
 
 Execute `spatial-rs/docs/superpowers/plans/2026-07-07-compositional-core-inversion-roadmap.md`
 in phase order:
 
-1. **Phase 0 — freeze the surface.** Write `docs/language-spec.md` (grammar,
-   construct set, one canonical spelling per construct; the
-   `memfold ... with ... over ...` + arrow bulk-IO forms become canonical),
-   inventory every alias/spelling bridge with a retirement target, migrate
-   the 39-program corpus to canonical spellings, record the metaprogramming
-   and host-API ADRs.
+1. **Finish Phase 0 -- migrate canonical source spellings.** Execute a separate
+   implementation plan for active source-surface IDs C01-C13, C16, C20a, and
+   C21 plus C22 parser negatives in
+   `spatial-rs/docs/compatibility-bridges.md`. Implement missing canonical
+   ingress, migrate affected roster sources under each row's proof gate, and
+   retire/demote migrated spelling bridges. The seven legacy GEMMs are the
+   highest-risk subset, not the entire boundary. Begin Phase 1 afterward;
+   C20b/C23 join shared invocation/manifest paths and C14/C15/C17/C18/C19/C24
+   retire later.
 2. **Phase 1 — controller-tree IR + interpreter.** Backend-neutral core types
    (parametric FixPt; HLS strings out of `ir::Type`), controller-tree IR with
    static-or-runtime dimension bounds (absorbs the B1 design from

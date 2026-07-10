@@ -9,6 +9,38 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-09 -- Phase 0 language contract ratified
+
+Rust commits `a6562ddd99272c10a0771d4c0f55cc8a7029ea0b`,
+`4505e7cf4fd463bdc7348c8e26478aa6ab489a2e`, and
+`84991df280dc1248c96f3a2d4c3473ad3be8e1ee` on `David/HLS-spatial` define and
+route the normative Spatial DSL contract. Authoritative summary:
+[[2026-07-09-phase0-language-contract]].
+
+- Canonical syntax now uses `Size`, `FixPt<Signedness,I,F>`, explicit
+  reduction identity/operator/yield, canonical conditionals/window commands,
+  view-to-view bulk IO, `requires`, explicit `par ... tail`, and runtime DRAM
+  extent linkage.
+- The bridge ledger contains an explicit 39-kernel crosswalk. Phase 0 spelling
+  migration (C01-C13, C16, C20a, C21 plus C22 negatives) is broader than the
+  seven high-risk GEMMs; C20b/C23 join later shared paths and name/classifier
+  debt, including C24, retires later.
+- ADRs ratify deterministic restricted const evaluation and a file CLI with
+  versioned `spatial.run.v1` input/output JSON.
+- Two read-only Sol Ultra reviewers covered all six planned review domains
+  under the reduced concurrency cap; every Critical/Important finding was
+  fixed and its owning lane rerun before commit.
+  The session-local model choice did not change the standing future-session default.
+- Local gates pass: fmt, the full locked test suite, clippy, default examples,
+  39-member Vitis dry-run/plan, imported evidence validation, and docs-only
+  path hygiene.
+
+Boundary: normative target docs changed only. No current parser/IR/HLS/
+manifest/roster/vendor evidence changed, so no fresh EC2/Vitis run was needed.
+Next: canonical-corpus spelling migration, then Phase 1 controller-tree IR.
+The full Rust rewrite remains the goal; EE109/MVP-B is its first acceptance
+ladder, not the definition of full-rewrite completion.
+
 ## 2026-07-09 -- Phase 0 language-contract plan ready
 
 Rust commit `a6562ddd99272c10a0771d4c0f55cc8a7029ea0b` (`Plan Phase 0 language contract`) on
