@@ -9,6 +9,34 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-09 -- Phase 0 canonical-corpus implementation plan committed
+
+Rust commit `41cdfb7a` (`Plan Phase 0 canonical corpus migration`) on
+`David/HLS-spatial` records the reviewed implementation route for the second
+half of inversion Phase 0. The plan is
+`docs/superpowers/plans/2026-07-09-phase0-canonical-corpus-migration.md`.
+
+- Two read-only `gpt-5.6-sol`/ultra audit agents, capped at two concurrent,
+  mapped C01-C12/C16/C21/C22 frontend gaps and C13/C20a corpus/proof gaps.
+- The audits agree that C21 strict-versus-macro ingress must land first, C22
+  must wait for typed `requires`, and C13 retirement must coordinate with C07
+  plus C01/C02/C03/C05.
+- One focused plan reviewer reported no Critical findings. Important findings
+  were corrected: preserve arbitrary identifiers while deleting coercions,
+  own harness byte equality explicitly, require full local gates before every
+  implementation commit, and record David's session model override.
+- The eleven checkpoints proceed through C21, ADR 0001 `Size`, parametric
+  fixed point, C20a requirements, memories/schedules, value blocks, stencil
+  commands, memory reductions/GEMM, mandatory `accel`, alias retirement, and
+  the closed C22 grammar.
+- Fresh audit verification passed 692 core tests, 106 HLS codegen tests, and
+  the EE109 example tests at the plan baseline.
+
+Boundary: plan/vault documentation only. No parser behavior, checked IR,
+generated HLS, manifest, roster membership, or vendor evidence changed. No
+fresh EC2/Vitis run was required. Next code action: red tests for C21 direct
+`: =` rejection and `accel!` macro parity.
+
 ## 2026-07-09 -- Phase 0 language contract ratified
 
 Rust commits `a6562ddd99272c10a0771d4c0f55cc8a7029ea0b`,

@@ -24,12 +24,13 @@ supplements, does not replace, [[workflow]] and [[progress-log]].
 ## Where Things Stand (2026-07-09)
 
 - Rust repo: `/Users/david/Documents/David_code/spatial-rs`, branch
-  `David/HLS-spatial`, at `84991df280dc1248c96f3a2d4c3473ad3be8e1ee`
-  (`Route Spatial work through the language contract`). Phase 0's normative
+  `David/HLS-spatial`, at `41cdfb7a`
+  (`Plan Phase 0 canonical corpus migration`). Phase 0's normative
   contract is committed in `4505e7cf4fd463bdc7348c8e26478aa6ab489a2e`;
-  the reviewed execution plan is
-  `a6562ddd99272c10a0771d4c0f55cc8a7029ea0b`. (`.codex/` remains an untracked
-  local artifact; leave it untouched.)
+  its reviewed contract plan is `a6562ddd99272c10a0771d4c0f55cc8a7029ea0b`,
+  and the implementation plan is
+  `docs/superpowers/plans/2026-07-09-phase0-canonical-corpus-migration.md`.
+  (`.codex/` remains an untracked local artifact; leave it untouched.)
 - **MVP-A (every lab program → Vitis-validated): complete.** 39-program roster,
   anchor `docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program/`,
   `resource_fit=37/39`, `over_budget=2`, `ii_caveated=14`.
@@ -66,15 +67,14 @@ corpus. MVP-B completion does not imply full-rewrite completion.
 Execute `spatial-rs/docs/superpowers/plans/2026-07-07-compositional-core-inversion-roadmap.md`
 in phase order:
 
-1. **Finish Phase 0 -- migrate canonical source spellings.** Execute a separate
-   implementation plan for active source-surface IDs C01-C13, C16, C20a, and
-   C21 plus C22 parser negatives in
-   `spatial-rs/docs/compatibility-bridges.md`. Implement missing canonical
-   ingress, migrate affected roster sources under each row's proof gate, and
-   retire/demote migrated spelling bridges. The seven legacy GEMMs are the
-   highest-risk subset, not the entire boundary. Begin Phase 1 afterward;
-   C20b/C23 join shared invocation/manifest paths and C14/C15/C17/C18/C19/C24
-   retire later.
+1. **Finish Phase 0 -- execute the reviewed canonical-corpus plan.** Follow
+   `spatial-rs/docs/superpowers/plans/2026-07-09-phase0-canonical-corpus-migration.md`
+   in checkpoint order. Start with C21 strict-versus-macro ingress, then ADR
+   0001 `Size`; do not jump directly to the seven GEMMs. The plan covers active
+   source-surface IDs C01-C13, C16, C20a, and C21 plus C22 parser negatives,
+   with Program/HLS/manifest equality and exact legacy-negative closure. Begin
+   Phase 1 afterward; C20b/C23 join shared invocation/manifest paths and
+   C14/C15/C17/C18/C19/C24 retire later.
 2. **Phase 1 — controller-tree IR + interpreter.** Backend-neutral core types
    (parametric FixPt; HLS strings out of `ir::Type`), controller-tree IR with
    static-or-runtime dimension bounds (absorbs the B1 design from
@@ -131,6 +131,8 @@ answer to that finding.
 - Honest boundaries: state what did NOT change (HLS/manifest/roster/evidence)
   and never tick a box on a claim — name the tests and, where required, the
   evidence directory.
-- Keep gpt-5.5 xhigh reviewers in the loop when executing under a subagent
-  workflow (project rule). The 2026-07-07 session ran solo on Claude Fable 5
-  at David's explicit direction.
+- Keep the project-default reviewers in the loop when executing under a
+  subagent workflow. David explicitly overrode the model for the 2026-07-09
+  session to `gpt-5.6-sol` with ultra reasoning and capped concurrency below
+  the former six-agent waves; that session-local override does not silently
+  rewrite future-session policy.

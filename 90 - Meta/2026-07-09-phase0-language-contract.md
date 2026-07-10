@@ -22,12 +22,15 @@ inversion Phase 0. Authoritative repo artifacts:
 - `spatial-rs/docs/adr/0002-file-cli-host-runtime.md`
 - execution plan:
   `spatial-rs/docs/superpowers/plans/2026-07-09-phase0-language-contract.md`
+- canonical-corpus implementation plan:
+  `spatial-rs/docs/superpowers/plans/2026-07-09-phase0-canonical-corpus-migration.md`
 
 Rust commits:
 
 - `a6562ddd99272c10a0771d4c0f55cc8a7029ea0b` - plan checkpoint;
 - `4505e7cf4fd463bdc7348c8e26478aa6ab489a2e` - four reviewed contract artifacts;
 - `84991df280dc1248c96f3a2d4c3473ad3be8e1ee` - README/checklist/roadmap routing and checked plan state.
+- `41cdfb7a` - reviewed Phase 0 canonical-corpus implementation plan.
 
 ## Ratified Surface
 
@@ -68,14 +71,26 @@ diff/path hygiene. Imported evidence remains
 
 ## Open Phase 0 Work
 
-The canonical-corpus spelling migration remains open. It covers active source-
-surface IDs C01-C13, C16, C20a, and C21, plus C22 parser negatives, not only
-the seven legacy GEMMs. The seven GEMMs are still the highest-risk subset.
-Migration must implement missing canonical ingress, apply each ledger row's
-proof gate, and delete/demote migrated spelling bridges. Then begin Phase 1
-controller-tree IR, interpreter, C20b shared invocation enforcement, and C23
-manifest adaptation. Name/classifier/manifest couplings C14/C15/C17/C18/C19
-and architecture-wide C24 remain later retirement debt.
+The canonical-corpus spelling migration remains open and now has a reviewed
+eleven-checkpoint execution plan in Rust commit `41cdfb7a`. It covers active
+source-surface IDs C01-C13, C16, C20a, and C21, plus C22 parser negatives, not
+only the seven legacy GEMMs. The first implementation checkpoint is C21:
+separate strict file ingress from the narrow `accel!` stringification adapter
+and reject direct `: =` source while preserving Program/HLS/manifest equality.
+
+Later checkpoints implement ADR 0001 `Size`, parametric fixed point, typed
+requirements, canonical schedules/value blocks/stencil commands, typed memory
+views and GEMM MemFold, mandatory `accel`, alias retirement, then the closed
+C22 grammar. The seven GEMMs remain the highest-risk subset. After Phase 0,
+begin controller-tree IR, interpreter, C20b shared invocation enforcement, and
+C23 manifest adaptation. Name/classifier/manifest couplings
+C14/C15/C17/C18/C19 and architecture-wide C24 remain later retirement debt.
+
+Two reduced-concurrency audit agents mapped frontend and corpus/proof
+dependencies; one focused reviewer cleared the final plan after corrections
+for identifier freedom, harness-equality ownership, per-commit local gates,
+and the explicit session model override. This session is capped at two
+concurrent subagents using `gpt-5.6-sol` with ultra reasoning.
 
 Boundary: normative docs changed; currently implemented compiler acceptance,
 parser behavior, checked IR, generated HLS, manifests, roster membership, and
