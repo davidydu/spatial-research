@@ -9,6 +9,36 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-10 -- C01 raw Size syntax and const AST complete
+
+Rust commits `2ee3842dc621ea06370b3ebfdd707d541615eec7`
+(`Introduce raw Size constant syntax`),
+`8c814cae66a55f4c983496da89d62782619a68d9`
+(`Harden transitional Size lowering`), and `aa9839c5`
+(`Record raw Size syntax checkpoint`) on `David/HLS-spatial` complete C01
+Checkpoint 2A.
+
+- Decimal tokens now preserve raw source text without lexer range checks;
+  runtime integer positions still enforce signed `i32` bounds.
+- Canonical `const NAME: Size = ...` parses into typed, spanned
+  `ConstExprId` arena nodes for literals, names, precedence-aware arithmetic,
+  parentheses, and exact two-argument `min`/`max`/`ceil_div` calls.
+- Legacy `usize` literals remain an explicit compatibility representation;
+  canonical typed lowering intentionally stays fail-closed until 2B/2C.
+- The first quality review found two Important fail-closed holes: bridge
+  filtering could erase canonical same-named declarations, and a forged
+  `Size + legacy value` AST could cast negative data to host `usize`. Both
+  received red regressions, were fixed in `8c814cae`, and passed re-review.
+- Manager verification passed format, the full locked suite (705 core and 107
+  `m1_codegen` tests), clippy, examples, 39-entry dry-run/plan generation, and
+  imported evidence validation at `37/39`, two over-budget, fourteen
+  II-caveated.
+
+Boundary: this is syntax/AST foundation only. No EE109 source migrated, no
+canonical `Size` program lowers yet, and no checked Program, HLS, v0 manifest,
+roster, or vendor evidence changed. Next: C01 Checkpoint 2B, E0500-E0506 name
+resolution/evaluation/poison/ordering.
+
 ## 2026-07-09 -- C21 strict versus macro ingress complete
 
 Rust commits `15321092f08a50574892719072ca73a958b23e48`

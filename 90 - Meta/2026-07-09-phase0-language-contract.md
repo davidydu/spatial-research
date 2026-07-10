@@ -33,6 +33,9 @@ Rust commits:
 - `41cdfb7a` - reviewed Phase 0 canonical-corpus implementation plan.
 - `15321092f08a50574892719072ca73a958b23e48` - C21 strict/macro ingress implementation.
 - `7408ce9b` - C21 ledger, roadmap, and execution-plan checkpoint.
+- `2ee3842dc621ea06370b3ebfdd707d541615eec7` - raw `Size` tokens and const AST.
+- `8c814cae66a55f4c983496da89d62782619a68d9` - fail-closed transitional `Size` repair.
+- `aa9839c5` - C01 Checkpoint 2A docs checkpoint.
 
 ## Ratified Surface
 
@@ -79,7 +82,11 @@ strict text rejects direct `: =`, while a doc-hidden `accel!` transport ingress
 normalizes only lexer-confirmed stringify spacing. Scalar and memory Program,
 HLS, and v0 manifest parity are pinned. The remaining implementation surface
 is C01-C13, C16, C20a, and C22 parser negatives, not only the seven legacy
-GEMMs. The next checkpoint is ADR 0001 C01 `Size`.
+GEMMs. C01 Checkpoint 2A is complete: decimal tokens preserve raw source,
+canonical `Size` expressions build a typed spanned arena, and compatibility
+`usize` is represented separately. Evaluation and E0500-E0506 remain open;
+the next checkpoint is 2B name resolution, evaluation, poison, and diagnostic
+ordering.
 
 Later checkpoints implement ADR 0001 `Size`, parametric fixed point, typed
 requirements, canonical schedules/value blocks/stencil commands, typed memory
