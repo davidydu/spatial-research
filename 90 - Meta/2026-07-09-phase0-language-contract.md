@@ -31,6 +31,8 @@ Rust commits:
 - `4505e7cf4fd463bdc7348c8e26478aa6ab489a2e` - four reviewed contract artifacts;
 - `84991df280dc1248c96f3a2d4c3473ad3be8e1ee` - README/checklist/roadmap routing and checked plan state.
 - `41cdfb7a` - reviewed Phase 0 canonical-corpus implementation plan.
+- `15321092f08a50574892719072ca73a958b23e48` - C21 strict/macro ingress implementation.
+- `7408ce9b` - C21 ledger, roadmap, and execution-plan checkpoint.
 
 ## Ratified Surface
 
@@ -72,11 +74,12 @@ diff/path hygiene. Imported evidence remains
 ## Open Phase 0 Work
 
 The canonical-corpus spelling migration remains open and now has a reviewed
-eleven-checkpoint execution plan in Rust commit `41cdfb7a`. It covers active
-source-surface IDs C01-C13, C16, C20a, and C21, plus C22 parser negatives, not
-only the seven legacy GEMMs. The first implementation checkpoint is C21:
-separate strict file ingress from the narrow `accel!` stringification adapter
-and reject direct `: =` source while preserving Program/HLS/manifest equality.
+eleven-checkpoint execution plan in Rust commit `41cdfb7a`. C21 is complete:
+strict text rejects direct `: =`, while a doc-hidden `accel!` transport ingress
+normalizes only lexer-confirmed stringify spacing. Scalar and memory Program,
+HLS, and v0 manifest parity are pinned. The remaining implementation surface
+is C01-C13, C16, C20a, and C22 parser negatives, not only the seven legacy
+GEMMs. The next checkpoint is ADR 0001 C01 `Size`.
 
 Later checkpoints implement ADR 0001 `Size`, parametric fixed point, typed
 requirements, canonical schedules/value blocks/stencil commands, typed memory

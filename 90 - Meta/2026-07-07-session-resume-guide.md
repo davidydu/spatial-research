@@ -24,8 +24,8 @@ supplements, does not replace, [[workflow]] and [[progress-log]].
 ## Where Things Stand (2026-07-09)
 
 - Rust repo: `/Users/david/Documents/David_code/spatial-rs`, branch
-  `David/HLS-spatial`, at `41cdfb7a`
-  (`Plan Phase 0 canonical corpus migration`). Phase 0's normative
+  `David/HLS-spatial`, at `7408ce9b`
+  (`Record C21 ingress checkpoint`). Phase 0's normative
   contract is committed in `4505e7cf4fd463bdc7348c8e26478aa6ab489a2e`;
   its reviewed contract plan is `a6562ddd99272c10a0771d4c0f55cc8a7029ea0b`,
   and the implementation plan is
@@ -46,8 +46,10 @@ supplements, does not replace, [[workflow]] and [[progress-log]].
 - **Inversion Phase 0 contract half: complete.** Language spec, 39-source
   compatibility crosswalk, restricted-const ADR, and file/runtime ADR are
   ratified. Source-spelling migration remains open; name/classifier retirement
-  is tracked for Phase 2/3. No current compiler behavior or vendor evidence
-  changed. See [[2026-07-09-phase0-language-contract]].
+  is tracked for Phase 2/3. C21 strict-versus-macro ingress is complete in
+  `15321092`: direct `: =` is rejected without breaking `accel!`. No HLS,
+  manifest, roster, or vendor-evidence payload changed. See
+  [[2026-07-09-phase0-language-contract]].
 
 ## Two Completion Definitions
 
@@ -69,9 +71,9 @@ in phase order:
 
 1. **Finish Phase 0 -- execute the reviewed canonical-corpus plan.** Follow
    `spatial-rs/docs/superpowers/plans/2026-07-09-phase0-canonical-corpus-migration.md`
-   in checkpoint order. Start with C21 strict-versus-macro ingress, then ADR
-   0001 `Size`; do not jump directly to the seven GEMMs. The plan covers active
-   source-surface IDs C01-C13, C16, C20a, and C21 plus C22 parser negatives,
+   in checkpoint order. C21 is complete; start Checkpoint 2 with ADR 0001
+   `Size` and do not jump directly to the seven GEMMs. The remaining plan covers
+   active source-surface IDs C01-C13, C16, and C20a plus C22 parser negatives,
    with Program/HLS/manifest equality and exact legacy-negative closure. Begin
    Phase 1 afterward; C20b/C23 join shared invocation/manifest paths and
    C14/C15/C17/C18/C19/C24 retire later.

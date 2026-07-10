@@ -9,6 +9,31 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-09 -- C21 strict versus macro ingress complete
+
+Rust commits `15321092f08a50574892719072ca73a958b23e48`
+(`Separate strict Spatial and macro ingress`) and `7408ce9b`
+(`Record C21 ingress checkpoint`) on `David/HLS-spatial` close bridge C21.
+
+- Public strict `parse_accel` now accepts only canonical `:=`; direct `: =`
+  has an exact parser-negative regression.
+- `accel!` uses a doc-hidden transport ingress that rewrites only
+  lexer-confirmed colon/equal stringify spacing and preserves byte length.
+- Scalar and indexed-memory macro/direct pairs produce equal Programs,
+  `kernel.cpp`, and v0 manifests. Harness equality was not claimed.
+- A spec reviewer cleared every requested C21 requirement. A second quality
+  reviewer found no Critical, Important, or Minor issue.
+- Manager verification passed format, the full locked suite (694 core and 107
+  `m1_codegen` tests), clippy with warnings denied, default examples, 39-entry
+  dry-run, 39-entry plan, and diff hygiene.
+- Imported evidence still validates exactly as
+  `kernels=39 resource_fit=37/39 over_budget=2 ii_caveated=14`.
+
+Boundary: parser ingress behavior changed only for the intended strict
+negative; canonical Programs, generated HLS, v0 manifests, roster membership,
+and vendor evidence did not change. No fresh EC2/Vitis run was required. Next:
+Checkpoint 2A, raw numeric tokens and the ADR 0001 `Size` const AST.
+
 ## 2026-07-09 -- Phase 0 canonical-corpus implementation plan committed
 
 Rust commit `41cdfb7a` (`Plan Phase 0 canonical corpus migration`) on
