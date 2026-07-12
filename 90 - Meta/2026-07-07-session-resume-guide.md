@@ -21,11 +21,11 @@ supplements, does not replace, [[workflow]] and [[progress-log]].
 > route changed. Authoritative plan:
 > `spatial-rs/docs/superpowers/plans/2026-07-07-compositional-core-inversion-roadmap.md`.
 
-## Where Things Stand (2026-07-09)
+## Where Things Stand (2026-07-12)
 
 - Rust repo: `/Users/david/Documents/David_code/spatial-rs`, branch
-  `David/HLS-spatial`, at `aa9839c5`
-  (`Record raw Size syntax checkpoint`). Phase 0's normative
+  `David/HLS-spatial`, at `2e6dba95`
+  (`Record Size evaluation checkpoint`). Phase 0's normative
   contract is committed in `4505e7cf4fd463bdc7348c8e26478aa6ab489a2e`;
   its reviewed contract plan is `a6562ddd99272c10a0771d4c0f55cc8a7029ea0b`,
   and the implementation plan is
@@ -40,7 +40,7 @@ supplements, does not replace, [[workflow]] and [[progress-log]].
   selected Vitis evidence dirs
   (`docs/vitis-validation/2026-07-07-selected-family-*-e2536a1b/`)**; the
   rest open.
-- Full local gates are green at the language-contract checkpoint: format,
+- Full local gates are green at C01 Checkpoint 2B: format,
   locked workspace tests, clippy with `-D warnings`, default examples,
   39-member dry-run/plan, and imported-evidence validation.
 - **Inversion Phase 0 contract half: complete.** Language spec, 39-source
@@ -50,7 +50,11 @@ supplements, does not replace, [[workflow]] and [[progress-log]].
   `15321092`: direct `: =` is rejected without breaking `accel!`. No HLS,
   manifest, roster, or vendor-evidence payload changed. C01 Checkpoint 2A is
   also complete in `2ee3842d` + `8c814cae`: raw decimal tokens and the typed
-  const-expression arena are landed, but evaluation/typed lowering are not.
+  const-expression arena are landed. C01 Checkpoint 2B is complete in
+  `5295f5ce` + `b13600f4` + `73ceeae6` + `feb44688`: restricted `Size`
+  evaluation, lexical/source-ordered names, E0500-E0505, poison handling,
+  strict recovery, and sealed arena ownership are landed. Typed HIR/E0506 and
+  corpus migration remain open.
   See
   [[2026-07-09-phase0-language-contract]].
 
@@ -74,9 +78,10 @@ in phase order:
 
 1. **Finish Phase 0 -- execute the reviewed canonical-corpus plan.** Follow
    `spatial-rs/docs/superpowers/plans/2026-07-09-phase0-canonical-corpus-migration.md`
-   in checkpoint order. C21 and C01 Checkpoint 2A are complete; start 2B with
-   ADR 0001 name resolution/evaluation and do not jump directly to the seven
-   GEMMs. The remaining plan covers
+   in checkpoint order. C21 and C01 Checkpoints 2A-2B are complete; start 2C
+   with typed HIR/fixed-width plumbing and checked E0506 embedding, then migrate
+   all 33 affected sources in 2D. Do not jump directly to the seven GEMMs. The
+   remaining plan covers
    active source-surface IDs C01-C13, C16, and C20a plus C22 parser negatives,
    with Program/HLS/manifest equality and exact legacy-negative closure. Begin
    Phase 1 afterward; C20b/C23 join shared invocation/manifest paths and
@@ -138,7 +143,7 @@ answer to that finding.
   and never tick a box on a claim — name the tests and, where required, the
   evidence directory.
 - Keep the project-default reviewers in the loop when executing under a
-  subagent workflow. David explicitly overrode the model for the 2026-07-09
-  session to `gpt-5.6-sol` with ultra reasoning and capped concurrency below
-  the former six-agent waves; that session-local override does not silently
-  rewrite future-session policy.
+  subagent workflow. David explicitly overrode the current July 9-12 session
+  to `gpt-5.6-sol` with ultra reasoning and capped concurrency below the former
+  six-agent waves; that session-local override does not silently rewrite
+  future-session policy.

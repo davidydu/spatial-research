@@ -9,6 +9,47 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-07-12 -- C01 Size evaluation and E0500-E0505 complete
+
+Rust commits `f8dcc46e` (`Align Size diagnostics with typed-use phase`),
+`5295f5ce20bb8f59f17670eb66c73370d0f436fb`
+(`Evaluate restricted Size constants`), `b13600f4`
+(`Complete Size diagnostic recovery matrix`), `73ceeae6`
+(`Harden Size evaluation edge cases`), `feb44688`
+(`Preserve collision poison by declaration`), and `2e6dba95`
+(`Record Size evaluation checkpoint`) on `David/HLS-spatial` complete C01
+Checkpoint 2B.
+
+- Canonical `Size` initializers now resolve earlier visible declarations and
+  evaluate target-independently with checked `u64` arithmetic, parentheses,
+  and exact `min`/`max`/`ceil_div` calls while retaining source provenance.
+- Typed `ConstId` and `PortId` identities, lexical/source visibility, poison
+  propagation, and deterministic diagnostic ordering support E0500-E0505.
+  E0506 remains correctly owned by typed-use Checkpoint 2C.
+- The diagnostic-only recovery grammar classifies complete but unsupported
+  runtime expressions as E0505 while malformed builtin arity, chained
+  comparisons/equality, and reserved `in` remain parser errors.
+- Review was intentionally iterative. The first pass found incomplete recovery
+  coverage; the second found suppressed sibling errors, global name lookup,
+  permissive recovery, and forgeable arena ownership; the third found
+  post-collision E0500/E0501 cascades for runtime/legacy declarations. Each
+  issue received a focused regression and repair. The final Sol Ultra
+  re-review approved `feb44688` with no findings.
+- Manager verification passed format, the full locked workspace suite
+  (including 729 core tests, 107 `m1_codegen` tests, 99 Vitis-validation tests,
+  and three ownership doctests), clippy with warnings denied, default examples,
+  the 39-entry dry-run and plan, imported-evidence validation, and diff hygiene.
+- Imported evidence remains exactly
+  `kernels=39 resource_fit=37/39 over_budget=2 ii_caveated=14`.
+
+Boundary: no EE109 source has migrated from `usize` to `Size`, canonical
+`Size` values do not yet lower through typed HIR, and no checked Program,
+generated HLS, v0 manifest, roster membership, or vendor evidence changed. No
+fresh EC2/Vitis execution was run; this checkpoint regenerated local dry-run
+and plan artifacts and validated the existing 39-program evidence only. Next:
+C01 Checkpoint 2C typed HIR/fixed-width plumbing and checked E0506 embedding,
+then 2D migration of all 33 affected corpus sources.
+
 ## 2026-07-10 -- C01 raw Size syntax and const AST complete
 
 Rust commits `2ee3842dc621ea06370b3ebfdd707d541615eec7`

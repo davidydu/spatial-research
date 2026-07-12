@@ -36,6 +36,12 @@ Rust commits:
 - `2ee3842dc621ea06370b3ebfdd707d541615eec7` - raw `Size` tokens and const AST.
 - `8c814cae66a55f4c983496da89d62782619a68d9` - fail-closed transitional `Size` repair.
 - `aa9839c5` - C01 Checkpoint 2A docs checkpoint.
+- `f8dcc46e` - assign E0506 to typed-use Checkpoint 2C.
+- `5295f5ce20bb8f59f17670eb66c73370d0f436fb` - restricted `Size` evaluation and E0500-E0505.
+- `b13600f4` - complete diagnostic-only recovery matrix.
+- `73ceeae6` - lexical lookup, independent diagnostics, strict recovery, and sealed const-arena ownership.
+- `feb44688` - source-ordered declaration-identity collision poison.
+- `2e6dba95` - C01 Checkpoint 2B docs checkpoint.
 
 ## Ratified Surface
 
@@ -68,9 +74,9 @@ the reduced session concurrency cap. Every Critical and Important finding was
 corrected and its owning lane rerun before commit.
 The session-local model choice did not change the standing future-session default.
 
-Local gates passed: format, the full locked test suite, clippy with `-D warnings`,
-default examples, 39-member dry-run/plan, imported evidence validation, and
-diff/path hygiene. Imported evidence remains
+Local gates passed through C01 Checkpoint 2B: format, the full locked test
+suite, clippy with `-D warnings`, default examples, 39-member dry-run/plan,
+imported evidence validation, and diff/path hygiene. Imported evidence remains
 `2026-07-05-current-head-76158dd7-39-program` with
 `resource_fit=37/39`, `over_budget=2`, `ii_caveated=14`.
 
@@ -84,9 +90,14 @@ HLS, and v0 manifest parity are pinned. The remaining implementation surface
 is C01-C13, C16, C20a, and C22 parser negatives, not only the seven legacy
 GEMMs. C01 Checkpoint 2A is complete: decimal tokens preserve raw source,
 canonical `Size` expressions build a typed spanned arena, and compatibility
-`usize` is represented separately. Evaluation and E0500-E0506 remain open;
-the next checkpoint is 2B name resolution, evaluation, poison, and diagnostic
-ordering.
+`usize` is represented separately. C01 Checkpoint 2B is also complete:
+earlier-visible name resolution, checked `u64` evaluation, deterministic
+E0500-E0505 diagnostics, poison handling, strict diagnostic-only recovery, and
+sealed const-arena ownership are landed. Iterative Sol Ultra review found and
+closed recovery, lexical lookup, sibling-diagnostic, arena-ownership, and
+source-ordered collision-poison gaps before final approval. E0506 and typed
+lowering remain open; the next checkpoint is 2C typed HIR and fixed-width
+plumbing, followed by 2D migration of all 33 affected corpus sources.
 
 Later checkpoints implement ADR 0001 `Size`, parametric fixed point, typed
 requirements, canonical schedules/value blocks/stencil commands, typed memory
@@ -102,6 +113,7 @@ for identifier freedom, harness-equality ownership, per-commit local gates,
 and the explicit session model override. This session is capped at two
 concurrent subagents using `gpt-5.6-sol` with ultra reasoning.
 
-Boundary: normative docs changed; currently implemented compiler acceptance,
-parser behavior, checked IR, generated HLS, manifests, roster membership, and
-vendor evidence did not. No fresh EC2/Vitis run was required.
+Boundary: C21 strict ingress and C01 raw syntax/evaluation changed frontend
+behavior as recorded above. No EE109 source migration, checked Program,
+generated HLS, manifest, roster membership, or vendor evidence changed. No
+fresh EC2/Vitis run was required.
