@@ -13,3 +13,6 @@
 *.swp
 *.swo
 *~
+
+# Private, never published (EC2 lane details, private runbooks)
+private/

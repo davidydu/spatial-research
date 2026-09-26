@@ -113,19 +113,10 @@ answer to that finding.
 
 ## EC2 / Vitis Lane
 
-- Host alias `[ec2-alias]` in `~/.ssh/config`
-  (`[ec2-host — see private/ec2-lane.md]`, user `ubuntu`, key
-  `[ssh-key — see private/ec2-lane.md]`). **Restored 2026-07-07 (later
-  session): the old `[old-ec2-host — see private/ec2-lane.md]` / `[old-ssh-key]`
-  entry was dead; the live us-west-2 host has Vitis 2025.1 at
-  `/tools/Xilinx/2025.1`, cargo/rustc 1.75, and the bundle/run-script lane
-  layout under `~/`. Stale `~/spatial-rs-runs` workspaces and old bundles
-  (72G+) were deleted after confirming every checkpoint was already imported
-  under `docs/vitis-validation/`; disk is now ~70% used with 74G free. The IP
-  is still dynamic across stop/start unless an Elastic IP is attached.**
-- Reachability check:
-  `ssh [ec2-alias] "source /tools/Xilinx/2025.1/Vitis/settings64.sh; vitis-run --version"`.
-  If the hostname changed, update `~/.ssh/config` first.
+- Host, user, key path, and the reachability check live in `private/ec2-lane.md`
+  (gitignored; not on the public site). The host is an EC2 instance with Vitis
+  2025.1 at `/tools/Xilinx/2025.1` and cargo/rustc 1.75; its IP is dynamic
+  across stop/start unless an Elastic IP is attached.
 - Any slice that changes generated HLS or adds a roster member needs a selected
   `run-vitis-validation --kernel ... --execute --mode both` run before its box
   is ticked; roster promotion needs a full-roster refresh. See the checklist
