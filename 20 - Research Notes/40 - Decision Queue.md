@@ -6,7 +6,7 @@ date: 2026-04-25
 
 # Decision Queue — Architectural Choices for Rust+HLS Rewrite
 
-25 items requiring user decision before the corresponding subsystem can be re-implemented.
+26 items requiring user decision before the corresponding subsystem can be re-implemented.
 
 ## D-01 — [Q-036] Choose the HLS policy for BigIP optional arithmetic operations and simulator placeholders.
 Source: fringe/src/fringe/BigIP.scala:22-105; fringe/src/fringe/targets/BigIPSim.scala:82-96
@@ -107,3 +107,7 @@ Decision criteria: User decision: Rust host-side fixed-point conversions match C
 ## D-25 — [Q-154] Define multi-true `OneHotMux` semantics.
 Source: spatial/src/spatial/codegen/scalagen/ScalaGenBits.scala:30-37; src/spatial/node/Mux.scala:19-37; [[60 - Counters and Primitives]]
 Decision criteria: User decision: HLS `OneHotMux` with multiple true selectors matches Scalagen OR-reduce, asserts one-hotness, or defines priority semantics.
+
+## D-26 — [Q-165] Choose the host-language architecture: compiler core (Rust / Python) × student surface (external DSL / Python-embedded / both) × Python integration depth.
+Source: 90 - Meta/2026-06-26-rust-first-spatial-dsl-overlay.md (Non-Goals); 90 - Meta/2026-07-07-fundamental-design-review.md (Issue 2)
+Decision criteria: User decision among cells R-X, R-E, R-B, P-X, P-E, P-B after the pre-registered D-26 protocol; integration depth (I0/I1/I1′/I2/In) chosen for R-* cells.

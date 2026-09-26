@@ -22,6 +22,7 @@ Research effort to produce a comprehensive, implementation-level specification o
 | `10 - Spec/` | **The deliverable.** Authoritative, cross-linked spec. Populated progressively during Phase 2. |
 | `20 - Research Notes/` | Raw artifacts. `00 - Coverage/` holds Phase 1 subagent outputs; `10 - Deep Dives/` holds per-topic reading notes; `20 - Open Questions.md` tracks unresolved issues. |
 | `30 - HLS Mapping/` | Parallel notes categorizing each construct as clean-map / needs-rework / chisel-specific for the future HLS target. |
+| `35 - Python Surface Mapping/` | Per-construct evidence for D-26 (Python embedding styles vs the external DSL); build spec if a Python surface is chosen. |
 | `40 - Cross References/` | Navigation matrices (source-tree map, pass pipeline order, node↔codegen matrix). |
 | `90 - Meta/` | Workflow docs, design doc, progress log, conventions. |
 

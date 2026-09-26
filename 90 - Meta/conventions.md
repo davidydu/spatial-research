@@ -36,6 +36,14 @@ Every file has a frontmatter block. `type` is required; other fields depend on `
 | `spec` | Authoritative spec entries under `10 - Spec/` | `concept`, `source_files`, `source_notes`, `hls_status`, `depends_on`, `status` |
 | `hls-mapping` | Non-index entries under `30 - HLS Mapping/` (per-construct) | `construct`, `spec_entry`, `category` |
 | `cross-ref` | Navigation matrix: directory → concept mapping, pass orders, node↔codegen matrices | — |
+| `decision-record` | Decision records under `20 - Research Notes/50 - Decision Records/` | `decision-id`, `related-questions`, `status`, `date` |
+| `decision-queue` | The decision queue | `date` |
+| `research` | Per-angle research notes under `D-NN-research/` | `decision`, `angle`; **from D-26 onward also** `discriminates`, `sources`, `verified`, `status` |
+| `research-note` | Free-standing research notes (legacy; prefer `research` or `deep-dive`) | `topic`, `date`, `status` |
+| `decision` / `handoff` | Legacy one-off notes; do not create new ones | — |
+| `reference` | Manifests of external material (e.g. [[reference-clones]]) | `date` |
+| `python-mapping-index` | Index of `35 - Python Surface Mapping/` | `date_started` |
+| `python-mapping` | Per-construct entries under `35 - Python Surface Mapping/` | `construct`, `spec_entry`, `grammar_rule`, `per_style`, `obligations_at_risk`, `raters`, `verified`, `status` |
 
 If a new type is needed, add it to this table before using it — the schema is the authoritative list.
 
@@ -53,6 +61,20 @@ Two forms:
 If a citation isn't available, tag the claim `(inferred, unverified)` in-prose. Untagged behavioral claims without citations are a style error.
 
 After a re-read confirms a claim, add `verified: <YYYY-MM-DD>` to the entry's frontmatter (list of dates for multiple re-reads).
+
+### External citations (from D-26 onward)
+
+- Code in a pinned external clone: `<repo>@<7-char sha>:<path>:<L1-L2>`, e.g.
+  `calyx@1a2b3c4:calyx-py/calyx/builder.py:40-88`. The full SHA, upstream URL,
+  and clone date live in [[reference-clones]]; a reader rebuilds
+  `https://github.com/<org>/<repo>/blob/<sha>/<path>#L<L1>-L<L2>`.
+- `spatial-rs` (not public) uses the same form, `spatial-rs@<sha>:<path>:<L1-L2>`.
+- Documentation and papers: `<URL> (accessed YYYY-MM-DD)`.
+- Absolute local paths (`/Users/...`) are not citations and must not appear in
+  new notes.
+- Every factual claim in a `research` or `python-mapping` note carries an
+  evidence tag: `[measured]`, `[precedent-measured]`, `[designed]`, or
+  `[judgment]`. Untagged claims fail the spot-check.
 
 ## Wikilinks
 
@@ -101,6 +123,12 @@ After a re-read confirms a claim, add `verified: <YYYY-MM-DD>` to the entry's fr
 - `vitis_csynth_validated` — generated Vitis/Vivado project ran `csynth_design`, with report metadata recorded
 - `vitis_evidence_validated` — captured evidence directory passed the repo-local Vitis evidence validator
 - `ec2_rust_1_75_compatible` — local manifests and lockfile remain readable by the EC2 Rust/Cargo 1.75 toolchain
+
+**Python surface mapping labels (`python-mapping` entries):**
+- `expressible`: `yes` / `awkward` (needs a construct outside the style's allowed-Python subset) / `no` (with the data-model citation)
+- `info_preserved`: subset of `[spans, literal_types, size_vs_int, scope, order]` the style keeps
+- `error_locus`: `python-time` / `ir-check` / `runtime` / `silent`
+- `silently_divergent`: hazards where Python evaluates with its own semantics before the DSL sees the value
 
 ## Progress log format
 

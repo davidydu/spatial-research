@@ -2309,3 +2309,20 @@ Source: `src/spatial/node/Blackbox.scala:18-35`; `src/spatial/lang/Blackbox.scal
 Blocked by: —
 Status: out-of-scope-for-v1
 Resolution: (empty until resolved)
+
+## Q-165 — [2026-09-25] Host-language architecture (Rust/Python core, external/embedded student surface) asserted, not researched
+
+The vault records "Do not use Python as the compiler-core owner" as a non-goal
+(`90 - Meta/2026-06-26-rust-first-spatial-dsl-overlay.md`, Non-Goals) and
+"The external-DSL choice itself is right for teaching … diagnostics are fully
+owned" (`90 - Meta/2026-07-07-fundamental-design-review.md`, Issue 2) without a
+decision record or research notes. The course professor's stated position is
+that Python is easier to teach and to pick up. Which language hosts the
+compiler core, which surface students write, and how Python integrates need
+the same treatment as D-01..D-25.
+
+Source: `90 - Meta/2026-06-26-rust-first-spatial-dsl-overlay.md`; `90 - Meta/2026-07-07-fundamental-design-review.md`
+Blocked by: —
+Status: needs-architectural-decision
+Decision criteria: D-26 pre-registration (hypotheses, weights, reversal conditions) → research angles → recommendation matrix → user decision among cells R-X, R-E, R-B, P-X, P-E, P-B.
+Resolution: tracked by [[D-26]]

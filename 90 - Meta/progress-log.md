@@ -9,6 +9,15 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-09-25 — D-26 Wave 0 (host-language research) and publication gate
+- Design approved after a four-reviewer pass: [[2026-09-25-python-rust-architecture-research-design]]; plans: [[2026-09-25-d26-research-dispatch]] (vault) and `spatial-rs/docs/superpowers/plans/2026-09-25-check-cli.md`; slice contract [[2026-09-25-check-cli-slice-contract]].
+- Filed Q-165; added D-26 to the Decision Queue (26 items); conventions gained the in-use types, `python-mapping*` types, an External citations paragraph, and the mapping labels.
+- Pinned seven precedent clones (calyx, dahlia, allo, exo, pymtl3, amaranth, polars) plus the two local repos in [[reference-clones]].
+- Scripts: `90 - Meta/scripts/validate_d26_note.py` (+ fixtures) and `d26_wave_check.sh`; both verified (validator passes/fails the fixtures as designed; wave check PASS on the skeleton).
+- `35 - Python Surface Mapping/`: overview + 13 skeleton entries (8 constructs, 5 cross-cutting), all validating.
+- [[D-26]] committed at `status: pre-registered`: hypotheses from the professor's stated claim, audience, decision rule (weights table blank until David and the Rust-leaning instructor fill it), reversal conditions (k = 10), fixed program and mistake lists, stopping rule.
+- Publication gate: EC2 lane details moved to a gitignored private note; the never-pushed history was rewritten and verified clean (blob, message, and tree scans zero; ancestor intact; local Quartz build OK). The push is deferred until a `davidydu` GitHub credential is available on this machine; the mirror backup is kept until then.
+
 ## 2026-07-12 -- C01 Size evaluation and E0500-E0505 complete
 
 Rust commits `f8dcc46e` (`Align Size diagnostics with typed-use phase`),
