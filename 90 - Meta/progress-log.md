@@ -9,6 +9,12 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-09-28 — Handoff to Codex (state checkpoint)
+- Handoff document written to `~/Downloads/2026-09-28-spatial-d26-handoff.md` (outside the vault).
+- D-26: Wave 0 committed (`6128334`); Wave 1 research notes not yet produced (the two dispatched agents were terminated by an API rate limit before writing; `D-26-research/` is empty). Waves 1–3 remain per [[2026-09-25-d26-research-dispatch]].
+- `check` CLI slice (D-26 decision 2): Tasks 1–3 committed in spatial-rs (`a0711f64` render_text; `ccc7371b` crate + check command; `612a1ba6` plan doc); spec/code-quality reviews and Tasks 4–5 remain. Paired gate transcript will be logged with Task 5.
+- Publication gate: rewrite complete and verified; push still deferred pending a repo-owner GitHub credential; backup mirror retained until then.
+
 ## 2026-09-25 — D-26 Wave 0 (host-language research) and publication gate
 - Design approved after a four-reviewer pass: [[2026-09-25-python-rust-architecture-research-design]]; plans: [[2026-09-25-d26-research-dispatch]] (vault) and `spatial-rs/docs/superpowers/plans/2026-09-25-check-cli.md`; slice contract [[2026-09-25-check-cli-slice-contract]].
 - Filed Q-165; added D-26 to the Decision Queue (26 items); conventions gained the in-use types, `python-mapping*` types, an External citations paragraph, and the mapping labels.
