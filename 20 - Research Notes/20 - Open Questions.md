@@ -2326,3 +2326,18 @@ Blocked by: —
 Status: needs-architectural-decision
 Decision criteria: D-26 pre-registration (hypotheses, weights, reversal conditions) → research angles → recommendation matrix → user decision among cells R-X, R-E, R-B, P-X, P-E, P-B.
 Resolution: tracked by [[D-26]]
+
+## Q-166 — [2026-09-28] D-26 mistake 5 conflicts with normative writable-DRAM assignment
+
+The frozen D-26 mistake list calls direct DRAM writes inside a loop instead of
+`store` an error. The current normative capability table permits indexed writes
+to output/inout DRAM, and the lvalue rule explicitly admits writable DRAM.
+Acceptance of such a program therefore cannot by itself count as a false
+acceptance or poor error detection.
+
+Source: `spatial-rs@eb49d8b:docs/language-spec.md:769-791`; [[D-26]], fixed mistake list item 5.
+Status: open
+Resolution: The meeting-cut study retains the original row and reports its
+classification conflict; the frozen list is unchanged. The result must not be
+scored as a missed error. A revised future error study needs an explicitly
+confirmed illegal case or must register this row as a valid control.
