@@ -2341,3 +2341,16 @@ Resolution: The meeting-cut study retains the original row and reports its
 classification conflict; the frozen list is unchanged. The result must not be
 scored as a missed error. A revised future error study needs an explicitly
 confirmed illegal case or must register this row as a valid control.
+
+## Q-167 — [2026-09-28] D-26 FIFO mapping incorrectly included masked-off lanes in conflicts
+
+The first C0 mapping draft said same-FIFO conflicts apply "including masked-off
+lanes." Rule 10 adds the active-lane predicate before checking conflicts; tail
+semantics skip the inactive body and its effects. The claim incorrectly widened
+the conflict rule.
+
+Source: `spatial-rs@eb49d8b:docs/language-spec.md:583-588`, `spatial-rs@eb49d8b:docs/language-spec.md:863-878`; [[C0 - Python Fifo Deq Timing]].
+Status: resolved
+Resolution: Corrected the mapping during its main-session five-claim check.
+No compiler behavior or pre-registration changed; the independent audit also
+records the correction.
