@@ -9,6 +9,27 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-09-28 — check CLI slice complete (D-26 decision 2)
+- Implementation chain: `a0711f64` text renderer; `ccc7371b` CLI; `612a1ba6` plan; `eb49d8bc47bea46c83a7eb26f6a244f6303eebcb` integration coverage and native-argument fix. Fresh Codex spec review and code-quality review passed. Review found native non-UTF-8 argv previously panicked with exit 101; four subprocess regressions failed before `args_os`/native-path preservation and passed afterwards.
+- CLI verification: 4 unit tests and 9 integration tests pass. Full `cargo test --locked`: 1,180 tests passed, zero failures. `cargo fmt --all --check`, `cargo clippy --all-targets --locked -- -D warnings`, and `git diff --check`: exit 0. The documented SDKROOT workaround was used for compilation/linking. Rust 1.75 compatibility is declared and lockfile version remains 3; this was not a fresh execution on the remote Rust 1.75 toolchain.
+- `cargo run -p ee109-examples --locked --bin emit-vitis-dry-run`: exit 0. `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --out target/vitis-validation-plan`: exit 0. `cargo run -p ee109-examples --locked --bin run-vitis-validation -- --validate-evidence docs/vitis-validation/2026-07-05-current-head-76158dd7-39-program --mode both`: exit 0; `kernels=39 resource_fit=37/39 over_budget=2 ii_caveated=14`. This validates existing captured evidence; no fresh vendor synthesis run was performed.
+- Boundary: no accepted syntax, HIR, IR, classifier, HLS, manifest, roster, or vendor evidence change. `check` prints raw `compile_source` diagnostics; the `accel!`/`parse_accel` path still post-processes classifier failures into E02xx near-miss diagnostics. D-26 uses the CLI output.
+- `reference-clones` now records the reviewed CLI revision and preserves the historical pre-registration revision; corrected its Exo metaprogramming description from pinned source evidence.
+- User explicitly changed writer/reviewer routing to **Codex only**, with aggressive independent parallel work. Earlier Claude launches were stopped and produced no notes. The six architecture cells and frozen decision criteria are unchanged.
+
+```text
+$ cargo run -q -p spatial-rs-cli -- check crates/spatial-rs-cli/tests/fixtures/e0500.spatial
+error[spatial:E0500]: dimension name does not resolve to an earlier Size constant
+  --> crates/spatial-rs-cli/tests/fixtures/e0500.spatial:2:29
+   = `N` is unknown or names a Size constant declared later
+   = help: declare a Size constant with this name before the dimension
+
+exit=1
+$ cargo run -q -p spatial-rs-cli -- check crates/spatial-rs-cli/tests/fixtures/ok.spatial
+
+exit=0
+```
+
 ## 2026-09-28 — Handoff to Codex (state checkpoint)
 - Handoff document written to `~/Downloads/2026-09-28-spatial-d26-handoff.md` (outside the vault).
 - D-26: Wave 0 committed (`6128334`); Wave 1 research notes not yet produced (the two dispatched agents were terminated by an API rate limit before writing; `D-26-research/` is empty). Waves 1–3 remain per [[2026-09-25-d26-research-dispatch]].
