@@ -9614,3 +9614,14 @@ Boundary:
   are claimed.
 - No fresh EC2/Vitis execution was run for this local helper cleanup; the
   existing 39-program evidence was parsed and validated locally.
+
+
+## 2026-09-28 — D-26 Wave 2: surfaces, errors, boundary and mapping
+
+Completed angles 2, 3 and 5 and all thirteen Python mapping entries using Codex-only writers, per the user's explicit session override. The overview records one rating per entry, designed versus implemented preservation, and the second-rater deferral. Main-session five-claim checks: angle2 5/5, angle3 5/5, angle5 5/5; mappings64/65 initially, then65/65 after correcting inactive FIFO lanes (Q167). D0's designed-extension preservation rating was harmonized by the independent audit without changing expressibility.
+
+Angle2 contains15 complete listings, final union counts Scala/external/tracing/builder/AST14/6/13/11/12, and per-lab counts/absence sets. These are concept inventories, not learner outcomes. Angle3 records24 external runs and10 Exo cases/controls; main reran selected cases. Three canonical labs and five variants hit parser barriers; direct DRAM-write row5 is legal (Q166, fixed list preserved). Scala is source-only; Allo native runtime unavailable. Angle5 distinguishes specified ADR JSON contracts from implemented text check, and unchecked AST ingress from a checked-IR boundary.
+
+Fresh mapping citation audit:291 current code occurrences supported,15 distinct URLs fetched,65/65 behavioral claims supported after Q167; D0 consistency clarification independently verified. Full research-note citation audit and P-E inference response are being completed for the final meeting-cut commit. No compiler semantics, HLS evidence, publication or presentation changed in this research wave.
+
+Wave 2 mechanical gate: PASS (all21 note schemas, pinned citation bounds, no leaks, links, unchanged23 duplicate-stem baseline). The link checker initially misread fenced LUT source `[[1,2]]` as an Obsidian link; corrected only its fenced-code handling, preserving the exact program/transcript text. Q167 was separately committed because the gate's subagent-change allowlist intentionally excludes general question-file edits.

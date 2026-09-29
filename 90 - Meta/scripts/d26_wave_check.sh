@@ -62,7 +62,10 @@ paths={str(p.with_suffix("")) for p in pathlib.Path(".").rglob("*.md")}
 bad=0
 for f in list(pathlib.Path("20 - Research Notes/50 - Decision Records").glob("D-26*/*.md"))+list(pathlib.Path("35 - Python Surface Mapping").glob("*.md"))+[pathlib.Path("20 - Research Notes/50 - Decision Records/D-26.md")]:
     if not f.exists(): continue
-    for m in re.finditer(r"\[\[([^\]|#]+)", f.read_text()):
+    # Fenced source/transcripts can contain LUT literals such as [[1,2]].
+    # Only prose outside those fences participates in Obsidian link resolution.
+    prose=re.sub(r"(?ms)^```[^\n]*\n.*?^```[ \t]*$", "", f.read_text())
+    for m in re.finditer(r"\[\[([^\]|#]+)", prose):
         t=m.group(1).strip()
         if t not in stems and t not in paths: print(f"{f}: unresolved [[{t}]]"); bad+=1
 sys.exit(1 if bad else 0)
