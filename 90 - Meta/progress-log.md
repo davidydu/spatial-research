@@ -9654,3 +9654,7 @@ Validation: all 22 D-26 research/mapping schemas, citation bounds, leak checks a
 Compiler HEAD remains eb49d8bc47bea46c83a7eb26f6a244f6303eebcb with only its pre-existing untracked local artifacts. No production compiler or vendor evidence changed; no new Vitis run was claimed.
 
 Publication readiness: existing identifying markers have zero matches in all 358 unpublished commit snapshots/messages, current index and publishable files; remote is an ancestor and needs only an ordinary fast-forward. Current GitHub account has no push permission for either repo. Local publication artifacts are complete; live deployment is not claimed. The final Git transport outcome is recorded separately below.
+
+Final transport check: an ordinary push of the completed vault was attempted and GitHub returned HTTP 403 because the active credential lacks write permission. No remote update occurred. The site push was not attempted after the prerequisite vault push failed, avoiding a deployment against stale remote research. Content proposal/cleanup commit: 999e2f1; site configuration commit: 9118ae0. Both are local. Publishing requires an authorized GitHub account; no credential, account, access policy or remote history was changed.
+
+Final UI checks: the 390-pixel homepage stays within its viewport; wide tables scroll within their own containers. Desktop diagrams render without literal escape characters, and the professor brief is available in the local preview. The normal D-26 gate passes after commit, including its clean-status check.
