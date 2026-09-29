@@ -9,6 +9,11 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-09-28 — D-26 Wave 1
+- Codex wrote [[D-26-01a-precedent-python-over-core]] and [[D-26-01c-precedent-external-dsl-over-core]] from neutral prompts. Main-session source spot-checks: 1a 5/5 supported (Exo host metaprogramming, Allo inference/build, Calyx builder exceptions, PyMTL source labels, Exo paired negative tests); 1c 5/5 supported (Dahlia pass order, bounds behavior, Calyx source spans, Dahlia line-only emission, maturin binary-wheel mechanism). Zero substantive failures; verified dates recorded.
+- Mechanical corrections: normalized citation line notation, replaced unregistered Ruff aliases with pinned official URLs, and adjusted subsection/configuration formatting. `d26_wave_check.sh`: PASS with 2 research notes, 13 mapping skeletons, 23 legacy duplicate stems, no leak matches, citation bounds and new links valid. Validator used installed Python 3.12/PyYAML 6.0.1 because the default Python lacked PyYAML.
+- Findings preserve distinctions between Python compiler implementations, compiled targets/simulators, inspected diagnostic strings, and executed results. No teaching-outcome experiment, wheel-install trial, simulator benchmark, or compiler execution was performed by these precedent writers. D-26 remains pre-registered; weights remain blank, k = 10.
+
 ## 2026-09-28 — check CLI slice complete (D-26 decision 2)
 - Implementation chain: `a0711f64` text renderer; `ccc7371b` CLI; `612a1ba6` plan; `eb49d8bc47bea46c83a7eb26f6a244f6303eebcb` integration coverage and native-argument fix. Fresh Codex spec review and code-quality review passed. Review found native non-UTF-8 argv previously panicked with exit 101; four subprocess regressions failed before `args_os`/native-path preservation and passed afterwards.
 - CLI verification: 4 unit tests and 9 integration tests pass. Full `cargo test --locked`: 1,180 tests passed, zero failures. `cargo fmt --all --check`, `cargo clippy --all-targets --locked -- -D warnings`, and `git diff --check`: exit 0. The documented SDKROOT workaround was used for compilation/linking. Rust 1.75 compatibility is declared and lockfile version remains 3; this was not a fresh execution on the remote Rust 1.75 toolchain.
