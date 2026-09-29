@@ -21,9 +21,13 @@ supplements, does not replace, [[workflow]] and [[progress-log]].
 > route changed. Authoritative plan:
 > `spatial-rs/docs/superpowers/plans/2026-07-07-compositional-core-inversion-roadmap.md`.
 
-## Where Things Stand (2026-07-12)
+## Current research checkpoint (2026-09-28)
 
-- **D-26 host-language research (2026-09-25):** design [[2026-09-25-python-rust-architecture-research-design]]; plan [[2026-09-25-d26-research-dispatch]]; record [[D-26]] (meeting cut audited 2026-09-28; awaiting user confirmation). Evidence and corrections: [[2026-09-25-d26-citation-audit]]. The deck waits for David's architecture decision. The vault's publication gate ran on 2026-09-25 (history scrubbed and verified); the push itself is pending a `davidydu` GitHub credential — see `private/plans/`.
+The final research recommendation is [[D-26-final-architecture|R-E: source-captured Python kernels over one Rust semantic core]]. Read [[D-26-professor-brief]] and [[2026-09-28-d26-research-extension]] first. Architecture implementation awaits professor approval; do not resume the historical implementation queue on the basis of this research proposal alone. Current compiler checkpoint is `eb49d8bc`; the thin CLI implements text `check`. The older checkpoints below are retained as history. Publication/build status is recorded in [[progress-log]].
+
+## Historical implementation checkpoint (2026-07-12)
+
+- **D-26 host-language research (2026-09-25):** design [[2026-09-25-python-rust-architecture-research-design]]; plan [[2026-09-25-d26-research-dispatch]]; record [[D-26]] (historical meeting cut audited 2026-09-28; final follow-up proposal linked above). Evidence and corrections: [[2026-09-25-d26-citation-audit]]. The professor brief now presents the final research recommendation; implementation still awaits approval. The vault's publication gate ran on 2026-09-25 (history scrubbed and verified); the push itself is pending a `davidydu` GitHub credential — see `private/plans/`.
 - Rust repo: `/Users/david/Documents/David_code/spatial-rs`, branch
   `David/HLS-spatial`, at `2e6dba95`
   (`Record Size evaluation checkpoint`). Phase 0's normative

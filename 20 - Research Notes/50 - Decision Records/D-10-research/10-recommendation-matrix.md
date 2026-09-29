@@ -8,7 +8,7 @@ angle: 10
 
 ## Named Recommendation
 
-**Recommendation D-10: Scalagen-Compatible Default with Declared Precision Modes.** Make `scalagen_f64_reclamp` the default Rust reference mode for v1, because the current spec already names Scalagen plus `emul` as the numeric reference and `Number` routes transcendentals through `Double` before rewrapping to the source format ([[20 - Numeric Reference Semantics]]; [[03-spec-open-question-survey]]). Add explicit precision-mode metadata so MPFR and synthesized-hardware matching can exist as opt-in verification modes, not silent changes to the oracle. This preserves compatibility while giving D-18 and D-19 a place to record intentional numeric divergence.
+**Recommendation D-10: Scalagen-Compatible Default with Declared Precision Modes.** Make `scalagen_f64_reclamp` the default Rust reference mode for v1, because the current spec already names Scalagen plus `emul` as the numeric reference and `Number` routes transcendentals through `Double` before rewrapping to the source format ([[20 - Numeric Reference Semantics]]; [[20 - Research Notes/50 - Decision Records/D-10-research/03-spec-open-question-survey|03-spec-open-question-survey]]). Add explicit precision-mode metadata so MPFR and synthesized-hardware matching can exist as opt-in verification modes, not silent changes to the oracle. This preserves compatibility while giving D-18 and D-19 a place to record intentional numeric divergence.
 
 ## Option Matrix
 

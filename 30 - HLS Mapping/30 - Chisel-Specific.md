@@ -13,7 +13,7 @@ Each line is generated from spec-entry `hls_status` frontmatter. Entries marked 
 
 [[70 - Timing Model]] — Explicit RTL delay and cycle-alignment machinery has no direct HLS equivalent and needs architectural redesign.
 [[C0 - Retiming]] — Explicit RTL delay and cycle-alignment machinery has no direct HLS equivalent and needs architectural redesign.
-[[10 - Overview]] — Emits Chisel/RTL structures directly; an HLS backend needs C++ emission and scheduling instead.
+[[10 - Spec/50 - Code Generation/10 - Chiselgen/10 - Overview|10 - Overview]] — Emits Chisel/RTL structures directly; an HLS backend needs C++ emission and scheduling instead.
 [[20 - Types and Ports]] — Emits Chisel/RTL structures directly; an HLS backend needs C++ emission and scheduling instead.
 [[30 - Memory Emission]] — Emits Chisel/RTL structures directly; an HLS backend needs C++ emission and scheduling instead.
 [[40 - Controller Emission]] — Emits Chisel/RTL structures directly; an HLS backend needs C++ emission and scheduling instead.

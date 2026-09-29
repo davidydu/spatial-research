@@ -54,7 +54,7 @@ Each line is generated from spec-entry `hls_status` frontmatter. Entries marked 
 [[90 - Rewrite Transformer]] — Algorithm is portable, but its outputs and invariants must be adapted to HLS scheduling and pragmas.
 [[B0 - Accum Specialization]] — Algorithm is portable, but its outputs and invariants must be adapted to HLS scheduling and pragmas.
 [[D0 - Streamify]] — Algorithm is portable, but its outputs and invariants must be adapted to HLS scheduling and pragmas.
-[[10 - Overview]] — Reference semantics are essential, but the JVM simulator path must become Rust tests, models, or HLS-compatible runtime code.
+[[10 - Spec/50 - Code Generation/20 - Scalagen/10 - Overview|10 - Overview]] — Reference semantics are essential, but the JVM simulator path must become Rust tests, models, or HLS-compatible runtime code.
 [[20 - Numeric Reference Semantics]] — Reference semantics are essential, but the JVM simulator path must become Rust tests, models, or HLS-compatible runtime code.
 [[30 - Memory Simulator]] — Reference semantics are essential, but the JVM simulator path must become Rust tests, models, or HLS-compatible runtime code.
 [[40 - FIFO LIFO Stream Simulation]] — Reference semantics are essential, but the JVM simulator path must become Rust tests, models, or HLS-compatible runtime code.

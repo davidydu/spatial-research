@@ -8,7 +8,7 @@ angle: 2
 
 ## Bottom Line
 
-For [[D-20]], `DelayLine` should be treated as both, but not uniformly. A compiler-created `DelayLine` is a [[scheduling artifact]]: it is inserted by `RetimingTransformer` to make values arrive at the scheduled consumer time. In emitted hardware it is still real sequential state, but its semantic trace is the original value, not a source-level storage object. A user-created `retime(delay, payload)` is different: it is explicit [[semantic state]] in the hardware timing contract and is tagged as user-injected (`src/spatial/lang/api/MiscAPI.scala:23-31`, `src/spatial/metadata/retiming/package.scala:30-31`).
+For [[D-20]], `DelayLine` should be treated as both, but not uniformly. A compiler-created `DelayLine` is a scheduling artifact: it is inserted by `RetimingTransformer` to make values arrive at the scheduled consumer time. In emitted hardware it is still real sequential state, but its semantic trace is the original value, not a source-level storage object. A user-created `retime(delay, payload)` is different: it is explicit semantic state in the hardware timing contract and is tagged as user-injected (`src/spatial/lang/api/MiscAPI.scala:23-31`, `src/spatial/metadata/retiming/package.scala:30-31`).
 
 ## Scheduling Source
 

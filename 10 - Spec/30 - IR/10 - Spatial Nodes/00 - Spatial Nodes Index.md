@@ -22,7 +22,7 @@ Per-node entries for IR ops defined under `src/spatial/node/`.
 
 ## Metadata (separate index)
 
-→ [[20 - Metadata/00 - Metadata Index]]
+→ [[10 - Spec/30 - IR/20 - Metadata/00 - Metadata Index|00 - Metadata Index]]
 
 ## Source
 

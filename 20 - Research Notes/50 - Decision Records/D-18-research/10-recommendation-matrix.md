@@ -27,7 +27,7 @@ Adopt **Legacy Clamp as the canonical reference policy**, with a named mode such
 
 Rust reference simulation should reproduce `FloatPoint.clamp` exactly enough for bit-for-bit parity, including the `x > 1.9` guard, `x >= 2` repair, cutoff repair, overflow-to-infinity, normal and subnormal packing, one-discarded-bit rounding, signed-zero underflow, NaN/infinity/zero encodings, and `convertBackToValue` canonicalization (`/Users/david/Documents/David_code/spatial/emul/src/emul/FloatPoint.scala:318-433`; [[01-source-algorithm-call-surface]]). The ugly rule should be quarantined by name, not cleaned away silently.
 
-This recommendation follows the spec hierarchy. [[20 - Numeric Reference Semantics]] and [[50 - Data Types]] already treat Scalagen/emul as the reference when native hardware or JVM intuitions disagree, and they explicitly warn that custom floating formats cannot be delegated to native `f32`/`f64` if bit parity is required. [[03-tests-apps-usage]] also shows the current test suite does not protect clamp boundaries directly, so a clean replacement would look safe until exact bit fixtures are added.
+This recommendation follows the spec hierarchy. [[20 - Numeric Reference Semantics]] and [[50 - Data Types]] already treat Scalagen/emul as the reference when native hardware or JVM intuitions disagree, and they explicitly warn that custom floating formats cannot be delegated to native `f32`/`f64` if bit parity is required. [[20 - Research Notes/50 - Decision Records/D-18-research/03-tests-apps-usage|03-tests-apps-usage]] also shows the current test suite does not protect clamp boundaries directly, so a clean replacement would look safe until exact bit fixtures are added.
 
 ## Rejected Alternatives
 

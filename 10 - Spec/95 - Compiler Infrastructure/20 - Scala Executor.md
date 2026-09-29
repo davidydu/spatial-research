@@ -64,7 +64,7 @@ Dense fringe loads and stores use the same pieces in opposite directions. A load
 
 ## Interactions
 
-The executor depends heavily on metadata established by earlier compiler phases: controller schedule, `fullDelay`, II, parent/child control structure, memory metadata, and fringe transfer nodes. It shares conceptual ground with [[20 - Scalagen]] because both are Scala-side reference behavior, but this executor runs inside the compiler pipeline while the Scala codegen emits standalone Scala.
+The executor depends heavily on metadata established by earlier compiler phases: controller schedule, `fullDelay`, II, parent/child control structure, memory metadata, and fringe transfer nodes. It shares conceptual ground with [[10 - Spec/50 - Code Generation/20 - Scalagen/10 - Overview|20 - Scalagen]] because both are Scala-side reference behavior, but this executor runs inside the compiler pipeline while the Scala codegen emits standalone Scala.
 
 The command-line timing knobs wire directly into the executor constructor: `scalaExecLatency` is the memory response latency, `scalaExecThroughput` is bytes per tick, and `scalaSimAccess` sets maximum simultaneous requests `src/spatial/Spatial.scala:561-575` `src/spatial/Spatial.scala:124-129`. This makes the executor useful for coarse memory-system experiments, but those knobs are simulator parameters rather than target hardware metadata.
 

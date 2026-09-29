@@ -21,6 +21,9 @@ verified: ["2026-09-28"]
 status: draft
 ---
 
+> [!note] Historical meeting-cut synthesis
+> This note preserves the provisional R-X recommendation before the follow-up. The selected proposal is [[D-26-final-architecture|R-E]], pending professor approval; see [[2026-09-28-d26-research-extension|the updated decision rationale]].
+
 ## Scope
 
 Synthesize the meeting cut without treating student syntax, compiler implementation language and Python tooling as one choice. This is a provisional engineering recommendation for the next milestone, not a completed course adoption decision. Evidence comes from the other D-26 notes and mappings. No personal weights, quantitative utility scale, simulator comparison, install study or novice repair study was supplied or measured.

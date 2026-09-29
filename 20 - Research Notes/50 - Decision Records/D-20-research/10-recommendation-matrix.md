@@ -41,7 +41,7 @@ For HLS, use report/co-simulation reconciliation as timing authority. HLS loweri
 
 Reject **cycle-aware as the default Rust reference**. It would contradict Scalagen parity and requires D-15/D-22-style flow and backpressure semantics that are not settled enough to be implicit defaults.
 
-Reject **value-only as the only supported mode**. It is too blind for retiming bugs, explicit `retime`, and Chisel parity diagnostics; tests already include IR-shape retiming sentinels such as `SimpleRetimePipe` rather than just final-value checks ([[03-tests-apps-usage]]).
+Reject **value-only as the only supported mode**. It is too blind for retiming bugs, explicit `retime`, and Chisel parity diagnostics; tests already include IR-shape retiming sentinels such as `SimpleRetimePipe` rather than just final-value checks ([[20 - Research Notes/50 - Decision Records/D-20-research/03-tests-apps-usage|03-tests-apps-usage]]).
 
 Reject **HLS-report-only for all debugging**. Reports are the final synthesis authority, but they do not replace a pre-HLS diagnostic model for source-visible retiming directives.
 

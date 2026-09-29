@@ -85,7 +85,7 @@ Per-IR-node summary of how each backend emits it. Draft populated from Phase 1 c
 
 ## Notes
 
-- **Scalagen is reference**: when two backends disagree, Scalagen+emul is ground truth. See [[20 - Scalagen/20 - Numeric Reference Semantics]].
+- **Scalagen is reference**: when two backends disagree, Scalagen+emul is ground truth. See [[10 - Spec/50 - Code Generation/20 - Scalagen/20 - Numeric Reference Semantics|20 - Numeric Reference Semantics]].
 - **Pirgen errors at codegen**: FIFO.isEmpty/isFull/peek/numel/almostEmpty/almostFull and LineBufferNew emit `error(...)` — users see this as a late compile error.
 - **Tsthgen is semantically lossy**: all fixed-point types with fractional bits coerced to `float`/`double`. Bit-exact tests must use Scalagen, not Tsthgen.
 - **Roguegen has no DRAM**: AXI streams only; user apps with host DRAM won't compile under Rogue.

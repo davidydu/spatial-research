@@ -30,7 +30,7 @@ The modeling utility object is a large singleton under `src/spatial/util/modelin
 
 ## Interactions
 
-These entries cross-link to [[70 - Timing Model]], [[10 - Area Model]], [[C0 - Retiming]], [[70 - Banking]], [[20 - Scalagen]], and [[70 - Naming and Resource Reports]]. The infrastructure code is mostly consumed by analyses, transformations, and diagnostics rather than directly by user-facing DSL nodes.
+These entries cross-link to [[70 - Timing Model]], [[10 - Area Model]], [[C0 - Retiming]], [[70 - Banking]], [[10 - Spec/50 - Code Generation/20 - Scalagen/10 - Overview|20 - Scalagen]], and [[70 - Naming and Resource Reports]]. The infrastructure code is mostly consumed by analyses, transformations, and diagnostics rather than directly by user-facing DSL nodes.
 
 ## HLS notes
 

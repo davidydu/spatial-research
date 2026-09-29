@@ -12,6 +12,9 @@ related:
   - "[[2026-07-07-session-resume-guide]]"
 ---
 
+> [!note] Current architecture review
+> The adopted controller-tree inversion remains the foundation. The student surface is now addressed by [[D-26-final-architecture|the R-E proposal]], pending professor approval, rather than by the teaching assertion in this historical review.
+
 # Fundamental Design Review: Recognition Must Become Compilation
 
 Full text lives in the repo:

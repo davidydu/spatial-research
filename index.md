@@ -1,50 +1,54 @@
 ---
-title: Spatial DSL Implementation Spec
-date: 2026-05-12
+type: moc
+title: "Spatial Research"
+date: 2026-09-28
 ---
 
-# Spatial DSL — Implementation Spec
+Research toward a teachable Spatial hardware language and a compositional compiler targeting HLS. This site connects the proposed architecture to its source evidence, experiments and implementation specification.
 
-A comprehensive, citation-anchored specification of the [Spatial](https://github.com/stanford-ppl/spatial) hardware DSL, produced as the blueprint for a future Rust- or Python-based compiler that targets HLS (High-Level Synthesis) instead of the current Chisel/RTL backend.
+> [!important] Architecture proposal ready for professor review
+> **Restricted Python kernel source over one Rust semantic core.** Capture source without execution, check one hardware contract, and lower a typed controller tree to functional simulation or HLS. Implementation of this architecture awaits professor approval.
 
-> **Every algorithmic claim in this spec cites a file and line range from the Spatial source tree at `~/Documents/David_code/spatial`.** Subagent summaries are never quoted as sources. Claims tagged `(inferred, unverified)` are explicitly flagged.
+## For reviewers
 
-## Start here
-
-| If you want to… | Go to |
+| Read | Purpose |
 |---|---|
-| **Scope the rewrite — what features must be supported** | [[03-mvp-subset-recommendation\|MVP feature subset]] |
-| Get the lay of the land | [[00 - Index]] |
-| Read the spec | [[10 - Spec/00 - Spec Index\|Spec Index]] |
-| See which constructs port cleanly to HLS | [[10 - Clean Mappings\|HLS mapping]] |
-| See the open architectural questions | [[20 - Open Questions]] |
-| Understand the research methodology | [[workflow\|Workflow runbook]] |
-| Review the decision queue | [[40 - Decision Queue]] |
+| [[D-26-professor-brief\|Professor approval brief]] | The recommendation, evidence, tradeoffs and decision to approve |
+| [[D-26-final-architecture\|Final architecture plan]] | Source workflow, semantic ownership, delivery commitments and staged gates |
+| [[2026-09-28-d26-research-extension\|Research method and debate]] | Why the recommendation changed; competing case; measured versus inferred conclusions |
+| [[D-26-12-simulator-spike\|Matched interpreter experiment]] | Exact-output checks, runtime measurements, independent repeat and reproducibility archive |
+| [[D-26\|Original D-26 protocol and meeting cut]] | Frozen hypotheses, mistake list, historical recommendation and audit trail |
 
-## MVP scope (rewrite starting point)
+## Research result
 
-Rather than reimplement the full Spatial language, the rewrite scope is bounded by **what real user-facing examples actually use**. Two corpora were analyzed:
+The architecture separates **student syntax**, **semantic implementation**, and **Python tooling**. A token-backed Python AST can preserve the required hardware information without a second checker. The chosen Rust core owns names, constants, types, legality and exact functional behavior. Python owns source capture and the host/testbench experience.
 
-- **EE109 labs** (3 files, 203 LOC) — pedagogical floor for student-written code. See [[02-ee109-examples]].
-- **Spatial canonical examples** (264 files across `apps/`, Rosetta, feature tests) — broader real-app usage. See [[01-spatial-user-examples]].
+This is a selected engineering proposal. No learner study has established a universally best teaching syntax. The explicit tradeoff is additional frontend integration in exchange for familiar authoring; the full plan retains paired conformance labs and all original Python-surface guarantees.
 
-The synthesis [[03-mvp-subset-recommendation\|MVP subset recommendation]] defines four tiers (EE109 floor → canonical → common → out-of-scope) with implementation order, milestone gates, and spec coverage gaps. Estimated 60–70% effort reduction vs full-language reimplementation.
+## Current state
 
-## Status
+| Area | Verified state | Remaining work |
+|---|---|---|
+| Research | D-26 meeting cut audited; follow-up debate and bounded interpreter experiment documented | Learner outcomes and full-system acceptance remain unmeasured |
+| Prototype compiler | Text `check` CLI and existing parser/constant/HIR/classifier infrastructure | General checker/controller interpreter, source-captured Python frontend and structural migration |
+| Hardware evidence | Historical 39-program backend corpus: 37 fit, 2 over budget, 14 initiation-interval caveats | Fresh evidence for changed HLS and the general backend before release |
+| Student delivery | Versioned host contracts and packaging mechanisms researched | Full JSON commands, tested wheels, notebook adapter and release CI |
 
-- ✅ **Phase 0** — Scaffold and design (2026-04-21)
-- ✅ **Phase 1** — Coverage pass, 10/10 verified (2026-04-21)
-- ✅ **Phase 2** — Deep dives + spec population substantially complete (2026-04-25). 96 `type: spec` entries.
-- 🔄 **Phase 3** — HLS mapping kicked off; 96 entries classified across clean / rework / Chisel-specific indexes
-- ⏳ **Phase 4** — Consolidation (cross-refs, open-Q resolution)
+See [[2026-06-27-rust-spatial-rewrite-roadmap|Backend evidence and implementation roadmap]], [[D-26-05-boundary-design|Boundary and implemented CLI limits]], and [[progress-log|Verification history]]. Historical vendor results do not certify the proposed general compiler.
 
-## Reading the spec
+## Explore the evidence
 
-- **Wikilinks (`[[Name]]`)** resolve to other spec entries — click through to navigate.
-- **File:line citations** (e.g., `spatial/src/spatial/transform/UnrollingTransformer.scala:40-210`) reference the Spatial source tree.
-- **`hls_status`** frontmatter on spec entries: `clean` translates directly to HLS, `rework` needs HLS-specific design, `chisel-specific` is tied to RTL, `unknown` is pending analysis.
-- **Status fields**: spec entries flow `draft` → `reviewed` → `stable`. Deep-dive notes flow `draft` → `ready-to-distill` → `superseded`.
+| Topic | Entry point |
+|---|---|
+| Full language specification | [[10 - Spec/00 - Spec Index\|Specification index]] |
+| Python construct and semantic mapping | [[00 - Python Mapping Overview\|Python mapping overview]] |
+| Same-lab syntax comparison | [[D-26-02-student-surface-comparison\|Surface study]] |
+| Real diagnostic transcripts | [[D-26-03-error-paths\|Error-path study]] |
+| HLS mapping | [[10 - Clean Mappings\|Clean mappings]] |
+| Scope and corpus | [[03-mvp-subset-recommendation\|MVP subset research]] |
+| Decisions and unresolved issues | [[40 - Decision Queue\|Decision queue]] · [[20 - Open Questions\|Open questions]] |
+| Vault map and conventions | [[00 - Index\|Top-level index]] · [[workflow\|Research workflow]] |
 
-## Source
+Research notes distinguish measured results, inspected precedents, proposed designs and engineering judgments. Pinned code references resolve through [[reference-clones|the source manifest]]. An `awaiting-professor-approval` proposal is not an implemented feature or an approved course release.
 
-This site renders the spec from [github.com/davidydu/spatial-research](https://github.com/davidydu/spatial-research). The site itself is generated by [Quartz](https://quartz.jzhao.xyz/).
+The [research vault](https://github.com/davidydu/spatial-research) is the source of this site. [Quartz](https://quartz.jzhao.xyz/) renders it; website configuration lives in the [site repository](https://github.com/davidydu/spatial-research-site).

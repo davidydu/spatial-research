@@ -27,6 +27,9 @@ sources:
 verified: ["2026-09-28"]
 status: draft
 ---
+
+> [!note] Scenario assumption updated
+> This steelman preserves its original Python-maintainer scenario. David subsequently specified equal necessary team skills. The selected proposal and response to this case are in [[D-26-final-architecture]]; this note is historical argument, not the current recommendation.
 ## Scope
 
 Choose **P-E: a Python compiler core with one restricted Python AST surface** for the stipulated undergraduate FPGA course. Staff already use Python for vendor orchestration, students know Python, and TAs patch the compiler between offerings. These are scenario assumptions, not measured staffing or learning facts. The positive case is sustained course ownership: put the student language, semantic implementation, and course integration within the maintainers' existing working language.

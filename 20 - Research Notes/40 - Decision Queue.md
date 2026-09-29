@@ -111,4 +111,4 @@ Decision criteria: User decision: HLS `OneHotMux` with multiple true selectors m
 ## D-26 — [Q-165] Choose the host-language architecture: compiler core (Rust / Python) × student surface (external DSL / Python-embedded / both) × Python integration depth.
 Source: 90 - Meta/2026-06-26-rust-first-spatial-dsl-overlay.md (Non-Goals); 90 - Meta/2026-07-07-fundamental-design-review.md (Issue 2)
 Decision criteria: User decision among cells R-X, R-E, R-B, P-X, P-E, P-B after the pre-registered D-26 protocol; integration depth (I0/I1/I1′/I2/In) chosen for R-* cells.
-Status: meeting cut audited 2026-09-28; [[D-26]] awaiting user confirmation. See [[2026-09-25-d26-citation-audit]].
+Status: final research proposal ready — [[D-26-final-architecture|R-E: source-captured Python kernels over a Rust semantic core]], awaiting professor approval before implementation. Read [[D-26-professor-brief]] and [[2026-09-28-d26-research-extension]]. [[D-26]] preserves the original protocol and audited meeting cut.

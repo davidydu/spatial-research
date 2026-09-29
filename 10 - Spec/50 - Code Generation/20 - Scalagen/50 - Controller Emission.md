@@ -85,7 +85,7 @@ For non-outer-stream controllers, `gen(block)` visits statements in source order
 
 The `inputs: Seq[Sym[_]]` at `ScalaGenController.scala:111-113` deserves attention. `nonBlockInputs` are the op's non-block inputs (e.g., for `UnrolledForeach`, that's `ens ++ cchain ++ ... iters ++ valids ++ stopWhen`); `block.nestedInputs` is every symbol used inside but defined outside; `op.binds` are op-introduced symbols (loop iterators, switch binds, state-machine variables); the `isMem || isValue` filter excludes memories (file-scope) and compile-time constants (inlined). The remaining inputs are the closure for `_kernel.run(...)`.
 
-The `useMap` mechanism at `:120-122`, `:137` handles symbols that are themselves chunked: a captured input with a `scoped` map entry (from `javaStyleChunk`, see [[10 - Overview]]) has its mapping temporarily removed during kernel emission so the input is referenced by its original name, then restored after.
+The `useMap` mechanism at `:120-122`, `:137` handles symbols that are themselves chunked: a captured input with a `scoped` map entry (from `javaStyleChunk`, see [[10 - Spec/50 - Code Generation/20 - Scalagen/10 - Overview|10 - Overview]]) has its mapping temporarily removed during kernel emission so the input is referenced by its original name, then restored after.
 
 ## `emitControlDone` and `emitControlIncrement` hooks
 

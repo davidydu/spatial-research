@@ -16,7 +16,7 @@ contains one rating per entry, followed by source checking and a separate audit.
 
 Cells: R-X, R-E, R-B, P-X, P-E, P-B (core Rust/Python × surface external/
 embedded/both). This folder is the evidence for D-26 angles 2–4 and becomes the
-build spec only if an E or B cell is chosen.
+build spec only after an E or B proposal is approved. [[D-26-final-architecture|The current proposal selects R-E]], pending professor approval. These first-rating designs remain evidence, not implemented frontend coverage; the final plan also requires the deferred construct inventory below.
 
 ## Embedding styles (summary)
 

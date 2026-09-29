@@ -14,6 +14,9 @@ related:
   - "[[60 - EE109 HLS Lowering Map]]"
 ---
 
+> [!note] Historical framing; architecture proposal updated
+> The June framing remains historical. [[D-26-final-architecture|The September proposal]] selects source-captured Python kernels over a Rust semantic core, pending professor approval. Its surface recommendation replaces the earlier research position; it does not retroactively claim an approved implementation change.
+
 # Rust-First Spatial DSL Overlay
 
 ## Purpose

@@ -22,7 +22,7 @@ Cross-cutting formal semantics. Synthesized from Argon framework, Spatial IR, pa
 
 ## Synthesis inputs
 
-- [[30 - IR/00 - Argon Framework/00 - Argon Index]]
-- [[30 - IR/10 - Spatial Nodes/00 - Spatial Nodes Index]]
-- [[40 - Compiler Passes/00 - Pass Pipeline Index]]
-- [[10 - Language Surface/00 - Language Surface Index]]
+- [[10 - Spec/30 - IR/00 - Argon Framework/00 - Argon Index|00 - Argon Index]]
+- [[10 - Spec/30 - IR/10 - Spatial Nodes/00 - Spatial Nodes Index|00 - Spatial Nodes Index]]
+- [[10 - Spec/40 - Compiler Passes/00 - Pass Pipeline Index|00 - Pass Pipeline Index]]
+- [[10 - Spec/10 - Language Surface/00 - Language Surface Index|00 - Language Surface Index]]

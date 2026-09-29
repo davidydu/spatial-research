@@ -2325,7 +2325,7 @@ Source: `90 - Meta/2026-06-26-rust-first-spatial-dsl-overlay.md`; `90 - Meta/202
 Blocked by: —
 Status: needs-architectural-decision
 Decision criteria: D-26 pre-registration (hypotheses, weights, reversal conditions) → research angles → recommendation matrix → user decision among cells R-X, R-E, R-B, P-X, P-E, P-B.
-Resolution: tracked by [[D-26]]
+Resolution: research recommendation completed as [[D-26-final-architecture|R-E]], pending professor approval; [[D-26]] preserves the original protocol. [[2026-09-28-d26-research-extension]] records the debate, equal-skills assumption and new evidence. No implementation approval is implied.
 
 ## Q-166 — [2026-09-28] D-26 mistake 5 conflicts with normative writable-DRAM assignment
 
