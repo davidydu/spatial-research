@@ -9658,3 +9658,17 @@ Publication readiness: existing identifying markers have zero matches in all 358
 Final transport check: an ordinary push of the completed vault was attempted and GitHub returned HTTP 403 because the active credential lacks write permission. No remote update occurred. The site push was not attempted after the prerequisite vault push failed, avoiding a deployment against stale remote research. Content proposal/cleanup commit: 999e2f1; site configuration commit: 9118ae0. Both are local. Publishing requires an authorized GitHub account; no credential, account, access policy or remote history was changed.
 
 Final UI checks: the 390-pixel homepage stays within its viewport; wide tables scroll within their own containers. Desktop diagrams render without literal escape characters, and the professor brief is available in the local preview. The normal D-26 gate passes after commit, including its clean-status check.
+
+## 2026-09-28 — Professor presentation outline refined
+
+Added [[2026-09-28-spatial-professor-presentation-outline]] following David's approval of the six-part story and request to show the Rust compiler progress, documentation repository and documentation website. The nine-minute outline has seven screens: prototype, research foundation, architectural lesson, recommended pipeline, rationale, first semantic milestone and approval. Each screen specifies the intended takeaway, visible content, visual, speaker emphasis, evidence and transition. A Codex story review helped keep the first semantic slice separate from later HLS delivery and retain the historical backend qualifications.
+
+The brief now links to the outline. The documentation tour treats the repository and website as two views of one research base, with a matching local preview planned until publication is verified. Status remains `outline-for-review`; no presentation webpage, compiler implementation, professor approval or public deployment is claimed.
+
+## 2026-09-28 — Professor web presentation built
+
+David approved the outline and style and requested plain wording. Added a seven-screen presentation in the site repository, covering Rust progress, documentation, the move beyond program recognition, Python source over a Rust compiler, the rationale, the first semantic slice and the approval request. The homepage, brief and [[2026-09-28-spatial-professor-presentation-outline|outline]] link to it.
+
+The presentation includes keyboard navigation, architecture-stage controls, source panels, speaker notes, fullscreen, and an embedded documentation tour with a saved homepage preview. Its build is integrated with the existing Quartz deployment. Codex copy and implementation reviews corrected one language-choice rationale and three interaction defects. Desktop inspection found and corrected a documentation-preview sizing issue; narrow-screen inspection found and corrected missing spaces around hidden line breaks. All seven screens fit within the phone width. Final browser and build checks are recorded with the presentation implementation plan in the site repository.
+
+The diagnostic is a labeled, shortened rendering of recorded output at Rust revision `eb49d8bc`; the exact transcript remains in Sources. Historical HLS results retain their date and limits. No compiler code changed, no fresh vendor run occurred, and professor approval remains pending. No public deployment is claimed.

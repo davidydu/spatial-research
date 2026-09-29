@@ -11,6 +11,8 @@ Research toward a teachable Spatial hardware language and a compositional compil
 
 ## For reviewers
 
+<a href="presentation/index.html" data-router-ignore target="_blank" rel="noopener noreferrer">Open the presentation</a> · [[2026-09-28-spatial-professor-presentation-outline|Screen outline and speaking plan]]
+
 | Read | Purpose |
 |---|---|
 | [[D-26-professor-brief\|Professor approval brief]] | The recommendation, evidence, tradeoffs and decision to approve |

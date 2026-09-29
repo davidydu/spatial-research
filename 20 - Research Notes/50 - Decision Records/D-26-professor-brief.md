@@ -17,6 +17,8 @@ Students work in a familiar Python environment while the compiler retains explic
 
 This is a selected architecture proposal, pending your approval before implementation. [[D-26-final-architecture|The full plan]] defines ownership, contracts, commitments and delivery gates.
 
+<a href="presentation/index.html" data-router-ignore target="_blank" rel="noopener noreferrer">Open the seven-screen presentation</a>. It covers the Rust prototype, documentation repository and website, proposed architecture, and first implementation milestone. [[2026-09-28-spatial-professor-presentation-outline|Screen outline and speaking plan]].
+
 ## The problem the research resolves
 
 The earlier prototype recognizes whole-program families. That provides useful backend experiments and regression cases, but cannot be the foundation of a general language where students compose memory, loops, reductions and state in new ways. The research separates three decisions that were previously conflated: the language students write, the language implementing compiler semantics, and the Python tooling used to run labs.
