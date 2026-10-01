@@ -4,7 +4,7 @@ title: "PY-R002 — Numeric and reduction semantics"
 topic: python-numeric-and-reduction-semantics
 project: spatial-python
 session: 2026-09-30
-status: draft
+status: research-conclusion
 source_files:
   - "spatial@e7a8f2f:argon/src/argon/lang/Aliases.scala:8-112"
   - "spatial@e7a8f2f:src/spatial/lang/Aliases.scala:157-165"
@@ -34,7 +34,8 @@ source_files:
   - "spatial@e7a8f2f:fringe/src/fringe/templates/math/Math.scala:271-363"
   - "spatial@e7a8f2f:fringe/src/fringe/templates/math/Math.scala:671-677"
   - "spatial@e7a8f2f:fringe/src/fringe/templates/math/Math.scala:844-867"
-feeds_spec: []
+feeds_spec:
+  - "[[20 - Python Numeric Contract]]"
 ---
 
 ## Question, authority, and result
@@ -51,6 +52,8 @@ Evidence labels in this note have narrow meanings:
 - **Proposed policy:** a Python design choice, including every illustrative API name below.
 - **Calculated expectation:** arithmetic derived from a listing or source path, without running Spatial.
 - **Executed arithmetic probe:** the bounded Python experiment reproduced in this note. It is neither an execution of the original Scala compiler nor a Python Spatial implementation.
+
+**Follow-up:** [[PY-R011 - Numeric Lowering and Intrinsic Profiles]] completes the proposed floating special/status, math, RNG, and target profiles. It explicitly extends the provisional reciprocal/rsqrt/sigmoid wording below: reciprocal uses a mathematical unit even when typed one is unrepresentable; named rsqrt/sigmoid are single-round functions. User-written compositions retain per-operation rounding. The combined proposed contract is [[20 - Python Numeric Contract]]; no profile is yet adopted or implemented.
 
 ## Original numeric behavior
 
@@ -211,7 +214,7 @@ A fixed-to-float or float-to-float cast performs one destination nearest-even ro
 
 For finite arithmetic, decode bits to an exact rational, perform the operation exactly, then round once to the output format using nearest/ties-to-even. Find the binary exponent through integer bit lengths and comparisons; do not estimate it with host logarithms. Handle significand carry by renormalizing the exponent. Subnormals have uniform spacing `2^(1-bias-q)` and use the same tie rule; preserve gradual underflow and the sign of rounded zero. Overflow rounds to signed infinity. The proposal does not inherit the original `1.9` heuristic.
 
-IEEE-like special values are part of the numeric contract: NaN arithmetic produces a canonical positive quiet NaN; ordered comparisons and equality with NaN are false, inequality is true; signed zeros compare numerically equal; infinities compare in numerical order. Under nearest-even, exact finite cancellation returns +0, `-0 + -0` returns -0, and multiplication/division zero signs use XOR. `min`/`max` propagate a NaN and choose -0/+0 respectively on a zero tie. A separate `minimum_number` operation could later specify NaN-eliding behavior. NaN payload preservation is promised only for bit operations, not arithmetic. Signaling NaN input is quieted by arithmetic with an invalid status.
+IEEE-like special values are part of the numeric contract: NaN arithmetic produces a canonical positive quiet NaN; ordered comparisons and equality with NaN are false, inequality is true; signed zeros compare numerically equal; infinities compare in numerical order. Under nearest-even, exact finite cancellation returns +0, `-0 + -0` returns -0, and multiplication/division zero signs use XOR. `min`/`max` propagate a NaN. Same-sign zero pairs retain their sign; mixed-sign zero ties choose -0/+0 respectively. A separate `minimum_number` operation could later specify NaN-eliding behavior. NaN payload preservation is promised only for bit operations, not arithmetic. Signaling NaN input is quieted by arithmetic with an invalid status.
 
 Each arithmetic evaluation may return diagnostic status such as inexact, overflow, underflow, divide-by-zero, or invalid alongside bits; status is part of the simulation trace, not a global mutable rounding mode. Ordinary float division by zero produces the specified infinity/NaN and status rather than a fixed-number divide-by-zero fault. Absence of a hardware status output does not change the specified value. This is an IEEE-like subset proposal; it is not a claim of full IEEE-754 conformance.
 
@@ -223,7 +226,7 @@ For float `%`, require an explicitly named semantic operation rather than accide
 
 ### Randomness and mathematical intrinsics
 
-A stochastic-rounding operation must specify adjacent-value probability, RNG input/state, seed, stream identity, and consumption order. For raw exact value `k+f`, `k=floor(value)` and `0<=f<1`, choose `k+1` with probability f, otherwise k; this works for negative values too. A seed alone is not a complete reproducibility contract. The program should expose the random stream as an effect dependency or an explicit bit input, so scheduling cannot silently redraw or duplicate it. Until a versioned stream algorithm is adopted, stochastic operations are represented by the architecture but rejected as unsupported; the old four-bit algorithm is available only as a named compatibility experiment. This is a numerical correctness dependency, not a scarcity argument.
+A stochastic-rounding operation must specify adjacent-value probability, RNG input/state, seed, stream identity, and consumption order. For raw exact value `k+f`, `k=floor(value)` and `0<=f<1`, choose `k+1` with probability f, otherwise k; this works for negative values too. A seed alone is not a complete reproducibility contract. The program should expose the random stream as an effect dependency or an explicit bit input, so scheduling cannot silently redraw or duplicate it. R011 now proposes a concrete Philox stream and draw-consumption policy. Until that profile is adopted and implemented, stochastic operations remain represented with a profile/support diagnostic; the old four-bit algorithm is only a named compatibility experiment. This is a numerical correctness dependency, not a scarcity argument.
 
 Pure Python integer/rational arithmetic can specify exact `sqrt` by comparing the candidate rounding boundaries after squaring; it need not use host Double as the authority. Fixed negative square root faults; float negative finite square root produces NaN with invalid status. Integer exponentiation uses typed operations and a specified evaluation order, or an explicitly widened exact-power operation. Reciprocal is typed division. Exp, log, trig, hyperbolic, and their inverses need separately declared approximation/range contracts; there is no universal claim that host `math` results are bit-exact for custom floats. Reject an intrinsic lacking an approved profile, retaining its node/type/span for a later extension. A compatibility host-math profile can record the original Double round-trip, but is not an exact Python numeric profile.
 
@@ -231,15 +234,23 @@ Pure Python integer/rational arithmetic can specify exact `sqrt` by comparing th
 
 ### Three operations with different permissions
 
-All combining regions are typed and pure: `(T,T)->T`, with numeric normalization after each combine. Contribution regions may have reads, writes, FIFO consumes, and runtime branches under the control/effect contract. Evaluate every active contribution exactly once in declared logical order; regrouping values never licenses regrouping, duplicating, or dropping contribution effects. A requested parallel schedule that conflicts with those effects must be proved legal or diagnosed. Silently serializing requested concurrent effects would hide a constraint failure.
+All combining regions are typed and state-free: `(T,T)->T`, with numeric normalization after each combine. Here “pure combine” excludes storage access, RNG draws, consumes/produces, observed-status resources, and external effects; it does not erase possible arithmetic language faults. Such faults retain the declared fold/tree evaluation order and are not generic always-speculatable `Pure` operations. Contribution regions may have reads, writes, FIFO consumes, and runtime branches under the control/effect contract. Evaluate every active contribution exactly once in declared logical order; regrouping values never licenses regrouping, duplicating, or dropping contribution effects. A requested parallel schedule that conflicts with those effects must be proved legal or diagnosed. Silently serializing requested concurrent effects would hide a constraint failure.
 
 | Proposed operation | Meaning | Permission to regroup | Empty enabled domain |
 |---|---|---|---|
 | `fold(init, values, combine)` | `s0=init`; `s[j+1]=combine(s[j],v[j])` in logical order | none without an equivalence proof | returns init |
-| `reduce(values, op, identity)` | reduction under a recognized associative operator and valid typed identity | may regroup; may reorder only if commutativity also holds | returns identity |
+| `reduce(values, op, identity?)` | reduction under a recognized associative operator; any supplied identity must be valid for the typed operation | may regroup; may reorder only if commutativity also holds | returns identity if supplied; otherwise domain fault |
 | `tree_reduce(values, combine, identity?, tree)` | explicit ordered-leaf tree; default adjacent-pair balanced tree | must preserve the chosen tree | identity if supplied, otherwise domain fault |
 
 The ordered fold is a deliberate redesign of the legacy arbitrary-lambda Fold behavior. It should not inherit the old spelling's false implication of unroll-invariant left-fold behavior. These meanings apply elementwise for memory variants, with destination initialization/reads and visible updates governed explicitly below.
+
+A lawful reduction without an identity is valid on a nonempty domain: a singleton returns its leaf, and larger domains combine their leaves. Prove nonemptiness, validate an invocation requirement, or preserve a runtime empty-domain fault before destination publication. No register reset supplies a missing identity. This is the contract used by R001's nonempty FIFO example and R006's `requires_nonempty` representation.
+
+For a faulting combine, logical combine evaluation follows its fold recurrence or the fixed tree's left-subtree, right-subtree, parent order; speculative execution may not expose a later fault ahead of an earlier ordered effect/fault. For example, checked Int8 fold with seed 127 and contributions [1,-1] faults at its first addition. Regrouping the contributions to zero would hide that fault. Lawful reassociation requires equivalence of definedness/fault behavior as well as final values.
+
+Relative contribution/combine order is also specified. Ordered fold evaluates the seed, then contribution j and combine j before starting contribution j+1. With FIFO [1,-1] and checked Int8 seed 127, it consumes only 1 before faulting, leaving -1. Fixed-tree reduction first evaluates all active contributions in logical order, then evaluates the declared tree left subtree, right subtree, parent; that different effect/fault order is intentional. A lawful freely regroupable reduction requires a total, fault-free combine on its admitted domain, or a separate equivalence proof covering its precise fault/effect schedule. It may stream total combines without changing contribution order.
+
+For memory variants, invoke the mapper once per map index and snapshot its selected result cells in logical destination-index order. A memory fold then combines each selected cell into private accumulator state in that order before starting the next map contribution. A memory fixed-tree reduction collects those contribution snapshots before combining cells in logical destination order with the declared tree. Publish destination results only after successful completion; earlier mapper effects are not rolled back on failure. Streaming or temporary-storage elimination requires equivalent values, lifetimes, effects, and fault order, rather than weakening this reference rule.
 
 An identity is neutral for the combine operation; a seed is included exactly once even when it is not neutral. In a no-padding tree_reduce, an identity parameter means the empty-domain result, not an instruction to insert one identity leaf per lane. A backend may pad only with a proven neutral identity. `reduce` uses built-in/verified identities, rather than trusting an arbitrary constant labeled `zero`. A declared empty result for an arbitrary tree should be named `empty_result` if it is not proved neutral.
 
@@ -473,8 +484,10 @@ All entries are **proposed expected behavior**, except rows explicitly linked to
 | R11 | initializer with an effect under disabled/enabled empty invocation | zero executions/one execution, respectively | invocation/effect contract |
 | R12 | stochastic negative raw -1.25 under an adopted stream | only adjacent -2/-1 with declared probabilities; reproducible stream trace | correct negative rounding and explicit RNG effect |
 
-## Next dependencies
+## Follow-up and implementation evidence
 
-The integrating reviewer should independently reopen the citations behind width interpretation, scalar fold options/overloads, first-group accumulation, float tie rounding, saturating cast rescaling, and fixed FMA before adopting rules. During this study the manager independently verified scalar fields/overloads/unrolling and generic FMA sources, then added dated corrections to [[60 - Reduction and Accumulation]] and [[60 - Counters and Primitives]]; see [[02 - Python Research Review Log]]. The earlier scalar Boolean/fixed Chisel precision assertions are therefore historical corrected text, not present findings against the corrected note. Further correction targets remain in `10 - Spec/50 - Code Generation/20 - Scalagen/20 - Numeric Reference Semantics.md`: line 66 called the normal formula round-to-even; lines 72 and 78 overgeneralized subnormal flushing and float-to-fixed clipping when inspected. This study itself edits only PY-R002 and leaves frozen historical decision/experiment artifacts unchanged.
+The manager independently reopened the decisive width, fold-overload/unrolling, float-tie, cast-rescaling and FMA paths; [[02 - Python Research Review Log]] records those checks and probe reproduction. Dated source-note corrections now include [[60 - Reduction and Accumulation]], [[60 - Counters and Primitives]], [[50 - Data Types]], and [[20 - Numeric Reference Semantics]]. Earlier correction targets in this study are no longer a pending source-note task. Frozen decision/experiment artifacts remain unchanged.
 
-The next semantic study must settle controller invocation, effect ordering, accumulator ownership, and runtime-domain faults with these numeric meanings. PY-R001 then needs matched overflow/rounding/reduction examples and diagnostics for both source capture and builder forms. Compiler architecture must retain exact literal tokens and numeric operation attributes, and the validation plan must turn the acceptance rows into independently computed cases before production implementation is approved. Later HLS research checks target capabilities against this contract, preserving explicit tree/rounding/FMA behavior or rejecting a lowering that cannot do so.
+R003/R008 now supply controller invocation, ownership, runtime faults and advanced protocols. R004 covers source/builder composition and matched diagnostics. R006 retains exact literals and numeric attributes in checked representations. R011 selects proposed special/status/math/RNG profiles and numeric HLS routes, including explicit extensions to this study's provisional reciprocal/rsqrt/sigmoid language. The condensed review contract is [[20 - Python Numeric Contract]].
+
+Remaining evidence belongs to adoption and implementation: independent conformance vectors/trace fixtures, executable Python arithmetic/reference behavior, certified math algorithms and domains, and selected vendor/RTL/resource results. Review completion does not prove those future runs. No blanket legacy simulator parity, full IEEE conformance, or completed transcendental library is claimed.

@@ -4,10 +4,12 @@ title: "PY-R007 — Host workflow, reproducibility, and validation"
 topic: python-host-workflow-and-validation
 project: spatial-python
 session: 2026-09-30
-status: draft
+status: research-conclusion
 source_files:
   - "spatial@e7a8f2f:test/spatial/tests/ee109/Lab1Part2DramSramExample.scala:6-43"
-feeds_spec: []
+feeds_spec:
+  - "[[10 - Python Language Contract]]"
+  - "[[40 - Python Compiler and HLS Contract]]"
 ---
 
 ## Recommendation and evidence boundary
@@ -27,7 +29,7 @@ All names in this sequence are illustrative. The API contract matters more than 
 | Check | Resolve names, types, scopes, initialization, effects, protocols, and invocation requirements | Checked semantic program or structured diagnostics; check success names a capability profile |
 | Prepare | Bind typed scalar/buffer/stream inputs and allocate explicit outputs | Validated invocation; dimensions, alias relationships, formats, and persistence agree with the checked interface |
 | Simulate | Select reference execution and an environment trace | Outputs, committed effects, terminal/wait/fault state, and replay metadata; no hardware timing claim |
-| Compile | Select a target/tool profile and request an HLS project | Generated artifacts and unresolved target obligations; generation alone is not hardware support |
+| Compile | Select a target/tool profile and request an HLS project | Success returns an eligible emitted project with no unresolved required target obligations. Failure returns diagnostics and an inspectable incomplete plan, explicitly ineligible for emission/build reuse; generation alone is not hardware validation |
 | Validate hardware | Run the separately configured vendor flow | Separate simulation, synthesis, resource, timing, and board evidence records |
 | Reuse | Load a checked artifact or cached result | Verify schema, dependency/profile digests, and input contract before reuse |
 
@@ -43,7 +45,7 @@ Use a versioned buffer descriptor: element format, rank/extents, byte strides, l
 
 Distinct port names are not proof of distinct memory. Preparation must validate the declared alias groups against actual backing ranges. If the program requires disjoint ports and receives overlapping views, it fails before starting. If aliasing is declared, memory/effect analysis preserves it. Snapshot copying is an explicit invocation mode; it must not change an accepted alias contract accidentally.
 
-The default reference invocation owns an input snapshot and private output storage. This prevents concurrent host mutation from changing the run and makes a failure report reproducible. A later zero-copy mode requires exclusive host ownership during execution and a documented failure/partial-write contract. This is an interface choice, not a claim that the hardware can roll back transactions.
+The default reference invocation owns an input snapshot and private output storage. Snapshot each declared backing allocation once and preserve all views into it; copying each port independently would incorrectly break accepted aliases. This prevents concurrent host mutation from changing the run and makes a failure report reproducible. A later zero-copy mode requires exclusive host ownership during execution and a documented failure/partial-write contract. This is an interface choice, not a claim that the hardware can roll back transactions.
 
 Invocation-local state is fresh on every call. Persistent state requires an explicit session handle, state schema, reset operation, and serialization policy. Repeated invocation tests must distinguish a register allocated inside a loop, outside the loop, and in a persistent session. A live invocation has exclusive ownership of its session; unsupported concurrent use is diagnosed. Separate sessions can run independently.
 
@@ -59,11 +61,11 @@ Use `pyproject.toml` for package metadata, build requirements, and optional depe
 
 Pin and test supported Python minor versions. The official [AST documentation](https://docs.python.org/3.14/library/ast.html) explicitly notes that the grammar can change between Python releases (accessed 2026-09-30). Therefore convert the accepted host AST into a versioned Spatial surface representation and reject unknown syntax. Do not serialize Python AST objects or rely on pickle as the compiler interchange format. Record the parser/runtime version even when two supported versions produce the same Spatial program.
 
-Optional native libraries must not become the authority for typing, effect legality, or numeric answers. A solver can return a proof/certificate that Python verifies, or supply a conservative analysis result under a named trusted-tool profile. An unavailable solver yields a diagnosed unresolved obligation; it must not silently accept unsafe lowering. Native reference tools may generate test vectors without becoming production semantic dependencies.
+Optional native libraries must not become the authority for typing, effect legality, or numeric answers. A solver can return a proof/certificate that Python verifies, or suggest a candidate that the Python analyses independently check. An unavailable solver yields a diagnosed unresolved obligation; it must not silently accept unsafe lowering. A trusted native legality oracle would change the proposed semantic-ownership boundary and is not adopted here. Native reference tools may generate test vectors without becoming production semantic dependencies.
 
 ## Reproducible artifacts and diagnostics
 
-Separate semantic identity from build identity. The semantic key includes normalized source/template content, frozen meta bindings, DSL/numeric/protocol versions, resolved dependency contents, and semantically significant schedules or tree policies. The build key adds compiler/framework versions, optimization pipeline, target capability file, vendor release, libraries, constraints, and generated-file hashes. Ordinary runtime input data is a run key, not a reason to compile a different kernel unless explicitly specialized.
+Separate semantic identity from build identity. The checked semantic key uses canonical checked meaning, frozen meta bindings, DSL/numeric/protocol versions, resolved semantic dependencies, and semantically significant schedules or tree policies. An earlier acquisition cache also keys exact source/template content and parser versions; it is not the checked semantic key. The build key adds compiler/framework versions, optimization pipeline, target capability file, vendor release, libraries, constraints, and generated-file hashes. Ordinary runtime input data is a run key, not a reason to compile a different kernel unless explicitly specialized. Source and origin digests separately retain the exact diagnostic provenance even when two source forms have equal checked meaning.
 
 Use deterministic ordering, explicit integer/bit encodings, canonical record serialization, and content digests. Paths and notebook display names belong to provenance; machine-specific absolute paths must not make identical semantic programs different. Keep source digests and mappings so errors still show the exact source revision that produced an artifact. A cache entry with a mismatched schema/profile is rejected or recompiled through an explicit migration, never guessed compatible.
 

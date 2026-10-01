@@ -17,7 +17,7 @@ For the first study, [[PY-E001 - Initial Example Corpus]] records reference expe
 
 ## Specification checks before implementation
 
-Each future Python specification must link to the adopted decision, supporting study, relevant source, and example cases. Distinguish document review, design adoption, and implementation status. Do not mark a feature implemented because its source sketch is valid Python syntax or a document was reviewed.
+Each Python specification must link to its proposed or adopted decision, supporting study, relevant source, and example cases. Proposed contracts are review artifacts; adopted contracts require explicit authority. Distinguish document review, design adoption, and implementation status. Do not mark a feature implemented because its source sketch is valid Python syntax or a document was reviewed.
 
 Record supported inputs, output/effect semantics, intended rejections, and unresolved limits. New behavior that diverges from original Spatial requires an explicit decision; compatibility with an earlier Rust contract is not sufficient justification by itself.
 

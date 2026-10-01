@@ -12,7 +12,9 @@ Decisions use one shared D-number sequence. The current Python direction is reco
 
 **[[D-27]] — accepted, 30 September 2026:** pure Python Spatial, programming-model research first, HLS research afterward, and design review before implementation. This records David's report of the professor discussion and subsequent research instruction; it does not approve a detailed API or compiler architecture.
 
-The immediate study is [[PY-R001 - Programming Model Study]]. [[02 - Python Open Questions]] tracks the detailed questions. Adopted choices receive the next D-number here and a record in the existing decision folder.
+**[[D-28]] — proposed, 30 September 2026:** captured Python kernels, Python semantic compiler/reference simulator, Spatial dialects on xDSL, and a checked HLS implementation plan. [[05 - Python Professor Brief]] summarizes the recommendation for review. No production implementation or detailed professor approval is claimed.
+
+[[02 - Python Open Questions]] tracks research answers and remaining adoption/execution evidence. Proposed and adopted choices use this shared D-number sequence with their authority stated explicitly.
 
 ## Earlier Rust/HLS questions
 

@@ -12,7 +12,7 @@ Source-grounded research and an implementation-level specification of the Spatia
 
 - [[00 - Python Rewrite Index|Python Spatial research]] — current entry point for examples, research, decisions, and validation.
 - [[01 - Python Research Plan|Research plan]] — programming model, semantics, compiler design, then HLS research and implementation planning.
-- [[D-27|Pure Python direction]] — accepted direction and its limits; [[02 - Python Open Questions|detailed choices remain open]].
+- [[D-27|Pure Python direction]] — accepted direction and its limits; [[D-28|detailed architecture proposed for review]].
 
 ## Earlier architecture review — superseded
 
@@ -37,7 +37,7 @@ Source-grounded research and an implementation-level specification of the Spatia
 | `30 - HLS Mapping/` | Parallel notes categorizing each construct as clean-map / needs-rework / chisel-specific for the future HLS target. |
 | `35 - Python Surface Mapping/` | Earlier construct mappings and Python embedding comparisons; reusable design evidence for the pure Python rewrite. |
 | `40 - Cross References/` | Navigation matrices (source-tree map, pass pipeline order, node↔codegen matrix). |
-| `50 - Python Rewrite/` | Current Python studies, example corpus, questions, and validation plan; adopted specification and HLS studies added when ready. Decisions remain in the shared D-number register. |
+| `50 - Python Rewrite/` | Current Python studies, examples, proposed contracts, HLS mappings, review evidence, and professor brief. Decisions remain in the shared D-number register. |
 | `90 - Meta/` | Workflow docs, design doc, progress log, conventions. |
 
 ## Specification coverage history

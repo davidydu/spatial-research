@@ -48,7 +48,7 @@ For each topic:
 1. Open a research question with a stable `PY-Q` identifier.
 2. Read the original source and relevant historical evidence; write a dated `PY-R` study before a specification.
 3. Compare alternatives against the same example semantics. Preserve failed cases and contrary evidence.
-4. Record a proposed conclusion with its limits. When a choice is adopted, write the next shared `D-NN` decision with `scope: python-rewrite`, naming its authority and scope.
+4. Record a proposed conclusion with its limits in the next shared `D-NN` decision, with `scope: python-rewrite`. Update adoption status only when authority is explicit; preserve the proposal history.
 5. Distill the recommended behavior into `40 - Specification/`, linking both the decision proposal and the evidence, with `adoption_status: proposed`. After explicit adoption, update that field and its authority record. Record unresolved details explicitly; a review contract is not implementation approval.
 6. Define validation cases and expected behavior before compiler implementation. Add observed results only after execution.
 7. Update the index, affected questions, and [[progress-log]]. Commit coherent batches and publish the same files through the existing website.

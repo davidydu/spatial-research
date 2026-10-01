@@ -7,17 +7,19 @@ date_started: 2026-09-30
 
 Research before implementation: establish what Spatial programs mean in Python, decide how the compiler represents and checks them, then study HLS lowering.
 
-**Current phase:** language foundations reviewed; full-language architecture research underway. Pure Python is the agreed direction. Source capture is the current research recommendation for writing kernels, with a shared builder interface for generators. Detailed proposals remain subject to review and professor approval. No Python compiler implementation is claimed.
+**Current phase:** full-language research package reviewed; final publication checks underway. Pure Python is the agreed direction. The proposed architecture uses captured kernels, Python-owned semantics and simulation, custom Spatial dialects on xDSL, and a checked HLS backend. [[D-28]] records the recommendation for professor review. No Python compiler implementation is claimed.
 
 ## Read first
 
 1. [[D-27|Direction and authority]] — what the professor and David have settled.
-2. [[01 - Python Research Plan|Research plan]] — study order, review criteria, and documentation rules.
-3. [[PY-R001 - Programming Model Study|Current study]] — compare source capture and an explicit builder on the same programs.
-4. [[PY-E001 - Initial Example Corpus|Example corpus]] — original sources, expected behavior, and cases that can distinguish designs.
-5. [[02 - Python Open Questions|Open questions]] — unresolved choices and the evidence needed to resolve them.
+2. [[05 - Python Professor Brief|Professor brief]] — the proposal, progress, main tradeoff, and approval boundary.
+3. [[D-28|Architecture recommendation]] — selected design, alternatives, and reversal conditions.
+4. [[04 - Python Implementation Roadmap|Implementation sequence]] — complete vertical paths, dependencies, and evidence gates after approval.
+5. [[02 - Python Open Questions|Question register]] — research answers, adoption status, and remaining evidence.
 
 [[03 - Managed Research Execution|Managed research execution]] tracks the full research package, parallel work, and completion criteria while David is away.
+
+[[01 - Python Research Plan|Research method]] · [[PY-R001 - Programming Model Study|Paired Python programs]] · [[PY-E001 - Initial Example Corpus|Shared example cases]]
 
 ## Foundation studies
 
@@ -25,20 +27,41 @@ Research before implementation: establish what Spatial programs mean in Python, 
 - [[PY-R003 - Control Memory and Effects]] — operation order, lazy branches, state lifetime, aliases, and the need for communicating tasks.
 - [[PY-R004 - Capture Composition and Diagnostics]] — source versus builder, reusable kernels, notebook/file capture, and matched errors.
 
+## Full language and compiler
+
+- [[PY-R005 - Full Language Coverage and Migration]] — 18 language/infrastructure families and their migration and acceptance gates.
+- [[PY-R006 - Compiler Architecture and Framework Choice]] — representations, xDSL comparison/probes, semantic ownership, and pass invariants.
+- [[PY-R007 - Host Workflow Reproducibility and Validation]] — input preparation, packaging, artifact identity, diagnostics, and measured-workload targets.
+- [[PY-R008 - Advanced State and Communication Protocols]] — queues, locks, windows, streams, transfers, FSMs, and cancellation.
+
+## Proposed contracts
+
+[[10 - Python Language Contract|Language and capture]] · [[20 - Python Numeric Contract|Numbers and reductions]] · [[30 - Python State and Protocol Contract|State and communication]] · [[40 - Python Compiler and HLS Contract|Compiler and HLS boundary]]
+
+These distill the studies for review. Document review, design adoption, and implemented support have separate status fields.
+
+## HLS studies
+
+- [[PY-R009 - HLS Boundary and Control Lowering]] — compiler/vendor responsibilities, control routes, faults, ABI, and evidence levels.
+- [[PY-R010 - Memory Scheduling and Design Space Exploration]] — physical memory, transfers, banking, scheduling, and legal tuning.
+- [[PY-R011 - Numeric Lowering and Intrinsic Profiles]] — numeric profiles, random/math operations, and vendor primitive compatibility.
+
 ## Documentation structure
 
 | Location | What belongs here |
 |---|---|
 | `10 - Research/` | Questions, source readings, alternatives, experiments, limitations, and proposed conclusions |
 | `20 - Examples/` | Shared example cases: source programs, intended behavior, expected outputs and effects; competing Python forms stay in the linked studies |
-| Shared `20 - Research Notes/50 - Decision Records/` | Adopted choices and rejected alternatives; continue the existing D-number sequence |
-| `40 - Specification/` — create when needed | Proposed Python language/compiler contracts for review, then adopted contracts with explicit authority |
-| `50 - HLS Lowering/` — create when research begins | Later research connecting the Python program model to HLS |
+| Shared `20 - Research Notes/50 - Decision Records/` | Proposed and adopted choices with authority, alternatives, and reversal conditions; continue the existing D-number sequence |
+| `40 - Specification/` | Proposed Python language/compiler contracts for review, then adopted contracts with explicit authority |
+| `50 - HLS Lowering/` | Mapping the checked Python program to hardware plans, HLS, and target validation |
 | `60 - Validation/` | How claims will be checked; later, reproducible results and their limits |
 
 [[00 - Python Validation Plan|Validation plan]] · [[01 - Python Coverage Ledger|Full-scope coverage ledger]] · [[02 - Python Research Review Log|Source checks and reviews]]
 
-**Specification status:** no detailed Python language or compiler contract has been adopted. **HLS status:** deferred until the programming model is reviewed. Create these directories with their first substantive topic pages; do not populate placeholder specifications.
+[[03 - Independent Architecture Review|Architecture review]] · [[04 - Independent Numeric Review|Numeric review]] · [[05 - Independent Protocol and HLS Review|Protocol/HLS review]] · [[06 - Python Research Completion Audit|Requirement-by-requirement audit]]
+
+**Specification status:** proposed contracts; no detailed contract adopted. **HLS status:** research mappings and target gates; no Python-generated vendor run. Create new topic pages for substantive work, and link evidence rather than copying status claims between pages.
 
 ## How the earlier work fits
 

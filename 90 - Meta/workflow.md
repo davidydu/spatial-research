@@ -12,7 +12,7 @@ load_priority: high
 
 ## Current route — 30 September 2026
 
-Research a **pure Python Spatial compiler** before implementation, under [[D-27]]. Start with [[00 - Python Rewrite Index]], [[02 - Python Open Questions]], and [[PY-R001 - Programming Model Study]]. The order is programming model, semantic contract, compiler design, HLS research, then implementation planning. Review the relevant design before implementing it.
+Research a **pure Python Spatial compiler** before implementation, under [[D-27]]. Start with [[00 - Python Rewrite Index]], [[D-28]], and [[03 - Managed Research Execution]]. [[05 - Python Professor Brief]] is the short meeting view. The order is programming model, semantic contract, compiler design, HLS research, then implementation planning. Review the relevant design before implementing it.
 
 Use **Codex-only** agents for bounded parallel source checks, alternative designs, and review. Give writers separate files; the integrating agent verifies the source claims that determine a conclusion. Read local files and use command-line checks by default; use browser UI only when requested or needed to inspect a visual defect.
 

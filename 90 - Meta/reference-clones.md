@@ -4,7 +4,7 @@ project: spatial-spec
 date: 2026-09-25
 ---
 
-# Reference Clones (D-26 precedent material)
+# Reference Clones
 
 Shallow clones under `David_code/reference/` (outside the vault; never
 published). Citations use `<name>@<7-char sha>:<path>:<L1-L2>`; the full SHA
@@ -35,3 +35,13 @@ knows the link cannot be rebuilt.
 The pre-registration retains its original `spatial-rs@29f7bad` citations. Their full historical revision is `29f7bad846c2bbdf00b046c1f37c1abfbc22a180`; resolve them with `git show` at that revision. New CLI and Wave 2 measurements use the current table revision. The intervening implementation checkpoint was `612a1ba6`. These snapshot updates do not change the frozen program or mistake lists.
 
 The Exo role description was corrected after source inspection: `exo@defe172:tests/test_metaprogramming.py:11-45` exercises `with python` and `with exo`. A blanket prohibition of host metaprogramming does not describe this pinned version; see [[D-26-01a-precedent-python-over-core]].
+
+## Python rewrite additions — 30 September 2026
+
+These sources extend the reference set for the Python rewrite. They are not retroactive additions to the frozen D-26 comparison.
+
+| name | research role | upstream | full SHA | cloned | licence |
+|---|---|---|---|---|---|
+| xdsl | Python-native compiler framework candidate; inspect core versus optional native dependencies | https://github.com/xdslproject/xdsl | 0b107461b3bfcd353d949fe00d3d1623bd6c826a | 2026-09-30 | Apache-2.0 with LLVM Exceptions (LICENSE) |
+
+The manager independently checked the clone's HEAD and license file. Framework source inspection and any executed probes are recorded in the architecture study; inclusion in this manifest is not adoption or a support claim.

@@ -4,7 +4,7 @@ title: "PY-R001 — Python programming model comparison"
 topic: python-programming-model
 project: spatial-python
 session: 2026-09-30
-status: draft
+status: research-conclusion
 source_files:
   - "spatial@e7a8f2f:test/spatial/tests/ee109/Lab1Part2DramSramExample.scala:6-43"
   - "spatial@e7a8f2f:test/spatial/tests/feature/control/ReduceTiny.scala:7-37"
@@ -12,7 +12,8 @@ source_files:
   - "spatial@e7a8f2f:src/spatial/lang/control/ReduceClass.scala:37-62"
   - "spatial@e7a8f2f:src/spatial/lang/control/ReduceClass.scala:78-87"
   - "spatial@e7a8f2f:src/spatial/lang/Reg.scala:48-57"
-feeds_spec: []
+feeds_spec:
+  - "[[10 - Python Language Contract]]"
 ---
 
 ## Question and scope
@@ -127,7 +128,7 @@ Proposed interpretation: Python constructs each region once. `reduction.index` i
 
 For both forms, initialization precedes the reduction's SRAM reads. Each of the sixteen contributions is read once in the proposed functional model. The identity is a value of the selected Spatial numeric type; it is not a pre-existing accumulator value that should be added once more. The scalar result becomes available after the represented reduction completes. Neither sketch exposes partially accumulated values or chooses a hardware reduction tree.
 
-The proposed common empty-domain rule would return the identity when one is supplied. That is a Python design proposal requiring original-behavior review; this fixed nonempty source example does not establish it. Exact `Int` width, overflow, reassociation, and the distinction between a reduction and a fold remain open. The value `120` cannot decide them. A later discriminating probe must use the numeric/effect policy being considered; choosing floating-point or saturating arithmetic now would add a new policy merely to make a test interesting.
+The proposed common empty-domain rule returns a supplied valid identity. This fixed nonempty example alone does not establish that rule. The completed numeric study [[PY-R002 - Numeric and Reduction Semantics]] now proposes Int32 wrapping arithmetic, lawful reduction versus ordered fold/fixed tree, explicit empty-domain rules, and discriminating cases. The value `120` cannot decide those policies; they remain proposed for adoption rather than inferred from the example.
 
 ## E3: two proposed spellings of a runtime branch with FIFO state
 
@@ -196,7 +197,7 @@ Proposed interpretation: Python enters both branch contexts during construction,
 
 Both forms use the following **proposed reference-execution policy** for this illustration: finish the first fill region, finish the second, then evaluate contribution bodies in increasing index order, completing a body's selected FIFO effect before evaluating the next body. FIFO allocation starts with empty queues. For this nonempty reduction without an identity, the first contribution seeds the accumulator and later contributions combine with it; the register reset is not added as another contribution. These are explicit candidate semantics to compare, not a verified description of every original Spatial controller or generated schedule.
 
-The review domain is the supplied positive counts within capacity. Extending it to zero or negative counts, empty identity-free reductions, capacity faults, blocking behavior, or parallel contribution bodies requires a separate decision. A possible common rule is to reject an empty identity-free reduction; deciding when the compiler can prove nonemptiness versus require a runtime guard remains open.
+This initial comparison uses supplied positive counts within capacity. R002/R003/R008 now propose the extensions: reject invalid counts/domains, preserve identity-free empty-domain faults before publication, distinguish ordered queue faults from blocking channels, and retain ordered contribution effects. Nonemptiness may be proved, validated as an invocation requirement, or guarded at runtime. Adoption and execution evidence remain separate from this example.
 
 Under that candidate model, the small trace is derived by hand:
 

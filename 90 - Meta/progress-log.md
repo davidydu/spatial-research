@@ -9722,3 +9722,18 @@ The documentation schema now separates review, adoption, and implementation stat
 - Independently reran both recorded arithmetic/source probes with exact output agreement. These are bounded experiments, not compiler execution or hardware evidence.
 - [[PY-R001 - Programming Model Study]] now recommends source capture for kernel authors and a shared builder for generators, subject to detailed review and professor approval. Added the host/reproducibility/validation proposal [[PY-R007 - Host Workflow Reproducibility and Validation]].
 - Continuing full-language coverage, compiler-framework choice, and advanced communication protocols under [[03 - Managed Research Execution]]. Research remains active; no production compiler was started.
+
+## 2026-09-30 — Foundation publication verified
+- Research commits `a435e13` and `cf4a1d4` pushed to `davidydu/spatial-research`. Local site build processed 526 Markdown inputs and emitted 1,136 files; the homepage/Python audit checked 692 links and anchors across 18 HTML pages.
+- [Website run 36818724576](https://github.com/davidydu/spatial-research-site/actions/runs/36818724576) succeeded. Direct HTTP checks confirmed the updated Python index, numeric study, capture/diagnostic study, host/validation study, and managed execution plan. No browser UI was used.
+
+## 2026-09-30 — Full Python research package reviewed
+
+Completed the eleven studies, four proposed contracts, full-language coverage ledger, [[D-28|architecture recommendation]], [[04 - Python Implementation Roadmap|S0–S9 implementation sequence]], and [[05 - Python Professor Brief|professor brief]]. The recommendation is captured Python kernels, a Python semantic compiler and reference simulator, custom Spatial dialects on xDSL, and a checked implementation plan before HLS generation. Detailed architecture and semantic changes remain proposed for professor review.
+
+The coverage ledger accounts for all 106 original-spec documents and 124 pinned source paths across 18 families. Three independent Codex reviews challenged architecture, numeric semantics, and protocols/HLS. Their repaired findings include progress preservation, foreign-model identity, failed-plan handling, lock-induced deadlocks, stale views, packed-memory transactions, reduction evaluation order, signed zero, and reproducible stochastic arithmetic. Author overlap is disclosed; the manager separately accepted the affected capture and coverage studies.
+
+Recorded probes and independent reruns establish bounded arithmetic, source-capture, framework, and random-generator results. They do not establish full compiler performance, a complete exact-math library, or vendor/RTL correctness. [[06 - Python Research Completion Audit]] separates completed research requirements from those future implementation gates. No production compiler was started, no new vendor run was claimed, and the frozen D-26 record remains unchanged. Final integrated validation and publication are recorded below after completion.
+- Current research continues beyond that published checkpoint: full coverage, architecture/dependencies, advanced protocols, HLS design, and implementation roadmap. Publication is not the full research completion gate.
+
+Final local checks: 40 changed/new Markdown documents, 378 new wikilinks, 424 pinned citation ranges, 29 Python snippets parsed without execution, and exact 106-document coverage passed. Quartz built 543 inputs into 1,172 files; all 1,844 audited internal links and anchors across 40 current-route pages resolve. Whitespace checks and the frozen D-26 comparison pass.

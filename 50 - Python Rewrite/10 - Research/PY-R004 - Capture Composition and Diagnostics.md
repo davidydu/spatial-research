@@ -4,7 +4,7 @@ title: "PY-R004 — Capture, composition, and diagnostics"
 topic: python-capture-composition-diagnostics
 project: spatial-python
 session: 2026-09-30
-status: draft
+status: research-conclusion
 source_files:
   - "exo@defe172:src/exo/API.py:35-49"
   - "exo@defe172:src/exo/frontend/pyparser.py:37-90"
@@ -20,7 +20,8 @@ source_files:
   - "calyx@d6bcdc8:calyx-py/calyx/builder.py:1700-1707"
   - "amaranth@90449f1:amaranth/hdl/_ast.py:627-639"
   - "spatial-rs@eb49d8b:docs/language-spec.md:831-837"
-feeds_spec: []
+feeds_spec:
+  - "[[10 - Python Language Contract]]"
 ---
 
 ## Question, conclusion, and authority
@@ -534,4 +535,4 @@ unparsed decimal: 0.1
 4. Define file, raw-cell, unsaved-cell, edited-cell, generated-source, source-unavailable builder, and supplied-origin builder diagnostic acceptance cases. Check phase/code, primary segment, related definition/instantiation labels, and repair applicability; never score quality solely by whether some error string appeared.
 5. Use effect-sensitive traces for the guarded FIFO case and exact token/tree-sensitive cases for numeric ingress. Record actual execution evidence only after a real frontend/checker/simulator exists. No syntax parse is a semantic conformance run.
 
-[designed] Distill this note only after an adopted decision names its scope and authority. Keep `feeds_spec: []` and `status: draft` until then. The frontends remain alternatives, and the source-first recommendation remains revisable.
+[designed] Distill reviewed conclusions into proposed contracts with explicit `adoption_status: proposed` and `implementation_status: not-implemented`. Adoption requires a decision naming its scope and authority. A completed research note can have `status: research-conclusion` before adoption; link its proposed contracts through `feeds_spec`. The source-first recommendation remains revisable during professor review.

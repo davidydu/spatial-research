@@ -4,7 +4,7 @@ title: "PY-R003 — Control, memory, and effects"
 topic: python-control-memory-effects
 project: spatial-python
 session: 2026-09-30
-status: draft
+status: research-conclusion
 source_files:
   - "spatial@e7a8f2f:test/spatial/tests/feature/control/FIFOBranch.scala:9-35"
   - "spatial@e7a8f2f:test/spatial/tests/feature/control/ReduceTiny.scala:7-37"
@@ -30,7 +30,8 @@ source_files:
   - "spatial-rs@eb49d8b:docs/language-spec.md:722-924"
   - "https://docs.python.org/3.14/reference/expressions.html#evaluation-order (accessed 2026-09-30)"
   - "https://docs.python.org/3.14/reference/simple_stmts.html#augmented-assignment-statements (accessed 2026-09-30)"
-feeds_spec: []
+feeds_spec:
+  - "[[30 - Python State and Protocol Contract]]"
 ---
 
 ## Conclusion and authority
@@ -278,6 +279,8 @@ The task graph must express these protocols at the architecture level before the
 
 ## Distillation and unresolved limits
 
-The adopted specification should eventually separate: logical execution/effects; storage identity/lifetime/capabilities; dimensions/views/transfers; controllers and contribution regions; communicating tasks/channels; diagnostics/proof profiles; and scheduled/backend semantics. No specification files are fed yet because this note is draft and the proposal has not been adopted.
+**Follow-up:** [[PY-R008 - Advanced State and Communication Protocols]] now defines the advanced transitions identified above. [[PY-R009 - HLS Boundary and Control Lowering]] and [[PY-R010 - Memory Scheduling and Design Space Exploration]] give their target obligations, including safety and progress refinement. The family questions above are the study history; their proposed answers are now in those notes and [[30 - Python State and Protocol Contract]].
 
-The bounded conclusion is decisive on lazy branches, dequeue mutation, preservation of aliases, separation of contribution effects from pure reduction arithmetic, and the need to represent explicit task concurrency. Original-generated simulator invalid/OOB behavior, FIFO elasticity, scalar-fold order, and immediate cancellation must not be copied as unnamed defaults. Remaining evidence is explicit: transformed IR and fresh application runs, optional-executor checks, full arbitration/stream/lock/window protocols, repeated-invocation lifetime cases, and scheduled/backend trace comparisons. Completing this bounded study is progress toward the full language; it is not evidence that the initial three examples establish full-Spatial semantics.
+The adopted specification should eventually separate: logical execution/effects; storage identity/lifetime/capabilities; dimensions/views/transfers; controllers and contribution regions; communicating tasks/channels; diagnostics/proof profiles; and scheduled/backend semantics. The findings now feed proposed contracts with adoption and implementation status explicitly separate; no adopted language support is claimed.
+
+The bounded conclusion is decisive on lazy branches, dequeue mutation, preservation of aliases, separation of contribution effects from pure reduction arithmetic, and the need to represent explicit task concurrency. Original-generated simulator invalid/OOB behavior, FIFO elasticity, scalar-fold order, and immediate cancellation must not be copied as unnamed defaults. Remaining evidence is explicit: transformed IR and fresh application runs, optional-executor checks, executable arbitration/stream/lock/window conformance, repeated-invocation lifetime cases, and scheduled/backend trace comparisons. Completing this bounded study is progress toward the full language; it is not evidence that the initial three examples establish full-Spatial semantics.

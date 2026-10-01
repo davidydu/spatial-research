@@ -42,26 +42,29 @@ Run independent tasks concurrently within the available slots. Give each writer 
 | PY-R005 | Full-language coverage and migration dispositions; complete the coverage ledger | Foundation studies plus all original-spec and source families |
 | PY-R006 | Python compiler architecture, IR/pass contracts, framework/dependency comparison | Reviewed language foundations and selected surface |
 | PY-R007 | Host/package workflow, reproducibility, conformance strategy, and feedback-time targets | The proposed language and compiler boundary |
-| PY-R008 onward | HLS families and any separately needed advanced semantic study | Reviewed program model; allocate scopes to avoid overlapping writers |
+| PY-R008 | Advanced state, communication, transfer, and termination semantics | Foundation control/numeric studies and full-language inventory |
+| PY-R009 | HLS boundary, control routes, faults, and ABI | Reviewed program model and advanced protocols |
+| PY-R010 | Memory, transfers, banking, scheduling, and DSE | Logical memory/protocol contracts and primary vendor evidence |
+| PY-R011 | Numeric lowering, special values, intrinsic/RNG profiles | Exact numeric proposal and primary vendor evidence |
 
 Identifiers reserve study scope, not a claim that the documents are complete. Publish only coherent batches with working links and clear current status. Reviewers must not certify their own study as an independent review.
 
 ## Completion requirements
 
-| ID | Required artifact or evidence | Baseline |
+| ID | Required artifact or evidence | Current status |
 |---|---|---|
-| R01 | Clear public programming-model recommendation, compared fairly with alternatives on the three cases, composition, and diagnostics | Incomplete |
-| R02 | Numeric policy covering bounded integers, fixed point, floating point, literals, conversions, exceptional cases, reductions, and folds | Incomplete |
-| R03 | Control, state, aliasing, memory/dimensions, queues/streams, ordering, termination, and simulation contract | Incomplete |
-| R04 | Every one of the 106 original-spec documents accounted for in a crosswalk, plus a check against source language/node families for omissions | Incomplete |
-| R05 | Python-owned source/unchecked/checked program representations, module boundaries, pass invariants, effects, provenance, and serialization/reproducibility strategy | Incomplete |
-| R06 | Explicit framework/dependency choice and reasons, including the limits of native tools under the pure Python requirement | Incomplete |
-| R07 | Host workflow, file/notebook ingestion, errors, packaging, invocation, and compatibility/migration strategy | Incomplete |
-| R08 | HLS mapping and compiler-versus-vendor responsibilities across the full intended language; distinguish functionality, scheduling, resource fit, and timing evidence | Incomplete |
-| R09 | Conformance and performance plan with independent references, boundary/composition/negative cases, declared workload targets, and reproducibility | Incomplete |
-| R10 | Implementation plan in vertical slices that advances toward the full rewrite, with dependencies, entry/exit checks, and approval boundary | Incomplete |
-| R11 | One coherent architecture recommendation, shared decision proposal, and a short professor brief explaining the big picture and tradeoffs | Incomplete |
-| R12 | Independent review findings resolved, source checks documented, links/schemas/site build checked, commits pushed, live pages verified | Incomplete |
+| R01 | Clear public programming-model recommendation, compared fairly with alternatives on the three cases, composition, and diagnostics | Research accepted; see completion audit |
+| R02 | Numeric policy covering bounded integers, fixed point, floating point, literals, conversions, exceptional cases, reductions, and folds | Research accepted; see completion audit |
+| R03 | Control, state, aliasing, memory/dimensions, queues/streams, ordering, termination, and simulation contract | Research accepted; see completion audit |
+| R04 | Every one of the 106 original-spec documents accounted for in a crosswalk, plus a check against source language/node families for omissions | Research accepted; see completion audit |
+| R05 | Python-owned source/unchecked/checked program representations, module boundaries, pass invariants, effects, provenance, and serialization/reproducibility strategy | Research accepted; see completion audit |
+| R06 | Explicit framework/dependency choice and reasons, including the limits of native tools under the pure Python requirement | Research accepted; see completion audit |
+| R07 | Host workflow, file/notebook ingestion, errors, packaging, invocation, and compatibility/migration strategy | Research accepted; see completion audit |
+| R08 | HLS mapping and compiler-versus-vendor responsibilities across the full intended language; distinguish functionality, scheduling, resource fit, and timing evidence | Research accepted; see completion audit |
+| R09 | Conformance and performance plan with independent references, boundary/composition/negative cases, declared workload targets, and reproducibility | Research accepted; see completion audit |
+| R10 | Implementation plan in vertical slices that advances toward the full rewrite, with dependencies, entry/exit checks, and approval boundary | Research accepted; see completion audit |
+| R11 | One coherent architecture recommendation, shared decision proposal, and a short professor brief explaining the big picture and tradeoffs | Research accepted; see completion audit |
+| R12 | Independent review findings resolved, source checks documented, links/schemas/site build checked, commits pushed, live pages verified | Reviews repaired; final validation/publication pending |
 
 Research completion means these artifacts answer the design questions with evidence and explicit limits. It does not mean a compiler exists or that unrun vendor experiments passed. Do not substitute an introductory subset for the full architecture. If a construct needs a later implementation stage, identify its representation, semantic obligations, intended lowering path, and acceptance evidence now. If a real research blocker prevents doing that, keep the requirement open.
 
@@ -75,12 +78,12 @@ Use pinned local source first and primary external documentation when needed. Is
 
 ## Durable work record
 
-| Wave | Current state | Next action |
+| Wave | Current state | Remaining action |
 |---|---|---|
-| 1 | PY-R002–004 drafted and manager-reviewed; source-first recommendation integrated in PY-R001; source probes independently reproduced | Final independent challenge in wave 4 |
-| 2 | Full-coverage and architecture writers active; host/validation draft prepared by manager | Complete crosswalk, dependency choice, and representation contracts |
-| 3 | Advanced protocol study PY-R008 active before HLS mapping | Review protocols, then assign backend families |
-| 4 | Not started | Assign independent reviewers after a coherent draft exists |
-| 5 | Not started | Audit R01–R12 against actual artifacts and external publication state |
+| 1 | R001–004 researched, source-checked, independently reproduced where bounded probes apply, integrated into proposed language/numeric/state contracts | Adoption and future executable conformance |
+| 2 | Complete 106-document/124-path crosswalk, architecture/framework and host/validation proposals; manager acceptance recorded | Future implementation measurements and feature evidence |
+| 3 | R008 advanced protocols and R009–011 full-family HLS mappings reviewed, with explicit target/profile gates | Locked tool/device, certificates, vendor/RTL/resource evidence during implementation |
+| 4 | Independent architecture, numeric and protocol/HLS findings repaired and reread | Retain counterexamples as future acceptance cases |
+| 5 | D-28, professor brief, four proposed contracts, S0–S9 roadmap and full requirement audit prepared | Finish integrated validation, commit/push, deploy and verify live content |
 
-Update this table and [[progress-log]] at coherent checkpoints. The goal remains active until the requirement-by-requirement completion audit passes. A returned subagent summary, a plausible proposal, or a green site build alone does not complete the research.
+[[06 - Python Research Completion Audit]] records the requirement-by-requirement evidence. All detailed architecture/contracts remain proposed under D-28, and production implementation is not started. The managed goal remains active through final publication verification; research acceptance never substitutes for implementation evidence.
