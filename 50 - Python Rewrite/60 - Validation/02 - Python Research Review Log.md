@@ -25,3 +25,13 @@ The review distinguishes ordered evaluation of effectful contribution bodies fro
 ## Completion audit status
 
 The initial source checks have produced design-relevant evidence, but they do not close R01–R12 in [[03 - Managed Research Execution]]. The detailed studies, full-scope crosswalk, architecture, HLS work, and final independent review are still in progress.
+
+## 30 September 2026 — Foundation integration review
+
+The manager reviewed PY-R002–004 and requested repairs before accepting their recommendations. Ordinary assignment now follows Python RHS-before-target order, rather than silently importing the earlier Rust order. Augmented assignment retains its separate target-once/read-before-RHS rule. State lifetimes distinguish iteration scratch, outer loop-carried state, task activation, invocation state, and explicit persistence. Effectful contribution bodies remain distinct from pure reduction combiners.
+
+Additional source spot-checks confirmed the normal float packing formula lacks retained-bit parity at a tie (`spatial@e7a8f2f:emul/src/emul/FloatPoint.scala:358-376`); runtime saturating casts pass raw values directly while ordinary casts rescale (`spatial@e7a8f2f:src/spatial/codegen/scalagen/ScalaGenFixPt.scala:107-114`; `spatial@e7a8f2f:emul/src/emul/FixedPoint.scala:90-93`); Exo's function capture uses introspected source and its host quotation executes constructed code (`exo@defe172:src/exo/frontend/pyparser.py:73-90`, `exo@defe172:src/exo/frontend/pyparser.py:432-445`, `exo@defe172:src/exo/frontend/pyparser.py:570-587`); Allo directly accepts source strings (`allo@094ab41:allo/ir/utils.py:144-161`). These checks support the distinctions in the studies; they do not run those compilers.
+
+The manager independently extracted and reran the complete recorded Python probes from PY-R002 and PY-R004. Both reproduced their recorded stdout exactly, including 2,054,352 small-format fixed-FMA triples and the token/AST/source-span observations. The arithmetic probe is a bounded arithmetic experiment; the capture probe uses Python's parser only. Neither implements or validates a Python Spatial frontend.
+
+Source-only capture is now the manager's research recommendation in [[PY-R001 - Programming Model Study]], with a builder for generators/tooling. Its strongest objection and reversal conditions remain visible. Full scope, advanced protocols, architecture/framework choice, host workflow, and HLS still require the later waves. The foundation authors do not count as the final independent reviewers of their own work.

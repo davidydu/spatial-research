@@ -9716,3 +9716,9 @@ David then requested that the main agent manage the complete research while he i
 Main-session source inspection verified the scalar optional fold initializer versus memory Boolean fold mode, original fold overload/unrolling differences, generic fixed-point versus floating-point FMA emission paths, schedule defaults, generated FIFO behavior, and control-execution limitations. [[02 - Python Research Review Log]] records the exact pinned evidence. Corrected the affected original reduction and accumulator notes and the `ParallelPipe` codegen matrix description. The frozen D-26 protocol and experiments were not changed.
 
 The documentation schema now separates review, adoption, and implementation status so a complete proposed contract can be presented for approval without claiming it is already adopted or implemented. Research recommendations may advance autonomously under David's mandate; production compiler implementation still follows the relevant design review.
+
+## 2026-09-30 — Python foundations reviewed
+- Added [[PY-R002 - Numeric and Reduction Semantics]], [[PY-R003 - Control Memory and Effects]], and [[PY-R004 - Capture Composition and Diagnostics]]. Manager review corrected inherited assignment order, clarified lifetimes and contribution effects, and verified decisive pinned sources.
+- Independently reran both recorded arithmetic/source probes with exact output agreement. These are bounded experiments, not compiler execution or hardware evidence.
+- [[PY-R001 - Programming Model Study]] now recommends source capture for kernel authors and a shared builder for generators, subject to detailed review and professor approval. Added the host/reproducibility/validation proposal [[PY-R007 - Host Workflow Reproducibility and Validation]].
+- Continuing full-language coverage, compiler-framework choice, and advanced communication protocols under [[03 - Managed Research Execution]]. Research remains active; no production compiler was started.

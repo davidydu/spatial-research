@@ -9,12 +9,12 @@ These questions belong to the Python rewrite. The original [[20 - Open Questions
 
 | ID | Question | Evidence needed | Status |
 |---|---|---|---|
-| PY-Q001 | Source-captured kernel syntax or an explicit Python builder? | The same three complete programs under both approaches, including capture/runtime behavior and diagnostic locations | Open; [[PY-R001 - Programming Model Study]] |
+| PY-Q001 | Source-captured kernel syntax or an explicit Python builder? | The same three complete programs under both approaches, including capture/runtime behavior and diagnostic locations | Source-first recommendation under review; [[PY-R001 - Programming Model Study]], [[PY-R004 - Capture Composition and Diagnostics]] |
 | PY-Q002 | Which original Spatial behaviors are preserved, revised, or excluded? | A source-grounded semantic inventory; explicit treatment of simulation/backend disagreements and previous Rust redesigns | Open; Phase 2 |
-| PY-Q003 | What do integers, fixed-point values, literals, and reduction order mean? | Exact boundary examples and an independent arithmetic reference; identify conversion and normalization points | Open; Phase 2 |
-| PY-Q004 | How do names, state writes, memory aliases, and consuming FIFO operations behave? | Branch/effect examples, lexical visibility, operation order, initialization, and error policy | Open; Phases 1–2 |
+| PY-Q003 | What do integers, fixed-point values, literals, and reduction order mean? | Exact boundary examples and an independent arithmetic reference; identify conversion and normalization points | Proposed contract; [[PY-R002 - Numeric and Reduction Semantics]] |
+| PY-Q004 | How do names, state writes, memory aliases, and consuming FIFO operations behave? | Branch/effect examples, lexical visibility, operation order, initialization, and error policy | Foundation proposal; advanced protocols still in research; [[PY-R003 - Control Memory and Effects]] |
 | PY-Q005 | Which program objects and checks should the Python compiler own? | Candidate representations that explain all initial examples without recognizing whole-program families | Open; Phase 3 |
-| PY-Q006 | How should files and notebook cells reach the compiler, and how are errors reported? | Source capture contract, original locations, explicit host/capture/runtime distinction, and repair examples | Open; Phases 1–3 |
+| PY-Q006 | How should files and notebook cells reach the compiler, and how are errors reported? | Source capture contract, original locations, explicit host/capture/runtime distinction, and repair examples | Capture/diagnostic proposal; host packaging still in research; [[PY-R004 - Capture Composition and Diagnostics]] |
 | PY-Q007 | What feedback time is acceptable for simulation and compiler runs? | Representative workload sizes and user-facing latency targets fixed before performance measurements | Open; validation design |
 | PY-Q008 | Which hardware semantics can the later HLS backend preserve? | Per-operation lowering and behavioral checks after the Python programming model is reviewed | Deferred to Phase 4 |
 | PY-Q009 | How does the full original language fit the rewrite, beyond the three examples? | Complete source-spec crosswalk, source-family gap check, and a staged path for every intended capability | Open; full-scope research |

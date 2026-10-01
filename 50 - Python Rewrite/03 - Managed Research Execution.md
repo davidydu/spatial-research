@@ -77,9 +77,9 @@ Use pinned local source first and primary external documentation when needed. Is
 
 | Wave | Current state | Next action |
 |---|---|---|
-| 1 | Three Sol extra-high research writers dispatched; manager collecting the full-scope baseline | Verify decisive source claims and reconcile proposed rules |
-| 2 | Not started | Begin after programming-model review; prepare the source inventory in parallel |
-| 3 | Not started | Use the reviewed language/representation contract |
+| 1 | PY-R002–004 drafted and manager-reviewed; source-first recommendation integrated in PY-R001; source probes independently reproduced | Final independent challenge in wave 4 |
+| 2 | Full-coverage and architecture writers active; host/validation draft prepared by manager | Complete crosswalk, dependency choice, and representation contracts |
+| 3 | Advanced protocol study PY-R008 active before HLS mapping | Review protocols, then assign backend families |
 | 4 | Not started | Assign independent reviewers after a coherent draft exists |
 | 5 | Not started | Audit R01–R12 against actual artifacts and external publication state |
 

@@ -7,7 +7,7 @@ date_started: 2026-09-30
 
 Research before implementation: establish what Spatial programs mean in Python, decide how the compiler represents and checks them, then study HLS lowering.
 
-**Current phase:** programming-model research. Pure Python is the agreed implementation direction. The public API, source capture method, detailed semantics, compiler representation, and HLS design are still open. No Python compiler implementation is claimed.
+**Current phase:** language foundations reviewed; full-language architecture research underway. Pure Python is the agreed direction. Source capture is the current research recommendation for writing kernels, with a shared builder interface for generators. Detailed proposals remain subject to review and professor approval. No Python compiler implementation is claimed.
 
 ## Read first
 
@@ -18,6 +18,12 @@ Research before implementation: establish what Spatial programs mean in Python, 
 5. [[02 - Python Open Questions|Open questions]] — unresolved choices and the evidence needed to resolve them.
 
 [[03 - Managed Research Execution|Managed research execution]] tracks the full research package, parallel work, and completion criteria while David is away.
+
+## Foundation studies
+
+- [[PY-R002 - Numeric and Reduction Semantics]] — exact arithmetic, literals, reductions, folds, and disagreements in the original implementation.
+- [[PY-R003 - Control Memory and Effects]] — operation order, lazy branches, state lifetime, aliases, and the need for communicating tasks.
+- [[PY-R004 - Capture Composition and Diagnostics]] — source versus builder, reusable kernels, notebook/file capture, and matched errors.
 
 ## Documentation structure
 

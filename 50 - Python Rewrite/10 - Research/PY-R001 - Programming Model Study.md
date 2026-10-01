@@ -19,13 +19,13 @@ feeds_spec: []
 
 Resolve PY-Q001 in [[02 - Python Open Questions]]: should the public programming model use captured Python source or an explicit Python builder? The compiler implementation remains Python under [[D-27]]. This study does not select a backend or begin compiler implementation.
 
-Compare the three cases in [[PY-E001 - Initial Example Corpus]] in **both** forms. All six illustrative listings are below. Their common intended behavior is described, but semantic and diagnostic review remains open. The table is a work record, not an implementation-coverage report.
+Compare the three cases in [[PY-E001 - Initial Example Corpus]] in **both** forms. All six illustrative listings are below. Their common intended behavior is described. The foundation studies below now supply the proposed numeric/effect rules, composition design, and matched diagnostics; implementation validation remains open. The table is a work record, not an implementation-coverage report.
 
 | Case | Source-capture form | Builder form | Meaning and effect review | Execution |
 |---|---|---|---|---|
 | E1 tiled scale | First sketch below | First sketch below | Original source contract checked; proposed APIs unvalidated | Not run |
-| E2 scalar reduction | First sketch below | First sketch below | Identity and contribution meaning described; numeric and reduction policies need review | Not run |
-| E3 branch/FIFO | First sketch below | First sketch below | Accumulator, lazy branches, and proposed functional trace described; controller/effect questions open | Not run |
+| E2 scalar reduction | First sketch below | First sketch below | Proposed numeric/reduction contract in PY-R002; no execution evidence | Not run |
+| E3 branch/FIFO | First sketch below | First sketch below | Ordered contribution effects and lazy branches reviewed in PY-R003; advanced protocols remain separate | Not run |
 
 ## Evidence ledger
 
@@ -57,7 +57,7 @@ def tiled_scale(src: In[Dram[Int, 32]],
         store(dst[base:base + 16], tile_out)
 ```
 
-Proposed interpretation: the compiler reads the source without executing the function, its decorator, or annotations. It recognizes the supported statements and constructs program objects. The displayed annotations declare ports or storage in this language; they are not ordinary Python allocations. File/cell capture and supported imports still need an explicit contract.
+Proposed interpretation: the compiler reads the source without executing the function, its decorator, or annotations. It recognizes the supported statements and constructs program objects. The displayed annotations declare ports or storage in this language; they are not ordinary Python allocations. The proposed file/cell and explicit binding contract is in [[PY-R004 - Capture Composition and Diagnostics]].
 
 ### Explicit builder
 
@@ -78,7 +78,7 @@ with k.sequential(0, 32, step=16) as base:
 
 Proposed interpretation: Python executes the construction code once. Each context records a controller body using a symbolic index; it does not run the hardware trip count. Memory handles and arithmetic record operations. The local-storage declarations belong to the represented loop body; creating a Python handle once does not decide hardware allocation lifetime. Arbitrary Python side effects in construction code would occur during construction and need a clear policy.
 
-Both sketches leave the exact `Int` and scheduling contracts open. The builder has more explicit construction machinery; the source form needs a documented distinction from ordinary Python execution. E1 alone does not establish a winner.
+The follow-up proposal makes `Int` wrapping signed 32-bit data and separates logical operation order from scheduling; see [[PY-R002 - Numeric and Reduction Semantics]] and [[PY-R003 - Control Memory and Effects]]. The builder has more explicit construction machinery; the source form needs a documented distinction from ordinary Python execution. E1 alone does not establish a winner.
 
 ## E2: two proposed spellings of scalar reduction
 
@@ -220,7 +220,7 @@ The trace states the candidate's behavior more strongly than its final sum. It h
 | Identity and state | Annotations and intrinsic arguments distinguish result, register reset, identity, and output writes | Typed handles and explicit calls express those same distinctions | Numeric rules, empty domains, mutation/rebinding, and result lifetime |
 | Diagnostics | Source syntax can retain expression locations and literal spelling | Constructors need a defined location/literal provenance mechanism | Matched invalid examples with primary and related-source labels |
 
-This is an inspection of designed spellings. Six written examples establish neither implementation coverage nor diagnostic quality, usability, semantic equivalence, or a preferred surface. Both proposals still need a fair treatment of composition and generated kernels. A framework choice or a line-count comparison would not close those questions.
+This table records the original sketch comparison. The six listings alone establish neither implementation coverage, diagnostic quality, usability, nor semantic equivalence. [[PY-R004 - Capture Composition and Diagnostics]] now compares composition, generated kernels, acquisition, literal fidelity, and matched errors. That design review supports the recommendation below; a framework choice or a line count would not substitute for it.
 
 ## Fair comparison protocol
 
@@ -242,18 +242,27 @@ Draft one uninitialized read, one incompatible numeric use, one unsupported cons
 
 The simple E2 sum can hide differences between a reduction and a fold; add a written case that exposes the candidate's chosen numeric or effect policy. The E3 final sum can hide an incorrect order of FIFO consumption; review the candidate trace above and add a case whose output or remaining state changes when an untaken branch consumes. Verify original controller and simulator behavior before claiming that model preserves Spatial.
 
-## Completion and decision
+## Research recommendation after foundation review
 
-The packet now contains six illustrative listings, their intended statement-level meaning, source-derived expected values, a candidate FIFO trace, the evidence ledger, and an initial comparison. Python syntax checks do not validate the invented APIs or their semantics. Diagnostic sketches and the semantic review below remain necessary before proposing a surface decision in the shared decision queue.
+**Recommend source-captured Python as the primary kernel language.** Keep an explicit builder as a generator/tooling interface to the same unchecked program model. Do not promise two complete public APIs at the first implementation milestone. This is a manager research recommendation for professor review, not an adopted API or an implementation result.
 
-Remaining research, in order:
+[[PY-R004 - Capture Composition and Diagnostics]] gives both alternatives explicit composition and provenance mechanisms. Its matched cases cover uninitialized reads, incompatible types, unsupported runtime control, lazy FIFO branches, escaped names, and assignment order. Source capture retains the original statement, numeric token, branch body, and location before host execution. That makes it a direct fit for writing and explaining Spatial kernels. A builder can preserve the same information, but must provide literal trees, structured regions, and origin metadata deliberately. Neither notation removes the need for a common checker.
 
-1. Verify original reduction/fold, accumulator, branch, and FIFO behavior against the relevant implementation paths. Separate original behavior from each proposed policy above and from the earlier Rust redesign.
-2. Review the common numeric, effect, scope, result-lifetime, and empty-domain rules; retain both surface alternatives while those rules change. Add the discriminating reduction and branch probes rather than relying only on `120` or `378`.
-3. Complete matched error examples, construction/capture contracts, source provenance, and a small reusable/generated-kernel case. Identify any expression the current sketches cannot represent cleanly.
-4. Record a reasoned surface recommendation and its strongest objection. After review, design the unchecked and checked program objects, Python checker, and reference simulator. Investigate HLS mapping from that meaning afterward; writing these examples is not approval to implement either frontend.
+The strongest objection is that a Python-looking kernel is not an ordinary Python function. Source files/cells are compiler inputs; marker decorators and annotations are parsed without executing them. Arbitrary host callbacks do not run inside a captured kernel. Address this with an explicit capture API, a small documented meta language, typed helper/component templates, and external Python generators. If representative generators or user review show that explicit construction is clearer, reconsider the public surface without replacing the shared semantic model.
 
-The earlier source-capture preference is a hypothesis. Neither alternative is selected here. The conclusion must not depend on the implementation language, maintenance scarcity, or HLS tuning; those would answer different questions.
+The foundation review changes several inherited assumptions:
+
+| Topic | Recommendation and reason | Detailed evidence |
+|---|---|---|
+| Numeric behavior | Explicit widths and per-operation normalization; exact literal spelling; no host-float shortcut | [[PY-R002 - Numeric and Reduction Semantics]] |
+| Reduction | Separate associative reduction, ordered fold, and a fixed combination tree; do not silently let tuning change arithmetic | [[PY-R002 - Numeric and Reduction Semantics]] |
+| Stateful contributions | Execute active map/contribution effects exactly once in logical order; pure combination may be regrouped only when permitted | [[PY-R002 - Numeric and Reduction Semantics]], [[PY-R003 - Control Memory and Effects]] |
+| Branches | Preserve both bodies in the program and execute only the selected effects | [[PY-R003 - Control Memory and Effects]] |
+| Assignment | Ordinary Python `=` evaluates the value before the destination; augmented assignment evaluates/reads its target once before the RHS | [[PY-R004 - Capture Composition and Diagnostics]] |
+| State and concurrency | Preserve allocation identity/lifetime, aliases, bounded queue behavior, and explicit communicating tasks | [[PY-R003 - Control Memory and Effects]] |
+| Validation | A syntax parse, calculated output, or designed error is not a compiler execution | All three studies |
+
+The six listings remain illustrative. A later proposed language contract will settle exact spelling and the full grammar; examples must then be checked against it. Full communication/termination protocols, architecture/framework selection, host workflow, and HLS remain required work in [[03 - Managed Research Execution]]. No compiler implementation begins from this recommendation alone.
 
 ## Review checks on 30 September 2026
 
@@ -261,4 +270,4 @@ All six Python blocks passed `ast.parse` as separate source snippets. No snippet
 
 ## Distillation plan
 
-After the relevant decision is adopted, distill its contract into the Python specification. Preserve this study and its rejected alternatives. Research on source semantics stays linked to the original Spatial specification and pinned sources; the future Python specification must say which behavior it preserves or deliberately changes.
+Distill the reviewed recommendation into a proposed Python specification for approval. Mark adoption separately; only explicit adoption changes that status. Preserve this study and its rejected alternatives. Research on source semantics stays linked to the original Spatial specification and pinned sources; the future Python specification must say which behavior it preserves or deliberately changes.
