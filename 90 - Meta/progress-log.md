@@ -9754,3 +9754,15 @@ Research commit `42c898d` was pushed under `davidydu`; [Pages deployment 3682369
 
 - Published research commit `053b3be` under davidydu; Pages run `36887633973` succeeded. Eight live research/design/audit pages returned the expected new content, and the downloadable probe ZIP matched its recorded hash.
 - [[07 - Python Implementation Readiness Audit]] records completed research review and publication separately from professor adoption, production compiler implementation and target validation.
+
+## 2026-10-01 — Python professor presentation content
+
+Prepared [[2026-10-01-python-professor-presentation-outline]] with the approved seven-slide, ten-minute structure, full speaker scripts, visual guidance and source links. It uses the exact unimplemented E1 tiled-scale source from PY-R001 and keeps D-27's accepted direction separate from D-28's proposed architecture. Completed research and bounded probes are not presented as a working Python compiler.
+
+Added entry links for the new `/presentation/python/` route to the homepage, Python research index and professor brief, while preserving the historical `/presentation/` route. Refreshed the homepage's stale first-study status to match the completed research and implementation blueprints. Web implementation and publication verification are recorded separately after completion.
+
+Content checks passed: five Markdown frontmatters, 45 added wikilinks including heading targets, exact E1 source parity with PY-R001, and Python syntax parsing without execution. Reopened the pinned original E1 source to verify the two SRAM buffers, extents, transfer order and host reference. The slide timings include visual pauses; actual delivery time remains to be rehearsed.
+
+Aligned the outline and full speaker scripts with the implemented web presentation. The notes now match the visible titles, compiler stages and tour; the source sketch remains exact. The illustrated inputs `1…32` at scale `2` are labeled as an explanatory variant, and the separate A/B queue example isolates branch effects without claiming to reproduce the complete E3 program.
+
+The new web deck implements seven slides with source highlighting, a tile walkthrough, compiler-stage explanations, expected-value and queue illustrations, speaker notes, source panels and documentation links. Codex independently reviewed the content against the Python contracts. Local checks verified exact E1 source, ten-minute slide budgets, unique IDs, the speaking-script match and 259 internal links/anchors across the presentation and its entry pages. The combined Quartz build passed. Browser checks exercised navigation, tile selection and phases, scale changes, lazy queue consumption/reset, notes and sources. Responsive checks cover 1280×720, 1440×900 and a 390px-wide screen. The animations are presentation illustrations, not compiler execution. Publication confirmation will follow separately.

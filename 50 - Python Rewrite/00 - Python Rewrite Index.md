@@ -11,6 +11,8 @@ Research before implementation: establish what Spatial programs mean in Python, 
 
 ## Read first
 
+<a href="presentation/python/index.html" data-router-ignore target="_blank" rel="noopener noreferrer">Open Spatial in Python — seven-slide presentation</a> · [[2026-10-01-python-professor-presentation-outline|Ten-minute outline and full speaker notes]]. The presentation explains the proposed program and compiler path; it is not an implementation demonstration.
+
 1. [[D-27|Direction and authority]] — what the professor and David have settled.
 2. [[05 - Python Professor Brief|Professor brief]] — the proposal, progress, main tradeoff, and approval boundary.
 3. [[D-28|Architecture recommendation]] — selected design, alternatives, and reversal conditions.

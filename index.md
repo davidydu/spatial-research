@@ -1,7 +1,7 @@
 ---
 type: moc
 title: "Spatial Research"
-date: 2026-09-30
+date: 2026-10-01
 ---
 
 Research toward a pure Python rewrite of Spatial. First establish the programming model and its meaning; then investigate lowering to HLS. This site connects that work to the original source, experiments, and specification.
@@ -13,7 +13,9 @@ Research toward a pure Python rewrite of Spatial. First establish the programmin
 
 Start at [[00 - Python Rewrite Index|Python Spatial research]]. It connects the examples, studies, open questions, and decisions. The [[01 - Python Research Plan|research plan]] sets the order: programming model, semantics, compiler design, then HLS research and implementation planning.
 
-The [[PY-R001 - Programming Model Study|current study]] compares source capture and an explicit builder on the same [[PY-E001 - Initial Example Corpus|three example programs]]. [[D-27]] records the agreed direction; the detailed Python API and architecture remain open. The dated [[2026-09-30-pure-python-programming-model|professor feedback]] and [[2026-09-30-pure-python-feasibility|feasibility assessment]] explain why this is the current work.
+The [[PY-R001 - Programming Model Study|programming-model study]] compares source capture and an explicit builder on the same [[PY-E001 - Initial Example Corpus|three example programs]]. The completed research now includes [[00 - Implementation Design Index|five implementation blueprints]] and a [[07 - Python Implementation Readiness Audit|readiness review with bounded probes]]. [[D-27]] records the agreed direction; [[D-28]] proposes the detailed architecture for professor review. No Python compiler implementation is claimed.
+
+The <a href="presentation/python/index.html" data-router-ignore target="_blank" rel="noopener noreferrer">Spatial in Python presentation</a> follows one program through the proposed design in seven slides. Its [[2026-10-01-python-professor-presentation-outline|ten-minute outline and full speaker notes]] link each claim to the research. The [[05 - Python Professor Brief|professor brief]] is the short written version.
 
 The <a href="presentation/index.html" data-router-ignore target="_blank" rel="noopener noreferrer">28 September presentation</a> and [[2026-09-28-spatial-professor-presentation-outline|speaking outline]] are historical. Their Rust-core recommendation was superseded by the professor's feedback.
 
@@ -27,20 +29,20 @@ The <a href="presentation/index.html" data-router-ignore target="_blank" rel="no
 | [[D-26-12-simulator-spike\|Matched interpreter experiment]] | Exact-output checks, runtime measurements, independent repeat and reproducibility archive |
 | [[D-26\|Original D-26 protocol and meeting cut]] | Frozen hypotheses, mistake list, historical recommendation and audit trail |
 
-## What we will study next
+## What comes next
 
-Start with three small programs: tiled scale, a scalar reduction, and a runtime branch with state. Use them to explain memory, control, numeric behavior, and mutation in Python. Compare reading kernel source with constructing programs through an explicit Python library.
+Review [[D-28|the proposed architecture and semantic choices]], then begin one complete path through source capture, checking, simulation and diagnostics for a composed memory kernel. The [[04 - Python Implementation Roadmap|implementation roadmap]] expands that path across numeric, stateful and communicating programs.
 
-The compiler's checks, program representation, and functional simulation should be Python. Once those have a clear design, study how the represented operations lower to HLS. The existing specification and tests are evidence to review and reuse, not a reason to retain Rust as the implementation language.
+The compiler's checks, program representation and reference simulation are proposed in Python. HLS planning can start on the first checked subset while broader semantics develop. The existing specification and tests remain evidence to review and reuse. Fresh Python-generated target validation is a later gate.
 
 ## Current state
 
 | Area | Verified state | Remaining work |
 |---|---|---|
-| Research | Dedicated Python research section, common example corpus, and first comparative study; D-27 records the direction | Review the examples and settle the programming model |
-| Prototype compiler | Existing Rust prototype retained as a historical reference | Design the Python compiler, checker, program representation, and simulator |
+| Research | Full-language research, five implementation blueprints and bounded readiness probes complete as proposed research | Professor review of D-28 and deliberate semantic choices |
+| Python compiler | Frontend, checker, program representation and simulator specified in proposed blueprints; no production implementation | After approval, build the first complete capture/check/simulation path |
 | Hardware evidence | Historical 39-program backend corpus: 37 fit, 2 over budget, 14 initiation-interval caveats | Fresh evidence for changed HLS and the general backend before release |
-| Student delivery | Earlier host and packaging studies available for reference | Decide the Python workflow after reviewing examples; no new package is implemented |
+| Student delivery | Proposed host workflow, package interfaces and validation gates documented | Implement and validate the package and composed program families |
 
 See [[2026-06-27-rust-spatial-rewrite-roadmap|Historical Rust roadmap and backend evidence]], [[D-26-05-boundary-design|Earlier boundary study]], and [[progress-log|Verification history]]. Historical vendor results do not certify the future Python compiler.
 

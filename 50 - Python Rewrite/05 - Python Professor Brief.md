@@ -2,8 +2,10 @@
 type: reference
 title: "Python Spatial — professor discussion brief"
 project: spatial-python
-date: 2026-09-30
+date: 2026-10-01
 ---
+
+<a href="presentation/python/index.html" data-router-ignore target="_blank" rel="noopener noreferrer">Open the seven-slide presentation</a> · [[2026-10-01-python-professor-presentation-outline|Full speaker notes and evidence]].
 
 ## The proposal
 
