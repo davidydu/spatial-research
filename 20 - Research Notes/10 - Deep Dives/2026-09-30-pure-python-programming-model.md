@@ -23,6 +23,8 @@ This replaces the Python-frontend/Rust-core recommendation in [[D-26-final-archi
 
 The feedback selects a direction and an order of work. It does not settle the Python API, source capture method, supported subset, internal representation, or HLS strategy. The sketches below are research proposals, not implemented APIs or an approved detailed design.
 
+David subsequently clarified that the professor assumes abundant coding-agent capability, so Rust's implementation type-safety and development-discipline advantages should not decide the language choice. [[2026-09-30-pure-python-feasibility|The feasibility assessment]] concludes that a Python implementation can supply the full compiler; correctness and performance remain properties to validate in the chosen implementation.
+
 ## First deliverable
 
 Prepare a small set of readable Python Spatial programs, with a plain explanation of what each statement means. Use them to decide how programmers express memory, loops, reductions, branches, and state. Describe enough of the Python compiler to show how it would understand those programs.
