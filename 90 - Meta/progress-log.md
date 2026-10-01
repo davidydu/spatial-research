@@ -9749,3 +9749,8 @@ Research commit `42c898d` was pushed under `davidydu`; [Pages deployment 3682369
 - Integrated explicit value/Index/component rules, MaskedVec, empty mapper effects, FIFOReg, issued-operation cancellation, multi-producer close, wait certificates, and quota/address allocation distinctions into proposed contracts. Detailed adoption remains pending professor review.
 - Reproduced bounded framework, exact arithmetic, protocol, artifact and library probes, plus two identical curated xDSL wheels. The validation archive contains sources/results/manifest; no production compiler or Python-generated HLS result is claimed.
 - Updated the professor brief, implementation roadmap and full-family routing while preserving original/Rust sources and frozen D-26. Publication verification is recorded in the readiness audit.
+
+## 2026-10-01 — Implementation-readiness publication verified
+
+- Published research commit `053b3be` under davidydu; Pages run `36887633973` succeeded. Eight live research/design/audit pages returned the expected new content, and the downloadable probe ZIP matched its recorded hash.
+- [[07 - Python Implementation Readiness Audit]] records completed research review and publication separately from professor adoption, production compiler implementation and target validation.
