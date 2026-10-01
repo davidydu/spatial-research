@@ -2,14 +2,17 @@
 type: design
 title: "Professor review — Spatial architecture recommendation"
 date: 2026-09-28
-status: awaiting-professor-approval
+status: superseded
 decision: "D-26"
 related:
   - "[[D-26-final-architecture]]"
   - "[[D-26]]"
 ---
 
-## Recommendation for approval
+> [!important] Superseded after the professor discussion — 30 September 2026
+> The current direction is a pure Python rewrite, beginning with what Spatial programs and the compiler look like in Python, followed by HLS research. This brief records the earlier proposal. See [[2026-09-30-pure-python-programming-model]].
+
+## Recommendation presented — historical
 
 **Build a restricted Python-syntax Spatial frontend over a Rust semantic core.** Parse kernel source without executing it. Use one checker, one controller-tree representation, one functional interpreter and one structural HLS backend. Ship the compiler with Python testbench and notebook tooling through prebuilt wheels.
 

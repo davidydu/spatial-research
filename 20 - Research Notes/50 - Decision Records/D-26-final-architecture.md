@@ -2,7 +2,7 @@
 type: design
 title: "Final architecture proposal — Python surface, Rust semantic core"
 date: 2026-09-28
-status: awaiting-professor-approval
+status: superseded
 decision: "D-26"
 related:
   - "[[D-26]]"
@@ -10,7 +10,10 @@ related:
   - "[[2026-09-28-d26-research-extension]]"
 ---
 
-## Selected architecture
+> [!important] Superseded — 30 September 2026
+> David reported that the professor wants a pure Python rewrite of Spatial, with the Python programming model studied before HLS lowering. The Rust-core proposal below is retained as historical research. See [[2026-09-30-pure-python-programming-model|the current direction]].
+
+## Selected architecture — historical proposal
 
 **Select R-E: a restricted Python-syntax kernel language, captured from source without execution, over one Rust semantic compiler, controller-tree IR, reference interpreter, and structural HLS backend.** Deliver Python host/testbench tools and a bundled compiler executable through wheels. Use a process/JSON interface first. Do not require native Python bindings in the first release.
 

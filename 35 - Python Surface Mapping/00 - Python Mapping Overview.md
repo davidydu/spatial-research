@@ -15,8 +15,14 @@ adjudication will be recorded here once both ratings exist. The meeting cut
 contains one rating per entry, followed by source checking and a separate audit.
 
 Cells: R-X, R-E, R-B, P-X, P-E, P-B (core Rust/Python × surface external/
-embedded/both). This folder is the evidence for D-26 angles 2–4 and becomes the
-build spec only after an E or B proposal is approved. [[D-26-final-architecture|The current proposal selects R-E]], pending professor approval. These first-rating designs remain evidence, not implemented frontend coverage; the final plan also requires the deferred construct inventory below.
+embedded/both). This folder is evidence for D-26 angles 2–4. The earlier
+[[D-26-final-architecture|R-E proposal]] was superseded on 30 September 2026 by
+the professor's direction to pursue a [[2026-09-30-pure-python-programming-model|pure Python rewrite]].
+These first-rating designs remain evidence, not an approved Python API or implemented
+frontend coverage. They compare against the earlier external DSL; its scope,
+assignment-order, and declaration policies must not be adopted automatically as
+requirements for the new rewrite. The deferred construct inventory below still
+needs review.
 
 ## Embedding styles (summary)
 

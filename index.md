@@ -1,42 +1,46 @@
 ---
 type: moc
 title: "Spatial Research"
-date: 2026-09-28
+date: 2026-09-30
 ---
 
-Research toward a teachable Spatial hardware language and a compositional compiler targeting HLS. This site connects the proposed architecture to its source evidence, experiments and implementation specification.
+Research toward a pure Python rewrite of Spatial. First establish the programming model and its meaning; then investigate lowering to HLS. This site connects that work to the original source, experiments, and specification.
 
-> [!important] Architecture proposal ready for professor review
-> **Restricted Python kernel source over one Rust semantic core.** Capture source without execution, check one hardware contract, and lower a typed controller tree to functional simulation or HLS. Implementation of this architecture awaits professor approval.
+> [!important] Current direction — professor feedback, 30 September 2026
+> **Pure Python Spatial, including the compiler.** First work out what Spatial programs and their implementation look like in Python, then study HLS lowering. This replaces the earlier Python-frontend/Rust-core proposal. See [[2026-09-30-pure-python-programming-model|the new research direction and first program sketch]].
 
-## For reviewers
+## Start with the Python rewrite
 
-<a href="presentation/index.html" data-router-ignore target="_blank" rel="noopener noreferrer">Open the presentation</a> · [[2026-09-28-spatial-professor-presentation-outline|Screen outline and speaking plan]]
+[[2026-09-30-pure-python-programming-model|Programming model first]] records the feedback, a proposed tiled-scale example, source-capture and builder alternatives, and the next research steps. The direction is agreed; the detailed Python API and implementation design are still open.
+
+The <a href="presentation/index.html" data-router-ignore target="_blank" rel="noopener noreferrer">28 September presentation</a> and [[2026-09-28-spatial-professor-presentation-outline|speaking outline]] are historical. Their Rust-core recommendation was superseded by the professor's feedback.
+
+## Earlier research and evidence
 
 | Read | Purpose |
 |---|---|
-| [[D-26-professor-brief\|Professor approval brief]] | The recommendation, evidence, tradeoffs and decision to approve |
-| [[D-26-final-architecture\|Final architecture plan]] | Source workflow, semantic ownership, delivery commitments and staged gates |
+| [[D-26-professor-brief\|Earlier professor brief]] | The superseded recommendation and the evidence presented |
+| [[D-26-final-architecture\|Earlier architecture proposal]] | Historical Rust-core design, retained for the research record |
 | [[2026-09-28-d26-research-extension\|Research method and debate]] | Why the recommendation changed; competing case; measured versus inferred conclusions |
 | [[D-26-12-simulator-spike\|Matched interpreter experiment]] | Exact-output checks, runtime measurements, independent repeat and reproducibility archive |
 | [[D-26\|Original D-26 protocol and meeting cut]] | Frozen hypotheses, mistake list, historical recommendation and audit trail |
 
-## Research result
+## What we will study next
 
-The architecture separates **student syntax**, **semantic implementation**, and **Python tooling**. A token-backed Python AST can preserve the required hardware information without a second checker. The chosen Rust core owns names, constants, types, legality and exact functional behavior. Python owns source capture and the host/testbench experience.
+Start with three small programs: tiled scale, a scalar reduction, and a runtime branch with state. Use them to explain memory, control, numeric behavior, and mutation in Python. Compare reading kernel source with constructing programs through an explicit Python library.
 
-This is a selected engineering proposal. No learner study has established a universally best teaching syntax. The explicit tradeoff is additional frontend integration in exchange for familiar authoring; the full plan retains paired conformance labs and all original Python-surface guarantees.
+The compiler's checks, program representation, and functional simulation should be Python. Once those have a clear design, study how the represented operations lower to HLS. The existing specification and tests are evidence to review and reuse, not a reason to retain Rust as the implementation language.
 
 ## Current state
 
 | Area | Verified state | Remaining work |
 |---|---|---|
-| Research | D-26 meeting cut audited; follow-up debate and bounded interpreter experiment documented | Learner outcomes and full-system acceptance remain unmeasured |
-| Prototype compiler | Text `check` CLI and existing parser/constant/HIR/classifier infrastructure | General checker/controller interpreter, source-captured Python frontend and structural migration |
+| Research | Earlier D-26 studies retained; professor's pure Python direction recorded | Review representative Python programs and settle the programming model |
+| Prototype compiler | Existing Rust prototype retained as a historical reference | Design the Python compiler, checker, program representation, and simulator |
 | Hardware evidence | Historical 39-program backend corpus: 37 fit, 2 over budget, 14 initiation-interval caveats | Fresh evidence for changed HLS and the general backend before release |
-| Student delivery | Versioned host contracts and packaging mechanisms researched | Full JSON commands, tested wheels, notebook adapter and release CI |
+| Student delivery | Earlier host and packaging studies available for reference | Decide the Python workflow after reviewing examples; no new package is implemented |
 
-See [[2026-06-27-rust-spatial-rewrite-roadmap|Backend evidence and implementation roadmap]], [[D-26-05-boundary-design|Boundary and implemented CLI limits]], and [[progress-log|Verification history]]. Historical vendor results do not certify the proposed general compiler.
+See [[2026-06-27-rust-spatial-rewrite-roadmap|Historical Rust roadmap and backend evidence]], [[D-26-05-boundary-design|Earlier boundary study]], and [[progress-log|Verification history]]. Historical vendor results do not certify the future Python compiler.
 
 ## Explore the evidence
 

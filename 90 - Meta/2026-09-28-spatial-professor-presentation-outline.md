@@ -2,7 +2,7 @@
 type: design
 title: "Spatial professor presentation — story and screen outline"
 date: 2026-09-28
-status: implemented
+status: historical
 related:
   - "[[D-26-professor-brief]]"
   - "[[D-26-final-architecture]]"
@@ -10,6 +10,9 @@ related:
 ---
 
 # Spatial professor presentation
+
+> [!important] Historical presentation
+> On 30 September 2026, David reported that the professor chose a pure Python rewrite instead of the Rust-core proposal presented here. See [[2026-09-30-pure-python-programming-model|the current direction and research sequence]]. The outline below is preserved as the meeting record.
 
 ## Purpose and central message
 

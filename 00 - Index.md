@@ -6,12 +6,16 @@ date_started: 2026-04-21
 
 # Spatial Research — Top-Level Index
 
-Source-grounded research and an implementation-level specification of the Spatial hardware DSL, targeting HLS. The current architecture recommendation is a restricted Python source frontend over one Rust semantic core, pending professor approval. The specification, historical experiments and research trail remain available below.
+Source-grounded research and an implementation-level specification of the Spatial hardware DSL. Following professor feedback reported on 30 September 2026, the current direction is a pure Python rewrite: understand the Python programming model first, then investigate HLS lowering. The earlier Rust-core proposal and experiments remain historical evidence.
 
-## Current architecture review
+## Current direction
 
-- [[D-26-professor-brief|Professor approval brief]] — concise research result and approval request.
-- [[D-26-final-architecture|Selected architecture plan]] — one semantic authority, source contract and delivery gates.
+- [[2026-09-30-pure-python-programming-model|Pure Python Spatial — programming model first]] — professor feedback, a first program sketch, design alternatives, and research sequence.
+
+## Earlier architecture review — superseded
+
+- [[D-26-professor-brief|Earlier professor brief]] — the recommendation presented before the new direction.
+- [[D-26-final-architecture|Earlier architecture plan]] — historical Rust-core proposal.
 - [[2026-09-28-d26-research-extension|Follow-up method and debate]] — competing case, new evidence and limitations.
 - [[D-26|Original D-26 record]] — frozen protocol and historical meeting cut.
 
@@ -29,7 +33,7 @@ Source-grounded research and an implementation-level specification of the Spatia
 | `10 - Spec/` | **The deliverable.** Authoritative, cross-linked spec. Populated progressively during Phase 2. |
 | `20 - Research Notes/` | Raw artifacts. `00 - Coverage/` holds Phase 1 subagent outputs; `10 - Deep Dives/` holds per-topic reading notes; `20 - Open Questions.md` tracks unresolved issues. |
 | `30 - HLS Mapping/` | Parallel notes categorizing each construct as clean-map / needs-rework / chisel-specific for the future HLS target. |
-| `35 - Python Surface Mapping/` | Per-construct evidence for D-26 (Python embedding styles vs the external DSL); build spec if a Python surface is chosen. |
+| `35 - Python Surface Mapping/` | Earlier construct mappings and Python embedding comparisons; reusable design evidence for the pure Python rewrite. |
 | `40 - Cross References/` | Navigation matrices (source-tree map, pass pipeline order, node↔codegen matrix). |
 | `90 - Meta/` | Workflow docs, design doc, progress log, conventions. |
 
