@@ -33,7 +33,7 @@ Every file has a frontmatter block. `type` is required; other fields depend on `
 | `hls-mapping-index` | Index file for `30 - HLS Mapping/` | `date_started` |
 | `coverage` | Phase 1 subagent outputs | `subsystem`, `paths`, `file_count`, `date`, `verified` |
 | `deep-dive` | Source readings and comparative studies | `topic`, `source_files`, `session`, `status`, `feeds_spec` |
-| `spec` | Original Spatial entries under `10 - Spec/`; future adopted Python contracts under `50 - Python Rewrite/40 - Specification/` | `concept`, `source_files`, `source_notes`, `hls_status`, `depends_on`, `status`; Python additions below |
+| `spec` | Original Spatial entries under `10 - Spec/`; proposed or adopted Python contracts under `50 - Python Rewrite/40 - Specification/` | `concept`, `source_files`, `source_notes`, `hls_status`, `depends_on`, `status`; Python additions below |
 | `hls-mapping` | Non-index entries under `30 - HLS Mapping/` (per-construct) | `construct`, `spec_entry`, `category` |
 | `cross-ref` | Navigation matrix: directory → concept mapping, pass orders, node↔codegen matrices | — |
 | `decision-record` | Decision records under `20 - Research Notes/50 - Decision Records/` | `decision-id`, `related-questions`, `status`, `date` |
@@ -138,7 +138,7 @@ After a re-read confirms a claim, add `verified: <YYYY-MM-DD>` to the entry's fr
 
 - Studies use `PY-R001`, example collections use `PY-E001`, and questions use `PY-Q001`. Include the study or collection ID in its filename. Keep identifiers and stems unique; never reuse them.
 - Decisions continue the shared `D-NN` sequence, with `scope: python-rewrite`. Record who adopted the choice and what remains open. [[D-27]] records the direction; it does not approve a detailed architecture.
-- A future Python specification must also include `scope: python-rewrite`, `decision_records` (quoted wikilinks in a block list), and `implementation_status`. The existing `status` describes document review, not adoption or implemented support. Begin `implementation_status` at `not-implemented`; use `partial` or `validated` only with linked, scoped execution evidence.
+- A future Python specification must also include `scope: python-rewrite`, `decision_records` (quoted wikilinks in a block list), `adoption_status`, and `implementation_status`. Use `adoption_status: proposed` for a review contract and `adopted` only with explicit adoption evidence. The existing `status` describes document review, not adoption or implemented support. Begin `implementation_status` at `not-implemented`; use `partial` or `validated` only with linked, scoped execution evidence.
 - Keep original Spatial behavior, earlier Rust design choices, proposed Python behavior, and measured results distinct. Cite pinned source revisions for source facts. An expected output calculated from a listing is not an observed result.
 - Keep candidate code in its study and shared case definitions in the example corpus; link between them. Label illustrative APIs as unimplemented. Create specification and HLS topic folders with substantive content, not empty index placeholders.
 

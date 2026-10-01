@@ -14,7 +14,7 @@ Per-IR-node summary of how each backend emits it. Draft populated from Phase 1 c
 |---|---|---|---|---|---|
 | `AccelScope` | `writeKernelClass` emits `AccelUnit.scala`/`AccelWrapper.scala`; wires Fringe I/O | `object Main { def main() { accel_scope_body } }` | host `c1->setNumArgIns/Outs/run()` | PIR `AccelMain extends PIRApp` | `accel.Enable.set(1); while (done==0)` |
 | `UnitPipe` | Inner controller module `sm_<sym>.scala` | Inlined kernel `object X_kernel { def run } ` | — (host doesn't emit accel body) | `UnitController` | traversal only (instrumentation counters) |
-| `ParallelPipe` | `ParallelPipe` RTL template | emits children in parallel (semantic parallel) | — | `UnitController` + child lanes | — |
+| `ParallelPipe` | `ParallelPipe` RTL template | emits the body through `gen(func)`; this is not a cycle/backpressure simulation | — | `UnitController` + child lanes | — |
 | `OpForeach` → `UnrolledForeach` | `UnrolledForeach` RTL with counter chain + datapathEn | `for (i <- ctr) { kernel.run(...) }` | — | `LoopController` + `CounterIter`/`CounterValid` | — |
 | `OpReduce` → `UnrolledReduce` | similar + reduction tree | similar with accumulator register | — | `LoopController` with accumulation | — |
 | `OpMemReduce` | specialized nested + accumulator writes to SRAM | nested map/acc loops | — | `LoopController` with nested map+reduce | — |
@@ -85,7 +85,7 @@ Per-IR-node summary of how each backend emits it. Draft populated from Phase 1 c
 
 ## Notes
 
-- **Scalagen is reference**: when two backends disagree, Scalagen+emul is ground truth. See [[10 - Spec/50 - Code Generation/20 - Scalagen/20 - Numeric Reference Semantics|20 - Numeric Reference Semantics]].
+- **Scalagen is one reference execution path**: use its generated behavior as evidence, and record discrepancies with hardware or the optional Scala executor explicitly. It does not automatically settle the new Python contract. See [[10 - Spec/50 - Code Generation/20 - Scalagen/20 - Numeric Reference Semantics|20 - Numeric Reference Semantics]]. The `ParallelPipe` row was corrected on 30 September 2026 against `spatial@e7a8f2f:src/spatial/codegen/scalagen/ScalaGenController.scala:187-191`; calling `gen(func)` does not itself establish a model of parallel timing or bounded channel communication.
 - **Pirgen errors at codegen**: FIFO.isEmpty/isFull/peek/numel/almostEmpty/almostFull and LineBufferNew emit `error(...)` — users see this as a late compile error.
 - **Tsthgen is semantically lossy**: all fixed-point types with fractional bits coerced to `float`/`double`. Bit-exact tests must use Scalagen, not Tsthgen.
 - **Roguegen has no DRAM**: AXI streams only; user apps with host DRAM won't compile under Rogue.

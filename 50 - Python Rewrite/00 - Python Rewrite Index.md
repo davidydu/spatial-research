@@ -17,6 +17,8 @@ Research before implementation: establish what Spatial programs mean in Python, 
 4. [[PY-E001 - Initial Example Corpus|Example corpus]] — original sources, expected behavior, and cases that can distinguish designs.
 5. [[02 - Python Open Questions|Open questions]] — unresolved choices and the evidence needed to resolve them.
 
+[[03 - Managed Research Execution|Managed research execution]] tracks the full research package, parallel work, and completion criteria while David is away.
+
 ## Documentation structure
 
 | Location | What belongs here |
@@ -24,11 +26,11 @@ Research before implementation: establish what Spatial programs mean in Python, 
 | `10 - Research/` | Questions, source readings, alternatives, experiments, limitations, and proposed conclusions |
 | `20 - Examples/` | Shared example cases: source programs, intended behavior, expected outputs and effects; competing Python forms stay in the linked studies |
 | Shared `20 - Research Notes/50 - Decision Records/` | Adopted choices and rejected alternatives; continue the existing D-number sequence |
-| `40 - Specification/` — create when needed | The Python language and compiler contract distilled from adopted decisions |
+| `40 - Specification/` — create when needed | Proposed Python language/compiler contracts for review, then adopted contracts with explicit authority |
 | `50 - HLS Lowering/` — create when research begins | Later research connecting the Python program model to HLS |
 | `60 - Validation/` | How claims will be checked; later, reproducible results and their limits |
 
-[[00 - Python Validation Plan|Validation plan]]
+[[00 - Python Validation Plan|Validation plan]] · [[01 - Python Coverage Ledger|Full-scope coverage ledger]] · [[02 - Python Research Review Log|Source checks and reviews]]
 
 **Specification status:** no detailed Python language or compiler contract has been adopted. **HLS status:** deferred until the programming model is reviewed. Create these directories with their first substantive topic pages; do not populate placeholder specifications.
 

@@ -11,6 +11,8 @@ status: active
 
 Produce a source-grounded, reviewable design for pure Python Spatial before implementing the compiler. Begin with programs people can read and explain. Use those programs to expose semantic and compiler-design choices; investigate HLS after the programming model is sufficiently clear.
 
+The current unattended research mandate is tracked in [[03 - Managed Research Execution]], including the complete deliverables, review sequence, and completion audit. David assigned the main agent to manage the work and specified GPT-6.1 Sol at extra-high reasoning for Codex subagents.
+
 The settled direction is [[D-27]]. Assume adequate implementation and maintenance capability. Do not repeat Rust-versus-Python selection merely because Rust offers stronger implementation-language checks. Capability does not replace correctness evidence or performance measurements.
 
 ## Why this documentation structure
@@ -47,7 +49,7 @@ For each topic:
 2. Read the original source and relevant historical evidence; write a dated `PY-R` study before a specification.
 3. Compare alternatives against the same example semantics. Preserve failed cases and contrary evidence.
 4. Record a proposed conclusion with its limits. When a choice is adopted, write the next shared `D-NN` decision with `scope: python-rewrite`, naming its authority and scope.
-5. Distill the adopted behavior into `40 - Specification/`, linking both the decision and the evidence. Record unresolved details explicitly.
+5. Distill the recommended behavior into `40 - Specification/`, linking both the decision proposal and the evidence, with `adoption_status: proposed`. After explicit adoption, update that field and its authority record. Record unresolved details explicitly; a review contract is not implementation approval.
 6. Define validation cases and expected behavior before compiler implementation. Add observed results only after execution.
 7. Update the index, affected questions, and [[progress-log]]. Commit coherent batches and publish the same files through the existing website.
 
@@ -57,7 +59,7 @@ Research prototypes, if useful later, must be isolated, reproducible experiments
 
 Distinguish four things in every study: behavior observed in the original source, choices made in the Rust rewrite, proposed Python behavior, and results from actual executions. Cite the source revision and lines for code claims. A calculated expected output is not a successful compiler run.
 
-Keep review status separate from implementation status. `reviewed` means the document's claims have been checked; it does not mean the API is adopted or the feature works. An adopted decision is not an implementation result. For future Python specifications, include `scope: python-rewrite`, links to the deciding records, and a separate `implementation_status`.
+Keep review status separate from adoption and implementation status. `reviewed` means the document's claims have been checked; it does not mean the API is adopted or the feature works. An adopted decision is not an implementation result. For future Python specifications, include `scope: python-rewrite`, links to the deciding records, and separate `adoption_status` and `implementation_status` fields.
 
 Identifiers are stable and never reused: `PY-R001` for studies, `PY-E001` for example collections, and `PY-Q001` for questions. Decisions continue the shared `D-NN` sequence beginning with [[D-27]]; do not create a second decision registry. New study/example filenames include their ID and topic so their stems remain unique across the vault. Split a collection only when its size justifies separate pages, keeping the original index and links.
 

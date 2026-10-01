@@ -17,6 +17,10 @@ These questions belong to the Python rewrite. The original [[20 - Open Questions
 | PY-Q006 | How should files and notebook cells reach the compiler, and how are errors reported? | Source capture contract, original locations, explicit host/capture/runtime distinction, and repair examples | Open; Phases 1–3 |
 | PY-Q007 | What feedback time is acceptable for simulation and compiler runs? | Representative workload sizes and user-facing latency targets fixed before performance measurements | Open; validation design |
 | PY-Q008 | Which hardware semantics can the later HLS backend preserve? | Per-operation lowering and behavioral checks after the Python programming model is reviewed | Deferred to Phase 4 |
+| PY-Q009 | How does the full original language fit the rewrite, beyond the three examples? | Complete source-spec crosswalk, source-family gap check, and a staged path for every intended capability | Open; full-scope research |
+| PY-Q010 | Which compiler framework and dependencies should we choose? | Compare custom Python structures and Python-native frameworks against semantic ownership, effects, diagnostics, and HLS requirements | Open; Phase 3 |
+| PY-Q011 | What are the host API, package, reproducibility, and migration contracts? | End-to-end user workflows, immutable inputs and artifacts, provenance, and compatibility policy | Open; Phase 3 |
+| PY-Q012 | How should banking, scheduling, optimization, and design-space exploration divide between Spatial and HLS? | Legality versus optimization responsibilities, preserved directives, analysis boundaries, and report-based validation | Open; Phases 3–4 |
 
 ## Resolved direction
 

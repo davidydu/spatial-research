@@ -53,7 +53,7 @@ This is **not** a scalar counter. The body — emitted by `ScalaGenController.em
 
 **`AccumFMA` and `AccumUnk` throw `Exception("This shouldn't happen!")`** (`:49-50`). The invariant: `accumTransformer` splits FMA-shaped accumulation into `RegAccumFMA` before scalagen, and `accumAnalyzer` rejects `AccumUnk` earlier. If an unsplit `AccumFMA` reaches scalagen, **the simulator crashes**. See Q-scal-08.
 
-`RegAccumFMA(reg, m0, m1, en, first)` (`ScalaGenReg.scala:57-64`) is the FMA-shaped accumulator: on first iter `m0 * m1`; subsequent `m0 * m1 + reg.value`, then `reg.set(...)`. **Note**: like `FixFMA` (`ScalaGenFixPt.scala:150`), this is *not* a fused-precision FMA — the multiply rounds before the add. Hardware FMA preserves intermediate precision; scalagen does not.
+`RegAccumFMA(reg, m0, m1, en, first)` (`ScalaGenReg.scala:57-64`) is the FMA-shaped accumulator: on first iter `m0 * m1`; subsequent `m0 * m1 + reg.value`, then `reg.set(...)`. Like `FixFMA` (`ScalaGenFixPt.scala:150`), Scalagen expresses separate multiply and add operations. **Correction, 30 September 2026:** this alone does not prove a hardware precision mismatch. The generic fixed-point template also calls multiply with truncation/wrapping and then adds (`spatial@e7a8f2f:fringe/src/fringe/templates/math/Math.scala:844-867`); specialized accumulator and floating-point paths require their own checks. See [[60 - Reduction and Accumulation]].
 
 ## Bit selectors — Mux, OneHotMux, PriorityMux
 
