@@ -31,7 +31,7 @@ David approved the seven-slide structure and requested a vivid web presentation.
 | 3 | Python around the kernel | Ordinary host Python beside captured kernel source | 1:30 | 4:15 |
 | 4 | A program the compiler understands | Read source → resolve names → check meaning → checked program | 1:30 | 5:45 |
 | 5 | Values and state both matter | Scale control and a separate two-queue branch illustration | 1:30 | 7:15 |
-| 6 | The design has a place to live | Research repository, website and five implementation blueprints | 1:15 | 8:30 |
+| 6 | Research and documentation | Research repository, website and five implementation blueprints | 1:15 | 8:30 |
 | 7 | One complete program through Python | Accept the program, explain mistakes and check behavior; then HLS | 1:30 | 10:00 |
 
 The scripts below mirror the presentation’s speaker notes. Italicized note paragraphs are presentation cues. They include room for pointing, interactive examples and one short documentation tour. Timing is a delivery target, not a measured rehearsal. Keep citations and detailed qualifications in the notes/source panel; retain the short status labels on screen.
@@ -154,9 +154,9 @@ def tiled_scale(src: In[Dram[Int, 32]],
 
 **Boundary:** The scaled values and miniature queue transitions illustrate expected behavior; they are not results from an implemented Python Spatial compiler. The small arithmetic values do not exercise overflow. The queue controls operate on nonempty queues; blocking and scheduling are outside this illustration. The full E3 case and advanced concurrency contract remain in the linked research.
 
-## Slide 6 — The design has a place to live
+## Slide 6 — Research and documentation
 
-**On screen:** “The design has a place to live.” The review path is **What we write → What it means → How we would build it → What supports the proposal**. A documentation preview lists the five blueprints. The status distinguishes completed studies, proposed contracts and bounded research probes from the next implementation and validation work.
+**On screen:** “Research and documentation.” The review path is **What we write → What it means → How we would build it → What supports the proposal**. A documentation preview lists the five blueprints. The status distinguishes completed studies, proposed contracts and bounded research probes from the next implementation and validation work.
 
 **Visual action:** Open the implementation-design page for a brief documentation tour, then return to the presentation tab. The visible links also lead to examples, contracts, evidence, both repositories and this full script. The tour illustrates traceability; avoid treating page count as support coverage.
 
