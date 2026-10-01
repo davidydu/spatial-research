@@ -4,7 +4,7 @@ title: "Managed Python Spatial research"
 scope: "Complete pre-implementation research and professor-review package"
 project: spatial-python
 date: 2026-09-30
-status: active
+status: complete
 ---
 
 ## Mandate
@@ -64,7 +64,7 @@ Identifiers reserve study scope, not a claim that the documents are complete. Pu
 | R09 | Conformance and performance plan with independent references, boundary/composition/negative cases, declared workload targets, and reproducibility | Research accepted; see completion audit |
 | R10 | Implementation plan in vertical slices that advances toward the full rewrite, with dependencies, entry/exit checks, and approval boundary | Research accepted; see completion audit |
 | R11 | One coherent architecture recommendation, shared decision proposal, and a short professor brief explaining the big picture and tradeoffs | Research accepted; see completion audit |
-| R12 | Independent review findings resolved, source checks documented, links/schemas/site build checked, commits pushed, live pages verified | Reviews repaired; final validation/publication pending |
+| R12 | Independent review findings resolved, source checks documented, links/schemas/site build checked, commits pushed, live pages verified | Complete; checks passed and full package published |
 
 Research completion means these artifacts answer the design questions with evidence and explicit limits. It does not mean a compiler exists or that unrun vendor experiments passed. Do not substitute an introductory subset for the full architecture. If a construct needs a later implementation stage, identify its representation, semantic obligations, intended lowering path, and acceptance evidence now. If a real research blocker prevents doing that, keep the requirement open.
 
@@ -84,6 +84,6 @@ Use pinned local source first and primary external documentation when needed. Is
 | 2 | Complete 106-document/124-path crosswalk, architecture/framework and host/validation proposals; manager acceptance recorded | Future implementation measurements and feature evidence |
 | 3 | R008 advanced protocols and R009–011 full-family HLS mappings reviewed, with explicit target/profile gates | Locked tool/device, certificates, vendor/RTL/resource evidence during implementation |
 | 4 | Independent architecture, numeric and protocol/HLS findings repaired and reread | Retain counterexamples as future acceptance cases |
-| 5 | D-28, professor brief, four proposed contracts, S0–S9 roadmap and full requirement audit prepared | Finish integrated validation, commit/push, deploy and verify live content |
+| 5 | D-28, professor brief, four proposed contracts, S0–S9 roadmap and full requirement audit validated and published | Professor review before production implementation |
 
-[[06 - Python Research Completion Audit]] records the requirement-by-requirement evidence. All detailed architecture/contracts remain proposed under D-28, and production implementation is not started. The managed goal remains active through final publication verification; research acceptance never substitutes for implementation evidence.
+[[06 - Python Research Completion Audit]] records the requirement-by-requirement evidence. All detailed architecture/contracts remain proposed under D-28, and production implementation is not started. All R01–R12 research requirements are complete, including successful deployment and direct live-content checks recorded in the audit. Research acceptance does not substitute for implementation evidence.

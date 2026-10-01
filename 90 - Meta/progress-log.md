@@ -9737,3 +9737,7 @@ Recorded probes and independent reruns establish bounded arithmetic, source-capt
 - Current research continues beyond that published checkpoint: full coverage, architecture/dependencies, advanced protocols, HLS design, and implementation roadmap. Publication is not the full research completion gate.
 
 Final local checks: 40 changed/new Markdown documents, 378 new wikilinks, 424 pinned citation ranges, 29 Python snippets parsed without execution, and exact 106-document coverage passed. Quartz built 543 inputs into 1,172 files; all 1,844 audited internal links and anchors across 40 current-route pages resolve. Whitespace checks and the frozen D-26 comparison pass.
+
+## 2026-09-30 — Full Python package publication verified
+
+Research commit `42c898d` was pushed under `davidydu`; [Pages deployment 36823693022](https://github.com/davidydu/spatial-research-site/actions/runs/36823693022) succeeded. Direct HTTP checks verified the new Python index, professor brief, D-28, numeric contract, numeric-lowering study, and completion audit. All R01–R12 research requirements are complete. The managed plan and index now point to the published professor-review package. Detailed architecture remains proposed and implementation has not started.

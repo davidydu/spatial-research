@@ -7,7 +7,7 @@ date_started: 2026-09-30
 
 Research before implementation: establish what Spatial programs mean in Python, decide how the compiler represents and checks them, then study HLS lowering.
 
-**Current phase:** full-language research package reviewed; final publication checks underway. Pure Python is the agreed direction. The proposed architecture uses captured kernels, Python-owned semantics and simulation, custom Spatial dialects on xDSL, and a checked HLS backend. [[D-28]] records the recommendation for professor review. No Python compiler implementation is claimed.
+**Current phase:** full-language research package reviewed and published for professor review. Pure Python is the agreed direction. The proposed architecture uses captured kernels, Python-owned semantics and simulation, custom Spatial dialects on xDSL, and a checked HLS backend. [[D-28]] records the recommendation for professor review. No Python compiler implementation is claimed.
 
 ## Read first
 
@@ -17,7 +17,7 @@ Research before implementation: establish what Spatial programs mean in Python, 
 4. [[04 - Python Implementation Roadmap|Implementation sequence]] — complete vertical paths, dependencies, and evidence gates after approval.
 5. [[02 - Python Open Questions|Question register]] — research answers, adoption status, and remaining evidence.
 
-[[03 - Managed Research Execution|Managed research execution]] tracks the full research package, parallel work, and completion criteria while David is away.
+[[03 - Managed Research Execution|Managed research execution]] records the completed research package, parallel work, and completion evidence.
 
 [[01 - Python Research Plan|Research method]] · [[PY-R001 - Programming Model Study|Paired Python programs]] · [[PY-E001 - Initial Example Corpus|Shared example cases]]
 
