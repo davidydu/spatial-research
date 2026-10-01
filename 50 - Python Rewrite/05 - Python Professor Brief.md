@@ -23,7 +23,7 @@ flowchart LR
 
 Use normal Python for loading data, choosing sizes, running experiments, and checking results. Write accelerator kernels in a defined Python-syntax subset with Spatial types, memories, loops, reductions, and streams. The compiler reads that kernel source; it does not run the kernel as ordinary host Python.
 
-That lets us preserve the information hardware needs: exact numeric types, when storage changes, which branch consumes a value, and which operations may run together. A builder supports generated programs through the same checks. The proposed first input routes are source files and raw notebook cells; their API names are still illustrative.
+That lets us preserve the information hardware needs: exact numeric types, when storage changes, which branch consumes a value, and which operations may run together. A builder supports generated programs through the same checks. The proposed first input routes are source files and raw notebook cells; their proposed API and checking rules are now recorded in the implementation design.
 
 ## What we learned from the research
 
@@ -42,7 +42,7 @@ Exact language behavior may require adapters or custom helpers on some HLS targe
 
 ## What is ready, and what comes next
 
-The research package proposes the architecture, language/state/numeric contracts, HLS division of responsibility, full-scope coverage, validation targets, and implementation sequence. The documentation repo is the source of truth; the website publishes the same files with links back to the evidence.
+The research package now includes five implementation blueprints: source/checking, numbers, state/HLS, package/validation, and libraries. They specify algorithms and interfaces, with small reproducible experiments and a cross-review log. The architecture, semantic changes and implementation sequence remain proposed. The documentation repo is the source of truth; the website publishes the same files with links back to the evidence.
 
 No Python Spatial compiler or vendor hardware flow has been validated by this research. The first implementation step, after approval, is one complete path: read a composed memory kernel, check it, simulate it, explain errors, and save reproducible artifacts. We then expand reductions, numeric types, and stateful programs while beginning HLS on the checked subset.
 
@@ -50,4 +50,4 @@ No Python Spatial compiler or vendor hardware flow has been validated by this re
 
 ## Useful pages to show
 
-[[00 - Python Rewrite Index|Research home]] · [[D-28|Architecture decision]] · [[01 - Python Coverage Ledger|Full-language coverage]] · [[04 - Python Implementation Roadmap|Implementation sequence]] · [[02 - Python Research Review Log|Evidence and review findings]]
+[[00 - Implementation Design Index|Implementation design]] · [[07 - Python Implementation Readiness Audit|Readiness review]] · [[00 - Python Rewrite Index|Research home]] · [[D-28|Architecture decision]] · [[01 - Python Coverage Ledger|Full-language coverage]] · [[04 - Python Implementation Roadmap|Implementation sequence]] · [[02 - Python Research Review Log|Evidence and review findings]]

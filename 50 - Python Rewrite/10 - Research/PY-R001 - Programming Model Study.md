@@ -81,6 +81,8 @@ Proposed interpretation: Python executes the construction code once. Each contex
 
 The follow-up proposal makes `Int` wrapping signed 32-bit data and separates logical operation order from scheduling; see [[PY-R002 - Numeric and Reduction Semantics]] and [[PY-R003 - Control Memory and Effects]]. The builder has more explicit construction machinery; the source form needs a documented distinction from ordinary Python execution. E1 alone does not establish a winner.
 
+The 2026-10-01 implementation review makes Index-to-Int conversion explicit in the examples below and uses the registered Reg initializer. Numeric values and expected outputs are unchanged. These remain proposed source/builder spellings; the closed source grammar is in [[10 - Source Checker and IR Blueprint]].
+
 ## E2: two proposed spellings of scalar reduction
 
 Original source: `spatial@e7a8f2f:test/spatial/tests/feature/control/ReduceTiny.scala:7-15`. Preserve its `1 × 16` SRAM, writes of indices `0` through `15`, scalar reduction with addition and identity `0`, and scalar output. The source-derived expected result is `120`.
@@ -94,9 +96,9 @@ The identity and accumulator are distinct concepts in the original implementatio
 def scalar_reduce(result: Out[Int]):
     values: Sram[Int, 1, 16]
     for i in foreach(0, 16):
-        values[0, i] = i
+        values[0, i] = embed(Int, i)
 
-    def contribution(i: Int) -> Int:
+    def contribution(i: Index) -> Int:
         return values[0, i]
 
     total: Int = reduce(0, 16, identity=0, combine="add",
@@ -114,7 +116,7 @@ result = k.output_scalar("result", Int)
 values = k.sram(Int, 1, 16)
 
 with k.foreach(0, 16) as i:
-    values.at(0, i).write(i)
+    values.at(0, i).write(k.embed(Int, i))
 
 with k.reduce(0, 16, identity=0, combine="add") as reduction:
     reduction.contribute(values[0, reduction.index])
@@ -143,14 +145,14 @@ The source uses `Reduce(Reg[Int])`, not `Reduce(0)`. The explicit-accumulator ov
 def fifo_branch(count1: In[Int], count2: In[Int], result: Out[Int]):
     fifo1: Fifo[Int, 128]
     fifo2: Fifo[Int, 128]
-    accumulator: Reg[Int] = 0
+    accumulator: Reg[Int] = reg(reset=0)
 
     for i in foreach(0, count1):
-        fifo1.enq(i)
+        fifo1.enq(embed(Int, i))
     for i in foreach(0, count2):
-        fifo2.enq(i)
+        fifo2.enq(embed(Int, i))
 
-    def contribution(i: Int) -> Int:
+    def contribution(i: Index) -> Int:
         if fifo1.is_empty():
             return fifo2.deq()
         else:
@@ -176,9 +178,9 @@ fifo2 = k.fifo(Int, 128)
 accumulator = k.reg(Int, reset=0)
 
 with k.foreach(0, count1) as i:
-    fifo1.enq(i)
+    fifo1.enq(k.embed(Int, i))
 with k.foreach(0, count2) as i:
-    fifo2.enq(i)
+    fifo2.enq(k.embed(Int, i))
 
 with k.reduce(0, count1 + count2, identity=None,
               accumulator=accumulator, combine="add") as reduction:

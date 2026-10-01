@@ -7,15 +7,16 @@ date_started: 2026-09-30
 
 Research before implementation: establish what Spatial programs mean in Python, decide how the compiler represents and checks them, then study HLS lowering.
 
-**Current phase:** full-language research package reviewed and published for professor review. Pure Python is the agreed direction. The proposed architecture uses captured kernels, Python-owned semantics and simulation, custom Spatial dialects on xDSL, and a checked HLS backend. [[D-28]] records the recommendation for professor review. No Python compiler implementation is claimed.
+**Current phase:** full-language architecture research and the [[07 - Python Implementation Readiness Audit|implementation-readiness review]] are complete as proposed research. [[00 - Implementation Design Index]] now supplies concrete algorithms, interfaces and acceptance cases for every family. Pure Python is the agreed direction. The proposed architecture uses captured kernels, Python-owned semantics and simulation, custom Spatial dialects on xDSL, and a checked HLS backend. [[D-28]] records the recommendation for professor review. No Python compiler implementation is claimed.
 
 ## Read first
 
 1. [[D-27|Direction and authority]] — what the professor and David have settled.
 2. [[05 - Python Professor Brief|Professor brief]] — the proposal, progress, main tradeoff, and approval boundary.
 3. [[D-28|Architecture recommendation]] — selected design, alternatives, and reversal conditions.
-4. [[04 - Python Implementation Roadmap|Implementation sequence]] — complete vertical paths, dependencies, and evidence gates after approval.
-5. [[02 - Python Open Questions|Question register]] — research answers, adoption status, and remaining evidence.
+4. [[00 - Implementation Design Index|Implementation design]] — concrete algorithms, interfaces, libraries, and independent acceptance cases.
+5. [[04 - Python Implementation Roadmap|Implementation sequence]] — complete vertical paths, dependencies, and evidence gates after approval.
+6. [[02 - Python Open Questions|Question register]] — research answers, adoption status, and remaining evidence.
 
 [[03 - Managed Research Execution|Managed research execution]] records the completed research package, parallel work, and completion evidence.
 
@@ -53,6 +54,7 @@ These distill the studies for review. Document review, design adoption, and impl
 | `10 - Research/` | Questions, source readings, alternatives, experiments, limitations, and proposed conclusions |
 | `20 - Examples/` | Shared example cases: source programs, intended behavior, expected outputs and effects; competing Python forms stay in the linked studies |
 | Shared `20 - Research Notes/50 - Decision Records/` | Proposed and adopted choices with authority, alternatives, and reversal conditions; continue the existing D-number sequence |
+| `30 - Implementation Design/` | Concrete algorithms, records, APIs, module ownership, library recipes, and implementation acceptance cases |
 | `40 - Specification/` | Proposed Python language/compiler contracts for review, then adopted contracts with explicit authority |
 | `50 - HLS Lowering/` | Mapping the checked Python program to hardware plans, HLS, and target validation |
 | `60 - Validation/` | How claims will be checked; later, reproducible results and their limits |

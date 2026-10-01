@@ -109,3 +109,7 @@ If a target fails, profile the relevant stage and improve data layout, worklists
 Provide a migration guide by construct and example. Each entry states the original source behavior, proposed Python meaning, preserved case, changed case, and expected diagnostic or explicit replacement. The coverage ledger accounts for old runtime/codegen infrastructure that is replaced rather than ported. Do not build an automatic Scala translator before the language contract exists.
 
 The first usable vertical slice must complete capture, checking, reference execution, diagnostics, and reproducible invocation for a small composed kernel. Later slices add full numeric/state/protocol families and hardware evidence. A parser-only milestone can be useful progress, but it is not language support. Professor approval of the detailed proposal is the boundary before production compiler work.
+
+## Implementation-readiness supplement — 1 October 2026
+
+[[40 - Package and Conformance Blueprint]] now defines public workflow signatures, module ownership, SpatialJSON-v1 artifact kinds (including unchecked input), canonical identities, exact buffer ABI/session rules, diagnostics and fixture schema. [[30 - State Simulator and HLS Blueprint]] adds resumable QuiescentUnknown and explicit source-visible address bindings. [[07 - Python Implementation Readiness Audit]] records method experiments and the still-unrun production/performance gates.

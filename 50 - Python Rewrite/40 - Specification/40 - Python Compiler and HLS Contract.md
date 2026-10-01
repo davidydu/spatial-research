@@ -36,7 +36,7 @@ flowchart TD
     H --> V[Vendor synthesis and RTL validation]
 ```
 
-This is a proposed architecture, not an implemented pipeline. xDSL is recommended for inspectable Python region/SSA infrastructure; its exact adopted version and dependency hashes must be locked before implementation. Custom Python IR is the fallback if measured framework costs or representation conflicts justify it. Native MLIR adapters remain possible; native storage by itself does not move Python-defined Spatial rules to native code. No Rust semantic core is proposed.
+This is a proposed architecture, not an implemented pipeline. xDSL is recommended for inspectable Python region/SSA infrastructure; the proposed CPython/xDSL/dependency lock and clean-wheel reproduction are now fixed in [[40 - Package and Conformance Blueprint]]. Custom Python IR is the fallback if measured framework costs or representation conflicts justify it. Native MLIR adapters remain possible; native storage by itself does not move Python-defined Spatial rules to native code. No Rust semantic core is proposed.
 
 ## Representation and verification
 
@@ -66,7 +66,7 @@ Reference component models serialize as versioned model IDs with code/dependency
 
 ## HLS responsibility
 
-The first backend family is AMD Vitis HLS, with one release/part/clock/ABI profile locked at implementation time. Research documents retain the displayed versions of the primary documentation they used; no single unrestricted release compatibility is claimed.
+The first backend family is AMD Vitis HLS, with initial proposed profile `vitis-2025.1-z020-10ns` defined in [[30 - State Simulator and HLS Blueprint]]. That historical-tool baseline is a target for future Python validation, not a current Python support claim. Research documents retain the displayed versions of the primary documentation they used; no single unrestricted release compatibility is claimed.
 
 Spatial chooses numerical normalization, guards, reduction topology, aliases, storage lifetime, dependency/protocol order, semantic capacity, host ABI, and hard versus soft constraints. HLS tools bind and schedule legal emitted structures and report achieved behavior/resources. A pragma request is not achieved II, and achieved II is not semantic equivalence.
 
@@ -79,6 +79,10 @@ Memory planning must preserve logical bounds and backing identity while deriving
 Numeric lowering must preserve normalization at each declared operation. Select a vendor primitive only with a matching adopted profile or a proven adapter/domain restriction; otherwise emit a checked bit/helper implementation or diagnose target capability. Ordinary multiplication-plus-add is not implicit FMA. Resource/width/time limits are target constraints, not silent numerical changes.
 
 Hardware faults require static proof of impossibility, validated invocation preconditions, or synthesizable guards and an error/drain protocol. A simulation exception or C assertion alone is insufficient. Earlier committed external writes remain committed. Device errors map operation IDs back to captured source; outputs are marked incomplete.
+
+## Implementation blueprints
+
+[[00 - Implementation Design Index]] links the concrete source/checker, numeric, state/HLS, package and library designs. They include exact structured-region/token verification, pass requirement transfer, SpatialJSON-v1, source/builder/serialized unchecked input, public workflow signatures, dependency hashes and independently specified fixtures. S0 implements these choices after adoption instead of inventing a new schema or frontend contract. The initial target uses conservative capability records; every newly enabled vendor route still requires its own executable evidence.
 
 ## Evidence and implementation gates
 

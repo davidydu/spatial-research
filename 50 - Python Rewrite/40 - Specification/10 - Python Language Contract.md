@@ -38,12 +38,12 @@ Helpers and components have typed arguments, region results, explicit dependenci
 
 ## Proposed source grammar boundary
 
-This is the proposed accepted-form policy, not an implemented parser. Concrete intrinsic names in the examples remain illustrative until the approved API inventory is frozen at S0. Adding a syntactic form requires a meaning and diagnostic rule, not merely acceptance by Python's parser.
+This is the proposed accepted-form policy, not an implemented parser. [[10 - Source Checker and IR Blueprint]] now fixes the proposed grammar, parametric intrinsic families, signatures and checking algorithms. S0 implements that design after approval; earlier competing sketches retain explicit migration notes. Adding a syntactic form requires a meaning and diagnostic rule, not merely acceptance by Python's parser.
 
 | Form | Contract |
 |---|---|
 | Modules and definitions | Declarative source dependencies, registered kernel/helper markers, typed parameters, explicit meta parameters, nested typed helpers, and registered immutable source constants |
-| Declarations and writes | Typed scalar/value/storage declarations; assignment to declared names, output ports, registers, and indexed storage under their declared categories; augmented assignment with its distinct order |
+| Declarations and writes | Immutable annotated scalar/value bindings; explicit storage/Reg allocation; mutation only through writable output ports, registers and indexed storage; augmented assignment retains its distinct order |
 | Expressions | Names, exact numeric/Boolean literals, registered typed operations/calls, field/index/view access, typed aggregate construction, and lazy conditional expressions |
 | Boolean control | Conditions require Bool; `and`/`or` short-circuit through regions, `not` negates Bool; no implicit integer/buffer truth conversion |
 | Comparisons | Typed comparisons; chained comparisons evaluate shared middle operands once and later operands only while the chain remains true |
@@ -54,6 +54,12 @@ This is the proposed accepted-form policy, not an implemented parser. Concrete i
 Initially require one assignment target per statement; destructuring/chained assignment can be expressed with explicit temporary values and writes. This is a surface limit, not removal of an original accelerator capability. Do not silently treat unsupported syntax as host execution. Registered source operations cover the full family inventory in R005; a feature may have a defined contract before its implementation stage.
 
 Numeric tokens accept Python-style decimal/base-prefixed integer digits and valid digit-separator underscores; base prefixes are `0b`, `0o`, and `0x`. Decimal real forms include decimal points and base-ten `e`/`E` exponents, with separators only where Python permits them. Parse digits and powers into exact integers/rationals, retaining unary sign and expression structure. Hexadecimal floating literals, imaginary literals, and a bare NaN/infinity literal are excluded; use explicit typed special-value/bit constructors. Source-size and expansion budgets diagnose excessive inputs without silently rounding them. Strings are compile-time descriptors, formatting templates, or acquired host data; they do not imply dynamically allocated accelerator strings.
+
+## Implementation-readiness refinements, 2026-10-01
+
+The source/checker blueprint supplies the closed meta schema, name resolution, bidirectional type checks, helper/component signatures and owned graph records. Values are immutable; recurrence uses explicit Reg/storage. Helpers return at the final statement or through an exhaustive final if/else. Borrowed views may return only with declared owner/lifetime mapping; callee-local handles cannot escape ordinary calls. Index-to-accelerator integer conversion is explicit `embed(Int, index)`.
+
+Empty Vec/Tuple/Record values have zero data bits while retaining type and logical identity. A masked queue result instead uses `MaskedVec(N,T)`: inactive lanes are unavailable, not numerical zeros. Extraction requires an active lane or faults; explicit `materialize(default)` supplies values before ordinary packing/arithmetic. Canonical zero payload for inactive serialized lanes grants no read permission. See the blueprint for exact registry rules and source/builder acceptance cases.
 
 ## Meaning of represented execution
 

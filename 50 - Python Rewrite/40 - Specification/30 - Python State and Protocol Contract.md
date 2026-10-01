@@ -40,6 +40,7 @@ Ordered conflicting memory effects preserve order. Concurrent tasks require prov
 | Resource or controller | Proposed rule |
 |---|---|
 | Ordered FIFO/LIFO | Bounded enqueue/dequeue; active overflow/underflow faults. FIFO removes oldest; LIFO removes newest. Observation does not consume |
+| FIFOReg | Capacity-one queue, initially/reset empty; stored reset bits do not seed a token. Read consumes, write produces; ordered full/empty faults, communicating full/empty waits |
 | Communicating channel | Same bounded storage with suspend/resume and explicit close. Open-empty means wait, not end. Capacity and source-visible status are semantic |
 | Vector queue/stack operations | Compact active lanes in increasing lane order and commit an atomic batch. Scalar removal order determines returned vector order. Explicit simultaneous batches read old state, may reuse slots freed by their own pops, and do not invent empty bypass |
 | Priority and round-robin | Priority selects the first eligible nonempty candidate; caller-index rotation and stateful round-robin are different operations. Exactly one selected consume. Conditions are captured once; readiness is checked at grant |
@@ -70,7 +71,11 @@ Graceful stop halts admission and drains already admitted work. Stop-sensitive S
 
 Cancellation withdraws unissued requests at defined checkpoints. Issued external transactions must complete/acknowledge or use a declared supported abort protocol. Already committed writes/tokens are not rolled back. Cleanup releases owned resources after drain, closes endpoints consistently, and uses new generations for restart. Immediate process termination is not a hardware cancellation model.
 
-Completed, waiting on an open environment, exhausted/closed input, protocol fault, deadlocked closed system, cancelled, and observation-budget-exceeded are distinct outcomes. Feedback requires explicit initial tokens/state. A timeout does not prove deadlock or nontermination. General liveness requires stated fairness/environment assumptions; bounded exploration supplies evidence only for its finite instances.
+Completed, WaitingEnvironment with an actual enabling dependency path, QuiescentUnknown when that dependency is unresolved, exhausted/closed input, protocol fault, certified closed-component deadlock, cancelled, and observation-budget-exceeded are distinct outcomes. All producers must close and drain accepted sends before the channel is closed; End also requires its committed tokens drained. Feedback requires explicit initial tokens/state. A timeout does not prove deadlock or nontermination. General liveness requires stated fairness/environment assumptions; bounded exploration supplies evidence only for its finite instances.
+
+## Concrete implementation design
+
+[[30 - State Simulator and HLS Blueprint]] specifies continuations, captured requests, unified arbitration, fair execution, cleanup obligations, exact address/quota allocation and finite memory/HLS planning algorithms. The package blueprint fixes invocation ownership and resumable outcomes. Zero-data-bit aggregates retain logical cells/init/lifetime without a physical byte access. Dynamic addresses use explicit environment values or the named first-fit reference profile; address bits alone never authorize access.
 
 ## Acceptance
 

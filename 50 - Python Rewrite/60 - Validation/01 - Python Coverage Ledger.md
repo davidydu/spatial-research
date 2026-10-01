@@ -37,6 +37,10 @@ Pinned `spatial@e7a8f2f7f776dd0c5ac7fc03f16b3ed4d97021f0` contains 58 `src/spati
 
 The check includes generic scalar/aggregate/packing/math/RNG/debug; domains/FSM/forever/folds/timing; views/init/shifts/windows/dynamic allocation/dense/sparse transfer; queues/arbitration/merge/locks; independent stream fields versus atomic records, frames/buses/components; ordinary host arrays/tensors/files; libraries/lexical guards; conservative banking/retiming; models/DSE/ABI/target replacement. R005's scope choices and revisions require professor review. No original simulator/backend is universally authoritative.
 
+## Implementation-design routing, 2026-10-01
+
+Each G01–G18 gate now maps to concrete source/IR/checking, reference execution, target method and independent cases in [[07 - Python Implementation Readiness Audit#Full-family implementation crosswalk|the implementation crosswalk]]. Apply that mapping to every gate listed in each document row below and to the corresponding R005 source-family inventory. [[50 - Library and Migration Recipes]] additionally inventories the individual exported library families, including LowPrecision, HostML and LinearAlgebra. This adds an implementation-design destination without changing historical document/path counts or claiming executable support.
+
 ## Per-document crosswalk
 
 | ID | Original document | Substantive destination | Proposed disposition and obligation | Shared slices | Required gate |

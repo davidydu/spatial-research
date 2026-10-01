@@ -9741,3 +9741,11 @@ Final local checks: 40 changed/new Markdown documents, 378 new wikilinks, 424 pi
 ## 2026-09-30 — Full Python package publication verified
 
 Research commit `42c898d` was pushed under `davidydu`; [Pages deployment 36823693022](https://github.com/davidydu/spatial-research-site/actions/runs/36823693022) succeeded. Direct HTTP checks verified the new Python index, professor brief, D-28, numeric contract, numeric-lowering study, and completion audit. All R01–R12 research requirements are complete. The managed plan and index now point to the published professor-review package. Detailed architecture remains proposed and implementation has not started.
+
+## 2026-10-01 — Python implementation-readiness design
+
+- Continued research before implementation with three Codex reviewers, then cross-author review and parent reproduction. [[07 - Python Implementation Readiness Audit]] records gaps and repairs separately from the earlier architecture audit.
+- Added [[00 - Implementation Design Index]] and five blueprints covering source/checker/IR, numeric algorithms and certificates, state/simulation/HLS, package/artifacts/conformance, and individual library recipes.
+- Integrated explicit value/Index/component rules, MaskedVec, empty mapper effects, FIFOReg, issued-operation cancellation, multi-producer close, wait certificates, and quota/address allocation distinctions into proposed contracts. Detailed adoption remains pending professor review.
+- Reproduced bounded framework, exact arithmetic, protocol, artifact and library probes, plus two identical curated xDSL wheels. The validation archive contains sources/results/manifest; no production compiler or Python-generated HLS result is claimed.
+- Updated the professor brief, implementation roadmap and full-family routing while preserving original/Rust sources and frozen D-26. Publication verification is recorded in the readiness audit.

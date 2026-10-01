@@ -15,6 +15,12 @@ The intended result is a Python language frontend, Python semantic compiler, and
 
 The implementation contract will combine the reviewed programming-model recommendation, numeric/effect/protocol rules, compiler architecture, host workflow, and HLS studies. A later change to an adopted contract needs a dated decision and migration cases. Team capability is assumed adequate; the order below follows semantic dependencies and feedback value rather than scarce language expertise.
 
+## Concrete design inputs, 2026-10-01
+
+[[00 - Implementation Design Index]] now provides the implementation methods behind this roadmap. S0 follows [[40 - Package and Conformance Blueprint#Concrete S0 and S1 implementation order|the package entry checklist]] and [[10 - Source Checker and IR Blueprint]]: create the source-only package, implement owned schemas and canonical import, type/binding/effect checks, structured verifier and fixtures, then integrate S1. The CPython/xDSL dependency baseline and reproducible wheel route are specified. S2–S3 use the numeric blueprint; S4–S6 use the state/HLS blueprint; libraries expand through the explicit migration recipes.
+
+The first proposed target is `vitis-2025.1-z020-10ns`; historical Rust logs establish its identifiers only. S7 must establish new Python-generated evidence. Larger-device or other-release profiles can be added without reducing the full language scope. [[07 - Python Implementation Readiness Audit]] records the stronger review, its repairs and the still-unrun production/target gates.
+
 ## Slice sequence
 
 | Slice | User-visible result | Required scope | Exit evidence |

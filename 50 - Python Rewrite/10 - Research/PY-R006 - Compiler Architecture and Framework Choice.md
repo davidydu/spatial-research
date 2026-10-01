@@ -286,3 +286,7 @@ Observed first-run measurements:
 | 30,000 | 1.9393 | 0.9254 | 1.0959 | 0.7649 | 84.36 |
 
 Neither probe verifies Spatial token linearity, alias safety, faults, lazy task scheduling, numeric descriptors, full semantic serialization, arbitrary dialect interoperability, or HLS. Those remain acceptance obligations, not inferred successes.
+
+## Implementation-readiness supplement — 1 October 2026
+
+[[10 - Source Checker and IR Blueprint]] now defines closed operation/type/region registries, exact token/dominance verification, requirements, conservative analyses and pass transfer. [[40 - Package and Conformance Blueprint]] fixes the proposed runtime/dependency baseline and reproducible curated xDSL wheel. Nested-region framework and installed-wheel probes add bounded evidence; the framework still does not verify Spatial semantics.
