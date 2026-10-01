@@ -25,15 +25,15 @@ Every file has a frontmatter block. `type` is required; other fields depend on `
 |---|---|---|
 | `moc` | Top-level / folder-level indexes ([[00 - Index]]) | — |
 | `design` | One-off design docs ([[2026-04-21-spatial-spec-design]]) | `status` |
-| `plan` | Execution plans under `90 - Meta/plans/` | `status`, `scope`, `date` |
+| `plan` | Research, validation, and execution plans | `status`, `scope`, `date` |
 | `runbook` | Operational session-start docs ([[workflow]]) | `load_priority` |
 | `conventions` | This file — style / frontmatter / citation rules | `date` |
 | `log` | Append-only logs ([[progress-log]]) | — |
 | `open-questions` | The unresolved-questions tracker | `date_started` |
 | `hls-mapping-index` | Index file for `30 - HLS Mapping/` | `date_started` |
 | `coverage` | Phase 1 subagent outputs | `subsystem`, `paths`, `file_count`, `date`, `verified` |
-| `deep-dive` | Phase 2 raw reading notes | `topic`, `source_files`, `session`, `status`, `feeds_spec` |
-| `spec` | Authoritative spec entries under `10 - Spec/` | `concept`, `source_files`, `source_notes`, `hls_status`, `depends_on`, `status` |
+| `deep-dive` | Source readings and comparative studies | `topic`, `source_files`, `session`, `status`, `feeds_spec` |
+| `spec` | Original Spatial entries under `10 - Spec/`; future adopted Python contracts under `50 - Python Rewrite/40 - Specification/` | `concept`, `source_files`, `source_notes`, `hls_status`, `depends_on`, `status`; Python additions below |
 | `hls-mapping` | Non-index entries under `30 - HLS Mapping/` (per-construct) | `construct`, `spec_entry`, `category` |
 | `cross-ref` | Navigation matrix: directory → concept mapping, pass orders, node↔codegen matrices | — |
 | `decision-record` | Decision records under `20 - Research Notes/50 - Decision Records/` | `decision-id`, `related-questions`, `status`, `date` |
@@ -41,7 +41,7 @@ Every file has a frontmatter block. `type` is required; other fields depend on `
 | `research` | Per-angle research notes under `D-NN-research/` | `decision`, `angle`; **from D-26 onward also** `discriminates`, `sources`, `verified`, `status` |
 | `research-note` | Free-standing research notes (legacy; prefer `research` or `deep-dive`) | `topic`, `date`, `status` |
 | `decision` / `handoff` | Legacy one-off notes; do not create new ones | — |
-| `reference` | Manifests of external material (e.g. [[reference-clones]]) | `date` |
+| `reference` | Source manifests and common example definitions | `date` |
 | `python-mapping-index` | Index of `35 - Python Surface Mapping/` | `date_started` |
 | `python-mapping` | Per-construct entries under `35 - Python Surface Mapping/` | `construct`, `spec_entry`, `grammar_rule`, `per_style`, `obligations_at_risk`, `raters`, `verified`, `status` |
 
@@ -100,6 +100,8 @@ After a re-read confirms a claim, add `verified: <YYYY-MM-DD>` to the entry's fr
 
 **Deep-dive notes (`status` field):**
 - `draft` — in progress
+- `exploratory` — initial design possibilities; no adoption implied
+- `research-conclusion` — a bounded research conclusion, with evidence and limits; no API adoption or implementation implied
 - `ready-to-distill` — note is complete, ready to feed a spec entry
 - `superseded` — spec entry supersedes this note; kept for audit trail
 
@@ -129,6 +131,16 @@ After a re-read confirms a claim, add `verified: <YYYY-MM-DD>` to the entry's fr
 - `info_preserved`: subset of `[spans, literal_types, size_vs_int, scope, order]` the style keeps
 - `error_locus`: `python-time` / `ir-check` / `runtime` / `silent`
 - `silently_divergent`: hazards where Python evaluates with its own semantics before the DSL sees the value
+
+## Python rewrite documentation
+
+[[00 - Python Rewrite Index]] is the current entry point. Use the existing document types rather than creating a parallel schema.
+
+- Studies use `PY-R001`, example collections use `PY-E001`, and questions use `PY-Q001`. Include the study or collection ID in its filename. Keep identifiers and stems unique; never reuse them.
+- Decisions continue the shared `D-NN` sequence, with `scope: python-rewrite`. Record who adopted the choice and what remains open. [[D-27]] records the direction; it does not approve a detailed architecture.
+- A future Python specification must also include `scope: python-rewrite`, `decision_records` (quoted wikilinks in a block list), and `implementation_status`. The existing `status` describes document review, not adoption or implemented support. Begin `implementation_status` at `not-implemented`; use `partial` or `validated` only with linked, scoped execution evidence.
+- Keep original Spatial behavior, earlier Rust design choices, proposed Python behavior, and measured results distinct. Cite pinned source revisions for source facts. An expected output calculated from a listing is not an observed result.
+- Keep candidate code in its study and shared case definitions in the example corpus; link between them. Label illustrative APIs as unimplemented. Create specification and HLS topic folders with substantive content, not empty index placeholders.
 
 ## Progress log format
 
@@ -189,7 +201,7 @@ One paragraph. What this thing is in Spatial, why it exists, where it lives in t
 
 ## Semantics
 
-What this does, formally enough that a Rust reimplementer could match behavior.
+What this does, precisely enough that a reimplementation could match the stated behavior.
 
 ## Implementation
 

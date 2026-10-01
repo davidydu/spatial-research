@@ -1,8 +1,11 @@
 ---
 type: deep-dive
+topic: pure-python-feasibility
 title: "Can Spatial be implemented entirely in Python?"
 date: 2026-09-30
+session: 2026-09-30
 status: research-conclusion
+feeds_spec: []
 source_files:
   - "exo@defe172:src/exo/API.py:168-173"
   - "exo@defe172:src/exo/frontend/typecheck.py:144-168"
@@ -64,4 +67,4 @@ Here, pure Python means the Spatial compiler's own semantic implementation is Py
 
 ## Research consequence
 
-The implementation language is settled for this direction. Continue with [[2026-09-30-pure-python-programming-model|small Python Spatial programs]], their exact meaning, and a Python representation/checking design. Investigate HLS lowering afterward. Retain correctness tests and measurements, but do not reopen Rust solely because Python lacks the same implementation-language type system.
+The implementation language is settled for this direction; [[D-27]] records that decision. Continue from [[00 - Python Rewrite Index]] and [[PY-R001 - Programming Model Study|the paired programming-model study]], then establish the exact semantics and Python representation/checking design. Investigate HLS lowering afterward. Retain correctness tests and measurements, but do not reopen Rust solely because Python lacks the same implementation-language type system.

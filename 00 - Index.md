@@ -10,7 +10,9 @@ Source-grounded research and an implementation-level specification of the Spatia
 
 ## Current direction
 
-- [[2026-09-30-pure-python-programming-model|Pure Python Spatial — programming model first]] — professor feedback, a first program sketch, design alternatives, and research sequence.
+- [[00 - Python Rewrite Index|Python Spatial research]] — current entry point for examples, research, decisions, and validation.
+- [[01 - Python Research Plan|Research plan]] — programming model, semantics, compiler design, then HLS research and implementation planning.
+- [[D-27|Pure Python direction]] — accepted direction and its limits; [[02 - Python Open Questions|detailed choices remain open]].
 
 ## Earlier architecture review — superseded
 
@@ -22,7 +24,7 @@ Source-grounded research and an implementation-level specification of the Spatia
 ## Start here (for any session)
 
 1. [[workflow]] — **load this first.** Describes phases, per-session rhythm, verification discipline, stopping conditions.
-2. [[2026-04-21-spatial-spec-design]] — original brainstormed design doc (decisions + rationale).
+2. [[00 - Python Rewrite Index]] and [[01 - Python Research Plan]] — current work. [[2026-04-21-spatial-spec-design]] records the original source-documentation plan.
 3. [[conventions]] — frontmatter schemas, citation format, wikilink style.
 4. [[progress-log]] — running log of what's been done, open questions count.
 
@@ -30,11 +32,12 @@ Source-grounded research and an implementation-level specification of the Spatia
 
 | Folder | Purpose |
 |---|---|
-| `10 - Spec/` | **The deliverable.** Authoritative, cross-linked spec. Populated progressively during Phase 2. |
+| `10 - Spec/` | Source-grounded specification of original Spatial. Evidence for the Python rewrite; not automatically its language contract. |
 | `20 - Research Notes/` | Raw artifacts. `00 - Coverage/` holds Phase 1 subagent outputs; `10 - Deep Dives/` holds per-topic reading notes; `20 - Open Questions.md` tracks unresolved issues. |
 | `30 - HLS Mapping/` | Parallel notes categorizing each construct as clean-map / needs-rework / chisel-specific for the future HLS target. |
 | `35 - Python Surface Mapping/` | Earlier construct mappings and Python embedding comparisons; reusable design evidence for the pure Python rewrite. |
 | `40 - Cross References/` | Navigation matrices (source-tree map, pass pipeline order, node↔codegen matrix). |
+| `50 - Python Rewrite/` | Current Python studies, example corpus, questions, and validation plan; adopted specification and HLS studies added when ready. Decisions remain in the shared D-number register. |
 | `90 - Meta/` | Workflow docs, design doc, progress log, conventions. |
 
 ## Specification coverage history

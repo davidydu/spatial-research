@@ -11,7 +11,9 @@ Research toward a pure Python rewrite of Spatial. First establish the programmin
 
 ## Start with the Python rewrite
 
-[[2026-09-30-pure-python-programming-model|Programming model first]] records the feedback, a proposed tiled-scale example, source-capture and builder alternatives, and the next research steps. The direction is agreed; the detailed Python API and implementation design are still open.
+Start at [[00 - Python Rewrite Index|Python Spatial research]]. It connects the examples, studies, open questions, and decisions. The [[01 - Python Research Plan|research plan]] sets the order: programming model, semantics, compiler design, then HLS research and implementation planning.
+
+The [[PY-R001 - Programming Model Study|current study]] compares source capture and an explicit builder on the same [[PY-E001 - Initial Example Corpus|three example programs]]. [[D-27]] records the agreed direction; the detailed Python API and architecture remain open. The dated [[2026-09-30-pure-python-programming-model|professor feedback]] and [[2026-09-30-pure-python-feasibility|feasibility assessment]] explain why this is the current work.
 
 The <a href="presentation/index.html" data-router-ignore target="_blank" rel="noopener noreferrer">28 September presentation</a> and [[2026-09-28-spatial-professor-presentation-outline|speaking outline]] are historical. Their Rust-core recommendation was superseded by the professor's feedback.
 
@@ -35,7 +37,7 @@ The compiler's checks, program representation, and functional simulation should 
 
 | Area | Verified state | Remaining work |
 |---|---|---|
-| Research | Earlier D-26 studies retained; professor's pure Python direction recorded | Review representative Python programs and settle the programming model |
+| Research | Dedicated Python research section, common example corpus, and first comparative study; D-27 records the direction | Review the examples and settle the programming model |
 | Prototype compiler | Existing Rust prototype retained as a historical reference | Design the Python compiler, checker, program representation, and simulator |
 | Hardware evidence | Historical 39-program backend corpus: 37 fit, 2 over budget, 14 initiation-interval caveats | Fresh evidence for changed HLS and the general backend before release |
 | Student delivery | Earlier host and packaging studies available for reference | Decide the Python workflow after reviewing examples; no new package is implemented |
@@ -46,13 +48,13 @@ See [[2026-06-27-rust-spatial-rewrite-roadmap|Historical Rust roadmap and backen
 
 | Topic | Entry point |
 |---|---|
-| Full language specification | [[10 - Spec/00 - Spec Index\|Specification index]] |
+| Original Spatial specification | [[10 - Spec/00 - Spec Index\|Specification index]] |
 | Python construct and semantic mapping | [[00 - Python Mapping Overview\|Python mapping overview]] |
 | Same-lab syntax comparison | [[D-26-02-student-surface-comparison\|Surface study]] |
 | Real diagnostic transcripts | [[D-26-03-error-paths\|Error-path study]] |
 | HLS mapping | [[10 - Clean Mappings\|Clean mappings]] |
 | Scope and corpus | [[03-mvp-subset-recommendation\|MVP subset research]] |
-| Decisions and unresolved issues | [[40 - Decision Queue\|Decision queue]] · [[20 - Open Questions\|Open questions]] |
+| Current Python questions and shared decisions | [[02 - Python Open Questions\|Python questions]] · [[40 - Decision Queue\|Decision queue]] |
 | Vault map and conventions | [[00 - Index\|Top-level index]] · [[workflow\|Research workflow]] |
 
 Research notes distinguish measured results, inspected precedents, proposed designs and engineering judgments. Pinned code references resolve through [[reference-clones|the source manifest]]. An `awaiting-professor-approval` proposal is not an implemented feature or an approved course release.

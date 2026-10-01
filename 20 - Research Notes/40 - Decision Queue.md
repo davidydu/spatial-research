@@ -4,9 +4,17 @@ project: spatial-spec
 date: 2026-04-25
 ---
 
-# Decision Queue — Architectural Choices for Rust+HLS Rewrite
+# Decision Queue — Spatial Rewrite
 
-26 items requiring user decision before the corresponding subsystem can be re-implemented.
+Decisions use one shared D-number sequence. The current Python direction is recorded below; the 26 earlier Rust/HLS items remain as historical research and must be reviewed before importing their policies into Python.
+
+## Current Python work
+
+**[[D-27]] — accepted, 30 September 2026:** pure Python Spatial, programming-model research first, HLS research afterward, and design review before implementation. This records David's report of the professor discussion and subsequent research instruction; it does not approve a detailed API or compiler architecture.
+
+The immediate study is [[PY-R001 - Programming Model Study]]. [[02 - Python Open Questions]] tracks the detailed questions. Adopted choices receive the next D-number here and a record in the existing decision folder.
+
+## Earlier Rust/HLS questions
 
 ## D-01 — [Q-036] Choose the HLS policy for BigIP optional arithmetic operations and simulator placeholders.
 Source: fringe/src/fringe/BigIP.scala:22-105; fringe/src/fringe/targets/BigIPSim.scala:82-96
@@ -111,4 +119,4 @@ Decision criteria: User decision: HLS `OneHotMux` with multiple true selectors m
 ## D-26 — [Q-165] Choose the host-language architecture: compiler core (Rust / Python) × student surface (external DSL / Python-embedded / both) × Python integration depth.
 Source: 90 - Meta/2026-06-26-rust-first-spatial-dsl-overlay.md (Non-Goals); 90 - Meta/2026-07-07-fundamental-design-review.md (Issue 2)
 Decision criteria: User decision among cells R-X, R-E, R-B, P-X, P-E, P-B after the pre-registered D-26 protocol; integration depth (I0/I1/I1′/I2/In) chosen for R-* cells.
-Status: final research proposal ready — [[D-26-final-architecture|R-E: source-captured Python kernels over a Rust semantic core]], awaiting professor approval before implementation. Read [[D-26-professor-brief]] and [[2026-09-28-d26-research-extension]]. [[D-26]] preserves the original protocol and audited meeting cut.
+Status: superseded by [[D-27]] on 30 September 2026. The earlier [[D-26-final-architecture|R-E proposal]], [[D-26-professor-brief]], and [[2026-09-28-d26-research-extension]] remain historical. [[D-26]] preserves the original protocol, measurements, and audited meeting cut.

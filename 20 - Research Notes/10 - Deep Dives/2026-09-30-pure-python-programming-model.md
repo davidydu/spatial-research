@@ -1,8 +1,11 @@
 ---
 type: deep-dive
+topic: pure-python-programming-model
 title: "Pure Python Spatial — programming model first"
 date: 2026-09-30
+session: 2026-09-30
 status: exploratory
+feeds_spec: []
 source_files:
   - "spatial@e7a8f2f:test/spatial/tests/ee109/Lab1Part2DramSramExample.scala:6-43"
   - "spatial@e7a8f2f:test/spatial/tests/feature/control/ReduceTiny.scala:7-37"
@@ -14,6 +17,8 @@ related:
 ---
 
 # Pure Python Spatial — programming model first
+
+Continue from [[00 - Python Rewrite Index|Python Spatial research]] and [[PY-R001 - Programming Model Study|the paired programming-model study]]. This dated note preserves the initial discussion; [[D-27]] records the agreed direction.
 
 ## Professor feedback
 
@@ -69,7 +74,7 @@ This example deliberately fixes the size and tile width. Runtime dimensions, tai
 | Source capture | Python function syntax, ordinary-looking `for` / `if`, annotations, and explicit Spatial operations | Define the supported Python subset and explain where its meaning differs from ordinary Python execution |
 | Explicit Python builder | Python calls and control contexts that construct Spatial program objects | More explicit syntax for control, writes, literals, and source locations |
 
-**Initial research preference:** start with source-captured examples because they let us discuss the whole program in familiar statement form. Write a matching builder example for the difficult control/state case before deciding. Both the reader and the semantic checker can be implemented in Python. This is a starting hypothesis, not a final architecture choice.
+**Initial research preference:** start with source-captured examples because they let us discuss the whole program in familiar statement form. Compare all three programs in both source-capture and builder forms before deciding; [[PY-R001 - Programming Model Study]] maintains that comparison. Both the reader and the semantic checker can be implemented in Python. This is a starting hypothesis, not a final architecture choice.
 
 Plain operator-overloading traces alone are insufficient as the complete design: executing Python control flow can choose one branch or run a loop before the compiler has preserved its hardware meaning. An explicit builder can avoid this with its own control constructs. The existing mappings document these hazards and possible remedies; they do not prove all tracing designs impossible. See [[10 - Python Controller Bodies]], [[20 - Python If Expressions]], and [[90 - Python Naming and Scoping]].
 

@@ -6,11 +6,23 @@ status: active
 load_priority: high
 ---
 
-# Workflow — Spatial Spec Project
+# Workflow — Spatial Research
 
-**Load this file first at the start of every session.** It is the operational runbook; [[2026-04-21-spatial-spec-design]] holds the underlying rationale.
+**Load this file first at the start of every session.** The current work follows [[01 - Python Research Plan]]. [[2026-04-21-spatial-spec-design]] holds the original source-documentation rationale.
 
-> **Execution harness.** This runbook assumes **Claude Code** as the agent harness. References to `Agent` (Task tool), `TaskCreate`, `subagent_type: Explore`, and `model: opus` are Claude-Code-specific primitives. On another harness (Codex CLI, Gemini CLI, etc.), map these to the harness's equivalents — or do not execute the runbook and use it as reference only.
+## Current route — 30 September 2026
+
+Research a **pure Python Spatial compiler** before implementation, under [[D-27]]. Start with [[00 - Python Rewrite Index]], [[02 - Python Open Questions]], and [[PY-R001 - Programming Model Study]]. The order is programming model, semantic contract, compiler design, HLS research, then implementation planning. Review the relevant design before implementing it.
+
+Use **Codex-only** agents for bounded parallel source checks, alternative designs, and review. Give writers separate files; the integrating agent verifies the source claims that determine a conclusion. Read local files and use command-line checks by default; use browser UI only when requested or needed to inspect a visual defect.
+
+New Python work belongs under `50 - Python Rewrite/`. Decisions continue in `20 - Research Notes/50 - Decision Records/`; do not create another decision register. Preserve the original Spatial specification, earlier Rust work, and frozen experiments as evidence. Neither a research conclusion nor an adopted direction establishes implementation completion.
+
+For each topic, write evidence and alternatives first, then the decision, then the specification and validation cases. Follow [[conventions]] and [[00 - Python Validation Plan]]. Commit coherent documentation batches to the research repository, then rebuild the website from those same files. Record publication status in [[progress-log]].
+
+## Original source-documentation workflow
+
+The coverage phases below describe how the original Spatial specification was built and how to maintain it. They are not the current Python implementation queue. Reuse their citation and verification discipline; the Python research plan governs new design work.
 
 ## Source of truth
 
@@ -23,9 +35,9 @@ load_priority: high
 | Phase | What | Who | Output |
 |---|---|---|---|
 | **0** | Scaffold folder structure, design docs | main session (me) | `00 - Index.md`, `90 - Meta/*` |
-| **1** | Coverage pass — structural mapping of all subsystems | 10 parallel Opus 4.7 Explore subagents | `20 - Research Notes/00 - Coverage/*` |
+| **1** | Coverage pass — structural mapping of all subsystems | Independent agents assigned bounded source areas | `20 - Research Notes/00 - Coverage/*` |
 | **2** | Deep dives — read source, write notes, distill to spec | main session directly from source | `20 - Research Notes/10 - Deep Dives/*` → `10 - Spec/*` |
-| **3** | HLS mapping — categorize each construct for the Rust/HLS target | main session | `30 - HLS Mapping/*`; `hls_status` frontmatter on spec entries |
+| **3** | Earlier HLS mapping — categorize original constructs for the then-proposed Rust/HLS target | main session | `30 - HLS Mapping/*`; `hls_status` frontmatter on spec entries |
 | **4** | Consolidation — cross-ref matrices, open-Q resolution | main session | `40 - Cross References/*` populated; `20 - Open Questions.md` emptied or tagged OOS |
 
 ## Phase 1 — Coverage dispatch (one-shot, ~30 min wall)
@@ -49,8 +61,7 @@ load_priority: high
 
 ### Dispatch mechanics
 
-- Single message with 10 `Agent` tool calls in parallel.
-- `subagent_type: Explore`, `model: opus`, thoroughness "very thorough".
+- Dispatch independent source areas to Codex agents within available concurrency. The ten-area table is a coverage map, not a requirement to launch ten agents at once.
 - Prompt to each subagent must include: (a) the exact paths to cover, (b) the coverage-note schema in full, (c) the instruction that every claim about code content cites a file + line range, (d) the output file path: `Spatial Research/20 - Research Notes/00 - Coverage/<subsystem-slug>-coverage.md`.
 
 ### Coverage-note schema (every note has this structure)
@@ -106,7 +117,7 @@ For each returned coverage note:
 Every session, repeat the loop:
 
 1. **Orient** — open [[progress-log]], pick a topic from the priority queue or from `20 - Open Questions.md`.
-2. **Read source directly** — main session. Use subagents only for scoped lookups ("find all callers of X", "list every file that imports Y"). Do not delegate algorithmic understanding.
+2. **Read source directly** — use bounded Codex tasks for independent reading and alternative analyses. The integrating agent verifies decisive claims in the source and resolves disagreements before adopting a conclusion.
 3. **Write a deep-dive note** at `20 - Research Notes/10 - Deep Dives/<topic-slug>.md`. Raw findings, direct quotes from source, file:line citations, unresolved questions.
 4. **Distill to a spec entry** at `10 - Spec/…/<concept>.md`. Authoritative prose. Frontmatter points back to the deep-dive note and the source files. Status starts at `draft`.
 5. **HLS-tag** — add a `hls_status` field (`clean` / `rework` / `chisel-specific` / `unknown`) for spec entries. In Rust rewrite planning notes, also distinguish `surface-clean`, `semantic-portable`, `backend-pending`, and `reference-only` when the older vocabulary is too coarse. If non-trivial, add an entry to the appropriate `30 - HLS Mapping/` file.
@@ -196,7 +207,7 @@ For `hls-mapping`, `spec_entry` is a single wikilink (not a list), so it's a sim
 ## Status vocabulary
 
 - **Spec entries:** `draft` → `reviewed` → `stable`. `needs-rework` is a regression flag.
-- **Deep-dive notes:** `draft` → `ready-to-distill` → `superseded`.
+- **Deep-dive notes:** see [[conventions]] for draft, exploratory, conclusion, and superseded states. Research completion does not imply adoption.
 - **HLS status:** `clean` (translates directly), `rework` (needs HLS-specific design), `chisel-specific` (tied to RTL; not portable), `unknown` (pending analysis).
 
 ## Stopping conditions (Phase 2 complete)
@@ -222,7 +233,7 @@ For `hls-mapping`, `spec_entry` is a single wikilink (not a list), so it's a sim
 
 1. Read `00 - Index.md` and this file.
 2. Check `progress-log.md` for the most recent state.
-3. Check `20 - Open Questions.md` for unresolved items.
-4. Pick a topic (priority queue or open Q).
-5. Set `TaskCreate` entries for the session.
-6. Begin the per-session rhythm loop.
+3. Check [[02 - Python Open Questions]] for current choices; use the original open-question tracker for source-spec maintenance.
+4. Pick a bounded topic from [[01 - Python Research Plan]].
+5. Record its question, evidence needed, and deliverable; divide independent Codex tasks where useful.
+6. Follow the notes-first loop in the current plan. Do not resume historical Rust implementation tasks without a current request.

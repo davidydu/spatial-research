@@ -5,11 +5,17 @@ load_priority: high
 date: 2026-07-07
 ---
 
-# Session Resume Guide (Rust Rewrite, EE109-First Inversion)
+# Session Resume Guide
 
-For any Codex or Claude session picking up the Rust rewrite. Read this, then
-[[2026-07-07-fundamental-design-review]], then the checklist. This
-supplements, does not replace, [[workflow]] and [[progress-log]].
+This supplements [[workflow]] and [[progress-log]]. Use the current checkpoint below; the older Rust implementation queue is retained as history.
+
+## Current research checkpoint — 30 September 2026
+
+[[D-27]] records the **pure Python Spatial** direction reported after the professor discussion. Read [[00 - Python Rewrite Index]], [[01 - Python Research Plan]], and [[PY-R001 - Programming Model Study]]. Research the programming model before compiler design and HLS lowering. Use Codex-only agents and local-file checks. The Python API and detailed architecture remain open; do not resume the old Rust queue as current work.
+
+The research vault and website have been published under `davidydu`; older credential-blocked entries below are historical. See [[progress-log]] for dated publication evidence.
+
+## Historical Rust route
 
 > [!important] 2026-07-07 route change (later session)
 > David adopted the [[2026-07-07-fundamental-design-review|fundamental design review]]:
@@ -21,7 +27,7 @@ supplements, does not replace, [[workflow]] and [[progress-log]].
 > route changed. Authoritative plan:
 > `spatial-rs/docs/superpowers/plans/2026-07-07-compositional-core-inversion-roadmap.md`.
 
-## Current research checkpoint (2026-09-28)
+## Historical research checkpoint (2026-09-28; superseded by D-27)
 
 The final research recommendation is [[D-26-final-architecture|R-E: source-captured Python kernels over one Rust semantic core]]. Read [[D-26-professor-brief]] and [[2026-09-28-d26-research-extension]] first. Architecture implementation awaits professor approval; do not resume the historical implementation queue on the basis of this research proposal alone. Current compiler checkpoint is `eb49d8bc`; the thin CLI implements text `check`. The older checkpoints below are retained as history. Publication/build status is recorded in [[progress-log]].
 
