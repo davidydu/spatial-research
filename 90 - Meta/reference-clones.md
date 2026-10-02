@@ -45,3 +45,15 @@ These sources extend the reference set for the Python rewrite. They are not retr
 | xdsl | Python-native compiler framework candidate; inspect core versus optional native dependencies | https://github.com/xdslproject/xdsl | 0b107461b3bfcd353d949fe00d3d1623bd6c826a | 2026-09-30 | Apache-2.0 with LLVM Exceptions (LICENSE) |
 
 The manager independently checked the clone's HEAD and license file. Framework source inspection and any executed probes are recorded in the architecture study; inclusion in this manifest is not adoption or a support claim.
+
+## Course syntax additions — 1 October 2026
+
+These read-only public snapshots support [[PY-E002 - Spatial to Python Syntax Atlas]]. Sparse checkouts contain the inspected Markdown, language sources or named example files. The course's infrastructure commands are source material, not instructions executed by this research.
+
+| name / citation pin | research role | upstream | full SHA | cloned | licence observation |
+|---|---|---|---|---|---|
+| digital-systems-design-lab@b4896ab | Six course lab pages, cheatsheet and linked teaching material | https://github.com/kelayamatoz/Digital-Systems-Design-Lab | b4896abffd19bcc3f319a49d7a919e1cf70d5221 | 2026-10-01 | No root license file in pinned tree; no license grant inferred |
+| spatial@c1979ce | Public CS217 language declarations and EE109 fixtures | https://github.com/stanford-ppl/spatial | c1979ceb715cec239b6de36408a365aba5b7c709 | 2026-10-01 | MIT, repository LICENSE |
+| spatial-apps@2185958 | Homepage-linked Products, UnitTests and MachSuite on regression_arria10 | https://github.com/stanford-ppl/spatial-apps | 218595857ab9e0260179c4e21cfb02afd11ea7ac | 2026-10-01 | No root license file in pinned tree; no license grant inferred |
+
+The public Spatial pin is separate from `spatial@e7a8f2f`, which includes a local EE109 commit. The course studies record targeted file comparisons; matching inspected files does not establish whole-repository identity. New course-source citations use public c1979ce where checked. Historical local citations remain intact.

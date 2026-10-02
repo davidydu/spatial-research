@@ -15,6 +15,8 @@ Start at [[00 - Python Rewrite Index|Python Spatial research]]. It connects the 
 
 The [[PY-R001 - Programming Model Study|programming-model study]] compares source capture and an explicit builder on the same [[PY-E001 - Initial Example Corpus|three example programs]]. The completed research now includes [[00 - Implementation Design Index|five implementation blueprints]] and a [[07 - Python Implementation Readiness Audit|readiness review with bounded probes]]. [[D-27]] records the agreed direction; [[D-28]] proposes the detailed architecture for professor review. No Python compiler implementation is claimed.
 
+For the concrete answer to “what would Python look like?”, open the [[PY-E002 - Spatial to Python Syntax Atlas|Spatial-to-Python course syntax atlas]]. It pairs familiar constructs with proposed Python forms and links complete programs from scalar arithmetic through GEMM and convolution. [[60 - Course Syntax and Compiler Trace]] explains the compiler those examples require.
+
 The <a href="presentation/python/index.html" data-router-ignore target="_blank" rel="noopener noreferrer">Spatial in Python presentation</a> follows one program through the proposed design in seven slides. Its [[2026-10-01-python-professor-presentation-outline|ten-minute outline and full speaker notes]] link each claim to the research. The [[05 - Python Professor Brief|professor brief]] is the short written version.
 
 The <a href="presentation/index.html" data-router-ignore target="_blank" rel="noopener noreferrer">28 September presentation</a> and [[2026-09-28-spatial-professor-presentation-outline|speaking outline]] are historical. Their Rust-core recommendation was superseded by the professor's feedback.

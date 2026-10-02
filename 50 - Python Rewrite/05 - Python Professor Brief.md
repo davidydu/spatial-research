@@ -25,6 +25,8 @@ flowchart LR
 
 Use normal Python for loading data, choosing sizes, running experiments, and checking results. Write accelerator kernels in a defined Python-syntax subset with Spatial types, memories, loops, reductions, and streams. The compiler reads that kernel source; it does not run the kernel as ordinary host Python.
 
+The [[PY-E002 - Spatial to Python Syntax Atlas|course syntax atlas]] now makes this concrete: original Spatial next to proposed Python, with complete scalar, tiled-memory, reduction, FSM, GEMM and convolution examples. [[60 - Course Syntax and Compiler Trace]] follows those examples into the compiler and records the exact source-level choices.
+
 That lets us preserve the information hardware needs: exact numeric types, when storage changes, which branch consumes a value, and which operations may run together. A builder supports generated programs through the same checks. The proposed first input routes are source files and raw notebook cells; their proposed API and checking rules are now recorded in the implementation design.
 
 ## What we learned from the research

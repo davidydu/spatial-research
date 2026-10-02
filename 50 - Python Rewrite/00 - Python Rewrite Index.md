@@ -7,7 +7,7 @@ date_started: 2026-09-30
 
 Research before implementation: establish what Spatial programs mean in Python, decide how the compiler represents and checks them, then study HLS lowering.
 
-**Current phase:** full-language architecture research and the [[07 - Python Implementation Readiness Audit|implementation-readiness review]] are complete as proposed research. [[00 - Implementation Design Index]] now supplies concrete algorithms, interfaces and acceptance cases for every family. Pure Python is the agreed direction. The proposed architecture uses captured kernels, Python-owned semantics and simulation, custom Spatial dialects on xDSL, and a checked HLS backend. [[D-28]] records the recommendation for professor review. No Python compiler implementation is claimed.
+**Current phase:** the full-language architecture and [[07 - Python Implementation Readiness Audit|implementation-readiness review]] are published research checkpoints. The new [[PY-E002 - Spatial to Python Syntax Atlas|course syntax atlas]] makes the proposal concrete against the professor's examples; [[60 - Course Syntax and Compiler Trace]] closes source-signature details and traces the examples through the design. Pure Python is the agreed direction. The proposed architecture uses captured kernels, Python-owned semantics and simulation, custom Spatial dialects on xDSL, and a checked HLS backend. [[D-28]] remains proposed for professor review. No Python compiler implementation is claimed.
 
 ## Read first
 
@@ -25,6 +25,13 @@ Research before implementation: establish what Spatial programs mean in Python, 
 [[01 - Python Research Plan|Research method]] · [[PY-R001 - Programming Model Study|Paired Python programs]] · [[PY-E001 - Initial Example Corpus|Shared example cases]]
 
 ## Foundation studies
+
+For “what would Python look like?”, start with [[PY-E002 - Spatial to Python Syntax Atlas]]. It links complete proposed programs and the exact original spellings:
+
+- [[PY-R012 - Lab1 Syntax and Host Mapping]] — ports, registers, memories, queues, scalar reductions and host workflow.
+- [[PY-R013 - Controllers Reductions and Lab2 Mapping]] — control, memory reductions, FSMs and tiled GEMM.
+- [[PY-R014 - Convolution Windows and Lab3 Mapping]] — line history, shift registers, lookup tables and convolution.
+- [[08 - Course Syntax and Architecture Audit]] — source scope, independent checks, repairs and remaining implementation evidence.
 
 - [[PY-R002 - Numeric and Reduction Semantics]] — exact arithmetic, literals, reductions, folds, and disagreements in the original implementation.
 - [[PY-R003 - Control Memory and Effects]] — operation order, lazy branches, state lifetime, aliases, and the need for communicating tasks.

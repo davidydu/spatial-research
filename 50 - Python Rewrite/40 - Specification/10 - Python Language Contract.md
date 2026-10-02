@@ -36,6 +36,8 @@ Meta parameters contain only the closed immutable schema in R004: exact builtin 
 
 Helpers and components have typed arguments, region results, explicit dependencies, and hygienic local identities. Nested helpers capture DSL symbols subject to capability and lifetime checks. Calls are initially acyclic. Host recursion may generate a finite graph. General runtime recursion and unrestricted `while` have explicit diagnostics; typed FSM and forever controllers provide the corresponding bounded-state/dynamic-control model. Libraries compile through the same path as user code.
 
+The proposed exact course-facing registrations are in [[60 - Course Syntax and Compiler Trace]]. They include `Unit`, literal `lut` initialization, memory-mapper-only `Contribution[M]`/`contribute`, typed `disjoint` invocation requirements, explicit reduction signatures and window transitions. [[PY-E002 - Spatial to Python Syntax Atlas]] maps them to original Spatial spellings. These are closed registrations, not permission for arbitrary Python methods or callbacks.
+
 ## Proposed source grammar boundary
 
 This is the proposed accepted-form policy, not an implemented parser. [[10 - Source Checker and IR Blueprint]] now fixes the proposed grammar, parametric intrinsic families, signatures and checking algorithms. S0 implements that design after approval; earlier competing sketches retain explicit migration notes. Adding a syntactic form requires a meaning and diagnostic rule, not merely acceptance by Python's parser.

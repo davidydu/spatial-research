@@ -24,6 +24,8 @@ The full path is captured Python source → checked Spatial program → Python r
 
 Start with the package API and source/checker design, then implement the first complete kernel path in [[04 - Python Implementation Roadmap]]. Numeric and state work extend that same path. Hardware planning can begin once the first semantic path is checked and independently tested; it need not wait for the whole library.
 
+The course-based supplement [[60 - Course Syntax and Compiler Trace]] supplies exact common operation signatures, a tile/GEMM/convolution trace and schedule-request records. Read it beside [[PY-E002 - Spatial to Python Syntax Atlas]]. It refines the five blueprint responsibilities above and records gaps exposed by writing complete programs.
+
 ## Evidence and status
 
 [[07 - Python Implementation Readiness Audit]] records the gaps found, review discussion, experiments, repairs and remaining execution gates. [[01 - Python Coverage Ledger]] preserves all 106 original spec documents and their 18 family destinations. It links into this design without treating a document count as implemented feature coverage.
