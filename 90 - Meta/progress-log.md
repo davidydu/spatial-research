@@ -9774,3 +9774,7 @@ Added [[PY-E002 - Spatial to Python Syntax Atlas]], three course studies R012–
 Three Codex authors cross-reviewed the integrated proposal. Repairs include strict mux versus lazy if, contribution ownership, missing memory fixed-tree syntax, queue-transfer fault prefixes, actual backing aliases, initialized window history, and exact source/plan registrations. [[08 - Course Syntax and Architecture Audit]] records the discussion, independent bounded probes and limits. Parent probes passed 48 GEMM comparisons, 73 convolution comparisons including signed gradients, both FSM fixtures, 45 LUT cases and a lazy FIFO trace. These execute independent host models, not a Python Spatial compiler.
 
 Source/YAML/AST/link checks and the local Quartz build passed at the recorded checkpoints; a ZIP link found during rendered review was repaired before publication. No production compiler, new vendor run or hardware-performance claim was introduced. D-28 remains proposed for professor review.
+
+## 2026-10-02 — Course syntax research publication verified
+
+Published research commit `57573da` under davidydu. [Pages run 37027070083](https://github.com/davidydu/spatial-research-site/actions/runs/37027070083) succeeded. Direct HTTP checks verified all six new research pages and the probe archive's exact hash. The final focused Codex review found no remaining semantic blocker in the integrated queue-transfer, memory-tree and runtime-width window contracts. These are reviewed design documents; production compiler and target evidence remain future work.

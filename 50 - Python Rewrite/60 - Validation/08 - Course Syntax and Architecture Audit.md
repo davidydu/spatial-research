@@ -77,7 +77,11 @@ Local checks passed for 14 changed/new Markdown files, 18 Python blocks parsed w
 
 Quartz built 557 Markdown inputs into 1,203 files and copied the existing presentations. Rendered-link review caught an incorrectly resolved ZIP URL; it was changed to the repository's vault-root link convention. The rebuilt six new pages passed 277 internal file/anchor link checks on 2 October. A clean extraction and rerun of the downloadable archive matched its recorded JSON and SHA-256. The final Markdown check including the progress log passed 15 files, 18 Python blocks, 296 wikilinks and 35 distinct pinned source files. Counts concern the integrated snapshot before the publication entry.
 
-## Remaining gates
+## Publication verified — 2 October 2026
+
+Research commit `57573da` was pushed under `davidydu`. [Pages deployment 37027070083](https://github.com/davidydu/spatial-research-site/actions/runs/37027070083) completed successfully. Direct HTTP checks returned 200 and the expected new content for the atlas, compiler trace, all three course studies and this audit. The public probe ZIP matched the recorded SHA-256. This establishes publication of the reviewed research package, not compiler execution or professor adoption.
+
+## Remaining implementation and adoption gates
 
 - Professor adoption of D-28 and deliberate semantic changes.
 - Implemented capture/check/prepare/simulator passing positive and negative fixtures, including aliases, faults and partial effects.

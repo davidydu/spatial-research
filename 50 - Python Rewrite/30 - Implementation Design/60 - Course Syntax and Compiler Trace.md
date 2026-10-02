@@ -121,7 +121,7 @@ The outer-product proposal in R013 makes the abstract lifetime problem concrete:
 5. `mem_fold` snapshots tile_c's old initialized cells once. It performs contribution k and ordered cell combines before moving to k+1, then publishes only after successful completion. Earlier mapper effects are retained if a later fault occurs.
 6. A physical implementation may reuse memory only after the lifetime/visibility proof permits reuse. Introducing three rotating banks without tracking which version a consumer owns is insufficient.
 
-`disjoint` lowers to existing AccessRegion obligations, not numerical pointer comparison. Prepare uses buffer owner/storage identity, byte ranges, strides, dtype and logical views. A proved empty intersection passes, including zero-size views; an unknown overlap result cannot be treated as true. Read-only A and B may alias one another. InOut permission on C does not establish its independence from A/B.
+`disjoint` lowers to existing AccessRegion obligations, not numerical pointer comparison. Prepare uses buffer owner/storage identity, byte ranges, strides, dtype and logical views. A proved empty intersection passes, including zero-size views; logical emptiness means a zero extent, not merely a zero-byte element encoding. An unknown overlap result cannot be treated as true. Read-only A and B may alias one another. InOut permission on C does not establish its independence from A/B.
 
 ## Trace 3: convolution state survives between iterations
 
