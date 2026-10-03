@@ -22,6 +22,10 @@ These questions belong to the Python rewrite. The original [[20 - Open Questions
 | PY-Q011 | What are the host, package, reproducibility, and migration contracts? | Ordinary Python host work; typed alias-preserving snapshots/sessions; canonical identities; versioned model registry and explicit migration | Proposed; [[PY-R007 - Host Workflow Reproducibility and Validation]], R005/R006 |
 | PY-Q012 | How do banking, scheduling, and DSE divide between Spatial and HLS? | Spatial verifies layout/order/protocol and hard constraints; HLS realizes and reports. DSE rechecks candidates and preserves semantic capacities/admission | Proposed; [[PY-R010 - Memory Scheduling and Design Space Exploration]] |
 
+## Follow-ups from the 2 October review
+
+[[09 - Fable Design Review]] records a confirmed underflow/status-oracle defect under PY-Q003, binding and host/API gaps under PY-Q001/006/011, the xDSL comparison under PY-Q005/007/010, and explicit protocol-policy questions under PY-Q004. These are open follow-ups; the review does not adopt its proposed resolutions.
+
 ## Resolved direction
 
 The compiler implementation language and research order are settled by [[D-27]]. The open questions above do not reopen that choice. The table now records concrete research answers. They remain proposed under [[D-28]] until professor review; adoption and executable support are separate decisions. Target version/device selection and the unrun conformance/performance/vendor gates are implementation evidence obligations, not hidden completed results.

@@ -15,6 +15,9 @@ depends_on:
 
 ## Authority, result, and evidence
 
+> [!bug] 2 October 2026 — confirmed underflow defect
+> The finite-output UF predicate in floating-core step 5 and the recorded quantizer/oracle probes is incorrect at the minimum-normal boundary. [[09 - Fable Design Review#Confirmed numerical defect|The reproduced counterexample and correction obligation]] reopen this part of numeric readiness. The sqrt probe repeats the predicate by inspection. The algorithms and historical probe below are preserved pending repair; their agreement does not establish underflow correctness.
+
 This is the implementation-readiness supplement to the proposed numeric contract, not professor adoption or production code. It fixes algorithms and records that R002/R011 deliberately left at the technique/certificate level. Python owns every semantic calculation and proof check. Native tools may provide independent vectors, and vendor implementations may become certified routes; neither determines language legality.
 
 Read the complete R002/R011 special/domain tables with this blueprint. Full generic fixed/binary-floating formats and all original Num functions remain in scope. A target's finite capability domain and a reference run's resource budget are separate fields. A checked numeric node is representable without a hardware route. A reference resource limit reports unfinished computation, never a replacement arithmetic result or a language-domain fault.

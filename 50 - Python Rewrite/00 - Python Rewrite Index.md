@@ -11,6 +11,8 @@ Research before implementation: establish what Spatial programs mean in Python, 
 
 ## Read first
 
+**Latest review:** [[09 - Fable Design Review]] retains the proposed Python architecture, confirms an underflow-status defect, and records contract/API follow-ups and the outstanding IR comparison. [[10 - Fable Reconciled Feedback]] preserves the full external response. The defect is flagged, not yet repaired.
+
 <a href="presentation/python/index.html" data-router-ignore target="_blank" rel="noopener noreferrer">Open Spatial in Python — seven-slide presentation</a> · [[2026-10-01-python-professor-presentation-outline|Ten-minute outline and full speaker notes]]. The presentation explains the proposed program and compiler path; it is not an implementation demonstration.
 
 1. [[D-27|Direction and authority]] — what the professor and David have settled.

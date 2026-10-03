@@ -28,6 +28,8 @@ The course-based supplement [[60 - Course Syntax and Compiler Trace]] supplies e
 
 ## Evidence and status
 
+[[09 - Fable Design Review]] is the latest cross-design review. Read its confirmed numeric erratum and binding/API follow-ups before using these blueprints as implementation instructions. Optional reviewer proposals have not been adopted.
+
 [[07 - Python Implementation Readiness Audit]] records the gaps found, review discussion, experiments, repairs and remaining execution gates. [[01 - Python Coverage Ledger]] preserves all 106 original spec documents and their 18 family destinations. It links into this design without treating a document count as implemented feature coverage.
 
 These are proposed designs for professor review. Adoption, a working reference compiler, a working target backend, and measured hardware results are separate milestones. Research experiments test individual methods; they do not complete those milestones.

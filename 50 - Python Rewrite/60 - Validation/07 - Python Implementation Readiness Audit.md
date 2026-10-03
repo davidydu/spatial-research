@@ -8,6 +8,9 @@ status: reviewed
 
 ## Purpose and boundary
 
+> [!warning] Subsequent review — 2 October 2026
+> [[09 - Fable Design Review]] reopens the floating underflow/status-oracle part of IR03 and identifies contract consistency and public-workflow follow-ups. The dated results below record what was checked at the time; they do not override the new counterexample or establish current numeric readiness. Historical probe archives are preserved.
+
 David requested a further Codex review and discussion to establish whether the research tells contributors how to implement the full Python rewrite. This is a stronger question than whether the architecture proposal is coherent. The completed, dated [[06 - Python Research Completion Audit]] remains evidence of that earlier review and publication; it is not proof of implementation readiness.
 
 The baseline is research revision `b56a49630f22b204ab1a4f0c531adf3647ac1639`. The working tree was clean at the start. Pure Python frontend, semantic compiler, and reference simulator remain the accepted direction. The detailed architecture and semantic changes remain proposed for professor review. This work authorizes further research, bounded experiments, documentation and publication, not production compiler implementation.
