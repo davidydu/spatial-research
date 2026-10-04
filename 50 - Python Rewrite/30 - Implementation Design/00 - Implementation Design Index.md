@@ -14,6 +14,8 @@ The full path is captured Python source → checked Spatial program → Python r
 
 [[70 - Engineering Architecture Map|Open the engineering architecture map]] for an editable Excalidraw view of the whole path, module contracts, state ownership, verification gates and EE109 implementation stages.
 
+**Active work, 4 October:** [[80 - Initial Compiler Goal]] records David's authorization for the first composed-memory reference implementation, its frozen scope and evidence gates. It does not record adoption of the full architecture or completion of S1.
+
 ## Read by responsibility
 
 | Blueprint | What an implementer gets |

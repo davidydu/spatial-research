@@ -11,6 +11,8 @@ Research before implementation: establish what Spatial programs mean in Python, 
 
 ## Read first
 
+**Active implementation goal, 4 October:** David authorized [[80 - Initial Compiler Goal|the initial composed-memory compiler goal]]. Its frozen subset, independent expectations, unseen-composition gate and structural rewrite checks test the proposed plan locally before HLS. The detailed full-language architecture remains proposed; implementation progress is recorded separately from completed compiler support.
+
 **Latest refinement:** [[11 - Design Refinement Iterations]] records the Codex/Fable repair, challenge and verification rounds. [[PY-R015 - Numeric Status Repair and Independent Oracles]] repairs the confirmed underflow rule; [[PY-R016 - Source and Host Workflow Refinement]] completes the source/host proposal; [[PY-R017 - Compiler Representation Comparison]] supports the new immutable-record recommendation; [[PY-R018 - Protocol Policy Refinement]] makes the remaining policy boundaries explicit. Earlier [[09 - Fable Design Review|findings]] and [[10 - Fable Reconciled Feedback|external feedback]] remain dated evidence.
 
 <a href="presentation/python/index.html" data-router-ignore target="_blank" rel="noopener noreferrer">Open Spatial in Python — seven-slide presentation</a> · [[2026-10-01-python-professor-presentation-outline|Ten-minute outline and full speaker notes]]. The presentation explains the proposed program and compiler path; it is not an implementation demonstration.
