@@ -69,27 +69,28 @@ Common domain options are `step=1`, `par=1`, `schedule="foreach"`, `ii=None`. Sc
 | Operation | Required and optional arguments, in addition to common domain options | Meaning |
 |---|---|---|
 | `reduce(start,end,*,body,combine,identity=None,accumulator=None)` | body `(Index)->T`; combine `(T,T)->T` or registered ID; optional Reg[T] publication destination | Lawful typed reduction. Previous register value is not a seed. Empty domain returns the verified identity, otherwise faults before publication |
-| `fold(start,end,*,body,combine,seed=...,accumulator=...)` | Exactly one of seed:T or initialized accumulator:Reg[T] | Ordered recurrence; seed included once, or snapshot existing accumulator once. Empty returns that seed |
+| `fold(start,end,*,body,combine,seed=...,accumulator=...)` | Exactly one of seed:T or initialized accumulator:Reg[T] | Ordered recurrence; seed included once, or snapshot existing accumulator once. Empty evaluates/snapshots and returns that seed, with no accumulator write/publication |
 | `tree_reduce(start,end,*,body,combine,identity=None,empty_result=None,tree="adjacent_pairs")` | At most one identity or empty_result; only registered topology IDs | Ordered leaves, adjacent pairs and carried odd leaf; par cannot change topology. Empty faults if no result declared. Identity must be proved neutral; arbitrary empty_result is never padding permission |
 | `mem_reduce(dst,start,end,*,body,combine,identity=None)` | body `(Index)->Contribution[M]`; destination matching element type and selected shape | Does not seed from old destination. Snapshots each mapper result; successful result publishes selected cells |
-| `mem_fold(dst,start,end,*,body,combine)` | Same mapper type; selected destination cells must be initialized | Snapshot destination seeds once; map and fold in logical order; publish only on success |
+| `mem_fold(dst,start,end,*,body,combine)` | Same mapper type; selected destination cells must be initialized | Snapshot destination seeds once; map and fold in logical order; publish only on nonempty success. Empty map retains seed reads, with no writes/publication |
 | `mem_tree_reduce(dst,start,end,*,body,combine,identity=None,empty_result=None,tree="adjacent_pairs")` | Same leased mapper shape; identity/empty_result exclusivity and topology as scalar tree_reduce | Collect mapper snapshots in logical order, then combine each selected cell using the fixed tree; publish only on success |
 
 `None` denotes compile-time absence here; ellipses in the fold signature denote omitted optional alternatives, not admitted source expressions. A disabled enclosing region evaluates no domain, seed, mapper or combine. A nonempty map over an empty destination still runs mapper effects exactly once per active map index, with no cell accesses/combines/publications. Empty map and disabled operation are different. [[PY-R002 - Numeric and Reduction Semantics]] and the numeric blueprint remain authoritative for fault order, lawful reassociation and destination ownership.
 
 `mem_tree_reduce` supplies a source name for the memory fixed-tree semantics already specified by the numeric blueprint; it is a course-review registry completion, not an original tutorial spelling. Without it, the named-operation policy would leave an existing semantic family inexpressible. Empty-map domain validity is checked even when the destination has zero cells: no identity/empty_result still faults; with an admitted empty result there are no destination cells to publish.
 
-The combine checker proves recognized wrapping addition laws from the typed expression or a registered operation certificate. A helper merely named `add`, a flag claiming associativity or a successful sample cannot establish the law. Floating addition and fractional multiplication cannot use the same generic lawful-reduction certificate. An ordered fold or explicit tree can express those computations with its specified evaluation order.
+The combine checker admits the numeric blueprint's registered laws: wrapping fixed addition, F=0 wrapping multiplication, fixed min/max, raw bitwise AND/OR/XOR, and Bool all/any/xor. It matches a registered operation certificate or a recognized typed expression; wrapping addition is one example, not the whole law registry. A helper merely named `add`, a flag claiming associativity or a successful sample cannot establish the law. Floating addition and fractional multiplication cannot use the same generic lawful-reduction certificate. An ordered fold or explicit tree can express those computations with its specified evaluation order.
 
 ### Windows and initialization
 
 | Resource/operation | Proposed rule |
 |---|---|
+| `Reg[T]` declaration | Explicit reset image, or registered ZeroImage(T); missing default requires explicit supported reset or a diagnostic |
 | `Sram[T,*shape]` declaration | Allocate uninitialized cells in the owning activation; writes/transfers establish initialized regions |
 | `RegFile[T,*shape]` declaration | Allocate and initialize the declared reset image, default typed zero, as already specified by R008 |
 | `Lut[T,*shape] = lut(...)` | Immutable fully initialized literal image; missing/extra cells or writes reject |
-| `LineBuffer[T,H,W]` declaration | Allocate finite history capacity with no published valid row at creation |
-| `load(lb,row)` | Rank-one source is one chronological row of width W; preflight/snapshot, begin/fill/publish through R008 protocol |
+| `LineBuffer[T,H,MAX_W]` declaration | Allocate finite row capacity MAX_W with no published valid row; invocation logical width w satisfies 0 < w <= MAX_W; a bare declaration uses w=MAX_W |
+| `load(lb,row)` | Rank-one source is one chronological row of the invocation's logical width w; preflight/snapshot, begin/fill/publish through R008 protocol |
 | `load(lb,rows)` | Registered rank-two source S×W is a chronological batch; new history is `take_H(reverse(rows)+old_history)`; publish one new version |
 | `sr.reset(*,enable=True)` | Restore the full declared reset image only when enabled |
 | `sr[i,:].shift(value,*,enable=True)` | Select one full contiguous row; snapshot the old row, put value at column 0, set column j>0 from old j−1; preserve other rows |
@@ -148,6 +149,8 @@ These external records occupy the `plan_requests` field of the closed target des
 | `origin` | Source annotation span or plan-record origin for diagnostics |
 
 Source numeric `par` and `ii` requests default to `prefer`; external records can make them `require`. Explicit task concurrency/protocol obligations remain semantic requirements and cannot be weakened by preference status. A preference may be realized with a different reported resource/schedule value while preserving meaning; an unmet requirement returns a failed plan with reasons. Neither value establishes measured throughput. No silent conflicting duplicate overrides: different values for the same subject/kind require a declared search domain or produce a conflict diagnostic.
+
+For a stop-sensitive effectful loop with semantic admission window W=1, `par=4` cannot authorize four visible iterations in flight. The plan must report any unrealized preference while preserving the same committed effects as `par=1`. A larger explicit admission window is a separate semantic policy and changes semantic identity; it is not inferred from par or II. The advanced-controller slice must register its source form before presenting an extra keyword as accepted syntax.
 
 For the course's buffered C, request `kind=storage_versions`, `value=3`, with its chosen strength. This counts physical version slots; it cannot increase semantic publication credits or alter controller admission. Extra physical slots retain the declared protocol limits. The planner derives live intervals and producer/consumer version dependencies, checks capacity and safe recycling, and records the realized count and any unmet preference. The course's triple-buffer explanation motivates the candidate, not a proof for every transformed loop. Plan changes invalidate affected banking/alias/visibility/schedule certificates and require rechecking before emission.
 

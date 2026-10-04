@@ -234,47 +234,113 @@ def tiled_fold(src: In[Dram[Int, 32]], result: Out[Int]):
 
 [designed] Empty-domain variations are separate fixtures, not silent changes to the fixed32 examples. Under [[20 - Python Numeric Contract]], an enabled identity-zero reduction over an empty domain returns0; an enabled identity-free reduction faults unless nonemptiness is established; an empty Fold returns its captured seed. A disabled controller evaluates no seed or contribution and performs no destination write. These cases require distinct IR fields even though the printed nonempty addition examples cannot distinguish them all.
 
-## Complete host workflows, with constructor gaps visible
+## Complete proposed host workflows
 
-[designed] The package blueprint fixes the five public calls and `Ok`/`Error` result alternatives, but does **not** fix every Python constructor signature for `CaptureBundle`, `Backing`, `BufferView`, environment, budget, or output decoders. Consequently the following is complete **record-based design pseudocode**, not importable Python and not a claim that these constructors exist. [[60 - Course Syntax and Compiler Trace]] records the proposed construction convention. This keeps the launch sequence precise without inventing a competing `capture_file`, `compile`, `kernel.run`, `result.unwrap`, or `setArg` public API.
+[designed] The 2026-10-03 refinement in [[PY-R016 - Source and Host Workflow Refinement]] closes the constructor gaps previously recorded here. [[40 - Package and Conformance Blueprint]] owns the exact public SourceUnit/CaptureBundle, typed input/backing, environment/budget and completed-output interfaces. The following driver is **syntactically valid proposed ordinary Python**. The Spatial package/API is unimplemented; this is not a working compiler demonstration. Save the unchanged complete tiled_scale kernel above as `lab1.py`. The driver reads it as text and never imports it.
 
-### Common acquisition and execution sequence
+### One complete tiled-scale driver
 
-```text
-Inputs fixed by a reviewed fixture manifest:
-  kernel_source = exact UTF-8 text of the selected complete module above
-  entry = module ID "lab1" and selected exported kernel name
-  dependencies = exact source dependencies and core-prelude version/digest
-  profile = a registered semantic profile with signed wrapping Int32,
-            Ordered bounded FIFOs, and the documented reduction policies
-  environment = the registered closed local-memory environment (no input stream)
-  budget = {steps: 100000, numeric_work: 100000, trace_bytes: 1048576}
+```python
+from pathlib import Path
+from spatial import (
+    Int, SourceUnit, CaptureBundle, core_prelude, capture, specialize,
+    check, prepare, simulate, Error, ScalarInput, Backing, Environment, Budget,
+)
 
-bundle = CaptureBundle DATA RECORD containing entry, source unit bytes,
-         source identity/origins, dependencies and exact prelude identity
+unit = SourceUnit(
+    module_id="lab1", text=Path("lab1.py").read_text(encoding="utf-8"),
+    label="lab1.py",
+)
+bundle = CaptureBundle(
+    entry=("lab1", "tiled_scale"), sources=(unit,), dependencies=(),
+    prelude=core_prelude(),
+)
 template = capture(bundle)
 program = specialize(template, {})
+checked_result = check(program, profile="reference.guarded.v1")
+if isinstance(checked_result, Error):
+    raise RuntimeError(checked_result.diagnostics)
+checked = checked_result.value
 
-checked_result = check(program, profile)
-if checked_result is Error: report diagnostics and stop this case
-checked = the value carried by Ok
-
-bindings = the exact named typed scalar/backing/view DATA RECORDS below
+values = tuple(i % 256 for i in range(32))
+src = Backing.from_ints(name="input", dtype=Int, shape=(32,), values=values)
+dst = Backing.empty(name="output", dtype=Int, shape=(32,))
+bindings = {
+    "src": src.view(access="read"),
+    "scale": ScalarInput.from_int(dtype=Int, value=2),
+    "dst": dst.view(access="write"),
+}
 prepared_result = prepare(checked, bindings, session=None)
-if prepared_result is Error: report diagnostics and stop this case
-invocation = the value carried by Ok
-
-run = simulate(invocation, environment, budget)
-if run did not complete successfully:
-    retain diagnostics, partial_state, trace and any continuation
-    classify this case as incomplete/faulted; do not publish PASS
-else:
-    decode the named typed values from run.complete_outputs
-    verify shape and all expected values against the independent host oracle
-    retain run_identity and report PASS only after every comparison succeeds
+if isinstance(prepared_result, Error):
+    raise RuntimeError(prepared_result.diagnostics)
+run = simulate(
+    prepared_result.value, environment=Environment.closed_memory(),
+    budget=Budget(steps=100_000, numeric_work=100_000, trace_bytes=1_048_576),
+)
+if run.outcome != "Completed":
+    raise RuntimeError((run.outcome, run.diagnostics, run.run_identity))
+output = run.complete_outputs["dst"]
+assert output.dtype == Int and output.shape == (32,)
+got = output.to_ints()
+gold = tuple(((x * 2 + (1 << 31)) % (1 << 32)) - (1 << 31) for x in values)
+assert got == gold
+print("PASS", run.run_identity)
 ```
 
-[designed] `capture(bundle)` returns a syntax-validated Template and `specialize(template,{})` returns an UncheckedProgram; neither is passed through an invented `Result.unwrap`. Only `check` and `prepare` in this sequence return the `Result` alternative described by the package blueprint. Acquisition/specialization source diagnostics must stop the case rather than fabricating a Template. The shown budgets are proposed observation limits, not a claim that a not-yet-implemented interpreter completes within them. An exhausted budget is incomplete even if some output cells already changed.
+[designed] `capture` and `specialize` return a Template and UncheckedProgram directly; expected failures raise `DiagnosticError` with immutable diagnostics and terminate this script. `check`/`prepare` retain their specified Ok/Error alternatives. The difference preserves the existing stage signatures and is explicit in the package contract; no invented `.unwrap()` is needed. These budgets are proposed observation limits, not evidence of interpreter completion within them.
+
+[designed] Backing factories freeze typed portable ABI input bytes. Default reference preparation snapshots each backing once, retaining all shared views; output extraction reads the completed invocation snapshot, not the original `dst` object. The output backing's physical zero-fill is not source-visible initialization. Each of its 32 logical cells must be initialized before Completed can publish the buffer. Any fault, stop, cancellation or budget outcome has `complete_outputs=None`, with committed partial state inspectable separately. Completed is the state blueprint's existing success tag, not an FPGA/cycle-accuracy claim.
+
+### Scalar input and scalar output through the same stages
+
+[designed] Save the complete scalar module above as `scalar.py`. This block uses the same imports as the complete driver and demonstrates the scalar binding and public decoder without changing the launch contract:
+
+```python
+scalar_unit = SourceUnit(
+    module_id="scalar", text=Path("scalar.py").read_text(encoding="utf-8"),
+    label="scalar.py",
+)
+scalar_bundle = CaptureBundle(
+    entry=("scalar", "scalar_add"), sources=(scalar_unit,), dependencies=(),
+    prelude=core_prelude(),
+)
+scalar_program = specialize(capture(scalar_bundle), {})
+scalar_checked = check(scalar_program, profile="reference.guarded.v1")
+if isinstance(scalar_checked, Error):
+    raise RuntimeError(scalar_checked.diagnostics)
+scalar_prepared = prepare(scalar_checked.value, {
+    "a": ScalarInput.from_int(dtype=Int, value=3),
+    "b": ScalarInput.from_int(dtype=Int, value=5),
+}, session=None)
+if isinstance(scalar_prepared, Error):
+    raise RuntimeError(scalar_prepared.diagnostics)
+scalar_run = simulate(
+    scalar_prepared.value, environment=Environment.closed_memory(),
+    budget=Budget(steps=100_000, numeric_work=100_000, trace_bytes=1_048_576),
+)
+if scalar_run.outcome != "Completed":
+    raise RuntimeError((scalar_run.outcome, scalar_run.diagnostics))
+assert scalar_run.complete_outputs["result"].to_int() == 8
+print("PASS", scalar_run.run_identity)
+```
+
+[designed] Scalar `result: Out[Int]` has no host seed or binding entry; it is an uninitialized output cell until the kernel writes it. Binding a scalar Out is an error. For `scalar_add3`, select that export and add `"c": ScalarInput.from_int(dtype=Int,value=7)`; the independent expected result is 15.
+
+### A wrong binding must stop before execution
+
+[designed] A 31-cell output allocation is valid host data, but incompatible with E1's fixed 32-cell dst. With the tile driver's checked program and bindings, the proposed distinguishing failure is:
+
+```python
+bad_bindings = dict(bindings)
+bad_bindings["dst"] = Backing.empty(
+    name="wrong_output", dtype=Int, shape=(31,),
+).view(access="write")
+rejected = prepare(checked, bad_bindings, session=None)
+assert isinstance(rejected, Error)
+assert any(d.code == "HOST.SHAPE_MISMATCH" for d in rejected.diagnostics)
+```
+
+[designed] The diagnostic identifies port dst, expected `(32,)`, actual `(31,)`, and its source declaration. No invocation is created. Separately, `ScalarInput.from_int(dtype=Int,value=1 << 31)` raises `DiagnosticError(HOST.INVALID_ARGUMENT)` before preparation; the constructor does not silently wrap. Wrong dtype, extra/missing port names, and unsupported read/write capabilities also reject. A negative `IndexInput(value=...)` used as a runtime extent fails the declared shape precondition during prepare.
 
 ### Concrete binding records and outputs
 
@@ -314,7 +380,7 @@ assert len(src_bytes) == 128
 assert (scalar_gold, reduce_gold, fold_gold) == (8, 496, 497)
 ```
 
-[designed] For each fixture, use its full kernel module and record bindings in the common sequence. In particular, scalar addition still runs capture/specialize/check/prepare/simulate; FIFO does not acquire a separate shortcut simulator; nested Reduce/Fold do not execute their helpers as host callbacks. The same checked program can later feed `plan(checked,target,binding_contract)`, but successful reference execution grants no target capability or FPGA deployment evidence.
+[designed] For each fixture, use its full kernel module and construct the typed bindings above in the same five-stage sequence. In particular, scalar addition still runs capture/specialize/check/prepare/simulate; FIFO does not acquire a separate shortcut simulator; nested Reduce/Fold do not execute their helpers as host callbacks. The same checked program can later feed `plan(checked,target,binding_contract)`, but successful reference execution grants no target capability or FPGA deployment evidence.
 
 ## Source problems and explicit proposed repairs
 
@@ -329,7 +395,7 @@ assert (scalar_gold, reduce_gold, fold_gold) == (8, 496, 497)
 | Public CS217's scalar Fold overloads disagree in constructor flag | `spatial@c1979ce:src/spatial/lang/control/ReduceClass.scala:90-96`; explicit register route at `src/spatial/lang/control/MemReduceClass.scala:101-103` | [measured] Lift seed passes `isFold=true`; Sym seed passes `false`; explicit Reg delegates to MemFold with `fold=true`. [judgment] This is an upstream overload anomaly, not a reason to copy ambiguous behavior into Python. The mapped Lab1 form uses explicit Reg; proposed Python seed/accumulator rules are stated independently. |
 | `b1(ii) * x` omits `.value` | `digital-systems-design-lab@b4896ab:lab1_part1_spatial.md:354`; implicit conversion at `spatial@c1979ce:src/spatial/lang/api/Implicits.scala:61-69` | [measured] Spatial admits implicit Reg read. [designed] Python scalar `scale:In[Int]` is already a value; true Reg remains explicit `.value`. Do not allow arbitrary handles in numeric slots. |
 | R001 examples use `combine="add"`; source blueprint rejects arbitrary string-op guessing; exact keyword schema was incomplete | [[PY-R001 - Programming Model Study]], [[10 - Source Checker and IR Blueprint]] | [designed] Retain a closed registered `"add"` alias and typed DefinitionRef alternative in [[60 - Course Syntax and Compiler Trace]]. This note uses named typed helper `add`; neither an arbitrary string nor its name proves a law. |
-| Package records are described but exact Python constructors/decoders are not fixed | [[40 - Package and Conformance Blueprint]] | [designed] Use record-based workflow above and specify constructor conventions in the course supplement before claiming runnable examples. All five public workflow signatures remain unchanged. |
+| Earlier package records lacked exact Python constructors/decoders | [[40 - Package and Conformance Blueprint]]; [[PY-R016 - Source and Host Workflow Refinement]] | [designed] The 2026-10-03 refinement supplies typed constructors, exact failure behavior and public completed-output decoders. The five stages and raw-source boundary remain; syntactic validity is not implemented compiler support. |
 | Page labels `gold` printing as “Sent in” | `digital-systems-design-lab@b4896ab:lab1_part1_spatial.md:379-384` | [measured] Printed expression is gold, not src. [designed] Host examples label source, expected and actual separately; no algorithm change is inferred. |
 | Controller introduction labels schematic fragments as Python, but contains C-style loop notation | `digital-systems-design-lab@b4896ab:lab1_part1_spatial.md:454-470` | [measured] The page itself calls these fragments pseudo code. [designed] Do not treat `for (i; ...)`, `list.len` or its `accum + i` illustration as an accepted Python/Spatial program or an exact sum oracle. The complete Reduce listing supplies the mapped algorithm. |
 

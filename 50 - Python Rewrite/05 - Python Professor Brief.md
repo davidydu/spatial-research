@@ -33,7 +33,7 @@ That lets us preserve the information hardware needs: exact numeric types, when 
 
 - **The full language needs more than arithmetic.** We accounted for all 106 existing specification documents and checked a 124-path language/node/library baseline. The proposal includes state, aliases, reductions, streams, locks, memory transfers, and termination.
 - **Some old behaviors disagree.** Simulator behavior alone cannot settle every numeric, queue, or cancellation rule. We recorded those differences and proposed explicit rules for review.
-- **A compiler framework helps with structure.** We recommend xDSL, a Python framework, for the internal program representation. Spatial still owns its semantic checks. A small framework experiment confirmed that we must add our own ordering/dominance verification.
+- **One Python representation should own the meaning.** The revised proposal uses immutable Python records shared by checking, simulation and planning. A bounded comparison with xDSL favors this simpler ownership and lower representation costs. xDSL remains available for a specific backend pipeline if it proves useful; complete compiler performance is still unmeasured.
 - **HLS comes after those rules.** HLS can schedule and synthesize the generated design, but our compiler must already preserve arithmetic, dependencies, memory behavior, and communication protocols.
 
 The earlier Rust work remains useful evidence about Spatial and validation. The proposed compiler has no Rust core.
@@ -46,7 +46,7 @@ Exact language behavior may require adapters or custom helpers on some HLS targe
 
 ## What is ready, and what comes next
 
-The research package now includes five implementation blueprints: source/checking, numbers, state/HLS, package/validation, and libraries. They specify algorithms and interfaces, with small reproducible experiments and a cross-review log. The architecture, semantic changes and implementation sequence remain proposed. The documentation repo is the source of truth; the website publishes the same files with links back to the evidence.
+The research package now includes five implementation blueprints: source/checking, numbers, state/HLS, package/validation, and libraries. They specify algorithms and interfaces, with small reproducible experiments and a cross-review log. The 3 October [[11 - Design Refinement Iterations|Codex/Fable refinement]] repairs the floating-point status rule, adds a complete public host example and type aliases, and makes protocol edge cases explicit. The architecture, semantic changes and implementation sequence remain proposed. The documentation repo is the source of truth; the website publishes the same files with links back to the evidence.
 
 No Python Spatial compiler or vendor hardware flow has been validated by this research. The first implementation step, after approval, is one complete path: read a composed memory kernel, check it, simulate it, explain errors, and save reproducible artifacts. We then expand reductions, numeric types, and stateful programs while beginning HLS on the checked subset.
 

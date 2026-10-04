@@ -10,7 +10,7 @@ implementation_status: not-implemented
 
 The studies explain the choices. The contracts say what a program means. These blueprints say how to build the compiler that enforces those contracts.
 
-The full path is captured Python source → checked Spatial program → Python reference simulation or a checked hardware plan → HLS and interface components. Python owns the language rules throughout. xDSL supplies Python compiler infrastructure. No Python compiler or Python-generated hardware result is claimed yet.
+The full path is captured Python source → checked Spatial program → Python reference simulation or a checked hardware plan → HLS and interface components. Python owns the language rules throughout. Immutable compiler-owned records carry checked meaning and target plans. xDSL is an optional derived adapter when a named pipeline demonstrates value. No Python compiler or Python-generated hardware result is claimed yet.
 
 ## Read by responsibility
 
@@ -28,7 +28,7 @@ The course-based supplement [[60 - Course Syntax and Compiler Trace]] supplies e
 
 ## Evidence and status
 
-[[09 - Fable Design Review]] is the latest cross-design review. Read its confirmed numeric erratum and binding/API follow-ups before using these blueprints as implementation instructions. Optional reviewer proposals have not been adopted.
+[[11 - Design Refinement Iterations]] records the current proposed refinements and their checks. The earlier [[09 - Fable Design Review]] is preserved as the starting critique; its numeric erratum is repaired by R015, and R016–018 record source/host, representation and protocol decisions. Professor adoption remains pending.
 
 [[07 - Python Implementation Readiness Audit]] records the gaps found, review discussion, experiments, repairs and remaining execution gates. [[01 - Python Coverage Ledger]] preserves all 106 original spec documents and their 18 family destinations. It links into this design without treating a document count as implemented feature coverage.
 

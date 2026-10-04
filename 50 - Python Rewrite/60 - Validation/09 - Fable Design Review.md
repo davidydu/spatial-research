@@ -10,6 +10,10 @@ reviewed_snapshot: 8e5dd54d7255899889123fb277ae09bb75f5784c
 review_model: claude-fable-5-1
 ---
 
+> [!info] Follow-up — 3 October 2026
+> [[11 - Design Refinement Iterations]] records the proposed repairs and new measured representation comparison. The current architecture uses immutable compiler-owned records with optional xDSL adapters. Findings and results below remain the dated historical review; see the follow-up for current closure and implementation limits.
+
+
 ## Recommendation
 
 **Keep the pure Python architecture. Correct the numerical defect, reconcile the contracts, and complete the student-facing workflow before treating the design as ready to implement. Keep xDSL provisional until a representative comparison tests its cost.**

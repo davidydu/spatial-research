@@ -114,7 +114,7 @@ def tiled_scale(src: In[Dram[Int, 32]],
 
 **On screen:** Four selectable stages: **Read source → Resolve names → Check meaning → Keep a checked program**. The detail panel follows the same tiled program with explanatory views of loops, declarations, types, shapes and effects.
 
-**Visual action:** Click through the stages to change the explanation and simplified program view. The last stage is ready for reference simulation. The supporting line says Python owns the language rules and xDSL supplies proposed compiler infrastructure. These views are explanatory notation, not actual compiler output.
+**Visual action:** Click through the stages to change the explanation and simplified program view. The last stage is ready for reference simulation. The supporting line says Python owns the language rules and stores the checked program in immutable Python records. This follows the 3 October refinement in [[11 - Design Refinement Iterations]]. These views are explanatory notation, not actual compiler output.
 
 **Full speaker script, 1:30:**
 
@@ -124,13 +124,13 @@ def tiled_scale(src: In[Dram[Int, 32]],
 >
 > The output is a checked representation of the program. It still contains the memories and control structure. That representation is what the simulator would run.
 >
-> We propose using xDSL for the compiler infrastructure. The Spatial rules and compiler passes would still be Python code that we own. The framework gives us a way to organize operations and transformations. We still have to implement and test the checks.
+> We now propose storing the checked program and hardware plan in our own immutable Python records. The simulator and hardware planner would use the same checked program. We compared this with xDSL; it remains an option if a specific backend needs it. We still have to implement and test the compiler.
 >
 > *Click through the stages. The right-hand view is explanatory notation, not actual compiler output.*
 
 **Evidence:** [[10 - Source Checker and IR Blueprint]], [[PY-R006 - Compiler Architecture and Framework Choice]], [[40 - Python Compiler and HLS Contract]], [[07 - Python Implementation Readiness Audit]].
 
-**Boundary:** A bounded xDSL experiment is evidence about a framework behavior, not implementation of the Spatial checker. Avoid claiming that all legal programs can be proved statically.
+**Boundary:** The bounded records/xDSL comparison supports the representation choice; it is not a complete compiler benchmark or an implemented Spatial checker. Avoid claiming that all legal programs can be proved statically.
 
 ## Slide 5 — Values and state both matter
 

@@ -7,6 +7,7 @@ source_files: []
 source_notes:
   - "[[PY-R006 - Compiler Architecture and Framework Choice]]"
   - "[[PY-R007 - Host Workflow Reproducibility and Validation]]"
+  - "[[PY-R017 - Compiler Representation Comparison]]"
   - "[[PY-R009 - HLS Boundary and Control Lowering]]"
 decision_records:
   - "[[D-28]]"
@@ -22,7 +23,7 @@ implementation_status: not-implemented
 
 ## Chosen structure
 
-Propose immutable Python source/unchecked records, custom Spatial dialects on xDSL for checked semantic and implementation programs, a Python reference simulator, and a Python backend that emits HLS C++ and integration manifests. Python owns all Spatial-specific typing, arithmetic, effects, protocols, transformations, and target legality. xDSL supplies compiler infrastructure; it does not decide what a Spatial program means.
+Propose transitively immutable Python records for source/unchecked data, the canonical checked semantic program and the initial checked implementation plan, a Python reference simulator, and a Python backend that emits HLS C++ and integration manifests. Python owns all Spatial-specific typing, arithmetic, effects, protocols, transformations and target legality. An optional derived xDSL representation may support a named lowering/interop route after its correspondence and reuse gate; it does not become a second semantic authority.
 
 ```mermaid
 flowchart TD
@@ -36,7 +37,7 @@ flowchart TD
     H --> V[Vendor synthesis and RTL validation]
 ```
 
-This is a proposed architecture, not an implemented pipeline. xDSL is recommended for inspectable Python region/SSA infrastructure; the proposed CPython/xDSL/dependency lock and clean-wheel reproduction are now fixed in [[40 - Package and Conformance Blueprint]]. Custom Python IR is the fallback if measured framework costs or representation conflicts justify it. Native MLIR adapters remain possible; native storage by itself does not move Python-defined Spatial rules to native code. No Rust semantic core is proposed.
+This is a proposed architecture, not an implemented pipeline. [[PY-R017 - Compiler Representation Comparison]] supplies the paired representation experiment, its limits, and the reasons for the custom-record default. The CPython baseline remains; the reproducible xDSL wheel in [[40 - Package and Conformance Blueprint]] is evidence for an optional adapter, not a mandatory core dependency. Native MLIR adapters remain possible; native storage by itself does not move Python-defined Spatial rules to native code. No Rust semantic core is proposed.
 
 ## Representation and verification
 
@@ -48,9 +49,11 @@ This is a proposed architecture, not an implemented pipeline. xDSL is recommende
 | Checked implementation plan | Explicit lanes/masks/controllers/continuations, channels/arbiters, banks/ports/versions, numeric realizations, ABI, and correspondence to semantic obligations |
 | Emission | No unresolved required operation or target obligation; stable artifacts, source maps, capabilities, constraints, and tool dependency manifest |
 
-Framework verification is necessary but insufficient. Spatial checks value dominance, token linearity/joins, capability escape, numeric properties, region results, effects, lifetimes, initialization, aliasing, reduction policy, and task protocols. Requirements have explicit dispositions: proved, invocation precondition, supported runtime guard, unknown, or rejected. Unknown does not authorize lowering. A checked reference program can still lack a target capability.
+Spatial structural and semantic verification is required for every candidate. Any optional framework adapter must also pass its framework verification, which is insufficient by itself. Spatial checks value dominance, token linearity/joins, capability escape, numeric properties, region results, effects, lifetimes, initialization, aliasing, reduction policy, and task protocols. Requirements have explicit dispositions: proved, invocation precondition, supported runtime guard, unknown, or rejected. Unknown does not authorize lowering. A checked reference program can still lack a target capability.
 
-Checked snapshots expose queries and operations, not live mutable framework objects. Passes clone private candidates, transform, verify, and publish a new revision. Failed passes leave the previous revision intact. Attributes/properties and attached metadata must be immutable owned payloads because copying an outer graph does not freeze arbitrary nested Python objects. Runtime state belongs to an invocation, never to the shared checked graph.
+Checked snapshots expose queries over transitively immutable owned records. Unchecked, candidate and checked types are distinct; only successful verification can publish checked status for a particular revision/profile/requirement disposition. Passes rebuild affected records and ancestors, or a whole unit, verify the complete candidate and publish a new revision. They may share unchanged immutable structure. Failed passes leave the previous revision intact. Payload schemas exclude arbitrary mutable containers/callbacks; a frozen outer dataclass alone is insufficient. Analysis/use/parent indices are revision-scoped side tables. Runtime state belongs to an invocation, never to the shared checked graph.
+
+An optional xDSL adapter keeps mutable graphs private, preserves explicit correspondence to the canonical program/plan and verifies candidates before publication. Its clone mechanism must not share mutable nested payloads. It cannot replace the checked semantic program as the simulator/planner authority or silently round-trip framework mutations into semantic meaning.
 
 ## Pass and effect obligations
 
@@ -60,7 +63,7 @@ Only approved total-pure operations enter generic CSE/DCE/speculation. Ordinary 
 
 Each pass declares prerequisites, changes, preserved facts, invalidations, and checks. Semantic properties live in the program. Inferred facts live in revision/dependency-keyed analysis tables. Deleting or rewriting an operation must not discard an unmet requirement. Banking, scheduling, retiming, and buffering may iterate through implementation revisions; they must preserve logical values, effects, lifetime, capacity, and termination policy.
 
-Use a versioned canonical Spatial schema for interchange and caching. Import rejects unknown fields/tags, malformed identities, and violated invariants. Generic xDSL text is for inspection; pickle and Python AST objects are not trusted interchange. Separate source acquisition/provenance, checked semantic, build, and run keys. Tool/target versions, semantic profiles, actual aliases, session/environment state, and randomness belong in the appropriate key.
+Use a versioned canonical Spatial schema for interchange and caching. Import rejects unknown fields/tags, malformed identities, and violated invariants. If an xDSL adapter is enabled, its generic text is for inspection; pickle and Python AST objects are not trusted interchange. Separate source acquisition/provenance, checked semantic, build, and run keys. Tool/target versions, semantic profiles, actual aliases, session/environment state, and randomness belong in the appropriate key.
 
 Reference component models serialize as versioned model IDs with code/dependency hashes and explicit state/input/environment schemas. A reviewed Python registry resolves them outside the IR; closures and mutable host globals are not hidden model state. Registry admission has a declared trust boundary and independent conformance tests. Missing/mismatched model versions diagnose rather than silently rebind.
 
@@ -88,4 +91,4 @@ Hardware faults require static proof of impossibility, validated invocation prec
 
 Keep these outcomes separate: reference execution, generated C++ checks, vendor C simulation, RTL/protocol simulation, synthesis schedule/resource reports, physical timing, and board tests. Every claimed capability names its program/profile/inputs/environment and artifact/tool hashes. Unexecuted design studies do not receive executed-support labels.
 
-R007 fixes feedback workloads and targets before benchmarking, with warmups, repeated runs, median/p95 and memory reporting. Independent numeric vectors, state/event expectations, and bounded protocol exploration supplement shared checker/simulator code. Full scope and migration follow R005 and its 106-document coverage ledger. Implementation follows [[04 - Python Implementation Roadmap]] after professor review; no production compiler work is authorized by this proposed contract.
+R007 fixes feedback workloads and targets before benchmarking, with warmups, repeated runs, median/p95 and memory reporting. R017 measures partial representation work only and passes no complete R007 gate. The named representation gates follow their actual consumers: REP-S1 and the early structure-changing REP-EDIT fixture at S1 exit; REP-S5 before communicating-family support; and REP-S6(scope) before S7 emission for that scope. Source/builder/artifact agreement, candidate isolation, requirement/provenance transfer and stale-fact rejection begin at S1, while task-token and plan obligations wait for the stages that implement them. R017 and the roadmap define linked positive/negative execution evidence; S1 cannot claim that every later gate passed. Adopt a framework adapter only for named reused operations/passes/tools with measured conversion and correspondence costs. When an integrated R007 target is missed and profiling attributes the miss to the representation, required indices or transactions, require a bounded same-slice record-repair/xDSL comparison before extending that affected route. The trigger does not wait for a prebuilt winner or use an invented budget percentage. Reopen on an actual representation conflict or demonstrated equivalent whole-workflow benefit; a plan-layer adapter need not replace semantic records, and a toy speed ratio is not an adoption threshold. Independent numeric vectors, state/event expectations, and bounded protocol exploration supplement shared checker/simulator code. Full scope and migration follow R005 and its 106-document coverage ledger. Implementation follows [[04 - Python Implementation Roadmap]] after professor review; no production compiler work is authorized by this proposed contract.

@@ -6,6 +6,10 @@ date: 2026-10-01
 status: reviewed
 ---
 
+> [!info] Follow-up — 3 October 2026
+> [[11 - Design Refinement Iterations]] records the proposed repairs and new measured representation comparison. The current architecture uses immutable compiler-owned records with optional xDSL adapters. Findings and results below remain the dated historical review; see the follow-up for current closure and implementation limits.
+
+
 ## Purpose and boundary
 
 > [!warning] Subsequent review — 2 October 2026
