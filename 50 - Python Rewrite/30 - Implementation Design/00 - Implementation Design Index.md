@@ -12,6 +12,8 @@ The studies explain the choices. The contracts say what a program means. These b
 
 The full path is captured Python source → checked Spatial program → Python reference simulation or a checked hardware plan → HLS and interface components. Python owns the language rules throughout. Immutable compiler-owned records carry checked meaning and target plans. xDSL is an optional derived adapter when a named pipeline demonstrates value. No Python compiler or Python-generated hardware result is claimed yet.
 
+[[70 - Engineering Architecture Map|Open the engineering architecture map]] for an editable Excalidraw view of the whole path, module contracts, state ownership, verification gates and EE109 implementation stages.
+
 ## Read by responsibility
 
 | Blueprint | What an implementer gets |

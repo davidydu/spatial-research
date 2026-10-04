@@ -24,6 +24,8 @@ Research before implementation: establish what Spatial programs mean in Python, 
 
 [[03 - Managed Research Execution|Managed research execution]] records the completed research package, parallel work, and completion evidence.
 
+[[70 - Engineering Architecture Map|Engineering architecture map]] — the big picture and implementation details on one zoomable Excalidraw canvas, with the EE109 lab sequence below.
+
 [[01 - Python Research Plan|Research method]] · [[PY-R001 - Programming Model Study|Paired Python programs]] · [[PY-E001 - Initial Example Corpus|Shared example cases]]
 
 ## Foundation studies

@@ -26,10 +26,10 @@ The lab mappings revealed missing source-level details in the existing architect
 | Parse and bind | Recognize the closed AST grammar; bind each name to a definition, port, resource, helper or registered operation | `tile[i]`, `r.value`, `fsm(... action=write_state)` |
 | Specialize | Substitute explicit Meta values, validate finite capacities, prebind signature shape dependencies | GEMM TM/TN/TK and runtime M/N/K shapes |
 | Check meaning | Types, widths, domain bounds, effects, initialization, aliases, helper capture and resource lifetime | FIFO branch, GEMM tails, mapper-local SRAM and convolution history |
-| Build checked IR | Owned Spatial operations and regions with verified tokens, requirements and origin maps; use xDSL as infrastructure | Every example retains memories/controllers instead of becoming untyped Python calls |
+| Build checked IR | Immutable compiler-owned Python records with verified tokens, requirements and origin maps; xDSL is an optional derived adapter | Every example retains memories/controllers instead of becoming untyped Python calls |
 | Run the reference model | Python numeric engine plus resource state and ordered/communicating continuations | Compare values, queue changes, memory initialization and faults |
 | Build a hardware plan | Finite widths, storage, versions, ports, banking, task schedule, transfers, ABI and proof obligations | `.buffer`, `par`, II and streaming requests |
-| Emit and validate | Implementation dialect → HLS/interface code; independent tool and hardware evidence | The course's Part 2 tasks become later validation stages |
+| Emit and validate | Checked implementation plan → HLS/interface code; independent tool and hardware evidence | The course's Part 2 tasks become later validation stages |
 
 The reference simulator and HLS backend consume the same checked meaning. A vendor HLS tool may schedule supported generated code; it does not decide what a Python branch, fixed-point operation, FIFO consume or memory fold means.
 
