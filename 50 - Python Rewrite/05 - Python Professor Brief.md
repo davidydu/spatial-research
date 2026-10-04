@@ -5,7 +5,9 @@ project: spatial-python
 date: 2026-10-01
 ---
 
-<a href="presentation/python/index.html" data-router-ignore target="_blank" rel="noopener noreferrer">Open the seven-slide presentation</a> · [[2026-10-01-python-professor-presentation-outline|Full speaker notes and evidence]].
+<a href="presentation/python/index.html" data-router-ignore target="_blank" rel="noopener noreferrer">Open the refreshed seven-slide presentation</a> · [[2026-10-01-python-professor-presentation-outline|Full speaker notes and evidence]].
+
+The 3 October presentation follows one program through the proposed host workflow, explains the shared checked program, and shows the review findings and evidence before the approval request.
 
 ## The proposal
 
