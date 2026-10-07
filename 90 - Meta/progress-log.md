@@ -9,6 +9,12 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-07 — Center the meeting on the Python Spatial design
+- Replaced the main presentation with six architecture questions answering “What does a Python version of Spatial look like?” The main story now covers the complete Python system, host/kernel boundary, compiler-owned representation, reference execution, hardware planning and the design for professor review. Removed the tiled-program walkthrough and animation.
+- Kept the Excalidraw map embedded on slide 3. Moved implementation progress, independent-composition acceptance and EE 109 examples to a supporting evidence dialog and linked documentation. Explicitly distinguished reference validity from target eligibility, and generated HLS C++ from the Python compiler implementation.
+- Rewrote [[05 - Python Professor Brief]] and [[2026-10-01-python-professor-presentation-outline]] to match. All six scripts match the HTML notes and the timing targets sum to ten minutes. This supersedes the earlier seven-slide outline recorded below.
+- Validation: 31 local presentation links/assets resolve; no duplicate IDs or remaining program-animation controls; focused JavaScript/format checks pass. Inspected the new diagrams and checked all six slides at 1280×720, 1440×900 and phone width. Exercised navigation, map sections/zoom, speaker notes and the supporting evidence dialog. No browser errors in those flows.
+
 ## 2026-10-07 — Python professor presentation refresh
 - Refreshed the seven-slide, ten-minute [Python presentation](https://davidydu.github.io/spatial-research-site/presentation/python/) around the host/kernel boundary, shared checked meaning, independent composition acceptance, committed implementation progress and the route to HLS. Updated [[05 - Python Professor Brief]] and [[2026-10-01-python-professor-presentation-outline]]; all seven verbal scripts match the slide notes.
 - Embedded the existing [[70 - Engineering Architecture Map|Excalidraw architecture]] on slide 4, with a full vector viewer, overview/compiler/execution/lab shortcuts, zoom, drag/keyboard scrolling and editable-source download. Retained all 174 drawing elements and geometry; revised the old implementation-status subtitle to point to separate current evidence. SVG/source assets match the vault copies.
