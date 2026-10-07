@@ -1,15 +1,18 @@
 ---
 type: plan
 title: "Python Spatial implementation roadmap for review"
-scope: "Proposed vertical slices after architecture approval; no implementation authorization"
+scope: "Proposed full roadmap; bounded initial implementation authorized 2026-10-04"
 project: spatial-python
 date: 2026-09-30
+updated: 2026-10-07
 status: proposed
 ---
 
 ## Approval boundary and intended result
 
-This is the proposed implementation sequence following [[03 - Managed Research Execution]]. It is part of the research package for professor review. It does not authorize production compiler work or report that any slice exists.
+This is the proposed full implementation sequence following [[03 - Managed Research Execution]]. It remains part of the research package for professor review; its stages describe intended results, not completed support.
+
+**4 October authorization:** David authorized the [[80 - Initial Compiler Goal|bounded composed-memory implementation experiment]], an initial Int32 portion of S1 with the necessary S0 foundations. That work is underway in the separate implementation repository. This supersedes the earlier no-start wording for the initial experiment only. Professor adoption of the complete [[D-28]] architecture, the full roadmap and later support claims remain separate. The initial-goal page records implemented components and unfinished acceptance gates.
 
 The intended result is a Python language frontend, Python semantic compiler, and Python reference simulator, followed by a reusable HLS backend. Each slice must handle a family of composed programs and explain invalid cases. A handwritten recognizer for one complete application does not complete a slice.
 
@@ -72,13 +75,15 @@ Use four different statuses: proposed design, implemented reference semantics, i
 
 The fixture set must vary extents, nesting, types, helper boundaries, branch paths, alias relationships, masks, initial state, and scheduling annotations. Include a composition that was not in the initial corpus. Compare state/effect traces where final values can hide bugs. All source examples must become either accepted fixtures or documented intentional rejections under the adopted grammar.
 
-## Gates before starting implementation
+## Authority and readiness gates
 
-1. Professor review identifies the approved architecture/scope and any requested changes. The decision record names that authority; research recommendations do not silently change to adopted rules.
+The initial experiment proceeds under the 4 October authorization above. These gates govern the reviewed scope and subsequent expansion; they do not reopen permission for that already-authorized work.
+
+1. Professor review identifies the adopted full architecture/scope and any requested changes. The decision record names that authority; the bounded initial experiment does not by itself adopt the full roadmap.
 2. The proposed specification incorporates the reviewed rules and deliberate divergences from original Spatial. Initial release scope and full-rewrite milestones are explicit.
 3. The dependency/runtime baseline and artifact schema are pinned. The R017 comparison and its limitations inform the selected record structure before S0; reproduce the selected invariant tests in a clean environment. Any optional framework adapter has a named pipeline, pinned dependencies and explicit conversion/correspondence checks.
 4. Numeric, effect, and protocol examples have independent expected outcomes before optimizer/backend code exists. Feedback-time workloads and targets from [[PY-R007 - Host Workflow Reproducibility and Validation]] are preserved before measuring the implementation.
-5. The first slice has a concrete entry/exit checklist and a reviewable repository plan. Existing Rust and Scala repositories remain evidence; creating a Python implementation repository is a separate approved implementation action.
+5. Each slice has a concrete entry/exit checklist and a reviewable repository plan. The initial experiment has its own authorized Python repository and plan. Existing Rust and Scala repositories remain evidence, and their results do not establish Python implementation support.
 
 ## Acceptance and changes of direction
 

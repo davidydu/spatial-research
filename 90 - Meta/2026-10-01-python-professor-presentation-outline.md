@@ -5,35 +5,35 @@ project: spatial-python
 date: 2026-10-01
 updated: 2026-10-07
 status: meeting-ready
-scope: "Six-slide architecture discussion: what a Python version of Spatial looks like"
+scope: "Six slides on the Python system, feasibility, implementation plan and next milestones"
 ---
 
-# What does a Python version of Spatial look like?
+# Python Spatial: system, feasibility and implementation plan
 
-[Open the presentation](https://davidydu.github.io/spatial-research-site/presentation/python/). Six architecture slides, about ten minutes before discussion. Press **N** for the current script, **E** for its sources, and the arrow keys to move. Slide 3 embeds the Excalidraw overview; **Explore engineering map** opens section navigation, zoom, panning and the editable source.
+[Open the presentation](https://davidydu.github.io/spatial-research-site/presentation/python/). Six slides, about ten minutes before discussion. Press **N** for the current script, **E** for its sources, and the arrow keys to move. Slide 3 embeds the Excalidraw overview; **Explore engineering map** opens section navigation, zoom, panning and the editable source.
 
-The professor knows Spatial. The talk answers what the Python system would be: its language boundary, compiler representation, reference execution and later HLS path. It does not walk through a Spatial program. EE 109 examples, generality checks, implementation progress and the documentation repositories are supporting material.
+The professor knows Spatial, and HLS is already the agreed destination. This talk answers what a Python version of Spatial looks like, why it is feasible, how we will build it, what is implemented, and what we should validate next. It does not walk through a Spatial program or explain HLS again.
 
-The pure Python direction is accepted. The architecture and deliberate semantic changes in [[D-28]] remain proposed for review. David authorized the initial implementation experiment on 4 October; that authorization is separate from adoption of the complete architecture.
+David authorized the initial composed-memory experiment on 4 October. The detailed architecture and semantic changes in [[D-28]], and expansion beyond the bounded initial goal, remain for review. The 236 component tests are scoped implementation evidence; they do not establish a working complete compiler.
 
-## Six questions and timing
+## Story and timing
 
-| Slide | Main question | Navigation label | Time | Elapsed |
+| Slide | Headline | Navigation label | Time | Elapsed |
 |---|---|---|---|---|
 | 1 | What does a Python version of Spatial look like? | The whole system | 1:15 | 1:15 |
-| 2 | What does “Python” mean for the language? | The language boundary | 1:30 | 2:45 |
-| 3 | What does the Python compiler build? | Inside the compiler | 2:00 | 4:45 |
-| 4 | How would it execute in Python? | Running it in Python | 1:45 | 6:30 |
-| 5 | Where does HLS fit? | The later HLS path | 1:45 | 8:15 |
-| 6 | Does this capture the Python Spatial we want to build? | The design to review | 1:45 | 10:00 |
+| 2 | Yes, this is feasible in Python. | Why Python works | 1:30 | 2:45 |
+| 3 | What does the Python compiler build? | Inside the compiler | 1:30 | 4:15 |
+| 4 | Build one complete path, then expand it. | How we build it | 2:15 | 6:30 |
+| 5 | The foundations are implemented. | What works today | 1:30 | 8:00 |
+| 6 | Complete the core, then grow the language. | What comes next | 2:00 | 10:00 |
 
-**Total: 10 minutes.** The scripts reproduce the webpage notes with HTML whitespace normalized. Timing is a delivery target, not a measured rehearsal. Keep detailed syntax, module APIs and implementation evidence for questions.
+**Total: 10 minutes.** This is a pacing target, not a measured rehearsal. The scripts reproduce the current webpage notes with HTML whitespace normalized. Keep the map exploration and documentation tour brief; detailed syntax and API questions can use the linked notes.
 
 ## 1. What does a Python version of Spatial look like? · 1:15
 
-**Main idea:** Python implements the language frontend, compiler and reference engine. Spatial keeps explicit types, storage, control and parallel work.
+**Main idea:** A Python frontend, compiler and reference engine preserve Spatial’s explicit concepts. HLS is the agreed destination.
 
-**On screen:** Use Write, Compile and Execute to explain the proposed system. Point out which Spatial concepts stay and which implementation layers are rebuilt.
+**On screen:** Use Write, Compile and Execute to show the system. Briefly name what Spatial preserves and what Python rebuilds. HLS needs no separate explanation.
 
 ### Spoken script
 
@@ -41,9 +41,9 @@ The answer I’m proposing is a complete Python implementation of Spatial: a lan
 
 The Spatial concepts stay recognizable: explicit memory, control, parallel work, reductions and communication. We would rebuild the machinery that reads, represents, checks and executes those concepts.
 
-The compiler would produce a structured, checked description of the program. We could run that description in Python first. A later backend would use the same description to build a hardware implementation.
+The compiler would produce a structured, checked description of the program. We could run that description in Python first. The agreed HLS backend would use that description to build a hardware implementation.
 
-I want to focus this discussion on the shape of that system: what Python means at the language boundary, what sits inside the compiler, how execution works, and where HLS fits. Detailed syntax examples and implementation evidence are linked for follow-up.
+HLS is already our agreed target. Today I want to explain why this system is feasible in Python, how we plan to build it, what we have completed, and what we should validate next.
 
 ### Evidence
 
@@ -54,48 +54,48 @@ I want to focus this discussion on the shape of that system: what Python means a
 [Full language coverage](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/60---Validation/01---Python-Coverage-Ledger.html)
 
 
-## 2. What does “Python” mean for the language? · 1:30
+## 2. Yes, this is feasible in Python. · 1:30
 
-**Main idea:** Ordinary Python runs host experiments; captured kernel source follows Spatial rules. Compile-time choices and runtime inputs remain distinct.
+**Main idea:** Python can express the compiler algorithms and explicit Spatial rules. Practical throughput and memory use must be measured on the complete workflow.
 
-**On screen:** Point across host Python and captured kernel source, then down to compile time and run time. Keep this at the language boundary; no kernel walkthrough.
+**On screen:** Connect program records, explicit semantic rules and independent tests to feasibility. Separate the ability to implement these algorithms from the practical speed question.
 
 ### Spoken script
 
-Python has two roles. On the host side, it is the normal Python environment for data and experiments. Inside a kernel, Python syntax expresses a defined Spatial language.
+Yes. The compiler’s algorithms and data structures can all be implemented in Python. The main work is representing a program, analyzing its structure, checking rules and transforming it.
 
-The compiler reads the kernel source. It does not execute the kernel’s decorators, annotations or body to discover what the program is. That lets it inspect retained branches, scopes and storage relationships before a run.
+The important distinction is between the language we use to write the compiler and the behavior that compiler implements. For example, we can use Python integers while explicitly enforcing Spatial’s fixed-width arithmetic. We also define storage identity, lifetimes and the order of state changes.
 
-We also keep compile time and run time explicit. Source, dependencies and chosen meta parameters are fixed for compilation. Actual input values and supported runtime dimensions belong to a run. A runtime branch still chooses its path when the program executes.
+Ordinary Python remains available for data preparation and experiments. Accelerator kernels use a defined subset that the compiler reads as source. That keeps their meaning under our control.
 
-This is a deliberate language boundary. Spatial defines numeric precision, memory and control behavior even though the program is written with Python syntax. General Python libraries belong on the host unless we explicitly add their operations to the kernel language.
+So my answer on feasibility is yes. The practical question is how well the complete implementation performs. We need to measure compilation time, simulator speed and memory use on useful workloads. Our existing components give us evidence for parts of the design; they do not yet establish the complete workflow.
 
 ### Evidence
 
-[Source acquisition and language model](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/10---Research/PY-R001---Programming-Model-Study.html)
+[Python compiler architecture](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/10---Research/PY-R006---Compiler-Architecture-and-Framework-Choice.html)
 
-[Source and checker blueprint](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/30---Implementation-Design/10---Source-Checker-and-IR-Blueprint.html)
+[Explicit numeric behavior](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/10---Research/PY-R002---Numeric-and-Reduction-Semantics.html)
 
-[Complete proposed host API](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/10---Research/PY-R016---Source-and-Host-Workflow-Refinement.html)
+[Workflow and performance acceptance](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/10---Research/PY-R007---Host-Workflow-Reproducibility-and-Validation.html)
 
 
-## 3. What does the Python compiler build? · 2:00
+## 3. What does the Python compiler build? · 1:30
 
-**Main idea:** Source, generators and imported artifacts reach one checker and one immutable program model. Helpers and libraries compose the same operations.
+**Main idea:** One immutable program model and verifier serve source, generators, saved artifacts, execution and later lowering.
 
-**On screen:** Follow the input routes through the checker to the shared model. Open Explore engineering map for the original Excalidraw overview and zoomable details. The map describes proposed responsibilities, not implementation status.
+**On screen:** Follow the inputs through one verifier into the shared model. Open Explore engineering map only for a useful detail. Its colors show proposed responsibilities, not implementation status.
 
 ### Spoken script
 
-At the center is a program representation that we own in Python. You can think of it as typed records of operations, control regions and storage, with explicit links between them.
+The center of the design is one shared program model. It holds typed records for operations, control regions and storage, with explicit links between them.
 
-It carries the information needed to preserve Spatial’s behavior: the type of a value, whether two views share memory, where local storage lives, which region owns an operation, and which state changes must happen in order.
+The model keeps the facts that later stages need: the type of each value, which views share memory, where storage is valid, and which operations must happen in order. These facts should survive changes to the program.
 
-Written source, generated programs and imported artifacts reach the same checking boundary. The compiler first resolves and normalizes them into its common model. Only a fully verified candidate becomes a checked program. Helpers and libraries compose the same operations. A builder is another way to supply a program, not another set of language rules. Checked programs can retain declared input conditions and supported runtime checks; not every property must be proved statically.
+Written source, generated programs and saved artifacts all reach the same verifier. A fully verified candidate becomes a checked program. Some conditions can remain as declared input requirements or supported runtime checks.
 
-The accepted records are immutable. An optimization or structural edit makes a new candidate, repairs its references and checks it before use. That gives checking, simulation and hardware planning one common meaning to work from.
+The reference engine runs those records with separate state for each invocation. Compiler transformations build a new candidate and check it before use. The later backend consumes the same meaning.
 
-The Excalidraw map shows this design at both levels. Its top row is the whole system; the detailed sections assign responsibilities to the frontend, verifier, execution engine and backend. We can zoom into those during discussion. The full architecture remains proposed.
+This Excalidraw map connects that overview to the detailed module responsibilities. We can zoom into the checker, runtime or roadmap during discussion. It shows the proposed full system; the progress slide will show which parts are implemented.
 
 ### Evidence
 
@@ -106,106 +106,110 @@ The Excalidraw map shows this design at both levels. Its top row is the whole sy
 [Why compiler-owned Python records](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/10---Research/PY-R017---Compiler-Representation-Comparison.html)
 
 
-## 4. How would it execute in Python? · 1:45
+## 4. Build one complete path, then expand it. · 2:15
 
-**Main idea:** A reusable checked program is separate from the mutable state of each invocation. Reference execution preserves values, state changes and faults.
+**Main idea:** Finish one complete path for a reusable memory-program subset, including verification, source handling, prepared inputs, execution and artifacts.
 
-**On screen:** Show one immutable program serving Run A and Run B. Explain why inputs, storage contents and active control belong to a run. Mention explicit sessions only if persistent state comes up.
-
-### Spoken script
-
-The reference engine is a Python interpreter for our checked representation. It implements Spatial’s numeric, memory and control rules.
-
-The program and the execution state are separate. The same checked program can be used for several runs. Each invocation has its inputs, values, memory contents, active control and pending operations. Views that share storage keep that relationship. Persistent state, when requested, belongs to an explicit session.
-
-This matters because Spatial behavior includes state and effects. The engine must take only the selected branch, respect the required order of operations, and preserve memory lifetimes. For later communicating programs, waiting and resumable work must also have defined behavior.
-
-A completed run exposes complete outputs. A fault or suspended run has a different result. We can compare outputs and observable effects with independent expectations, then use this behavior as a reference for transformations and hardware plans.
-
-This engine tells us what the program does. It does not yet tell us its cycle count or the quality of a hardware implementation.
-
-### Evidence
-
-[Reference execution, state and hardware design](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/30---Implementation-Design/30---State-Simulator-and-HLS-Blueprint.html)
-
-[Invocation APIs and outcomes](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/30---Implementation-Design/40---Package-and-Conformance-Blueprint.html)
-
-[Numeric engine design](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/30---Implementation-Design/20---Numeric-Engine-Blueprint.html)
-
-
-## 5. Where does HLS fit? · 1:45
-
-**Main idea:** Planning introduces hardware choices and checks target obligations before HLS emission. Reference validity does not imply target eligibility.
-
-**On screen:** Follow the checked program through planning, plan checks and HLS emission. Explain that a runtime loop can have a variable iteration count while simultaneous hardware state and storage remain bounded.
+**On screen:** Point to the declared memory subset, then follow the four implementation steps. Explain that complete verification means the initial subset’s verifier. Each admitted feature must work through the whole path.
 
 ### Spoken script
 
-HLS comes after the language has a defined meaning. The Python compiler takes the checked program and builds a target-specific implementation plan.
+The implementation plan starts with a complete path for a limited but reusable language subset. The first family is memory programs using exact Int32 arithmetic, typed inputs, local and external storage, views, transfers, loops, branches and helpers.
 
-That plan introduces hardware choices: storage and banking, work mapping, scheduling constraints, interfaces and realizations of numeric operations. Those choices must satisfy target requirements and preserve the program’s allowed observable behavior. A program can be valid for reference execution and still lack a legal implementation for a particular target. Unknown required target facts block emission. Runtime loops need not have a fixed iteration count, but simultaneous hardware state and storage must be bounded.
+We start by finishing the complete verifier for the initial subset. It needs to check memory relationships, lifetimes, initialization and the remaining whole-program obligations before it can publish a checked program. Several lower-level pieces already work.
 
-We would check the plan and execute its modeled behavior in Python against the reference. Then the backend emits HLS C++ and any required interface components. Vendor simulation and synthesis give us separate evidence about the generated hardware.
+Next we connect source capture and host inputs. The frontend reads the defined Python grammar and lowers it through general rules. A helper remains a helper, a loop remains a loop, and a memory operation remains a memory operation. Generated programs and imported artifacts use the same verifier.
 
-So pure Python describes our compiler and reference engine. It does not mean the eventual FPGA executes Python. The HLS code is an output of the compiler.
+Then we complete reference execution. Each run has its own values and memory state. The engine executes the selected control paths, preserves state-change order and reports faults. We connect that to a usable API and saved artifacts.
 
-The split also lets us start hardware work on an accepted subset while the rest of the language grows. We should establish the Python language and reference path first, then use that stable meaning to guide lowering.
+Finally, we test whether those pieces actually compose. After freezing the compiler, an independent author writes a structurally unfamiliar program within the supported subset. It must run without a special compiler path. We also make a real structural edit, recheck it and compare its behavior with independent expectations.
+
+This is how we avoid repeating the earlier mistake. The implementation unit is a language feature working through the full pipeline. A successful application alone does not establish general support.
 
 ### Evidence
 
-[Target planning and HLS responsibilities](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/30---Implementation-Design/30---State-Simulator-and-HLS-Blueprint.html)
+[Authorized first goal and its acceptance gates](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/30---Implementation-Design/80---Initial-Compiler-Goal.html)
 
-[Compiler and HLS contract](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/40---Specification/40---Python-Compiler-and-HLS-Contract.html)
+[Frontend and verifier responsibilities](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/30---Implementation-Design/10---Source-Checker-and-IR-Blueprint.html)
+
+[Execution APIs, artifacts and conformance](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/30---Implementation-Design/40---Package-and-Conformance-Blueprint.html)
+
+
+## 5. The foundations are implemented. · 1:30
+
+**Main idea:** There is tested component progress at a committed checkpoint. The complete source-to-simulation path and acceptance gates remain unfinished.
+
+**On screen:** Mention 236 component tests once and explain their scope. Show the unfinished work beside it. Open the detailed progress page or research/site links if useful.
+
+### Spoken script
+
+We have moved beyond architecture notes into the foundations of the Python compiler. The committed checkpoint has 236 passing component tests. The source suite was rechecked on October 7.
+
+The implemented pieces include immutable program records, indices that track actual uses and ownership, exact integer primitives, type and layout rules, scalar normalization, input validation and local structural checks.
+
+These are useful pieces of a compiler, but we cannot yet take a Spatial Python source file through the complete checking and execution path. The full verifier and memory support are unfinished, and source capture and reference execution still need to be connected.
+
+The next work is therefore concrete. Finish that path, then demonstrate shared behavior across source, generated programs and saved artifacts. The unfamiliar-composition test, structural editing test and workflow measurements remain open.
+
+We have also organized the research as a versioned repository and a documentation website. The site connects the language decisions, architecture, implementation plan and evidence. These links let us inspect the reasoning or the exact progress record during discussion.
+
+### Evidence
+
+[Committed progress and unfinished acceptance gates](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/30---Implementation-Design/80---Initial-Compiler-Goal.html)
+
+[Implementation checkpoint — requires repository access](https://github.com/davidydu/spatial-py/tree/f8a993b)
+
+[Research documentation](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/00---Python-Rewrite-Index.html)
+
+
+## 6. Complete the core, then grow the language. · 2:00
+
+**Main idea:** Complete the subset, test new combinations and structural edits, measure the real workflow, then expand whole language families.
+
+**On screen:** Follow Complete, Accept and Expand. Ask whether composed memory is a strong first milestone and which missing capability should come next. Keep HLS as the agreed destination at the bottom.
+
+### Spoken script
+
+The next milestone is a complete memory-program subset, with independently specified results, state changes and faults. That gives us something concrete to judge beyond a collection of compiler components.
+
+Before expanding, we should show that the design handles a new combination of the supported features. We freeze the implementation and give an independent author the supported language contract. A renamed or resized development example is not enough. If the new program requires a special compiler case, we have found a gap in the general rules.
+
+We also need a real structural transformation. It must preserve the intended behavior, keep memory relationships and source information intact, and leave the old program usable if validation fails. Passing the checker alone does not prove equivalent behavior, so we compare outcomes as well.
+
+At the same milestone, we measure the actual supported capture, checking and execution paths. That turns the practical Python performance question into evidence.
+
+After that, we extend whole feature families: reductions and numeric formats, then more stateful and communicating constructs. The EE 109 labs help us track which combinations matter. Each family gets source support, checking, reference behavior and tests together.
+
+HLS remains the agreed destination. We can begin that work from a validated subset while the rest of the language grows.
+
+The feedback I want is whether this first milestone tests enough of Spatial’s core, and which capability should come next. That would give us a clear implementation order after the meeting.
+
+### Evidence
 
 [Staged implementation roadmap](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/04---Python-Implementation-Roadmap.html)
 
+[Generality and performance acceptance](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/30---Implementation-Design/80---Initial-Compiler-Goal.html)
 
-## 6. The proposed Python Spatial system · 1:45
-
-**Main idea:** Review the language boundary, the Python-owned representation and the split between reference execution and hardware planning.
-
-**On screen:** Ask whether these choices capture the Python Spatial the professor wants. Open Research, progress & next experiment only for supporting questions; documentation and implementation progress do not lead the talk.
-
-### Spoken script
-
-These are the three design choices I would like to review. First, capture source as the main interface so the compiler can inspect the program before execution. Generated programs still use the same checking rules.
-
-Second, keep the language representation and its rules under our control in Python. That gives us a shared foundation for checking, transformations, execution and backends.
-
-Third, separate the reference behavior from hardware choices. The simulator defines the execution reference. Target planning adds implementation decisions that must preserve it.
-
-The tradeoff is that accelerator kernels follow a defined Python subset. We still need to measure compiler throughput and hardware quality; choosing Python does not settle those engineering questions. Where old Spatial implementations disagree, the proposed behavior changes remain explicit review items.
-
-This is the research result I want feedback on: does this language boundary and system structure match the Python Spatial we want to build? The research notes, current implementation evidence and next experiment are available here if useful. They support the design discussion rather than setting the agenda.
-
-### Evidence
-
-[Architecture recommendation and unresolved obligations](https://davidydu.github.io/spatial-research-site/20---Research-Notes/50---Decision-Records/D-28.html)
-
-[Professor discussion brief](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/05---Python-Professor-Brief.html)
-
-[Current component evidence and acceptance criteria](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/30---Implementation-Design/80---Initial-Compiler-Goal.html)
+[Language and lab coverage](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/60---Validation/01---Python-Coverage-Ledger.html)
 
 ## Questions to be ready for
 
-**Does “pure Python” include the eventual hardware?** Python implements the compiler and reference engine. The hardware backend emits HLS C++ and interface descriptions; the FPGA does not execute Python.
+**Why is Python feasible?** The required representations, graph analyses, checking rules and transformations are algorithms we can implement in Python. Spatial’s exact arithmetic and state rules are explicit. This does not claim that Python’s default arithmetic supplies those rules or that useful throughput has already been measured.
 
-**Why capture source?** It preserves the kernel structure, literal text and source locations before a run. Static parameters specialize the program; runtime branches and values remain part of its checked meaning.
+**What is the first supported scope?** A reusable subset of memory programs with Int32 data, exact Index values, strict Bool control, typed ports, SRAM/DRAM views and transfers, runtime shapes, nested loops, branches and helpers. Aliases, initialization, lifetimes and fault order are part of the scope. It is an initial portion of S1, not all Spatial or all EE 109 labs.
 
-**Why one shared representation?** Source, builders, libraries and imported programs use the same operations and verifier. Simulation and hardware planning consume the same accepted meaning. Optional framework adapters remain derived views.
+**Why finish the verifier before the source frontend?** We can establish the common record-level rules first. Captured source and generated programs then reach the same checked representation. Verification must cover the whole initial subset before publishing a checked program; individual checking stages are not enough.
 
-**Does “checked” mean every condition is proved statically?** No. The design distinguishes proved facts, declared invocation conditions and supported runtime guards. A hardware plan has additional obligations; unknown required target facts block emission.
+**What makes the first milestone more than a demo?** Source, generated programs and artifact imports must agree. Independent expectations check values, state changes and faults. After freezing the implementation, an independent author supplies a structurally unfamiliar valid composition. If it requires a repair, keep the case as a regression and require a fresh unseen case for acceptance. A finite suite provides evidence, not a proof of every possible composition.
 
-**Must simulator and hardware use the same schedule?** They must preserve allowed observable behavior. Communicating programs may permit several valid traces. Reference simulation does not predict hardware cycle timing.
+**Why test structural editing now?** It exercises ownership, references, indices, source information and memory identity before many passes depend on them. Compare behavior before and after the edit; successful rechecking alone does not establish equivalence. A failed edit must leave the old program usable.
 
-**How do we avoid a compiler for only the known examples?** Libraries and helpers compose reusable language operations. The initial experiment adds an independent unfamiliar program after freezing a compiler revision, along with expected values, effects and faults. That acceptance gate remains ahead.
+**How will we assess performance?** Measure actual supported capture, checking and execution workloads, including latency and peak memory. The [[PY-R007 - Host Workflow Reproducibility and Validation|workflow study]] defines the targets and measurement method. The earlier representation experiment and current test-suite runtime do not satisfy those targets.
 
-**What is implemented?** The committed `f8a993b` checkpoint has 236 passing component tests for records, numeric primitives, input/type/layout rules, scalar normalization and structural checks. The full source-to-simulation path, verifier and memory execution are unfinished. [[80 - Initial Compiler Goal]] owns the detailed scope.
+**What follows the first milestone?** Extend reductions and numeric formats, then additional stateful and communicating families under the [[04 - Python Implementation Roadmap|roadmap]]. Each family adds source support, checking, reference execution, diagnostics, artifacts and tests together. EE 109 supplies coverage targets. The agreed HLS work can begin on a validated subset while other families grow.
 
-## Supporting material
+## Meeting links
 
-The final slide’s **Research, progress & next experiment** drawer contains implementation evidence and the next composed-memory experiment. Use the linked documentation for EE 109 syntax examples, generality acceptance and the research history. These support the architecture discussion; they are not additional main slides.
-
-[[05 - Python Professor Brief|Discussion brief]] · [[70 - Engineering Architecture Map|Editable engineering map]] · [[D-28|Architecture decision]] · [[00 - Implementation Design Index|Implementation blueprints]] · [[80 - Initial Compiler Goal|Implementation evidence and acceptance]] · [[60 - Course Syntax and Compiler Trace|EE 109 examples]] · [[PY-E002 - Spatial to Python Syntax Atlas|Syntax atlas]] · [[04 - Python Implementation Roadmap|Roadmap]]
+[[05 - Python Professor Brief|Discussion brief]] · [[70 - Engineering Architecture Map|Editable engineering map]] · [[80 - Initial Compiler Goal|Implementation evidence and acceptance]] · [[04 - Python Implementation Roadmap|Full roadmap]] · [[D-28|Architecture decision]] · [[00 - Implementation Design Index|Engineering blueprints]] · [[60 - Course Syntax and Compiler Trace|EE 109 examples]] · [[PY-E002 - Spatial to Python Syntax Atlas|Syntax atlas]]
 
 [Research repository](https://github.com/davidydu/spatial-research) · [Documentation website](https://davidydu.github.io/spatial-research-site/) · [Website repository](https://github.com/davidydu/spatial-research-site)

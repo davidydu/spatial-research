@@ -6,60 +6,57 @@ date: 2026-10-01
 updated: 2026-10-07
 ---
 
-<a href="https://davidydu.github.io/spatial-research-site/presentation/python/" data-router-ignore target="_blank" rel="noopener noreferrer">Open the six-slide architecture presentation</a> · [[2026-10-01-python-professor-presentation-outline|Full speaker notes and evidence]].
+<a href="https://davidydu.github.io/spatial-research-site/presentation/python/" data-router-ignore target="_blank" rel="noopener noreferrer">Open the six-slide presentation</a> · [[2026-10-01-python-professor-presentation-outline|Full speaker notes and evidence]].
 
-**What would a Python version of Spatial look like?** A language expressed through Python, a compiler written in Python, and a Python reference engine for Spatial’s behavior. A later backend builds a hardware plan and emits HLS C++.
+**A Python version of Spatial would include the language frontend, compiler and reference execution engine in Python.** Spatial retains explicit types, memories, control, parallel work, reductions and communication. HLS is already the agreed hardware destination.
 
-The ten-minute presentation answers that system-design question. The professor knows Spatial; program examples, implementation progress and the documentation repositories are supporting material.
+The ten-minute talk covers the system, Python feasibility, the implementation plan, tested foundations and next milestones. The professor knows Spatial; the presentation does not walk through a program or explain HLS again.
 
-## What stays, and what changes
+## Why Python is feasible
 
-Spatial retains explicit types, memories, controllers, parallel work, reductions and communication. Python replaces the implementation of source handling, program representation, checking, transformations and reference execution. Ordinary Python supplies the host environment for files, data and experiments. The proposed compiler has no Rust core.
+The compiler’s main work is representing programs, analyzing structure, checking rules and transforming records. We can implement these data structures and algorithms in Python. Spatial’s arithmetic, memory identities, lifetimes and state-change order remain explicit compiler rules. For example, Python integers can be used to implement fixed-width arithmetic without inheriting arbitrary-precision behavior for Spatial data.
 
-## The language boundary
+Ordinary Python handles host data and experiments. Kernels use a defined subset that the compiler reads as source without executing decorators, annotations or bodies. [[10 - Source Checker and IR Blueprint]] and [[PY-R016 - Source and Host Workflow Refinement]] specify this boundary.
 
-Host Python prepares experiments. Kernel source uses a defined Python subset with Spatial’s numeric, memory and control rules. The compiler reads that source without executing its decorators, annotations or body. Source, dependencies and chosen meta parameters are fixed for compilation; actual inputs and supported runtime dimensions belong to a run.
+The practical questions are compilation time, reference execution speed and memory use on useful workloads. The [[PY-R007 - Host Workflow Reproducibility and Validation|workflow study]] defines measurement targets. Component tests and representation experiments do not establish complete-workflow performance. The proposed compiler has no Rust core; team capability is assumed available.
 
-This gives the compiler the program’s retained structure before execution. General Python libraries remain host-side unless their operations are explicitly admitted to the kernel language. [[10 - Source Checker and IR Blueprint]] and [[PY-R016 - Source and Host Workflow Refinement]] specify the boundary.
+## The shared architecture
 
-## The compiler’s central object
+One immutable checked representation describes values, types, storage, views, lifetimes, control regions and ordered effects. Source files, generators and imported artifacts reach the same verifier. Helpers and libraries compose the same operations. Some checked conditions may remain declared input requirements or supported runtime guards.
 
-One immutable checked representation describes typed values, operations, control regions, storage identities, views, lifetimes and ordered effects. Written source, generated programs and imported artifacts reach the same verifier. Helpers and libraries compose the same operations, so their behavior does not depend on a separate compiler path.
+The reference engine executes this model with separate state for each invocation. A transformation creates and checks a new candidate before publication; its behavior must also be validated. Later lowering uses the same accepted meaning. Slide 3 embeds the [[70 - Engineering Architecture Map|Excalidraw map]] with both the overview and detailed module responsibilities. The drawing describes the proposed full system, not completed implementation.
 
-A transformation creates a candidate and checks it before publication. Simulation and hardware planning use the accepted program. Python owns these records and language rules; an optional framework adapter may serve a particular backend without becoming a second authority.
+## How we will build the first complete path
 
-Slide 3 embeds the [[70 - Engineering Architecture Map|Excalidraw architecture map]]. Its overview shows the whole system; the full canvas connects that view to module responsibilities. Its colors identify responsibilities, not implementation progress.
+The first milestone is a reusable subset of composed memory programs: Int32 data, exact Index values, strict Bool control, typed inputs, SRAM/DRAM views and transfers, runtime shapes, nested loops, branches and helpers. Aliases, initialization, lifetimes and fault order are included. This is an initial portion of S1, not all Spatial or all EE 109 labs.
 
-## Reference execution
+1. **Finish verification for that subset.** Complete memory, alias, lifetime, initialization and remaining whole-program checks, then publish checked programs.
+2. **Connect source and host inputs.** Capture the defined grammar, specialize parameters and lower through shared rules. Validate typed inputs and preserve shared backing identities when preparing a run.
+3. **Complete reference execution and the public workflow.** Add invocation-owned memory and ordered execution, diagnostics, the API and saved artifacts. Source, generated programs and imported artifacts must agree.
+4. **Test composition and structural change.** Use independent values, effects and fault expectations; exercise an actual region edit and an unfamiliar composition after freezing the compiler.
 
-The program and each run’s state are separate. One checked program can serve several invocations, each with its inputs, memory contents, active control and pending operations. Shared views retain their common backing. Persistent state, when requested, belongs to an explicit session.
+The [[80 - Initial Compiler Goal|authorized initial goal]], [[40 - Package and Conformance Blueprint|package and conformance blueprint]] and [[30 - State Simulator and HLS Blueprint|execution blueprint]] hold the detailed requirements. Every admitted feature must work through the full path, including errors and artifacts.
 
-The Python reference engine executes Spatial’s rules for values, memory, selected branches and effects. Completion, faults and suspended runs have distinct outcomes. This behavior provides a reference for transformations and hardware plans; it does not predict hardware cycle timing. [[30 - State Simulator and HLS Blueprint]] and [[40 - Package and Conformance Blueprint]] define these responsibilities.
+## What works today
 
-## The later HLS path
+At committed checkpoint `spatial-py@f8a993b`, **236 component tests pass**. The source suite was rechecked on 7 October. Implemented foundations include immutable records and real use/ownership indices, numeric primitives, input validation and provenance, type/layout rules, scalar normalization and bounded structural checks.
 
-The planner adds storage and banking, work mapping, scheduling constraints, interfaces and numeric realizations. It checks the resulting implementation plan before the backend emits HLS C++ and required interfaces. Plan execution in Python and vendor validation supply separate evidence.
+The complete subset verifier, memory checking and execution, source capture and source-to-simulation workflow remain unfinished. Artifacts, actual structural editing, unfamiliar-composition acceptance and complete-workflow measurements also remain open. These are tested compiler components; they do not establish a working complete compiler or hardware support.
 
-**Reference validity differs from target eligibility.** A checked program may retain declared input conditions and supported runtime guards. A hardware plan must also satisfy the target’s required obligations; unknown required facts block emission. Runtime loops can have variable iteration counts while simultaneous hardware state and storage remain bounded.
+The research repository and website connect the contracts, [[D-28|architecture decision]], [[00 - Implementation Design Index|engineering blueprints]] and progress evidence. They let the professor inspect the work beyond the slides.
 
-HLS can begin for an accepted subset while later language families grow. Compiler throughput and hardware correctness, resources and timing still need measurement. The [[04 - Python Implementation Roadmap|roadmap]] records the staged gates.
+## What comes next
 
-## The design to review
+First complete the memory subset. Then freeze a compiler revision and have an independent author write a structurally unfamiliar valid program. It must use the same compiler rules. A repaired case becomes a regression and acceptance needs a fresh unseen case. A finite suite tests generality; it does not prove every possible combination.
 
-The recommendation in [[D-28]] combines source capture, Python-owned immutable program records, one checking boundary, invocation-owned execution state and explicit hardware plans. The meeting should assess whether those boundaries capture the Python Spatial we want to build.
+Test a real structural edit as well. References, memory relationships and source information must remain correct, independent expectations must agree, and a failed edit must leave the old program usable. Measure the actual supported capture, checking and execution paths at this milestone.
 
-Where legacy implementations disagree, the proposed behavior changes remain explicit decisions for review. The pure Python direction is accepted; professor adoption of the detailed architecture and its semantic changes remains separate.
+Next extend whole families: reductions and numeric formats, then additional stateful and communicating constructs. Each family adds source support, checking, reference behavior, diagnostics, artifacts and tests together. The [[04 - Python Implementation Roadmap|roadmap]] owns the dependencies; [[60 - Course Syntax and Compiler Trace|EE 109 patterns]] and the [[PY-E002 - Spatial to Python Syntax Atlas|syntax atlas]] provide coverage targets. The agreed HLS work can begin from a validated subset while the remaining language grows.
 
-## Supporting evidence, if useful
-
-The [[00 - Implementation Design Index|implementation blueprints]], [[11 - Design Refinement Iterations|design reviews]] and [[01 - Python Coverage Ledger|language coverage ledger]] hold the research behind the proposal. The [[PY-E002 - Spatial to Python Syntax Atlas|syntax atlas]] and [[60 - Course Syntax and Compiler Trace|EE 109 mapping]] show proposed source examples; the main presentation does not walk through them.
-
-David authorized the [[80 - Initial Compiler Goal|initial implementation experiment]] on 4 October. The committed `spatial-py@f8a993b` foundations pass 236 component tests. The complete verifier, memory checking and execution, source-to-simulation workflow and unfamiliar-composition acceptance gate remain unfinished. No Python-generated HLS, RTL or hardware result is claimed.
-
-The initial experiment tests a reusable subset of composed memory programs. After a compiler revision is frozen, an independently written unfamiliar program must work through the same language rules. A repaired case becomes a regression; acceptance then needs a fresh unseen case. This supplements independent expected values, effects, faults and structural-edit checks.
+**For professor discussion:** does composed memory test enough of Spatial’s core before wider implementation, and which missing capability should follow it? David authorized the bounded initial experiment on 4 October. Adoption of the full architecture and its proposed semantic changes remains separate.
 
 ## Useful links
 
-[[00 - Python Rewrite Index|Research home]] · [[07 - Python Implementation Readiness Audit|Readiness review]] · [[02 - Python Research Review Log|Review findings]] · [[70 - Engineering Architecture Map|Engineering map]] · [[D-28|Architecture decision]] · [[80 - Initial Compiler Goal|Current implementation and acceptance]]
+[[00 - Python Rewrite Index|Research home]] · [[01 - Python Coverage Ledger|Coverage ledger]] · [[07 - Python Implementation Readiness Audit|Readiness review]] · [[11 - Design Refinement Iterations|Design refinement]] · [[02 - Python Research Review Log|Review findings]] · [[80 - Initial Compiler Goal|Current implementation and acceptance]]
 
 [Research repository](https://github.com/davidydu/spatial-research) · [Documentation website](https://davidydu.github.io/spatial-research-site/) · [Website repository](https://github.com/davidydu/spatial-research-site) · [Implementation repository](https://github.com/davidydu/spatial-py/tree/work/initial-reference) (requires repository access)
