@@ -1,219 +1,199 @@
 ---
-type: design
-title: "Spatial in Python — professor presentation and speaker notes"
+type: presentation-outline
+title: "Python Spatial — professor presentation and script"
 project: spatial-python
 date: 2026-10-01
-updated: 2026-10-03
-status: approved-presentation-outline
-scope: "Seven-slide, ten-minute presentation of the proposed pure Python rewrite"
-related:
-  - "[[05 - Python Professor Brief]]"
-  - "[[PY-R001 - Programming Model Study]]"
-  - "[[D-27]]"
-  - "[[D-28]]"
-  - "[[11 - Design Refinement Iterations]]"
+updated: 2026-10-07
+status: meeting-ready
 ---
 
-# Spatial in Python
+# Python Spatial: professor presentation and script
 
-## Purpose and authority
+[Open the presentation](https://davidydu.github.io/spatial-research-site/presentation/python/). Seven slides, about ten minutes before discussion. Press **N** for the current slide’s script, **E** for its evidence, and the arrow keys to move. Slide 4 embeds the Excalidraw overview: choose **Explore engineering map** for section navigation, zoom, panning and the editable source.
 
-Answer **What would a Python rewrite of Spatial look like?** The professor knows Spatial. Start with the program and host workflow, show what the compiler owns, explain what the review changed, and ask for approval of the first implementation milestone.
+The professor knows Spatial. This talk explains the Python programming model, the architecture, the evidence so far, and the next research result. The initial experiment was authorized on 4 October. The full architecture in [[D-28]] and proposed semantic changes remain for review. Component tests do not establish complete source-to-simulation execution or hardware results.
 
-David approved the seven-slide web presentation and requested this refresh after the Codex/Fable design refinement. Presentation approval is separate from architecture adoption. [[D-27]] accepts the pure Python direction; [[D-28]] remains the detailed proposal. The frontend, compiler and reference simulator are all Python, with no Rust core. The proposed checked program and first hardware plans use immutable Python records. xDSL remains optional for a specific pipeline that demonstrates a benefit.
+## Talk at a glance
 
-<a href="presentation/python/index.html" data-router-ignore target="_blank" rel="noopener noreferrer">Open the refreshed Python presentation</a>. The <a href="presentation/index.html" data-router-ignore target="_blank" rel="noopener noreferrer">28 September presentation</a> remains historical at its existing route.
-
-## Story and timing
-
-| Slide | Headline | Main visual | Time | Elapsed |
+| Slide | Headline | Navigation label | Time | Elapsed |
 |---|---|---|---|---|
-| 1 | Spatial in Python. | Program → Python compiler → reference simulation | 0:45 | 0:45 |
-| 2 | A familiar Spatial program | Exact tiled-scale source beside two tiles and two SRAM buffers | 1:45 | 2:30 |
-| 3 | How you would run it | Capture → Specialize → Check → Bind inputs → Simulate → Read outputs | 1:30 | 4:00 |
-| 4 | One checked program, two uses | Python source → immutable checked program → simulation or hardware planning | 1:30 | 5:30 |
-| 5 | Values and state both matter | Expected scaled values beside a branch that consumes one queue | 1:15 | 6:45 |
-| 6 | What changed after review | Three concrete findings, measured representation costs, and the documentation site | 1:45 | 8:30 |
-| 7 | One complete program through Python | Read, check and simulate a composed program; then check an early transformation | 1:30 | 10:00 |
+| 1 | Spatial in Python. | The idea | 0:45 | 0:45 |
+| 2 | A familiar Spatial program | The program | 1:30 | 2:15 |
+| 3 | Python for the experiment. Spatial for the kernel. | The Python boundary | 1:00 | 3:15 |
+| 4 | One checked program, two uses | The architecture | 1:45 | 5:00 |
+| 5 | A compiler must handle new combinations | Test generality | 1:30 | 6:30 |
+| 6 | What now works | Progress & documentation | 2:00 | 8:30 |
+| 7 | The next result: a complete, reusable path | Next result & discussion | 1:30 | 10:00 |
 
-The scripts below match the webpage speaker notes. Italic paragraphs are presentation cues. Ten minutes includes brief interactions and a documentation tour; this is a delivery target, not a measured rehearsal. Use the notes and sources panels for details.
+**Total: 10 minutes.** The spoken scripts below reproduce the webpage notes, with only HTML whitespace normalized. The talk includes brief visual interactions and a short documentation tour; the timing is a target, not a measured rehearsal. Keep detailed API, numeric-policy and module questions for the linked documentation or map discussion.
 
-## Slide 1 — Spatial in Python.
+## 1. Spatial in Python. · 0:45
 
-**On screen:** Write Spatial programs in Python. Build the compiler in Python too. The opening identifies this as a proposed design for professor review. The program, semantic compiler and reference simulator are Python.
+**Main idea:** The compiler and the programs use Python; Spatial retains precise meaning.
 
-**Visual action:** Follow the program through checking to reference simulation. Keep HLS as the later destination.
+**On screen:** Use the opening picture to distinguish the program from the compiler. Do not imply the picture is a live compiler result.
 
-**Full speaker script, 0:45:**
+### Spoken script
 
-> After our last discussion, I worked through what a full Python rewrite would look like. The program, compiler and reference simulator would all be Python. We would keep Spatial’s explicit memories, control and parallel work.
->
-> I’ll start with what someone writes and how they run it. Then I’ll show the compiler design, what changed after review, and the first implementation milestone.
->
-> The Python direction is already agreed. Today I’m asking you to review this particular programming model and architecture. The compiler is still a proposal; the experiments test parts of the design.
+After our last discussion, I worked through what a Python rewrite would look like. We would write Spatial programs in Python, and build the compiler and reference simulator in Python too. Spatial still has explicit memories, control and parallel work.
 
-**Evidence:** [[D-27|Accepted Python direction]], [[D-28|Proposed architecture]], [[05 - Python Professor Brief]].
+The important question is how we preserve what each program means, and then turn that meaning into hardware. Python is capable of expressing the compiler algorithms. We still need precise rules and independent checks of the results.
 
-**Boundary:** The working presentation and research experiments do not establish a working compiler.
+We have moved from research into an initial implementation experiment. Today I’ll show the proposed user experience, the architecture, what is implemented, and how we will test whether it handles new programs. The complete workflow is still in progress.
 
-## Slide 2 — A familiar Spatial program
+### Evidence
 
-**On screen:** The exact proposed E1 source from [[PY-R001 - Programming Model Study]], labeled as unimplemented syntax.
+- [Professor discussion brief](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/05---Python-Professor-Brief.html)
+- [D-27: accepted pure Python direction](https://davidydu.github.io/spatial-research-site/20---Research-Notes/50---Decision-Records/D-27.html)
+- [D-28: proposed compiler architecture](https://davidydu.github.io/spatial-research-site/20---Research-Notes/50---Decision-Records/D-28.html)
 
-```python
-@kernel
-def tiled_scale(src: In[Dram[Int, 32]],
-                scale: In[Int],
-                dst: Out[Dram[Int, 32]]):
-    for base in sequential(0, 32, step=16):
-        tile_in: Sram[Int, 16]
-        tile_out: Sram[Int, 16]
-        load(tile_in, src[base:base + 16])
-        for i in foreach(0, 16):
-            tile_out[i] = tile_in[i] * scale
-        store(dst[base:base + 16], tile_out)
-```
+## 2. A familiar Spatial program · 1:30
 
-**Visual action:** Click Load, Compute and Store, then choose positions 16–31. The illustration uses inputs 1…32 and scale 2; the original E1 fixture uses 0…31 and scale 3. Both use the unchanged source above. Keep both local buffers visible.
+**Main idea:** The proposed code exposes ports, storage and control.
 
-**Full speaker script, 1:45:**
+**On screen:** Click Load, Compute, Store, then the second tile. The animation illustrates behavior; it is not an execution trace from the compiler.
 
-> This program reads 32 values, multiplies each by a scale, and writes the results. It works in two tiles of 16. The picture follows the same code.
->
-> At the top are the input memory, the scale and the output memory. Inside the outer loop, we declare two local buffers. One holds the input tile; the other holds the result.
->
-> First we load a tile. The inner loop multiplies each value. Then we store the result back to external memory and move to the next tile.
->
-> We still tell the compiler about memory and control. Those annotations describe Spatial objects; ordinary Python does not allocate SRAM by running this function. The foreach loop gives the hardware planner work it can parallelize. It does not promise sixteen hardware lanes or a particular cycle count.
->
-> For this illustration, the inputs are one through 32 and the scale is two. The expected outputs are two through 64. This is an animation of the intended behavior, not a compiler run.
->
-> *Click Load, Compute, Store, then choose the second tile.*
+### Spoken script
 
-**Evidence:** [[PY-R001 - Programming Model Study#E1: two proposed spellings of tiled scale]], [[PY-E001 - Initial Example Corpus]]. Original source: `spatial@e7a8f2f:test/spatial/tests/ee109/Lab1Part2DramSramExample.scala:6-43`.
+This program reads 32 values, multiplies each by a scale, and writes the results. It works in two tiles of 16. The picture follows the same code.
 
-**Boundary:** The animation illustrates intended behavior. It is not a compiler run or hardware cycle measurement. foreach does not promise sixteen hardware lanes.
+At the top are the input memory, the scale and the output memory. Inside the outer loop, we declare two local buffers. One holds the input tile; the other holds the result.
 
-## Slide 3 — How you would run it
+First we load a tile. The inner loop multiplies each value. Then we store the result back to external memory and move to the next tile.
 
-**On screen:** The source panel on Slide 2 is labeled `lab1.py`, matching the host example. Six selectable stages expose the public API proposed in [[PY-R016 - Source and Host Workflow Refinement]]. Each stage has a short explanation and an exact API fragment. Imports and storage constructors are in the linked complete example. The source stays text; capture does not import or execute the kernel.
+We still tell the compiler about memory and control. Those annotations describe Spatial objects; ordinary Python does not allocate SRAM by running this function. The foreach loop gives the hardware planner work it can parallelize. It does not promise sixteen hardware lanes or a particular cycle count.
 
-**Visual action:** Click Check to show the error guard, Bind inputs to show typed storage views, and Read outputs to show the Completed guard and output snapshot. Open the complete host example only if asked for details.
+For this illustration, the inputs are one through 32 and the scale is two. The expected outputs are two through 64. This is an animation of the intended behavior, not a compiler run.
 
-**Full speaker script, 1:30:**
+Click Load, Compute, Store, then choose the second tile.
 
-> Here is how someone would run that program. Ordinary Python controls the experiment. The kernel stays in a source file that the compiler reads as text.
->
-> First we capture the source and choose any compile-time parameters. Then we check the program. A checking error stops the workflow and gives us diagnostics.
->
-> Next we bind typed inputs and an output buffer. The preparation step checks that their shapes and access permissions match the program. Then we run the Python reference simulator.
->
-> We read results only after the run reports Completed. A fault gives us diagnostics to inspect. A wait or an exhausted budget can give us a continuation to resume. None of those is a successful output.
->
-> The research now specifies these public names and a complete host example. The snippets here show that proposed API; there is no installed Spatial package behind these buttons.
->
-> *Click Check, Bind inputs, then Read outputs. The complete example is linked below.*
+### Evidence
 
-**Evidence:** [[PY-R016 - Source and Host Workflow Refinement]], [[40 - Package and Conformance Blueprint]], [[10 - Source Checker and IR Blueprint]].
+- [E1: exact proposed source and builder spellings](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/10---Research/PY-R001---Programming-Model-Study.html#e1-two-proposed-spellings-of-tiled-scale)
+- [Source capture, declarations and checking](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/30---Implementation-Design/10---Source-Checker-and-IR-Blueprint.html)
 
-**Boundary:** These fragments explain a proposed API. They are not a runnable installed package or a recorded successful run. Reading the host output backing is not the result API; complete_outputs owns successful snapshots.
+## 3. Python for the experiment. Spatial for the kernel. · 1:00
 
-## Slide 4 — One checked program, two uses
+**Main idea:** Host Python runs the experiment; kernel source is checked as Spatial.
 
-**On screen:** A shared checked description retains types, memories, control and effects in compiler-owned immutable Python records. One branch runs the reference simulator; the other derives a checked hardware plan. The first plan representation also uses Python records. xDSL is optional for a specific useful backend pipeline.
+**On screen:** Explain the boundary before mentioning the three workflow stages. The complete host API is linked for questions.
 
-**Visual action:** Switch between Simulate in Python and Plan hardware. The second view shows target capabilities, checked plan, Python plan execution and checks, then HLS and hardware validation.
+### Spoken script
 
-**Full speaker script, 1:30:**
+There are two roles for Python here. Normal Python handles data, files and experiments. The kernel is a piece of source that the compiler reads as Spatial. It uses a defined subset of Python syntax with Spatial’s types and storage.
 
-> The central object is a checked description of the Spatial program. It records the types, memories, control and order of effects in immutable Python records.
->
-> Both the reference simulator and hardware planner start from that same program. The simulator tells us what it does. The planner chooses a hardware implementation and must show that it preserves the program’s meaning.
->
-> We compared keeping this representation in our own Python records with using xDSL. We now recommend our own records for both the checked program and the first hardware plans. We already have to own the Spatial rules and checks, and this makes ownership direct.
->
-> xDSL remains an option when a specific backend pipeline gives us a measured benefit. We do not need it to define the language.
->
-> HLS comes after the checked hardware plan. It does not get to decide what our Python program means.
->
-> *Switch between Simulate in Python and Plan hardware to show the two uses of the same program.*
+This boundary lets us know what the whole kernel means before we run it. We do not discover the program by executing one sample input. We can inspect both branches, track storage and explain errors at their source.
 
-**Evidence:** [[D-28]], [[PY-R017 - Compiler Representation Comparison]], [[30 - State Simulator and HLS Blueprint]].
+The intended workflow is straightforward: read and specialize the source, check the program, bind typed inputs, then simulate. Complete results are available only after a completed run. We have specified this API; the complete path is still being built.
 
-**Boundary:** These are explanatory views. The representation comparison is bounded; full compiler performance, analyses and plan validation remain implementation work. A transformed candidate must be checked before use.
+### Evidence
 
-## Slide 5 — Values and state both matter
+- [Complete proposed host example](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/10---Research/PY-R016---Source-and-Host-Workflow-Refinement.html)
+- [Public API and result contracts](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/30---Implementation-Design/40---Package-and-Conformance-Blueprint.html)
 
-**On screen:** A scale slider updates four expected outputs. A separate queue example chooses A or B and consumes only that queue. A review lesson explains that the earlier numeric candidate and its test shared an incorrect assumption, so agreement alone was insufficient.
+## 4. One checked program, two uses · 1:45
 
-**Visual action:** Change the scale. Choose B and take one value: B loses 10 and A stays [3, 5, 7]. The queue example isolates the selected-branch rule; it does not reproduce the full E3 program.
+**Main idea:** Simulation and hardware planning share one checked meaning.
 
-**Full speaker script, 1:15:**
+**On screen:** Point across the overview. If asked for detail, open the map and use Compiler, Execution & HLS or Lab roadmap. Colors show responsibilities, not completion.
 
-> Correctness includes both values and changes to state. The scale example gives us a simple independent expected answer. Int uses signed 32-bit wrapping arithmetic, so we must test that rule as well as these small values.
->
-> The queue example shows why effect order matters. If a branch chooses B, it takes one value from B and leaves A alone. Evaluating both branches first would already change the wrong queue.
->
-> The review also found a real weakness in our earlier numeric experiment. The candidate and its comparison check shared the same incorrect underflow assumption. They agreed, but that agreement did not prove correctness.
->
-> We repaired the rule and used a separately derived status check. That is why the implementation plan calls for independent expected values and state traces.
->
-> *Change the scale. Choose B and take a value. Keep the numerical-boundary details in the sources panel.*
+### Spoken script
 
-**Evidence:** [[20 - Python Numeric Contract]], [[PY-R003 - Control Memory and Effects]], [[PY-R015 - Numeric Status Repair and Independent Oracles]], [[00 - Python Validation Plan]].
+This is the main architecture decision. One checked representation owns the meaning of the program. It records the values, memories, control and order of operations.
 
-**Boundary:** These small numbers do not exercise overflow, and nonempty queues do not illustrate blocking or scheduling. The repaired research probe is not an implemented numeric compiler library.
+The Python simulator runs that meaning. Hardware planning then decides how to realize it: where data lives, how work is scheduled, and what interfaces we need. These paths must agree about the program’s behavior.
 
-## Slide 6 — What changed after review
+That gives us a stable reference when we change the hardware implementation. A transformation creates a new candidate and checks it before use. Changing a schedule should preserve the observable results and state changes.
 
-**On screen:** Independent expectations; a complete host run with failure handling; and a comparison of compiler representations. The chart shows build plus bounded checks for a 100,000-operation branching graph: Python records 0.375 s and xDSL 4.559 s, both p95. The caveat states that this is not a full compiler benchmark and further indices, analyses and transformations need testing.
+The Excalidraw map connects this big picture to the engineering details. We can zoom into checking, execution or the lab roadmap during discussion. The map is the proposed architecture. Its colors describe responsibilities, not what is already implemented.
 
-**Visual action:** Open the review and evidence page for a short tour. Follow one finding to its study, point out the research repository, and return. Keep the tour around 20–30 seconds. Links also expose the site repository, implementation blueprints and full speaker script.
+### Evidence
 
-**Full speaker script, 1:45:**
+- [Editable engineering map and linked blueprints](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/30---Implementation-Design/70---Engineering-Architecture-Map.html)
+- [Architecture decision for review](https://davidydu.github.io/spatial-research-site/20---Research-Notes/50---Decision-Records/D-28.html)
+- [State, simulator and HLS design](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/30---Implementation-Design/30---State-Simulator-and-HLS-Blueprint.html)
 
-> We did three rounds of Codex and Fable review, with small experiments to check the claims. The useful result is what changed, not how many reviewers agreed.
->
-> First, we repaired the numeric status rule and separated its expected answer from the candidate. Second, we completed the host workflow and made stopping, resuming and output completion explicit. Third, we compared the two compiler representations.
->
-> This chart shows one bounded 100,000-operation workload. Building and checking the records took about 0.38 seconds at the 95th percentile, compared with about 4.56 seconds for xDSL. The full study includes another graph shape, snapshot and rewrite costs, and memory use.
->
-> This is not a measurement of a full Spatial compiler. xDSL maintains use lists and does extra structural checking; our record prototype does not yet do that work. We still need real analyses and harder transformations. Our recommendation comes from the ownership design as well as these measurements.
->
-> Everything is in the research repository, and the website connects the examples, decisions and evidence. I can open the review page here and follow a finding back to its study or reproducible check.
->
-> *Open the review and evidence page for a short tour. Show the repository link, then return to this slide.*
+## 5. A compiler must handle new combinations · 1:30
 
-**Evidence:** [[11 - Design Refinement Iterations]], [[PY-R015 - Numeric Status Repair and Independent Oracles]], [[PY-R016 - Source and Host Workflow Refinement]], [[PY-R017 - Compiler Representation Comparison]], [research repository](https://github.com/davidydu/spatial-research), [site repository](https://github.com/davidydu/spatial-research-site).
+**Main idea:** New combinations must work through reusable rules.
 
-**Boundary:** The three review rounds provide findings, not a proof by reviewer agreement. The chart rounds R017 values 0.37512925 and 4.5589 seconds. Both implementations ran the stated workload; xDSL supplies extra structural checking and indices absent from the custom prototype. Ownership and measured costs jointly inform the choice. Historical Rust results remain separate.
+**On screen:** Walk through freeze, independent unfamiliar program, unchanged compiler. This gate is still ahead.
 
-## Slide 7 — One complete program through Python
+### Spoken script
 
-**On screen:** Accept a composed memory program, explain errors, compare behavior with independent expectations and save reproducible inputs/results. Vary shapes, helpers and aliases and test an early rewrite. The meeting asks: Approve this model and first milestone? The later path is checked plan → plan execution → HLS.
+The earlier risk was a compiler that looked successful because it recognized the examples we gave it. We want reusable language rules that work when someone combines the constructs in a new way.
 
-**Visual action:** Refer back to the tiled program, then point to the checks on composition and transformations. Close by asking for approval of the programming model, shared checked-program architecture and first complete milestone.
+Our first scope is small memory programs with exact integers, loops, branches, helpers and shared views. We have written down that scope. We should vary several of those features together, including how helpers share storage.
 
-**Full speaker script, 1:30:**
+The important test comes after we freeze a compiler revision. An independent reviewer writes a valid program with an unfamiliar structure and independent expected results. It must run without adding a special compiler path.
 
-> If this programming model and architecture look right, the next step is one complete path through Python: read a composed memory program, check it, simulate it and return a reproducible result.
->
-> We should test errors at the same time. A wrong shape or invalid name should produce a useful diagnostic. A fault or unfinished run should never look like a successful output.
->
-> We should also change the program. Use different shapes, helpers and aliases, and try an early transformation that duplicates a helper or expands a short loop. Check that results, effects and storage identities are still right. That tests the compiler structure before we build many features on top of it.
->
-> Once that subset works, we can build and execute its hardware plan, then lower it to HLS while the rest of the language grows. Broader numeric and communication support has its own later gates.
->
-> What I’m asking you to approve is this programming model, the shared checked-program architecture, and that first complete milestone. The choice of Python itself is already settled.
+If the new case exposes a bug, we fix it and keep the case as a regression. Then we need a fresh unseen program for acceptance. A finite test suite cannot prove every possible combination, but this tests something much stronger than resizing or renaming a known lab. We have not reached this gate yet.
 
-**Evidence:** [[04 - Python Implementation Roadmap]], [[40 - Package and Conformance Blueprint]], [[D-28#Review and next action]].
+### Evidence
 
-**Boundary:** The pure Python direction is agreed. The detailed design and semantic changes remain proposed; refreshing or presenting this deck does not grant approval or start production implementation. First-slice success would not establish full language or hardware support.
+- [Frozen initial scope and acceptance obligations](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/30---Implementation-Design/80---Initial-Compiler-Goal.html)
+- [Language-wide coverage ledger](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/60---Validation/01---Python-Coverage-Ledger.html)
 
-## Presentation design and evidence rules
+## 6. What now works · 2:00
 
-Keep the existing warm paper, serif headlines, readable dark text and muted blue. Each slide has one main idea. Use movement to explain data flow and state, and selectable diagrams to reveal detail without filling the screen.
+**Main idea:** There is committed component progress, with the unfinished workflow clearly stated.
 
-Speaker notes contain the verbal script. The source panel links to the research behind each claim. Label proposed APIs, illustrative animation and bounded measurements where they appear. Preserve keyboard navigation, reduced-motion behavior and the historical `/presentation/` route.
+**On screen:** Mention 236 tests once, explain what they establish, then briefly open the progress page and show the research/site repository links.
 
-Publication and verification are recorded in [[progress-log]] after they occur. The refreshed presentation remains at `/presentation/python/`.
+### Spoken script
+
+We have started building the foundations, and there is committed code behind this slide. The first group handles exact numeric values. The next checks program records, types, layouts and which values are visible in nested regions. Structural checking also tracks the required order of effects.
+
+The committed checkpoint passes 236 component tests. The source suite was rerun on October 7 from an isolated copy of that commit. The checkpoint also has earlier source and installed-package checks and independent specification and code-quality reviews. These tests give evidence for those components; they do not establish a working end-to-end compiler.
+
+The full verifier, memory rules and execution path are still unfinished. We cannot yet take the displayed source program through checking and simulation, and the unfamiliar-program acceptance test has not happened.
+
+We have also built a documentation system for reviewing the work. The research repo holds the notes, contracts and evidence. The website publishes those files with links between them. This progress page says exactly what works and what remains. The course page connects EE 109 patterns to proposed Python. The architecture decision keeps unresolved obligations visible.
+
+For the meeting, I would open the progress page briefly and show how it links back to the design. The private implementation repo is also linked there for people with access.
+
+### Evidence
+
+- [Committed implementation evidence and remaining gates](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/30---Implementation-Design/80---Initial-Compiler-Goal.html)
+- [Private implementation checkpoint — repository access required](https://github.com/davidydu/spatial-py/tree/f8a993b)
+- [Documentation source repository](https://github.com/davidydu/spatial-research)
+
+## 7. The next result: a complete, reusable path · 1:30
+
+**Main idea:** Finish a reusable memory-program path, then begin HLS for that accepted subset.
+
+**On screen:** Ask about architecture, acceptance criteria and next course-pattern priority. Separate language behavior, compiler quality and hardware quality.
+
+### Spoken script
+
+The next deliverable is a complete path through the declared memory-program subset: read source, check it, run it and return a reproducible result. It also has to explain invalid programs and handle new combinations through the same rules.
+
+We will test an actual structural edit as well. When we duplicate or move part of a program, references, storage identities and effect order must still be right. A failed candidate must leave the old program intact.
+
+Once that subset is accepted, we can start hardware planning for it while the rest of the language grows. We should check the plan’s behavior against the reference, generate HLS, and then use the vendor tools to establish hardware correctness, resources and timing. Python simulation alone does not establish any of those hardware results.
+
+The initial implementation experiment is already authorized. What I would like your feedback on is the shared checked-program architecture, whether these acceptance criteria make a useful first research result, and which EE 109 pattern should come next. Proposed semantic changes remain explicit review items.
+
+### Evidence
+
+- [Initial experiment and acceptance criteria](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/30---Implementation-Design/80---Initial-Compiler-Goal.html)
+- [Language and hardware roadmap](https://davidydu.github.io/spatial-research-site/50---Python-Rewrite/04---Python-Implementation-Roadmap.html)
+- [Architecture and proposed semantic changes](https://davidydu.github.io/spatial-research-site/20---Research-Notes/50---Decision-Records/D-28.html)
+
+## Questions to be ready for
+
+**Why pure Python?** The compiler algorithms and explicit representations can be implemented in Python. We assume the team has the necessary capability. Correctness comes from specified rules, checked representations and independent evidence. Compiler throughput still needs measurement on real supported workloads.
+
+**Is this arbitrary Python to hardware?** The host is ordinary Python. Accelerator kernels use a defined Spatial subset with explicit types, storage and control. Source is read without executing kernel bodies or decorators.
+
+**What is implemented today?** Core records and indices, exact stateless numeric rules, input validation, shared type/layout rules, scalar normalization and structural checking at `f8a993b`. The 236 component tests are scoped evidence. [[80 - Initial Compiler Goal]] lists the unfinished parts.
+
+**How do we avoid another special-case compiler?** Use operation-level rules, a frozen supported subset, independent expectations and an unfamiliar composition written after freezing the implementation. If it requires a fix, it becomes a regression and acceptance needs a fresh unseen case.
+
+**When does HLS start?** For a subset that has passed its reference and representation gates, build and check its implementation plan and execute the plan against the reference. Then generate HLS and collect vendor evidence. Later language families can grow in parallel.
+
+**What is being requested from the professor?** Review the shared checked-program architecture and proposed semantic changes, assess the first subset’s acceptance criteria, and choose the next EE 109 pattern priority. The initial implementation experiment already has David’s authorization; full architecture adoption is separate.
+
+## Meeting links
+
+[[05 - Python Professor Brief|One-page brief]] · [[70 - Engineering Architecture Map|Editable engineering map]] · [[80 - Initial Compiler Goal|Implementation evidence]] · [[60 - Course Syntax and Compiler Trace|EE 109 examples]] · [[D-28|Architecture decision]] · [[04 - Python Implementation Roadmap|Roadmap]]

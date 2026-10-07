@@ -5,7 +5,8 @@ project: spatial-python
 date: 2026-10-03
 status: proposed
 adoption_status: proposed
-implementation_status: not-implemented
+implementation_status: foundations-in-progress
+updated: 2026-10-07
 ---
 
 # Python Spatial engineering architecture map
@@ -39,6 +40,10 @@ Blue marks owned program meaning, green marks reference execution and results, a
 **Hardware needs a checked plan.** Plan records add finite storage, scheduling, numeric realizations, interfaces and target obligations. Python plan execution is the S6 validation path for checking behavior against the semantic program. It does not imply that every `plan(...)` call runs exhaustive tests, or that a simulation proves all inputs correct. `plan(...)` returns an eligible checked `ImplementationPlan` only after its required checks; failed or unknown required target obligations block emission. Rejected candidates remain inspectable. Vendor simulation, synthesis and measured hardware results supply separate evidence. xDSL may be introduced as an adapter for a measured backend benefit; it does not own the canonical program.
 
 The directory labels on the canvas are proposed module responsibilities from [[40 - Package and Conformance Blueprint]]. The CLI projects the same public API and diagnostics; it is not a second compiler path.
+
+## Current implementation checkpoint
+
+The map describes the proposed architecture, not completed components. As of 7 October, the initial implementation has committed records, numeric rules and several checking stages, with 236 passing component tests at `f8a993b`. The full verifier, memory rules, source-to-simulation workflow and unfamiliar-composition acceptance are still ahead. [[80 - Initial Compiler Goal]] records the evidence and remaining work. The [[2026-10-01-python-professor-presentation-outline|professor presentation]] embeds this map with section navigation and zoom.
 
 ## Start with the first complete path
 

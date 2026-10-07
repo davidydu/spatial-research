@@ -64,7 +64,7 @@
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "One checked meaning. Python reference execution first; verified hardware planning follows.\nProposed design • 3 October 2026 • Compiler and hardware paths are not yet implemented.",
+      "originalText": "One checked meaning. Python reference execution first; verified hardware planning follows.\nArchitecture proposal • 3 October 2026 • Implementation progress is tracked separately.",
       "autoResize": false,
       "lineHeight": 1.25,
       "type": "text",
@@ -73,7 +73,7 @@
       "y": 135,
       "width": 3340,
       "height": 60,
-      "text": "One checked meaning. Python reference execution first; verified hardware planning follows.\nProposed design • 3 October 2026 • Compiler and hardware paths are not yet implemented."
+      "text": "One checked meaning. Python reference execution first; verified hardware planning follows.\nArchitecture proposal • 3 October 2026 • Implementation progress is tracked separately."
     },
     {
       "angle": 0,
