@@ -9,6 +9,10 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-07 — D1 scalar conditions and control facts
+- Updated [[80 - Initial Compiler Goal]] to `spatial-py@092637e`. All 376 tests pass from the source tree and an isolated installed wheel, including 25 D1 tests; the integrated C1–C5 checkpoint remains at its historical 351 tests. The Lab 1 and paired `tiled_adjust` fixtures remain unexecuted.
+- D1 derives generic entry-relative activation, scalar facts and mandatory divisor, shift-count, checked-embed and loop-step conditions while preserving original fault and token points. It does not yet decide rejection/guard/unreachable dispositions, evaluate runtime predicates, establish global entry/call reachability, complete the verifier, execute source, or prepare/simulate programs; the 36 C5 D/E obligations remain pending. Independent specification and parent reviews passed, with Opus 5.5 review of the design, implementation and corrections. Six red/green regressions corrected fault-observation duplication and resource-limit attribution. Parent probes covered 108 nested branches and 432 activations; specification probes covered 108 signed-loop cases, deep-region limits and a nested memory/helper fault-point case.
+
 ## 2026-10-07 — Integrated memory analysis checkpoint
 - Updated [[80 - Initial Compiler Goal]] to `spatial-py@4c4de14`. All 351 tests pass from the source tree and an isolated installed wheel; C4's 338-test result remains in its historical entry. The Lab 1 fixture remains unexecuted.
 - C1–C5 now produce one identity-bound structural memory report with an exhaustive account of remaining checks and their later consumers. A general canonical memory composition passes analysis, retaining 26 access obligations, seven events and three helper-entry equalities for D/E to resolve. Independent specification and parent quality reviews passed. D activation/guard handling and E effects/initialization are next; F normalization, G publication, source frontend, host and simulator remain pending.
