@@ -9,6 +9,10 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-07 — Python Spatial implementation checkpoint updated
+- Updated [[80 - Initial Compiler Goal]] from the current `spatial-py` worktree checkpoint: `8f80b24` specifies Lab 1 and paired `tiled_adjust` fixtures; `62fe18b` implements C1 memory declarations and ABI checks. The 258 passing tests are source-tree results; the earlier 236-test installed-wheel result remains historical. No fixture has run through capture/check/prepare/simulation.
+- C1 evidence covers closed scopes, meta witnesses, borrowed-result owner policies and captured `Out`/`InOut[Int]` environment operands. C2 context/call-graph work is ongoing with no result claimed; provenance/runtime identity, the full verifier and the complete source-to-simulation goal remain open.
+
 ## 2026-10-07 — Present Python feasibility and the implementation plan
 - Revised the six-slide professor presentation to cover the proposed Python system, feasibility, shared architecture, implementation sequence, tested foundations and next milestones. HLS appears as the agreed destination; no dedicated HLS explanation or program walkthrough remains.
 - Put the initial composed-memory subset and its source/check/execute path in the main presentation. Showed the committed 236-test component checkpoint alongside unfinished work, and kept the independent post-freeze composition, actual structural edit, shared input-route behavior and workflow measurements as acceptance requirements. The Excalidraw map remains on slide 3; research repository and documentation links are on slide 5.
