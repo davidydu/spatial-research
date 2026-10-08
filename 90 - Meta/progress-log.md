@@ -9,6 +9,10 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-07 — Integrated memory analysis checkpoint
+- Updated [[80 - Initial Compiler Goal]] to `spatial-py@4c4de14`. All 351 tests pass from the source tree and an isolated installed wheel; C4's 338-test result remains in its historical entry. The Lab 1 fixture remains unexecuted.
+- C1–C5 now produce one identity-bound structural memory report with an exhaustive account of remaining checks and their later consumers. A general canonical memory composition passes analysis, retaining 26 access obligations, seven events and three helper-entry equalities for D/E to resolve. Independent specification and parent quality reviews passed. D activation/guard handling and E effects/initialization are next; F normalization, G publication, source frontend, host and simulator remain pending.
+
 ## 2026-10-07 — Borrowed-result provenance checkpoint
 - Updated [[80 - Initial Compiler Goal]] to `spatial-py@456759f`. C4's 338 tests pass from both the source tree and an isolated installed wheel; C3's 311-test checkpoint remains historical. The Lab 1 and paired `tiled_adjust` fixtures are still unexecuted.
 - C4 derives actual owner roots for borrowed helper returns, retains distinct maps on shared owners, propagates finite loop-root changes, records required caller/callee shape checks, and preserves nested cell and local-allocation identity while rejecting temporary escapes and lifetime widening. All eight borrow-fixture groups have structural projections; no runtime writes were executed. Independent specification/parent reviews passed, including 360 policy cases and separate carry-scope and inactive-cell probes. C5 integrated reporting/audit is next; D/E/F, full verification, source capture and runtime remain unfinished.
