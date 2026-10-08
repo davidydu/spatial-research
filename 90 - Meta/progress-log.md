@@ -9,6 +9,10 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-07 — Memory maps and ordered access plans checkpoint
+- Updated [[80 - Initial Compiler Goal]] to `spatial-py@6b0e815`: C3's 311 tests pass from both the source tree and isolated installed wheel. C1's 258 and C2's 284 source-test results, plus the earlier 236-test source-and-wheel checkpoint, are historical. The Lab 1 and paired `tiled_adjust` fixtures remain unexecuted.
+- C3 adds nested/signed memory maps with intermediate logical bounds, identity reborrow bound-chain preservation, per-axis allocation checks and dynamic obligations, scalar-cell references through REGION/IF/LOOP, and ordered COPY plans for all seven development groups. Independent specification review passed; parent review added 1,533 metadata observations. C4 borrowed-result provenance and actual-owner substitution are starting; D/E/F, full verification, source capture and runtime remain unfinished.
+
 ## 2026-10-07 — Contextual memory and call analysis checkpoint
 - Updated [[80 - Initial Compiler Goal]] to `spatial-py@46e78da`: 284 source-tree tests pass. No 284-test installed-wheel or source-to-simulation result is claimed. The Lab 1 and paired `tiled_adjust` fixtures remain unexecuted.
 - C2 adds retained-call recursion rejection, per-use Index-metadata scope/dominance checks, explicit capture/ABI maps, loop-carry entry/backedge correspondence, and analysis-report identity and budget checks. Independent specification and code-quality reviews passed. C3 memory maps/access plans are now in progress; provenance/runtime identity, C3–C5, the full verifier, frontend and simulator remain unfinished.
