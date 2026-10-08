@@ -9,6 +9,10 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-07 — Contextual memory and call analysis checkpoint
+- Updated [[80 - Initial Compiler Goal]] to `spatial-py@46e78da`: 284 source-tree tests pass. No 284-test installed-wheel or source-to-simulation result is claimed. The Lab 1 and paired `tiled_adjust` fixtures remain unexecuted.
+- C2 adds retained-call recursion rejection, per-use Index-metadata scope/dominance checks, explicit capture/ABI maps, loop-carry entry/backedge correspondence, and analysis-report identity and budget checks. Independent specification and code-quality reviews passed. C3 memory maps/access plans are now in progress; provenance/runtime identity, C3–C5, the full verifier, frontend and simulator remain unfinished.
+
 ## 2026-10-07 — Python Spatial implementation checkpoint updated
 - Updated [[80 - Initial Compiler Goal]] from the current `spatial-py` worktree checkpoint: `8f80b24` specifies Lab 1 and paired `tiled_adjust` fixtures; `62fe18b` implements C1 memory declarations and ABI checks. The 258 passing tests are source-tree results; the earlier 236-test installed-wheel result remains historical. No fixture has run through capture/check/prepare/simulation.
 - C1 evidence covers closed scopes, meta witnesses, borrowed-result owner policies and captured `Out`/`InOut[Int]` environment operands. C2 context/call-graph work is ongoing with no result claimed; provenance/runtime identity, the full verifier and the complete source-to-simulation goal remain open.
