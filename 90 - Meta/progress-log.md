@@ -9,6 +9,10 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-07 — Borrowed-result provenance checkpoint
+- Updated [[80 - Initial Compiler Goal]] to `spatial-py@456759f`. C4's 338 tests pass from both the source tree and an isolated installed wheel; C3's 311-test checkpoint remains historical. The Lab 1 and paired `tiled_adjust` fixtures are still unexecuted.
+- C4 derives actual owner roots for borrowed helper returns, retains distinct maps on shared owners, propagates finite loop-root changes, records required caller/callee shape checks, and preserves nested cell and local-allocation identity while rejecting temporary escapes and lifetime widening. All eight borrow-fixture groups have structural projections; no runtime writes were executed. Independent specification/parent reviews passed, including 360 policy cases and separate carry-scope and inactive-cell probes. C5 integrated reporting/audit is next; D/E/F, full verification, source capture and runtime remain unfinished.
+
 ## 2026-10-07 — Memory maps and ordered access plans checkpoint
 - Updated [[80 - Initial Compiler Goal]] to `spatial-py@6b0e815`: C3's 311 tests pass from both the source tree and isolated installed wheel. C1's 258 and C2's 284 source-test results, plus the earlier 236-test source-and-wheel checkpoint, are historical. The Lab 1 and paired `tiled_adjust` fixtures remain unexecuted.
 - C3 adds nested/signed memory maps with intermediate logical bounds, identity reborrow bound-chain preservation, per-axis allocation checks and dynamic obligations, scalar-cell references through REGION/IF/LOOP, and ordered COPY plans for all seven development groups. Independent specification review passed; parent review added 1,533 metadata observations. C4 borrowed-result provenance and actual-owner substitution are starting; D/E/F, full verification, source capture and runtime remain unfinished.
