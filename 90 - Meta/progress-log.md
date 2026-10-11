@@ -9,6 +9,13 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-11 — Memory and metadata checks retain entry and operation placement
+
+- Updated [[80 - Initial Compiler Goal]] to `spatial-py@1feb2ac`. D3b adds 17 focused tests; all 471 tests pass from source and an isolated installed wheel on CPython 3.14.5. The design and 30 independent development cases were committed before implementation as `8802a42`.
+- Every derived memory/metadata request now has a proof, unreachable, entry-check, operation-guard or unsupported decision. Pure recipe proofs remain separate from runtime memory state. Checks keep their original points and tokens; each COPY retains one compound preflight. Every C5 consumer is explicitly planned or deferred, and every authored requirement remains visible. Planned does not mean discharged or inserted.
+- Independent Codex specification/composition reviews and parent quality review passed. Three fresh review cases became permanent regressions. Ten additional probe methods cover seven preauthored graphs, zero-valued totality, tokenless checks, and a new nested helper/region/loop/branch composition. Parent probes rejected 65 malformed boundaries without foreign hooks and verified identifier-length accounting. Fixture validation corrected unsupported initialized SRAM and tokenless-check assumptions without expanding the language.
+- Descriptor correspondence, authored-requirement validation, actual guard representation/insertion and full ledger rechecking remain next. Effect/initialization summaries, full checking/publication, source lowering, preparation and execution are unfinished. Lab 1 and the complete compiler's post-freeze composition gate have not run.
+
 ## 2026-10-11 — Scalar decisions preserve activation and fault order
 
 - Updated [[80 - Initial Compiler Goal]] to `spatial-py@704c190`. D3a adds 32 focused tests; all 454 tests pass from source and an isolated installed wheel on CPython 3.14.5. The design and 41 independent development cases were committed first as `613e7d0`.
