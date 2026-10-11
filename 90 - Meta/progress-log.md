@@ -9,6 +9,13 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-11 — Memory descriptions checked against their defining recipes
+
+- Updated [[80 - Initial Compiler Goal]] to `spatial-py@6d098ea`. D3c adds 23 test methods; all 494 tests pass from source and an isolated installed wheel on CPython 3.14.5. The design and 25-case independent matrix were committed and pushed before implementation as `e28d494`.
+- Every pending descriptor shape/capacity comparison now receives PROVED, REFUTED or UNRESOLVED independently of reachability. The pass retains existing contextual substitutions, evaluates only exact local scalar facts, and preserves separate totality, lifetime, safety, effect and initialization responsibilities. A runtime guard cannot repair a contradictory description.
+- Independent Codex specification review and parent quality review passed. All 24 independently authored candidates matched expectations. A fresh component composition combines a reverse/dropped-axis view, ordered captures, a false-arm contradiction, a zero-trip empty view and a borrowed helper call. Generic helper uncertainty remains despite a known caller value. Parent probes add 360 signed/empty view observations, 102 malformed-boundary rejections without foreign hooks, and a 1,100-level recipe with exact/one-less resource checks. Parent review caught and corrected per-expression binding sets during development; frozen production needed no further changes.
+- Authored-requirement validation, ordered guard insertion and complete obligation rechecking remain next. Effects/initialization, full checking/publication, source lowering, preparation and execution are unfinished. Lab 1 and the complete compiler's post-freeze composition gate have not run.
+
 ## 2026-10-11 — Memory and metadata checks retain entry and operation placement
 
 - Updated [[80 - Initial Compiler Goal]] to `spatial-py@1feb2ac`. D3b adds 17 focused tests; all 471 tests pass from source and an isolated installed wheel on CPython 3.14.5. The design and 30 independent development cases were committed before implementation as `8802a42`.
