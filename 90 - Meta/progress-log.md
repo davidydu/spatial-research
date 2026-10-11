@@ -9,6 +9,13 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-11 — Scalar decisions preserve activation and fault order
+
+- Updated [[80 - Initial Compiler Goal]] to `spatial-py@704c190`. D3a adds 32 focused tests; all 454 tests pass from source and an isolated installed wheel on CPython 3.14.5. The design and 41 independent development cases were committed first as `613e7d0`.
+- The checker validates the selected exported kernel, considers every exported root and possible helper call, and separates control reachability from a successfully reached operation point. Each scalar condition receives a proved, unreachable, certain-failure, required-guard or unsupported decision at its original source/token location. Memory and authored requirements remain explicitly deferred; no guard is inserted yet.
+- Independent Codex specification review passed 20 probe methods, including 36 graphs checked against a separate path enumerator and an unfamiliar component composition. Parent code review reproduced and fixed missing identifier-character and traversal-frame work charges. Separate parent probes rejected 19 malformed inputs without foreign hooks. Tests include 1,100 nested regions, a 121-edge call chain and 151 export aliases.
+- Memory/authored decisions, descriptor proofs, guard normalization and full ledger rechecking remain next. Effect/initialization summaries, full checking/publication, source lowering, preparation and execution are unfinished. Lab 1 and the complete compiler’s post-freeze composition gate have not run.
+
 ## 2026-10-11 — Memory snapshot evaluator and ordered compiler requests
 
 - Updated [[80 - Initial Compiler Goal]] to `spatial-py@db792fb`. D2b has 24 dedicated tests and 422 passing tests from both source and an isolated installed wheel on CPython 3.14.5. Its contract and independent memory cases were committed first as `5152e54`.
