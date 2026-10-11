@@ -9,6 +9,14 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-11 — Authored requirements checked for ownership and local references
+
+- Updated [[80 - Initial Compiler Goal]] to `spatial-py@c27f6f1`. D3d adds 26 test methods; all 520 tests pass from source and an isolated installed wheel on CPython 3.14.5. The design and 30-row independent matrix were committed and pushed before implementation as `cb1d0a8`.
+- Each authored request must attach exactly once to its declared owner. Predicate subjects and optional Bool activation must have the right types, local scope and pre-owner availability. Existing contextual normalization handles formals and explicit captures; CALL-owned requests use caller context. All compiler-derived decisions and coverage remain exact retained evidence.
+- Admission does not certify predicate truth, requested placement, supplied activation or existing guards. Those claims remain pending alongside enforcement and combined-prefix rechecking. In particular, a supplied false flag cannot suppress the compiler's active divide-zero finding, and a preparation disposition cannot move a body check ahead of earlier writes.
+- Independent Codex specification review and parent quality review passed. All 47 independently authored variants matched their expected outcomes. A fresh component composition combines a helper's earlier write, nested REGION/IF captures, a zero-trip loop, two calls, six requests across all five predicates and an incomplete guard with a mismatching failure tag. Parent probes add 37 malformed-boundary rejections without foreign hooks and 25 exact/one-less depth and resource observations. No frozen production correction was needed.
+- Next is a closed canonical representation for general guard demands, then authored semantic validation, ordered enforcement and complete obligation rechecking. Effects/initialization, full checking/publication, source lowering, preparation and execution remain unfinished. Lab 1 and the complete compiler's post-freeze composition gate have not run.
+
 ## 2026-10-11 — Memory descriptions checked against their defining recipes
 
 - Updated [[80 - Initial Compiler Goal]] to `spatial-py@6d098ea`. D3c adds 23 test methods; all 494 tests pass from source and an isolated installed wheel on CPython 3.14.5. The design and 25-case independent matrix were committed and pushed before implementation as `e28d494`.
