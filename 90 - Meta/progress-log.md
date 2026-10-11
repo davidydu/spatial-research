@@ -9,6 +9,13 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-11 — Scalar condition evaluator and contextual requests
+
+- Updated [[80 - Initial Compiler Goal]] to `spatial-py@cb868d6`. D2a has 22 dedicated tests and 398 passing tests from both source and an isolated installed wheel on CPython 3.14.5. The design was committed first as `8014e79`.
+- Added general numerical and shape-condition evaluation with exact typed captures, ordered Boolean/shape/slice semantics, distinct false/fault/resource outcomes, fixed compile-time witnesses and local runtime-value scope. Fresh D1/C5 requests preserve every required consumer as routed or deferred; an evaluation result does not discharge an obligation.
+- Independent Codex specification review and parent quality review passed. Two reproduced malformed-report failures now have regression tests, including rejection before foreign equality hooks. Parent probes checked 938 scalar observations and 34 contextual and obligation-retention cases. Report admission has a bounded scan proportional to request count; no large-workload performance result is claimed.
+- Memory-state predicates, remaining proof/guard work, effects and initialization, full source checking, checked publication, host preparation and execution remain pending. The Lab 1 and composed-variant fixtures are still unexecuted. Documentation publication uses the existing site deployment workflow.
+
 ## 2026-10-07 — D1 scalar conditions and control facts
 - Updated [[80 - Initial Compiler Goal]] to `spatial-py@092637e`. All 376 tests pass from the source tree and an isolated installed wheel, including 25 D1 tests; the integrated C1–C5 checkpoint remains at its historical 351 tests. The Lab 1 and paired `tiled_adjust` fixtures remain unexecuted.
 - D1 derives generic entry-relative activation, scalar facts and mandatory divisor, shift-count, checked-embed and loop-step conditions while preserving original fault and token points. It does not yet decide rejection/guard/unreachable dispositions, evaluate runtime predicates, establish global entry/call reachability, complete the verifier, execute source, or prepare/simulate programs; the 36 C5 D/E obligations remain pending. Independent specification and parent reviews passed, with Opus 5.5 review of the design, implementation and corrections. Six red/green regressions corrected fault-observation duplication and resource-limit attribution. Parent probes covered 108 nested branches and 432 activations; specification probes covered 108 signed-loop cases, deep-region limits and a nested memory/helper fault-point case.
