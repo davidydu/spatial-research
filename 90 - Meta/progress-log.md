@@ -9,6 +9,13 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-11 — Memory snapshot evaluator and ordered compiler requests
+
+- Updated [[80 - Initial Compiler Goal]] to `spatial-py@db792fb`. D2b has 24 dedicated tests and 422 passing tests from both source and an isolated installed wheel on CPython 3.14.5. Its contract and independent memory cases were committed first as `5152e54`.
+- Added supplied-state observations for capabilities, allocation lifetimes, composed logical bounds, shared initialization, ordered COPY preflight and one selected output’s initialization. The compiler retains one ordered request per access or COPY, preserving original analysis identities, source locations and deferred effect/initialization consumers. Success performs no transfer, mutation or output publication.
+- Independent Codex specification and parent quality reviews passed. Four reproduced boundary defects now have regressions: empty identifiers, host identity addresses consuming the semantic integer-bit limit, foreign metaclass comparison before admission, and an unbounded convenience report scan. Final review checked 20 pure probes, 13 bridge probes and all 24 focused tests; parent checks add 405 geometry/completion and 648 COPY/alias observations.
+- Remaining work includes descriptor/execution correspondence, proof and guard decisions, effect/initialization summaries, full checking/publication, source lowering, preparation and execution. The Lab 1 and composed-variant fixtures remain unexecuted. This checkpoint supplies memory observations, not a complete compiler or hardware result.
+
 ## 2026-10-11 — Scalar condition evaluator and contextual requests
 
 - Updated [[80 - Initial Compiler Goal]] to `spatial-py@cb868d6`. D2a has 22 dedicated tests and 398 passing tests from both source and an isolated installed wheel on CPython 3.14.5. The design was committed first as `8014e79`.
