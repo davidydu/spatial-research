@@ -78,12 +78,14 @@ and Rust presentations are historical evidence.
 
 ## Current checkpoint and next task
 
-At the last behavior checkpoint, `spatial-py@c27f6f1` implemented D3d authored
-requirement admission. `4fe9baf` records publication closeout. The 11 October
-verification passed **520 source tests and 520 installed-wheel tests** on
-CPython 3.14.5, with independent specification/case review and parent code review.
-The research snapshot was `e05aa0c`; its deployment was
-[38183442280](https://github.com/davidydu/spatial-research-site/actions/runs/38183442280).
+At the last behavior checkpoint, `spatial-py@48687f3` implemented D4a
+canonical guard demands and guard correspondence (design, contract
+clarification and independent matrix first as `b8ddfe1`). The
+12 October verification passed **613 source tests and 613
+installed-wheel tests** on CPython 3.14.5, with independent design, inventory,
+specification and quality reviews and a fresh post-freeze composition. The
+research snapshot is the commit that records this paragraph; its deployment
+run is added here after verification.
 These are dated results; this handoff does not claim another compiler test run.
 
 The compiler's tracked
@@ -93,12 +95,14 @@ pitfalls. Its support ledger and `docs/evidence/` own implementation evidence.
 [[80 - Initial Compiler Goal]] is the published big-picture status. Prefer these
 current records over old chat replies, diagrams or slide test counts.
 
-D3d checks request ownership, local typed subjects and activation references.
-It retains semantic truth, requested placement and existing guard correctness
-as pending. Supplied claims cannot weaken compiler-derived requirements. The
-next task is to design a **closed canonical representation of general guard
-demands**, then validate authored semantics, insert ordered checks and recheck
-the combined obligation ledger. That representation is not already implemented.
+D4a gives every derived and authored condition one closed canonical form,
+decides each check at its owner's position in the contract's fixed order and
+matches existing guards by content; supplied claims still cannot weaken
+compiler-derived requirements. The next task is **guard insertion with token
+rethreading and recomputation of the successful prefix across inserted
+guards**, then the open routes listed in the D4a design (tokenless extent
+liveness, per-call helper entry checks, bounds-only query, activation
+correspondence) before E/F/G. Guard insertion is not already implemented.
 
 The full verifier/publication, source lowering, host preparation and reference
 execution remain unfinished. The planned Lab 1 tiled-scale example and its
