@@ -8,13 +8,27 @@ load_priority: high
 
 # Workflow — Spatial Research
 
-**Load this file first at the start of every session.** The current work follows [[01 - Python Research Plan]]. [[2026-04-21-spatial-spec-design]] holds the original source-documentation rationale.
+Start with [[project-handoff]] for the shared repository map, current checkpoint
+and restart task, then read this workflow. The current research follows
+[[01 - Python Research Plan]]; the authorized initial implementation has its own
+plan and state in `spatial-py`. [[2026-04-21-spatial-spec-design]] holds the original
+source-documentation rationale.
 
-## Current route — 30 September 2026
+## Current route — updated 12 October 2026
 
-Research a **pure Python Spatial compiler** before implementation, under [[D-27]]. Start with [[00 - Python Rewrite Index]], [[D-28]], and [[03 - Managed Research Execution]]. [[05 - Python Professor Brief]] is the short meeting view. The order is programming model, semantic contract, compiler design, HLS research, then implementation planning. Review the relevant design before implementing it.
+The current direction is a **pure Python Spatial compiler**, under [[D-27]].
+Research preceded the initial implementation authorized on 4 October; that
+implementation is now in progress. Start with [[00 - Python Rewrite Index]],
+[[D-28]], [[03 - Managed Research Execution]] and [[80 - Initial Compiler Goal]].
+[[05 - Python Professor Brief]] is the short meeting view. Review new designs
+before implementation; HLS remains a later target with separate evidence gates.
 
-Use **Codex-only** agents for bounded parallel source checks, alternative designs, and review. Give writers separate files; the integrating agent verifies the source claims that determine a conclusion. Read local files and use command-line checks by default; use browser UI only when requested or needed to inspect a visual defect.
+Use bounded independent agents for parallel source checks, alternative designs
+and review. Codex is preferred; later user instructions also authorize Claude
+Opus 5.5, superseding the earlier Codex-only and Fable preferences. Follow the
+current delegation details in [[project-handoff]]. Give writers separate files;
+the integrating agent personally verifies decisive claims. Read local files and
+use command-line checks by default; use browser UI when visual inspection is needed.
 
 New Python work belongs under `50 - Python Rewrite/`. Decisions continue in `20 - Research Notes/50 - Decision Records/`; do not create another decision register. Preserve the original Spatial specification, earlier Rust work, and frozen experiments as evidence. Neither a research conclusion nor an adopted direction establishes implementation completion.
 

@@ -9,6 +9,12 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-12 — Shared context for Codex, Claude Code and other harnesses
+
+- Added [[project-handoff]] as the shared startup map, preserving repository/worktree locations, user decisions, current evidence, presentation preferences, next guard-design task and publication procedure. Compiler `PROJECT_STATE.md` owns the detailed restart state, semantic pitfalls and verification commands without temporary environment dependencies.
+- Added `AGENTS.md`/`CLAUDE.md` entry pointers for the research, compiler and site repositories; the bootstrap compiler checkout explicitly routes to `work/initial-reference`. Updated [[workflow]], the main index and the historical [[2026-07-07-session-resume-guide]] to avoid stale Codex-only or Rust restart instructions.
+- This is a documentation and context checkpoint. D3d's 520-test results remain dated 11 October; no new compiler behavior or implementation milestone is claimed. Future decisions, corrections, validation results and next tasks belong in shared tracked files rather than only private agent memory.
+
 ## 2026-10-11 — Authored requirements checked for ownership and local references
 
 - Updated [[80 - Initial Compiler Goal]] to `spatial-py@c27f6f1`. D3d adds 26 test methods; all 520 tests pass from source and an isolated installed wheel on CPython 3.14.5. The design and 30-row independent matrix were committed and pushed before implementation as `cb1d0a8`.

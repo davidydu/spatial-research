@@ -23,10 +23,11 @@ Source-grounded research and an implementation-level specification of the Spatia
 
 ## Start here (for any session)
 
-1. [[workflow]] — **load this first.** Describes phases, per-session rhythm, verification discipline, stopping conditions.
-2. [[00 - Python Rewrite Index]] and [[01 - Python Research Plan]] — current work. [[2026-04-21-spatial-spec-design]] records the original source-documentation plan.
-3. [[conventions]] — frontmatter schemas, citation format, wikilink style.
-4. [[progress-log]] — running log of what's been done, open questions count.
+1. [[project-handoff]] — **load this first.** Shared context for any harness, repository/worktree map, verified checkpoint and next task.
+2. [[workflow]] — research and publication discipline.
+3. [[00 - Python Rewrite Index]] and [[01 - Python Research Plan]] — current research; [[80 - Initial Compiler Goal]] tracks implementation. [[2026-04-21-spatial-spec-design]] records the original source-documentation plan.
+4. [[conventions]] — frontmatter schemas, citation format, wikilink style.
+5. [[progress-log]] — dated results and remaining work.
 
 ## Folder map
 

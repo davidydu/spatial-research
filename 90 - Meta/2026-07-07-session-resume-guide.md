@@ -7,11 +7,14 @@ date: 2026-07-07
 
 # Session Resume Guide
 
-This supplements [[workflow]] and [[progress-log]]. Use the current checkpoint below; the older Rust implementation queue is retained as history.
+This is a historical resume guide. **For current work in any harness, start at
+[[project-handoff]]**, then [[workflow]] and [[80 - Initial Compiler Goal]]. The
+October Python implementation has progressed beyond the September checkpoint
+below; the Rust implementation queues are retained as history.
 
-## Current research checkpoint — 30 September 2026
+## Historical research checkpoint — 30 September 2026
 
-[[D-27]] records the **pure Python Spatial** direction reported after the professor discussion. Read [[00 - Python Rewrite Index]], [[01 - Python Research Plan]], and [[PY-R001 - Programming Model Study]]. Research the programming model before compiler design and HLS lowering. Use Codex-only agents and local-file checks. The Python API and detailed architecture remain open; do not resume the old Rust queue as current work.
+[[D-27]] records the **pure Python Spatial** direction reported after the professor discussion. At that checkpoint, the Python API and detailed architecture remained open, and the workflow used Codex-only agents. Later design, implementation and delegation decisions are recorded in [[project-handoff]] and [[progress-log]]. Do not resume the old Rust queue as current work.
 
 The research vault and website have been published under `davidydu`; older credential-blocked entries below are historical. See [[progress-log]] for dated publication evidence.
 
