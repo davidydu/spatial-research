@@ -84,8 +84,11 @@ clarification and independent matrix first as `b8ddfe1`). The
 12 October verification passed **613 source tests and 613
 installed-wheel tests** on CPython 3.14.5, with independent design, inventory,
 specification and quality reviews and a fresh post-freeze composition. The
-research snapshot is the commit that records this paragraph; its deployment
-run is added here after verification.
+research snapshot is `spatial-research@606561b`, published by
+[site deployment run 38310030032](https://github.com/davidydu/spatial-research-site/actions/runs/38310030032);
+on 12 October the Initial Compiler Goal, progress-log and project-handoff
+pages returned HTTP 200 and carried the implementation hash, the 613-test
+count and the D4a checkpoint.
 These are dated results; this handoff does not claim another compiler test run.
 
 The compiler's tracked
