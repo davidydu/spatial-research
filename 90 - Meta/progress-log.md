@@ -9,6 +9,13 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-12 — Actual Lab 1 source reaches canonical analysis
+
+- Checkpoint `spatial-py@763fc49` connects Python text → shared unchecked records → canonical operations → existing analyses. Independent builder records use the same normalizer. Lab 1 has 7 proved and 4 guard-required demands, with actual ports, allocation sites, loop bounds, views, transfer endpoints and effect order checked independently. No execution or checked-publication claim follows.
+- All **687 tests pass from source and 687 from an isolated installed wheel** on CPython 3.14.5 (88.864 and 88.855 seconds). [Normalization evidence](https://github.com/davidydu/spatial-py/blob/763fc49/docs/evidence/task-03b-program-normalization.md) records production hashes, review and the fresh post-freeze component composition. This does not replace the final whole-compiler holdout.
+- Independent review and parent verification retained regressions for child descriptor scope, lexical captures hidden by same-value aliases or shape metadata, typed literal provenance, comparison-chain depth and known-sign runtime slice steps. Existing scalar logic remains shared; no lab-name or whole-program dispatch was introduced.
+- Next: ordered guards, effects/initialization, complete verification/publication and prepared reference execution for admitted constructs, then the helper/tail/branch companion and remaining acceptance gates. Updated [[80 - Initial Compiler Goal]] and [[project-handoff]]. The compiler [PROJECT_STATE.md](https://github.com/davidydu/spatial-py/blob/work/initial-reference/PROJECT_STATE.md) records this snapshot's verified site deployment.
+
 ## 2026-10-12 — Actual Python source enters common compiler records
 
 - Checkpoint `spatial-py@7e37e6c`: actual Lab 1 Python text now converts into existing unchecked records, preserving ports, loops, uninitialized SRAM declarations, views, transfers and ordered expressions. Parsed literal expressions reach the existing scalar normalizer. No source execution, complete canonical normalization or checked publication is claimed.

@@ -78,20 +78,24 @@ and Rust presentations are historical evidence.
 
 ## Current checkpoint and next task
 
-Current behavior checkpoint: **`spatial-py@7e37e6c`**, verified on 12 October
-with **655 source tests and 655 isolated installed-wheel tests**, CPython 3.14.5.
-The private frontend converts actual Lab 1 Python text into common unchecked
-records; parsed scalar expressions reach the existing scalar normalizer.
-Independent specification and parent code reviews passed. Six independently
-authored source behavior tests are retained in the suite, including a new
-three-level composition. Exact scope, hashes, timings and limits are in the
-[source evidence](https://github.com/davidydu/spatial-py/blob/7e37e6c/docs/evidence/task-03a-source-integration.md).
+Current behavior checkpoint: **`spatial-py@763fc49`**, verified on 12 October
+with **687 source tests and 687 isolated installed-wheel tests**, CPython 3.14.5.
+Actual Lab 1 Python text now reaches existing canonical analyses through common
+unchecked-program normalization. Independently built records use the same rules.
+The normalized program has 7 proved and 4 guard-required demands; tests inspect
+ports, fresh allocations, captures, views, transfers and read/multiply/write order.
 
-Earlier in the same checkpoint, `b11ebde` repaired the D4a authored observation
-order, and `a2c2984` added a faithful canonical Lab 1 graph through current
-analyses: 7 proved and 4 guard-required demands, retaining effects/initialization
-work. The parsed source has not yet been normalized into that canonical graph.
-**There is no simulated Lab 1 output or complete source-to-execution path.**
+Independent specification and parent reviews passed after reproduced scope,
+metadata, literal and known-sign slice corrections. A fresh composition authored
+after the final production freeze passed without a new compiler path. Exact
+scope, hashes, timings and test cases are in the
+[normalization evidence](https://github.com/davidydu/spatial-py/blob/763fc49/docs/evidence/task-03b-program-normalization.md).
+**There is no simulated Lab 1 output, checked publication or complete
+source-to-execution path.**
+
+Earlier checkpoints: `7e37e6c` added source conversion; `b11ebde` repaired D4a
+observation order; `a2c2984` added the independently authored canonical Lab 1 graph.
+Their work remains complete for its recorded scope.
 
 David accepted the earlier integration sequence. The compiler's tracked
 [PROJECT_STATE.md](https://github.com/davidydu/spatial-py/blob/work/initial-reference/PROJECT_STATE.md)
@@ -102,13 +106,13 @@ scoped execution together; complete every obligation for admitted constructs.
 Do not equate complete guard routes with complete E/F/G or runtime enforcement.
 The full language goal and final unfamiliar-program acceptance remain unchanged.
 
-**Resume with shared declaration/loop/memory normalization.** Resolve ports and
-declarations, preserve absent SRAM initialization as fresh UNINITIALIZED storage,
-and lower views/transfers/writes with explicit captures and tokens. Source and
-builder use the same rules. Compare with the independent canonical Lab 1 fixture
-and differently structured cases, then connect guard insertion, initialization,
-full checking/publication, host preparation and reference execution. Existing
-D4a open routes remain obligations as their constructs enter publication.
+**Resume with ordered guard enforcement for the admitted programs**, followed
+by effects/initialization, complete checking/publication, host preparation and
+reference execution. Preserve precise failure order and the common source/builder
+path. Demonstrate the actual Lab 1 result, then expand through the companion and
+original acceptance matrix. Do not build every remaining verifier route before
+connecting execution; complete each admitted construct's obligations together.
+Existing D4a open routes remain required as their constructs enter publication.
 
 The private source seam explicitly excludes helpers, meta/static expansion,
 branch statements, noncore dependencies and the final bundle/template API.
