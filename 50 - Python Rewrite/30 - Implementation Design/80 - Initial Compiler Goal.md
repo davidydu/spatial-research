@@ -46,8 +46,8 @@ No FPGA resource, timing, RTL or hardware-support claim follows from local simul
 
 The implementation lives in the separate `spatial-py` repository. Its active plan is `docs/plans/2026-10-04-initial-reference.md`; its support ledger and task evidence distinguish completed foundations from the full goal. Historical Scala/Rust repositories remain evidence and are not modified to supply a Python result.
 
-Current execution checkpoint: **`spatial-py@10cc1be`**, verified on 13 October
-with **811 tests from source and 811 from an isolated installed wheel** on
+Current execution checkpoint: **`spatial-py@aecacc0`**, verified on 13 October
+with **870 tests from source and 870 from an isolated installed wheel** on
 CPython 3.14.5. **Actual Lab 1 source now produces the expected output through
 the Python compiler.** The path is source → shared unchecked records → canonical
 operations → checked publication → prepared inputs → reference execution.
@@ -76,13 +76,28 @@ found and repaired preparation accidentally evaluating another kernel's input
 conditions. [Branch evidence](https://github.com/davidydu/spatial-py/blob/10cc1be/docs/evidence/task-05b-statement-branches.md)
 records the independent tests, repair, frozen hashes and complete package checks.
 
-Next is the [reviewed helper path](https://github.com/davidydu/spatial-py/blob/10cc1be/docs/reviews/2026-10-13-helper-execution-path.md):
-explicit calls with scalar and borrowed-memory arguments, fresh local storage,
-and correct return order. Its targets are the original tiled-tail and local-borrow
-examples. Helpers, meta/static forms, true resumable budgets, artifact agreement
-and verified editing remain required. Current private resource-limit results
-have no continuation. The full goal remains open; HLS tools are not needed for
-this reference phase.
+**Helper functions now work with both scalar values and shared memory.** The
+original tiled-tail example produces `[5,-7,-2147483645,3,1]`; the local-borrow
+example produces `37` after six calls sharing caller storage. Each call gets
+fresh local storage, checks its inputs and cleans up before returning. Calls
+remain explicit operations in the compiler. Both examples run unchanged from
+source and from independently written compiler records, with full ordered traces.
+
+See the [source examples](https://github.com/davidydu/spatial-py/blob/aecacc0/examples/kernels/tiled_adjust.py),
+[repeatable demo](https://github.com/davidydu/spatial-py/blob/aecacc0/examples/run_helpers_reference.py),
+[recorded results](https://github.com/davidydu/spatial-py/blob/aecacc0/docs/evidence/helper-reference-output.json)
+and [helper evidence](https://github.com/davidydu/spatial-py/blob/aecacc0/docs/evidence/task-05c-helper-execution.md).
+A new program written after the implementation froze passed three cases combining
+overlapping helper arguments, swapped aliases, fresh local memory and conditional
+returns. Review also found and fixed a missing ordering check in the shared
+checker. All 870 tests passed through both package routes on unchanged files.
+
+Next: [nested helpers that capture surrounding values and storage](https://github.com/davidydu/spatial-py/blob/aecacc0/docs/reviews/2026-10-13-after-helper-execution.md).
+First pin their declaration/capture records and visibility rules, then connect
+them through the existing call and execution machinery. Helpers returning borrowed
+views, meta/static forms, true resumable budgets, artifact agreement and verified
+editing remain required. Current private resource-limit results have no
+continuation. The full goal remains open; HLS tools are not needed for this phase.
 
 David accepted earlier source/runtime integration on 12 October. Each admitted
 construct receives its complete checks while useful execution grows. The

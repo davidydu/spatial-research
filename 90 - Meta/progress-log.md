@@ -9,6 +9,13 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-13 — Helper source, shared memory and return execution
+
+- Checkpoint `spatial-py@aecacc0` adds top-level scalar and borrowed-memory helpers through explicit CALL, per-call input checks, frame-local bindings and fresh local storage. Direct and exhaustive conditional returns use shared normalization. Original DEV-TILE-TAIL produces `[5,-7,-2147483645,3,1]`; DEV-LOCAL-BORROW produces `37`. Source and independently authored common records match the full literal traces. See the [demo](https://github.com/davidydu/spatial-py/blob/aecacc0/examples/run_helpers_reference.py) and [recorded results](https://github.com/davidydu/spatial-py/blob/aecacc0/docs/evidence/helper-reference-output.json).
+- **870 source tests and 870 isolated-wheel tests pass** in 227.620 and 226.963 seconds on CPython 3.14.5, running concurrently. All 176 source/test/fixture/demo/package files and 64 production files remained unchanged. A new post-freeze composition passed three literal scenarios combining overlapping arguments, swapped aliases, local state, conditional returns and augmented scalar assignment. Parent reviewed its arithmetic/traces and replayed it. [Helper evidence](https://github.com/davidydu/spatial-py/blob/aecacc0/docs/evidence/task-05c-helper-execution.md) records manifests and exact scope.
+- Independent review caught a tokenless call to an ordered helper with an empty derived effect set passing the shared gate. Parent reproduced it, repaired the existing call-plan check and retained the `CHECK.CALL_TOKEN` regression before freeze. Further controls verify inactive recursion rejection, fresh uninitialized locals, late-fault committed prefixes, keyword effect order and nested calls with different dimensions.
+- Next is the [reviewed lexical-capture increment](https://github.com/davidydu/spatial-py/blob/aecacc0/docs/reviews/2026-10-13-after-helper-execution.md): pin declaration/capture records and visibility, then execute captured scalar values, storage and cells through the existing path. Borrowed results, resumability, artifacts, verified edits and full-goal acceptance remain open. Updated [[80 - Initial Compiler Goal]] and [[project-handoff]]; compiler state records the verified publication.
+
 ## 2026-10-13 — Statement branches and independent execution evidence
 
 - Checkpoint `spatial-py@10cc1be` adds ordinary source/common `if`/`elif`/`else` through the existing canonical IF machinery. The original conditional-fault and rank-2 recurrence programs match their literal values and full branch/read/write/fault traces. Separate arm scopes retain independent capture admission even with shared canonical arguments.

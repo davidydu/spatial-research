@@ -78,8 +78,8 @@ and Rust presentations are historical evidence.
 
 ## Current checkpoint and next task
 
-Current executed checkpoint: **`spatial-py@10cc1be`**, verified on 13 October
-with **811 source and 811 isolated installed-wheel tests**, CPython 3.14.5.
+Current executed checkpoint: **`spatial-py@aecacc0`**, verified on 13 October
+with **870 source and 870 isolated installed-wheel tests**, CPython 3.14.5.
 Actual Lab 1 source completes both independent output vectors through shared
 normalization, checked publication, strict host preparation and the generic
 reference runner. Seven demands are proved and four enforced by ordered guards.
@@ -101,14 +101,25 @@ The selected-entry preparation repair and 811-test frozen package results are
 in [branch evidence](https://github.com/davidydu/spatial-py/blob/10cc1be/docs/evidence/task-05b-statement-branches.md).
 The first execution-only checkpoint was `d2460e3` (773 tests per route).
 
-David authorized continued work while away on 13 October. **Next implement the
-reviewed helper path** after writing its concrete plan and red tests:
-[top-level scalar and borrowed helpers](https://github.com/davidydu/spatial-py/blob/10cc1be/docs/reviews/2026-10-13-helper-execution-path.md).
-Keep explicit CALL, per-call entry checks, frame-local Index bindings, aliases,
-transitive effects and fresh local lifetimes. Run original DEV-TILE-TAIL and
-DEV-LOCAL-BORROW; scalar-only calls or eager inlining do not replace them.
-Lexical nested captures, borrowed results, meta/static forms, true resumption,
-artifact agreement, verified editing and final acceptance remain mandatory.
+Top-level scalar/borrowed helpers now run through explicit CALL with fresh
+frame-local bindings, per-call entry checks and cleanup before return. Original
+DEV-TILE-TAIL gives `[5,-7,-2147483645,3,1]` (or empty output at n=0);
+DEV-LOCAL-BORROW gives `37` after six calls. Both source and independently written
+common records match their complete literal traces. The
+[helper demo](https://github.com/davidydu/spatial-py/blob/aecacc0/examples/run_helpers_reference.py) and
+[recorded results](https://github.com/davidydu/spatial-py/blob/aecacc0/docs/evidence/helper-reference-output.json)
+are repeatable. [Helper evidence](https://github.com/davidydu/spatial-py/blob/aecacc0/docs/evidence/task-05c-helper-execution.md)
+records the reproduced ordered-call token repair, fresh post-freeze alias/return
+composition, unchanged 176-file snapshot and both 870-test results.
+
+David authorized continued work while away on 13 October. **Next pin and implement
+lexical helper captures with scalar/Unit results** under the
+[reviewed next-step note](https://github.com/davidydu/spatial-py/blob/aecacc0/docs/reviews/2026-10-13-after-helper-execution.md).
+Start with the common declaration/capture records and visibility design plus
+independent red tests, then reuse the existing environment ABI, checker and
+runtime. Borrowed results follow with coordinate-map/lifetime handling.
+Meta/static forms, true resumption, artifact agreement, verified editing and
+final acceptance remain mandatory. No new approval is pending.
 
 The compiler's tracked
 [PROJECT_STATE.md](https://github.com/davidydu/spatial-py/blob/work/initial-reference/PROJECT_STATE.md)
