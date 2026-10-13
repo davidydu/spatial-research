@@ -9,6 +9,13 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-12 — Actual Python source enters common compiler records
+
+- Checkpoint `spatial-py@7e37e6c`: actual Lab 1 Python text now converts into existing unchecked records, preserving ports, loops, uninitialized SRAM declarations, views, transfers and ordered expressions. Parsed literal expressions reach the existing scalar normalizer. No source execution, complete canonical normalization or checked publication is claimed.
+- All **655 tests pass from source and 655 from an isolated installed wheel** on CPython 3.14.5 (88.626 and 88.376 seconds). Independent specification and parent quality reviews passed. Six post-freeze behavior probes are retained, including a new three-level composition; they do not replace the final whole-compiler holdout. [Source evidence](https://github.com/davidydu/spatial-py/blob/7e37e6c/docs/evidence/task-03a-source-integration.md) records hashes, reproduced corrections, parser limits and remaining capabilities.
+- Repaired the D4a observation-order defect at `b11ebde`, with seven regressions and independent review. Added the full canonical Lab 1 diagnostic graph at `a2c2984`: 7 proved and 4 guard-required demands, with effects/initialization retained. The canonical graph and parsed source are separately tested; connecting them is next.
+- David adopted earlier source/runtime integration without reducing the approved goal. Next is shared declaration/loop/memory normalization, then complete obligations and execution for admitted constructs, followed by the companion compositions and original acceptance gates. Updated [[80 - Initial Compiler Goal]] and [[project-handoff]]; the compiler [PROJECT_STATE.md](https://github.com/davidydu/spatial-py/blob/work/initial-reference/PROJECT_STATE.md) records the verified deployment after this research snapshot is published.
+
 ## 2026-10-12 — Shared context for Codex, Claude Code and other harnesses
 
 - Added [[project-handoff]] as the shared startup map, preserving repository/worktree locations, user decisions, current evidence, presentation preferences, next guard-design task and publication procedure. Compiler `PROJECT_STATE.md` owns the detailed restart state, semantic pitfalls and verification commands without temporary environment dependencies.

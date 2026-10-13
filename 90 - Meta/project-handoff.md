@@ -54,8 +54,8 @@ and Rust presentations are historical evidence.
 - David authorized the initial implementation on 4 October. [[D-27]] owns the
   direction; [[D-28]] and the implementation blueprints describe the detailed
   proposal. User authorization is separate from professor approval of every
-  architectural detail. No new implementation approval question was pending at
-  the D3d checkpoint.
+  architectural detail. No new implementation approval question was pending for
+  continuing the initial goal.
 - Research and compare designs before implementation. Implement general rules
   and unfamiliar compositions. A cherry-picked lab example or fixture-specific
   compiler path is not acceptance.
@@ -78,40 +78,45 @@ and Rust presentations are historical evidence.
 
 ## Current checkpoint and next task
 
-At the last behavior checkpoint, `spatial-py@48687f3` implemented D4a
-canonical guard demands and guard correspondence (design, contract
-clarification and independent matrix first as `b8ddfe1`). The
-12 October verification passed **613 source tests and 613
-installed-wheel tests** on CPython 3.14.5, with independent design, inventory,
-specification and quality reviews and a fresh post-freeze composition. The
-research snapshot is `spatial-research@606561b`, published by
-[site deployment run 38310030032](https://github.com/davidydu/spatial-research-site/actions/runs/38310030032);
-on 12 October the Initial Compiler Goal, progress-log and project-handoff
-pages returned HTTP 200 and carried the implementation hash, the 613-test
-count and the D4a checkpoint.
-These are dated results; this handoff does not claim another compiler test run.
+Current behavior checkpoint: **`spatial-py@7e37e6c`**, verified on 12 October
+with **655 source tests and 655 isolated installed-wheel tests**, CPython 3.14.5.
+The private frontend converts actual Lab 1 Python text into common unchecked
+records; parsed scalar expressions reach the existing scalar normalizer.
+Independent specification and parent code reviews passed. Six independently
+authored source behavior tests are retained in the suite, including a new
+three-level composition. Exact scope, hashes, timings and limits are in the
+[source evidence](https://github.com/davidydu/spatial-py/blob/7e37e6c/docs/evidence/task-03a-source-integration.md).
 
-The compiler's tracked
+Earlier in the same checkpoint, `b11ebde` repaired the D4a authored observation
+order, and `a2c2984` added a faithful canonical Lab 1 graph through current
+analyses: 7 proved and 4 guard-required demands, retaining effects/initialization
+work. The parsed source has not yet been normalized into that canonical graph.
+**There is no simulated Lab 1 output or complete source-to-execution path.**
+
+David accepted the earlier integration sequence. The compiler's tracked
 [PROJECT_STATE.md](https://github.com/davidydu/spatial-py/blob/work/initial-reference/PROJECT_STATE.md)
-owns the detailed restart state, reproducible verification commands and semantic
-pitfalls. Its support ledger and `docs/evidence/` own implementation evidence.
-[[80 - Initial Compiler Goal]] is the published big-picture status. Prefer these
-current records over old chat replies, diagrams or slide test counts.
+owns the exact next task, test reproduction and latest verified deployment record.
+The [early integration plan](https://github.com/davidydu/spatial-py/blob/work/initial-reference/docs/plans/2026-10-12-early-integration.md)
+supersedes the all-verifier-first order. Bring source, common normalization and
+scoped execution together; complete every obligation for admitted constructs.
+Do not equate complete guard routes with complete E/F/G or runtime enforcement.
+The full language goal and final unfamiliar-program acceptance remain unchanged.
 
-D4a gives every derived and authored condition one closed canonical form,
-decides each check at its owner's position in the contract's fixed order and
-matches existing guards by content; supplied claims still cannot weaken
-compiler-derived requirements. The next task is **guard insertion with token
-rethreading and recomputation of the successful prefix across inserted
-guards**, then the open routes listed in the D4a design (tokenless extent
-liveness, per-call helper entry checks, bounds-only query, activation
-correspondence) before E/F/G. Guard insertion is not already implemented.
+**Resume with shared declaration/loop/memory normalization.** Resolve ports and
+declarations, preserve absent SRAM initialization as fresh UNINITIALIZED storage,
+and lower views/transfers/writes with explicit captures and tokens. Source and
+builder use the same rules. Compare with the independent canonical Lab 1 fixture
+and differently structured cases, then connect guard insertion, initialization,
+full checking/publication, host preparation and reference execution. Existing
+D4a open routes remain obligations as their constructs enter publication.
 
-The full verifier/publication, source lowering, host preparation and reference
-execution remain unfinished. The planned Lab 1 tiled-scale example and its
-tail/helper/branch companion are specified in compiler `docs/lab1-demo-target.md`;
-they have not run through a complete compiler. Preserve the separate final
-unfamiliar-composition, artifact-agreement and verified-editing gates.
+The private source seam explicitly excludes helpers, meta/static expansion,
+branch statements, noncore dependencies and the final bundle/template API.
+The planned Lab 1 and tail/helper/branch companion are in compiler
+`docs/lab1-demo-target.md`. Preserve the separate final unfamiliar-composition,
+artifact-agreement and verified-editing gates. [[80 - Initial Compiler Goal]]
+is the published big-picture status; use it and current compiler evidence over
+old chats, diagrams or slide test counts.
 
 ## Documentation and presentation delivery
 
