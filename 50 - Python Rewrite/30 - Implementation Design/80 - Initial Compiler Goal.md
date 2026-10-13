@@ -46,11 +46,55 @@ No FPGA resource, timing, RTL or hardware-support claim follows from local simul
 
 The implementation lives in the separate `spatial-py` repository. Its active plan is `docs/plans/2026-10-04-initial-reference.md`; its support ledger and task evidence distinguish completed foundations from the full goal. Historical Scala/Rust repositories remain evidence and are not modified to supply a Python result.
 
-Current checkpoint: `spatial-py@763fc49` on `work/initial-reference`, with **687 passing tests from source and 687 from an isolated installed wheel** on CPython 3.14.5. **Actual Lab 1 Python text now reaches the existing canonical checker through shared normalization.** The same rules handle independently built records, nested loops, runtime sizes, multidimensional views, lazy reads and ordered writes. [Normalization evidence](https://github.com/davidydu/spatial-py/blob/763fc49/docs/evidence/task-03b-program-normalization.md) records the exact scope, independent review and frozen checks.
+Current execution checkpoint: **`spatial-py@10cc1be`**, verified on 13 October
+with **811 tests from source and 811 from an isolated installed wheel** on
+CPython 3.14.5. **Actual Lab 1 source now produces the expected output through
+the Python compiler.** The path is source → shared unchecked records → canonical
+operations → checked publication → prepared inputs → reference execution.
 
-The normalized source has two fresh uninitialized SRAM allocations, two transfers and an element read/multiply/write. The existing analyses derive **7 conditions proved and 4 requiring runtime guards**, matching the separately authored canonical fixture. Independent tests check actual operand wiring and token order. Effects/initialization remain pending; no Lab 1 output has been simulated or checked program published.
+Both independent Lab 1 vectors pass, including signed Int32 overflow. Each run
+has four fresh local allocations, four snapshot copies, 96 writes and 32 reads.
+The compiler proves seven conditions and inserts four ordered guards. Results
+come from invocation-owned state; original host inputs remain unchanged.
+See the [runnable example](https://github.com/davidydu/spatial-py/blob/d2460e3/examples/run_lab1_reference.py),
+[recorded outputs](https://github.com/davidydu/spatial-py/blob/d2460e3/docs/evidence/lab1-reference-output.json)
+and [execution evidence](https://github.com/davidydu/spatial-py/blob/d2460e3/docs/evidence/task-05a-reference-execution.md).
 
-David accepted an earlier integration sequence on 12 October: bring real source and execution forward, then expand through the declared compositions. Finish every required invariant for each admitted construct; explicitly reject capabilities that are not ready. The full goal and unfamiliar-program acceptance gate remain unchanged. The [active plan](https://github.com/davidydu/spatial-py/blob/work/initial-reference/docs/plans/2026-10-12-early-integration.md) and [compiler restart state](https://github.com/davidydu/spatial-py/blob/work/initial-reference/PROJECT_STATE.md) own the detailed sequence.
+The important result is the shared mechanism. Independent programs use the same
+checks and operation handlers for loops, signed multidimensional views, shared
+storage, lazy expressions and faults after earlier writes. A fresh composition,
+authored after the implementation froze, passed three cases combining reversed
+copies, overlapping writes, partial local initialization and overflow. This is
+intermediate evidence of composition, not the final unfamiliar-program gate.
+
+Ordinary statement `if`/`elif`/`else` now uses the same canonical branch
+machinery. The original conditional-fault and rank-2 recurrence programs run
+unchanged, with exact branch/read/write/fault traces. Ascending recurrence yields
+`[1,3,6,10,15,21]`; descending yields `[1,3,5,9,9,11]`. A separate fresh branch
+composition passed three cases after the corrected compiler froze. Review also
+found and repaired preparation accidentally evaluating another kernel's input
+conditions. [Branch evidence](https://github.com/davidydu/spatial-py/blob/10cc1be/docs/evidence/task-05b-statement-branches.md)
+records the independent tests, repair, frozen hashes and complete package checks.
+
+Next is the [reviewed helper path](https://github.com/davidydu/spatial-py/blob/10cc1be/docs/reviews/2026-10-13-helper-execution-path.md):
+explicit calls with scalar and borrowed-memory arguments, fresh local storage,
+and correct return order. Its targets are the original tiled-tail and local-borrow
+examples. Helpers, meta/static forms, true resumable budgets, artifact agreement
+and verified editing remain required. Current private resource-limit results
+have no continuation. The full goal remains open; HLS tools are not needed for
+this reference phase.
+
+David accepted earlier source/runtime integration on 12 October. Each admitted
+construct receives its complete checks while useful execution grows. The
+[active execution plan](https://github.com/davidydu/spatial-py/blob/work/initial-reference/docs/plans/2026-10-13-reference-execution.md)
+and [compiler restart state](https://github.com/davidydu/spatial-py/blob/work/initial-reference/PROJECT_STATE.md)
+own the detailed next task and newest verified checkpoint.
+
+## Earlier component checkpoints
+
+The following records preserve the evidence and limitations at their original
+freezes. Their statements about missing execution describe those earlier stages;
+the current integrated result is above.
 
 The independent development data includes 12 memory/effect cases and 133 successful numeric expression observations, plus numeric/type/host/preparation rejection cases. The numeric leaves now replay 116 value observations and 12 direct fault causes. Source-context and lazy-expression rows, fault prefixes, memory execution, host ingress and preparation still require their actual workflow tests. The negative Index bitwise interpretation was recorded explicitly before dependent code. Numeric resource limits are separate from arithmetic faults and retain a named implementation allocation ceiling; no machine-width wrap is imposed on Index.
 
@@ -115,6 +159,6 @@ The private source seam uses generic syntax and binding rules, with explicit lex
 
 Shared normalization now connects declarations, loop domains, views and transfers to canonical operations. Reviews repaired child descriptor remapping, missing lexical captures hidden by aliases, typed literal lineage and known-sign slice defaults. A fresh post-freeze composition passed without a new compiler path. Next, connect ordered guards, effects/initialization, complete checking/publication and prepared reference execution for the admitted constructs. The Lab 1 result comes before expanding through its tail/helper/branch companion and the full original acceptance matrix. Guard insertion and successful-prefix recomputation remain required work on this route.
 
-The full verifier remains unimplemented. Its reviewed design (`2f922d4`) requires both input routes to converge after unchecked normalization, keeps dynamic branch faults at their selected effect points, rejects recursion across all retained definitions, and keeps Out DRAM initialization dependent on the supplied owner. It must derive obligations from operations/signatures and publish a checked program only after the entire candidate passes. No checked program, complete source/check/simulation path or final whole-compiler unfamiliar-composition pass is claimed yet. The [implementation repository](https://github.com/davidydu/spatial-py/tree/work/initial-reference) and its [support ledger](https://github.com/davidydu/spatial-py/blob/work/initial-reference/docs/support-ledger.md) require repository access.
+At the earlier component checkpoint, the full verifier remained unimplemented. Its reviewed design (`2f922d4`) requires both input routes to converge after unchecked normalization, keeps dynamic branch faults at their selected effect points, rejects recursion across all retained definitions, and keeps Out DRAM initialization dependent on the supplied owner. It must derive obligations from operations/signatures and publish a checked program only after the entire candidate passes. That component checkpoint did not claim checked publication or execution. The current private execution result is recorded above; the final whole-compiler unfamiliar-composition gate remains open. The [implementation repository](https://github.com/davidydu/spatial-py/tree/work/initial-reference) and its [support ledger](https://github.com/davidydu/spatial-py/blob/work/initial-reference/docs/support-ledger.md) require repository access.
 
 [[70 - Engineering Architecture Map]] shows the full architecture. [[10 - Source Checker and IR Blueprint]], [[40 - Package and Conformance Blueprint]] and [[PY-R017 - Compiler Representation Comparison]] own the verification and representation obligations behind this goal.

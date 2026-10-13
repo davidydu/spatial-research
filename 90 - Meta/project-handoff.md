@@ -1,7 +1,7 @@
 ---
 type: runbook
 project: spatial-python
-date: 2026-10-12
+date: 2026-10-13
 status: active
 ---
 
@@ -78,49 +78,46 @@ and Rust presentations are historical evidence.
 
 ## Current checkpoint and next task
 
-Current behavior checkpoint: **`spatial-py@763fc49`**, verified on 12 October
-with **687 source tests and 687 isolated installed-wheel tests**, CPython 3.14.5.
-Actual Lab 1 Python text now reaches existing canonical analyses through common
-unchecked-program normalization. Independently built records use the same rules.
-The normalized program has 7 proved and 4 guard-required demands; tests inspect
-ports, fresh allocations, captures, views, transfers and read/multiply/write order.
+Current executed checkpoint: **`spatial-py@10cc1be`**, verified on 13 October
+with **811 source and 811 isolated installed-wheel tests**, CPython 3.14.5.
+Actual Lab 1 source completes both independent output vectors through shared
+normalization, checked publication, strict host preparation and the generic
+reference runner. Seven demands are proved and four enforced by ordered guards.
+The [execution evidence](https://github.com/davidydu/spatial-py/blob/d2460e3/docs/evidence/task-05a-reference-execution.md)
+records exact scope, source/test hashes, review findings, timings and a fresh
+post-freeze composition. The [runnable demo](https://github.com/davidydu/spatial-py/blob/d2460e3/examples/run_lab1_reference.py)
+prints the [recorded outputs](https://github.com/davidydu/spatial-py/blob/d2460e3/docs/evidence/lab1-reference-output.json).
 
-Independent specification and parent reviews passed after reproduced scope,
-metadata, literal and known-sign slice corrections. A fresh composition authored
-after the final production freeze passed without a new compiler path. Exact
-scope, hashes, timings and test cases are in the
-[normalization evidence](https://github.com/davidydu/spatial-py/blob/763fc49/docs/evidence/task-03b-program-normalization.md).
-**There is no simulated Lab 1 output, checked publication or complete
-source-to-execution path.**
+This is reference execution, not HLS or full initial-goal completion. Independent
+cases cover aliases, signed/rank-2 views, lazy faults, snapshot copies, fresh local
+lifetimes and precise committed prefixes. Private ResourceLimit results have no
+continuation; do not describe them as resumable simulation.
 
-Earlier checkpoints: `7e37e6c` added source conversion; `b11ebde` repaired D4a
-observation order; `a2c2984` added the independently authored canonical Lab 1 graph.
-Their work remains complete for its recorded scope.
+Ordinary statement branches now pass the original conditional-fault and rank-2
+recurrence sources, including full ordered control/memory traces. Separate arm
+scopes share canonical arguments without granting missing lexical captures.
+A fresh descending-window/alias composition passed three independent scenarios.
+The selected-entry preparation repair and 811-test frozen package results are
+in [branch evidence](https://github.com/davidydu/spatial-py/blob/10cc1be/docs/evidence/task-05b-statement-branches.md).
+The first execution-only checkpoint was `d2460e3` (773 tests per route).
 
-David accepted the earlier integration sequence. The compiler's tracked
+David authorized continued work while away on 13 October. **Next implement the
+reviewed helper path** after writing its concrete plan and red tests:
+[top-level scalar and borrowed helpers](https://github.com/davidydu/spatial-py/blob/10cc1be/docs/reviews/2026-10-13-helper-execution-path.md).
+Keep explicit CALL, per-call entry checks, frame-local Index bindings, aliases,
+transitive effects and fresh local lifetimes. Run original DEV-TILE-TAIL and
+DEV-LOCAL-BORROW; scalar-only calls or eager inlining do not replace them.
+Lexical nested captures, borrowed results, meta/static forms, true resumption,
+artifact agreement, verified editing and final acceptance remain mandatory.
+
+The compiler's tracked
 [PROJECT_STATE.md](https://github.com/davidydu/spatial-py/blob/work/initial-reference/PROJECT_STATE.md)
-owns the exact next task, test reproduction and latest verified deployment record.
-The [early integration plan](https://github.com/davidydu/spatial-py/blob/work/initial-reference/docs/plans/2026-10-12-early-integration.md)
-supersedes the all-verifier-first order. Bring source, common normalization and
-scoped execution together; complete every obligation for admitted constructs.
-Do not equate complete guard routes with complete E/F/G or runtime enforcement.
-The full language goal and final unfamiliar-program acceptance remain unchanged.
-
-**Resume with ordered guard enforcement for the admitted programs**, followed
-by effects/initialization, complete checking/publication, host preparation and
-reference execution. Preserve precise failure order and the common source/builder
-path. Demonstrate the actual Lab 1 result, then expand through the companion and
-original acceptance matrix. Do not build every remaining verifier route before
-connecting execution; complete each admitted construct's obligations together.
-Existing D4a open routes remain required as their constructs enter publication.
-
-The private source seam explicitly excludes helpers, meta/static expansion,
-branch statements, noncore dependencies and the final bundle/template API.
-The planned Lab 1 and tail/helper/branch companion are in compiler
-`docs/lab1-demo-target.md`. Preserve the separate final unfamiliar-composition,
-artifact-agreement and verified-editing gates. [[80 - Initial Compiler Goal]]
-is the published big-picture status; use it and current compiler evidence over
-old chats, diagrams or slide test counts.
+owns the exact active task, reproduction commands and latest deployment record.
+Follow its [execution plan](https://github.com/davidydu/spatial-py/blob/work/initial-reference/docs/plans/2026-10-13-reference-execution.md).
+No new approval is pending. Check the worktree before editing because another
+harness may have advanced beyond this publication. [[80 - Initial Compiler Goal]]
+is the published big-picture status; older diagrams and slides can lag actual
+compiler evidence.
 
 ## Documentation and presentation delivery
 

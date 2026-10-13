@@ -9,6 +9,20 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-13 — Statement branches and independent execution evidence
+
+- Checkpoint `spatial-py@10cc1be` adds ordinary source/common `if`/`elif`/`else` through the existing canonical IF machinery. The original conditional-fault and rank-2 recurrence programs match their literal values and full branch/read/write/fault traces. Separate arm scopes retain independent capture admission even with shared canonical arguments.
+- **811 source tests and 811 isolated-wheel tests pass** in 98.909 and 98.980 seconds on CPython 3.14.5. All 163 source/test/fixture/demo/package hashes stayed unchanged. Independent branch review passed; a different fresh descending-window/alias composition passed three scenarios after the final production freeze. Parent reviewed its expected values/traces and replayed it. [Branch evidence](https://github.com/davidydu/spatial-py/blob/10cc1be/docs/evidence/task-05b-statement-branches.md) records exact scope and manifests.
+- Review reproduced a preparation bug: another retained kernel's entry conditions were evaluated using the selected kernel's arguments. Two red regressions, a definition-scoped repair, positive/negative controls and independent replay now pass. The preliminary freeze was replaced before fresh holdout authorship/run. No result was retroactively attributed to the earlier checkpoint.
+- The integrating parent accepted the [next helper path](https://github.com/davidydu/spatial-py/blob/10cc1be/docs/reviews/2026-10-13-helper-execution-path.md), covering scalar and borrowed-memory calls together and both original companion cases. Full initial-goal acceptance, true resumption, artifacts, verified editing and HLS remain open. Updated [[80 - Initial Compiler Goal]] and [[project-handoff]]; the compiler state records live publication verification.
+
+## 2026-10-13 — Actual Lab 1 reference execution
+
+- Checkpoint `spatial-py@d2460e3` completes both independent Lab 1 vectors from actual Python source. Shared normalization, ordered guards, scoped checked publication, strict host preparation and a generic interpreter now form one executable route. See the [runnable demo](https://github.com/davidydu/spatial-py/blob/d2460e3/examples/run_lab1_reference.py) and [recorded outputs](https://github.com/davidydu/spatial-py/blob/d2460e3/docs/evidence/lab1-reference-output.json).
+- **773 source tests and 773 isolated-wheel tests pass** in 95.541 and 95.411 seconds on CPython 3.14.5. The 157-file source/test/fixture/demo/package snapshot remained unchanged. A separate agent authored a fresh composition after the 63 production files froze; all three independently calculated scenarios passed. [Execution evidence](https://github.com/davidydu/spatial-py/blob/d2460e3/docs/evidence/task-05a-reference-execution.md) records scope, review and hashes.
+- Independent review and parent replay repaired exported-root initialization checks, completion effect bounds, host/budget admission, borrowed DRAM ingress, pure tokenless execution, resource attribution and local cleanup. Memory aliases, snapshot transfers, fresh storage and late-fault prefixes use ordinary operation handlers.
+- Next is the reviewed statement-branch slice (`10be0de`), then helpers and the remaining original acceptance gates. Current private limits are nonresumable. No full-goal, HLS or hardware claim follows. Updated [[80 - Initial Compiler Goal]] and [[project-handoff]]; the compiler state records publication after live verification.
+
 ## 2026-10-12 — Actual Lab 1 source reaches canonical analysis
 
 - Checkpoint `spatial-py@763fc49` connects Python text → shared unchecked records → canonical operations → existing analyses. Independent builder records use the same normalizer. Lab 1 has 7 proved and 4 guard-required demands, with actual ports, allocation sites, loop bounds, views, transfer endpoints and effect order checked independently. No execution or checked-publication claim follows.
