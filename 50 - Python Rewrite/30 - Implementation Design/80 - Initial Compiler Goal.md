@@ -46,8 +46,8 @@ No FPGA resource, timing, RTL or hardware-support claim follows from local simul
 
 The implementation lives in the separate `spatial-py` repository. Its active plan is `docs/plans/2026-10-04-initial-reference.md`; its support ledger and task evidence distinguish completed foundations from the full goal. Historical Scala/Rust repositories remain evidence and are not modified to supply a Python result.
 
-Current execution checkpoint: **`spatial-py@1260959`**, verified on 17 October
-with **938 tests from source and 938 from an isolated installed wheel** on
+Current execution checkpoint: **`spatial-py@813718f`**, verified on 17 October
+with **1019 tests from source and 1019 from an isolated installed wheel** on
 CPython 3.14.5. **The Lab 1 tiled DRAM/SRAM example now produces the expected output
 through the Python compiler.** Lab 1's Reg, FIFO and Reduce/Fold families remain
 ahead; this is not full lab coverage. The path is source → shared unchecked records → canonical
@@ -109,13 +109,37 @@ or a bounds fault that preserves earlier writes. A previous test needed a Unit
 observation-adapter correction and remains separate regression evidence. Both
 938-test package suites passed with the frozen source and tests unchanged.
 
-Next: [helpers returning borrowed memory views, together with named view locals](https://github.com/davidydu/spatial-py/blob/1260959/docs/reviews/2026-10-17-after-capture-execution.md).
-A caller should be able to keep using a returned view of its own storage after
-the helper finishes; returning the helper's temporary storage must reject.
-Reuse the existing ownership analysis and call machinery. Meta/static forms,
-true resumable budgets, artifact agreement and verified editing remain required.
-Current private resource-limit results have no continuation. The full goal
-remains open; HLS tools are not needed for this phase.
+**Helpers can now return memory windows that the caller keeps using.**
+A returned view can be assigned to a named local, passed to another helper,
+selected conditionally, read/written or used in a transfer. The chosen storage
+and coordinates survive helper cleanup. Returning temporary helper-local memory
+rejects, including an inactive return alternative. This lets ordinary tile/window
+programs be split into reusable helpers through the shared compiler route.
+
+See the [runnable demo](https://github.com/davidydu/spatial-py/blob/813718f/examples/run_borrowed_views_reference.py),
+[Python source](https://github.com/davidydu/spatial-py/blob/813718f/examples/kernels/selected_views.py),
+[recorded results](https://github.com/davidydu/spatial-py/blob/813718f/docs/evidence/borrowed-views-reference-output.json),
+[review](https://github.com/davidydu/spatial-py/blob/813718f/docs/reviews/2026-10-17-borrowed-result-execution.md) and
+[execution evidence](https://github.com/davidydu/spatial-py/blob/813718f/docs/evidence/task-05e-borrowed-results.md).
+The demo checks five separate/aliased and nested-helper scenarios. Independent
+source/common programs agree on full traces; all eight original borrowed-result
+groups now have execution or rejection evidence. Reviews repaired conditional
+shape handling, two context-free selection gaps and an older explicit-slice
+regression before the final production freeze.
+A [separately authored composition](https://github.com/davidydu/spatial-py/blob/813718f/docs/evidence/task-05e-borrowed-acceptance-composition.md)
+records its literal expectations and first-run results. Both complete package
+routes pass **1019 tests** on unchanged frozen files.
+
+Pure tokenless forwarding still rejects when its entry checks cannot be proved;
+ordered helpers retain the existing runtime checks. This is a documented boundary,
+not a claim that all helper compositions or the initial compiler are complete.
+
+Next: complete the initial contract's compile-time parameters/constants,
+closed type aliases and finite `static`/`static_range` expansion. Pin their design
+and independent examples before implementation, then combine them with the
+existing memory/helper path. True resumable budgets, artifact agreement, verified
+editing and final whole-goal acceptance remain required. Current private
+resource-limit results have no continuation. HLS tools are not needed yet.
 
 David accepted earlier source/runtime integration on 12 October. Each admitted
 construct receives its complete checks while useful execution grows. The

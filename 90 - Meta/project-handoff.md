@@ -85,8 +85,8 @@ and Rust presentations are historical evidence.
 
 ## Current checkpoint and next task
 
-Current executed checkpoint: **`spatial-py@1260959`**, verified on 17 October
-with **938 source and 938 isolated installed-wheel tests**, CPython 3.14.5.
+Current executed checkpoint: **`spatial-py@813718f`**, verified on 17 October
+with **1019 source and 1019 isolated installed-wheel tests**, CPython 3.14.5.
 The actual Lab 1 tiled DRAM/SRAM source completes both independent output vectors through shared
 normalization, checked publication, strict host preparation and the generic
 reference runner. Seven demands are proved and four enforced by ordered guards.
@@ -135,20 +135,44 @@ fresh first-pass acceptance, and both 938-test results on unchanged 192-file and
 65-file manifests. An earlier composition's Unit observation-adapter repair is
 retained as a regression, separately from final fresh acceptance.
 
-David authorized continued work on 17 October. **Next implement borrowed helper
-results and named borrowed-view locals together**, starting with the
-[parent-reviewed next-step note](https://github.com/davidydu/spatial-py/blob/1260959/docs/reviews/2026-10-17-after-capture-execution.md).
-Pin the result/owner correspondence and return-boundary design with independent
-red tests; reuse existing C4 inference, selected maps and the call interpreter.
-Preserve caller-owned views after helper cleanup and reject callee-local escapes,
-including inactive alternatives. Meta/static forms, true resumption, artifact
-agreement, verified editing and final acceptance remain mandatory. No new approval
-is pending.
+**Helpers can now return memory windows that the caller keeps using.**
+A returned view can be assigned to a named local, passed to another helper,
+selected conditionally, read/written or used in a transfer. The chosen storage
+and coordinates survive helper cleanup. Returning temporary helper-local memory
+rejects, including an inactive return alternative. This lets ordinary tile/window
+programs be split into reusable helpers through the shared compiler route.
+
+See the [runnable demo](https://github.com/davidydu/spatial-py/blob/813718f/examples/run_borrowed_views_reference.py),
+[Python source](https://github.com/davidydu/spatial-py/blob/813718f/examples/kernels/selected_views.py),
+[recorded results](https://github.com/davidydu/spatial-py/blob/813718f/docs/evidence/borrowed-views-reference-output.json),
+[review](https://github.com/davidydu/spatial-py/blob/813718f/docs/reviews/2026-10-17-borrowed-result-execution.md) and
+[execution evidence](https://github.com/davidydu/spatial-py/blob/813718f/docs/evidence/task-05e-borrowed-results.md).
+The demo checks five separate/aliased and nested-helper scenarios. Independent
+source/common programs agree on full traces; all eight original borrowed-result
+groups now have execution or rejection evidence. Reviews repaired conditional
+shape handling, two context-free selection gaps and an older explicit-slice
+regression before the final production freeze.
+A [separately authored composition](https://github.com/davidydu/spatial-py/blob/813718f/docs/evidence/task-05e-borrowed-acceptance-composition.md)
+records its literal expectations and first-run results. Both complete package
+routes pass **1019 tests** on unchanged frozen files.
+
+Pure tokenless forwarding still rejects when its entry checks cannot be proved;
+ordered helpers retain the existing runtime checks. This is a documented boundary,
+not a claim that all helper compositions or the initial compiler are complete.
+
+Next: complete the initial contract's compile-time parameters/constants,
+closed type aliases and finite `static`/`static_range` expansion. Pin their design
+and independent examples before implementation, then combine them with the
+existing memory/helper path. True resumable budgets, artifact agreement, verified
+editing and final whole-goal acceptance remain required. Current private
+resource-limit results have no continuation. HLS tools are not needed yet.
+
+David authorized continued implementation; no new approval is pending.
 
 David asked to be notified when the HLS instance is needed. Complete planned
 language/reference support first and keep the instance stopped. Notify him once the scoped target plan, generated HLS source
 and testbench are ready for vendor simulation/synthesis; record the installed
-toolchain, target device and clock then. The next borrowed-result increment does
+toolchain, target device and clock then. The next meta/static language increment does
 not need HLS.
 
 The compiler's tracked

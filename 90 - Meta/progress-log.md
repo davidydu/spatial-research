@@ -9,6 +9,13 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-17 — Returned memory views and named view locals execute
+
+- Checkpoint `spatial-py@813718f` accepts borrowed helper results and named Read/Write/ReadWrite locals (behavior `f0a2351`). A helper can return a window of caller-owned memory; its selected storage, coordinates and surviving lifetime remain valid after helper cleanup. Returning helper-local storage rejects. The [demo](https://github.com/davidydu/spatial-py/blob/813718f/examples/run_borrowed_views_reference.py), [source](https://github.com/davidydu/spatial-py/blob/813718f/examples/kernels/selected_views.py), [recorded outputs](https://github.com/davidydu/spatial-py/blob/813718f/docs/evidence/borrowed-views-reference-output.json) and [evidence](https://github.com/davidydu/spatial-py/blob/813718f/docs/evidence/task-05e-borrowed-results.md) are linked for reproduction.
+- Independent source/common programs match complete traces; all eight original borrowed-result groups now have execution/rejection evidence. Specification and quality reviews passed after reproduced conditional-shape, discarded-handle, owning-selection and explicit-slice repairs. The [fresh frozen composition](https://github.com/davidydu/spatial-py/blob/813718f/docs/evidence/task-05e-borrowed-acceptance-composition.md) records independently authored expectations, first-run status and parent replay. No lab/program-shape dispatch was added.
+- **1019 source tests and 1019 isolated-wheel tests pass**, in 129.037s and 128.830s on CPython 3.14.5. Production and source/test/demo manifests remained unchanged; packaged compiler modules match the freeze. These timings are validation observations, not performance benchmarks.
+- Next: remaining initial-contract meta/static forms and closed type aliases, followed by the documented Labs 1–3 progression. Pure tokenless forwarding with unresolved entry checks remains a conservative boundary. True resumption, artifacts, verified editing and final acceptance stay open. Updated [[80 - Initial Compiler Goal]] and [[project-handoff]]; the compiler state records publication after live verification. The HLS instance is not needed.
+
 ## 2026-10-17 — Language first, guided by the three course labs
 
 - David confirmed that HLS should follow planned language/reference coverage, with EE109 Labs 1–3 guiding the feature sequence while varied student programs test generality. He corrected the earlier mention of Lab 4 to three labs. Updated [[04 - Python Implementation Roadmap]], [[80 - Initial Compiler Goal]], [[project-handoff]] and the compiler's tracked context/plans; the earlier option for an S1-only HLS path alongside language work is deferred.
