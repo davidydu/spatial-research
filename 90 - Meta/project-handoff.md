@@ -1,7 +1,7 @@
 ---
 type: runbook
 project: spatial-python
-date: 2026-10-13
+date: 2026-10-17
 status: active
 ---
 
@@ -78,8 +78,8 @@ and Rust presentations are historical evidence.
 
 ## Current checkpoint and next task
 
-Current executed checkpoint: **`spatial-py@aecacc0`**, verified on 13 October
-with **870 source and 870 isolated installed-wheel tests**, CPython 3.14.5.
+Current executed checkpoint: **`spatial-py@1260959`**, verified on 17 October
+with **938 source and 938 isolated installed-wheel tests**, CPython 3.14.5.
 Actual Lab 1 source completes both independent output vectors through shared
 normalization, checked publication, strict host preparation and the generic
 reference runner. Seven demands are proved and four enforced by ordered guards.
@@ -112,14 +112,32 @@ are repeatable. [Helper evidence](https://github.com/davidydu/spatial-py/blob/ae
 records the reproduced ordered-call token repair, fresh post-freeze alias/return
 composition, unchanged 176-file snapshot and both 870-test results.
 
-David authorized continued work while away on 13 October. **Next pin and implement
-lexical helper captures with scalar/Unit results** under the
-[reviewed next-step note](https://github.com/davidydu/spatial-py/blob/aecacc0/docs/reviews/2026-10-13-after-helper-execution.md).
-Start with the common declaration/capture records and visibility design plus
-independent red tests, then reuse the existing environment ABI, checker and
-runtime. Borrowed results follow with coordinate-map/lifetime handling.
-Meta/static forms, true resumption, artifact agreement, verified editing and
-final acceptance remain mandatory. No new approval is pending.
+Nested scalar/Unit helpers now capture immutable values, SRAM/DRAM handles,
+Out/InOut cells and other lexical helpers through the existing source/common/CALL
+route. Captures preserve aliases, hidden dimensions, exact call bindings and
+local cleanup. The [capture demo](https://github.com/davidydu/spatial-py/blob/1260959/examples/run_captures_reference.py)
+and [recorded results](https://github.com/davidydu/spatial-py/blob/1260959/docs/evidence/capture-reference-output.json)
+are repeatable. [Capture evidence](https://github.com/davidydu/spatial-py/blob/1260959/docs/evidence/task-05d-lexical-captures.md)
+records independent source/common traces, the proportional-work review repair,
+fresh first-pass acceptance, and both 938-test results on unchanged 192-file and
+65-file manifests. An earlier composition's Unit observation-adapter repair is
+retained as a regression, separately from final fresh acceptance.
+
+David authorized continued work on 17 October. **Next implement borrowed helper
+results and named borrowed-view locals together**, starting with the
+[parent-reviewed next-step note](https://github.com/davidydu/spatial-py/blob/1260959/docs/reviews/2026-10-17-after-capture-execution.md).
+Pin the result/owner correspondence and return-boundary design with independent
+red tests; reuse existing C4 inference, selected maps and the call interpreter.
+Preserve caller-owned views after helper cleanup and reject callee-local escapes,
+including inactive alternatives. Meta/static forms, true resumption, artifact
+agreement, verified editing and final acceptance remain mandatory. No new approval
+is pending.
+
+David asked to be notified when the HLS instance is needed. Keep it stopped during
+local reference work. Notify him once the scoped target plan, generated HLS source
+and testbench are ready for vendor simulation/synthesis; record the installed
+toolchain, target device and clock then. The next borrowed-result increment does
+not need HLS.
 
 The compiler's tracked
 [PROJECT_STATE.md](https://github.com/davidydu/spatial-py/blob/work/initial-reference/PROJECT_STATE.md)

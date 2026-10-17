@@ -38,7 +38,7 @@ Handlers for language operations, control and storage are expected. Dispatch bas
 
 ## Infrastructure
 
-The reference milestone runs locally on the pinned CPython baseline and standard-library semantic core. The stopped HLS instance is not needed. Keep it stopped until scoped S6/S7 work has an eligible plan and generated code ready for vendor validation. At that point, record the actual installed toolchain, device, clock and dependency versions before using it as evidence.
+The reference milestone runs locally on the pinned CPython baseline and standard-library semantic core. The stopped HLS instance is not needed. Keep it stopped until scoped S6/S7 work has an eligible plan, generated HLS source and a testbench ready for vendor simulation or synthesis. David asked on 17 October to be notified when that point is reached. Record the actual installed toolchain, device, clock and dependency versions before using vendor results as evidence.
 
 No FPGA resource, timing, RTL or hardware-support claim follows from local simulation.
 
@@ -46,8 +46,8 @@ No FPGA resource, timing, RTL or hardware-support claim follows from local simul
 
 The implementation lives in the separate `spatial-py` repository. Its active plan is `docs/plans/2026-10-04-initial-reference.md`; its support ledger and task evidence distinguish completed foundations from the full goal. Historical Scala/Rust repositories remain evidence and are not modified to supply a Python result.
 
-Current execution checkpoint: **`spatial-py@aecacc0`**, verified on 13 October
-with **870 tests from source and 870 from an isolated installed wheel** on
+Current execution checkpoint: **`spatial-py@1260959`**, verified on 17 October
+with **938 tests from source and 938 from an isolated installed wheel** on
 CPython 3.14.5. **Actual Lab 1 source now produces the expected output through
 the Python compiler.** The path is source → shared unchecked records → canonical
 operations → checked publication → prepared inputs → reference execution.
@@ -92,12 +92,29 @@ overlapping helper arguments, swapped aliases, fresh local memory and conditiona
 returns. Review also found and fixed a missing ordering check in the shared
 checker. All 870 tests passed through both package routes on unchanged files.
 
-Next: [nested helpers that capture surrounding values and storage](https://github.com/davidydu/spatial-py/blob/aecacc0/docs/reviews/2026-10-13-after-helper-execution.md).
-First pin their declaration/capture records and visibility rules, then connect
-them through the existing call and execution machinery. Helpers returning borrowed
-views, meta/static forms, true resumable budgets, artifact agreement and verified
-editing remain required. Current private resource-limit results have no
-continuation. The full goal remains open; HLS tools are not needed for this phase.
+**Nested helpers now capture surrounding values, memory, output cells and other
+helpers.** These declarations work inside functions, loops and branches. Calls
+preserve shared storage and view coordinates, check inputs and clean up their
+local storage before returning. Source programs and independently written common
+records agree on complete ordered traces. See the
+[capture demo](https://github.com/davidydu/spatial-py/blob/1260959/examples/run_captures_reference.py),
+[recorded results](https://github.com/davidydu/spatial-py/blob/1260959/docs/evidence/capture-reference-output.json)
+and [capture evidence](https://github.com/davidydu/spatial-py/blob/1260959/docs/evidence/task-05d-lexical-captures.md).
+
+Independent review caught a quadratic capture-ID search; a regression test now
+checks proportional work. A fresh program, authored after the corrected compiler
+froze, passed all three cases on its first run and parent replay: outputs 46/24,
+or a bounds fault that preserves earlier writes. A previous test needed a Unit
+observation-adapter correction and remains separate regression evidence. Both
+938-test package suites passed with the frozen source and tests unchanged.
+
+Next: [helpers returning borrowed memory views, together with named view locals](https://github.com/davidydu/spatial-py/blob/1260959/docs/reviews/2026-10-17-after-capture-execution.md).
+A caller should be able to keep using a returned view of its own storage after
+the helper finishes; returning the helper's temporary storage must reject.
+Reuse the existing ownership analysis and call machinery. Meta/static forms,
+true resumable budgets, artifact agreement and verified editing remain required.
+Current private resource-limit results have no continuation. The full goal
+remains open; HLS tools are not needed for this phase.
 
 David accepted earlier source/runtime integration on 12 October. Each admitted
 construct receives its complete checks while useful execution grows. The
