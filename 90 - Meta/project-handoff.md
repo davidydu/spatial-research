@@ -49,6 +49,13 @@ and Rust presentations are historical evidence.
 - The professor requested a pure Python rewrite: first explain what Python
   Spatial looks like, then lower it toward HLS. HLS is the agreed eventual
   target; the current reference milestone does not require vendor tools.
+- On 17 October David confirmed language/reference coverage before HLS, guided
+  by EE109 Labs 1–3 while supporting varied student programs. He corrected an
+  initial mention of Lab 4: there are three labs. Use their memory/control/numeric
+  patterns to choose small executable increments and require cross-feature
+  compositions. Avoid both lab-specific compiler paths and unrelated verifier
+  expansion. [[04 - Python Implementation Roadmap]] owns this progression and
+  supersedes its earlier option for an S1-only HLS path alongside language work.
 - Assume a capable team and capable coding agents. Earlier Rust arguments based
   on maintenance skill or type safety are not grounds to reopen that direction.
 - David authorized the initial implementation on 4 October. [[D-27]] owns the
@@ -80,7 +87,7 @@ and Rust presentations are historical evidence.
 
 Current executed checkpoint: **`spatial-py@1260959`**, verified on 17 October
 with **938 source and 938 isolated installed-wheel tests**, CPython 3.14.5.
-Actual Lab 1 source completes both independent output vectors through shared
+The actual Lab 1 tiled DRAM/SRAM source completes both independent output vectors through shared
 normalization, checked publication, strict host preparation and the generic
 reference runner. Seven demands are proved and four enforced by ordered guards.
 The [execution evidence](https://github.com/davidydu/spatial-py/blob/d2460e3/docs/evidence/task-05a-reference-execution.md)
@@ -100,6 +107,11 @@ A fresh descending-window/alias composition passed three independent scenarios.
 The selected-entry preparation repair and 811-test frozen package results are
 in [branch evidence](https://github.com/davidydu/spatial-py/blob/10cc1be/docs/evidence/task-05b-statement-branches.md).
 The first execution-only checkpoint was `d2460e3` (773 tests per route).
+
+This is the tiled-scale part of Lab 1. Its Reg, FIFO and Reduce/Fold families
+remain required. After the current general memory/helper and initial-contract
+work, use those gaps, Lab 2 memory reductions/FSM/LUT/fixed-point tiles, and Lab 3
+line/shift buffers and convolution to drive language expansion.
 
 Top-level scalar/borrowed helpers now run through explicit CALL with fresh
 frame-local bindings, per-call entry checks and cleanup before return. Original
@@ -133,8 +145,8 @@ including inactive alternatives. Meta/static forms, true resumption, artifact
 agreement, verified editing and final acceptance remain mandatory. No new approval
 is pending.
 
-David asked to be notified when the HLS instance is needed. Keep it stopped during
-local reference work. Notify him once the scoped target plan, generated HLS source
+David asked to be notified when the HLS instance is needed. Complete planned
+language/reference support first and keep the instance stopped. Notify him once the scoped target plan, generated HLS source
 and testbench are ready for vendor simulation/synthesis; record the installed
 toolchain, target device and clock then. The next borrowed-result increment does
 not need HLS.

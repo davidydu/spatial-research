@@ -9,6 +9,12 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-17 — Language first, guided by the three course labs
+
+- David confirmed that HLS should follow planned language/reference coverage, with EE109 Labs 1–3 guiding the feature sequence while varied student programs test generality. He corrected the earlier mention of Lab 4 to three labs. Updated [[04 - Python Implementation Roadmap]], [[80 - Initial Compiler Goal]], [[project-handoff]] and the compiler's tracked context/plans; the earlier option for an S1-only HLS path alongside language work is deferred.
+- Rechecked the pinned course sources and obtained an independent read-only mapping review. The executed Lab 1 case is tiled DRAM/SRAM processing; Reg, FIFO and Reduce/Fold remain open. Lab 2 adds memory reductions/folds, FSM, LUT and fixed-point tiled matrix computation; Lab 3 adds line-buffer/shift-register windows and Sobel convolution. Existing R012–R014 studies retain exact source citations and distinguish tutorial holes from designed completions.
+- Borrowed helper results and named views remain the next bounded increment, tested through reusable tile/window selection. Ordinary returns of dead helper-local SRAM must still reject; Lab 2's temporary memory contributions require their own reduction-owned lifetime. Each increment needs runnable source, independent variants and faults, and a fresh composition. This is a sequencing/documentation change, with no new compiler behavior or test result claimed.
+
 ## 2026-10-17 — Nested helper captures execute through the shared compiler
 
 - Checkpoint `spatial-py@1260959` verifies lexical captures (behavior `bf52579`): nested helpers in function, loop and branch scopes can use surrounding values, SRAM/DRAM, Out/InOut cells and other lexical helpers. Source and independently authored common records match complete traces, including hidden dimensions, reversed/dropped-axis views, aliases, fresh locals and committed writes before faults. See the [demo](https://github.com/davidydu/spatial-py/blob/1260959/examples/run_captures_reference.py), [recorded outputs](https://github.com/davidydu/spatial-py/blob/1260959/docs/evidence/capture-reference-output.json) and [capture evidence](https://github.com/davidydu/spatial-py/blob/1260959/docs/evidence/task-05d-lexical-captures.md).

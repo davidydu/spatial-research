@@ -38,7 +38,7 @@ Handlers for language operations, control and storage are expected. Dispatch bas
 
 ## Infrastructure
 
-The reference milestone runs locally on the pinned CPython baseline and standard-library semantic core. The stopped HLS instance is not needed. Keep it stopped until scoped S6/S7 work has an eligible plan, generated HLS source and a testbench ready for vendor simulation or synthesis. David asked on 17 October to be notified when that point is reached. Record the actual installed toolchain, device, clock and dependency versions before using vendor results as evidence.
+The reference milestone runs locally on the pinned CPython baseline and standard-library semantic core. On 17 October David confirmed that planned language/reference support should be completed before HLS work, with EE109 Labs 1–3 guiding the progression toward general student programs. [[04 - Python Implementation Roadmap#Current execution direction — 17 October 2026]] records the course families and ordering. The stopped HLS instance is not needed. Request it after the language milestone, once scoped S6/S7 work has an eligible plan, generated HLS source and a testbench ready for vendor simulation or synthesis. Record the actual installed toolchain, device, clock and dependency versions before using vendor results as evidence.
 
 No FPGA resource, timing, RTL or hardware-support claim follows from local simulation.
 
@@ -48,8 +48,9 @@ The implementation lives in the separate `spatial-py` repository. Its active pla
 
 Current execution checkpoint: **`spatial-py@1260959`**, verified on 17 October
 with **938 tests from source and 938 from an isolated installed wheel** on
-CPython 3.14.5. **Actual Lab 1 source now produces the expected output through
-the Python compiler.** The path is source → shared unchecked records → canonical
+CPython 3.14.5. **The Lab 1 tiled DRAM/SRAM example now produces the expected output
+through the Python compiler.** Lab 1's Reg, FIFO and Reduce/Fold families remain
+ahead; this is not full lab coverage. The path is source → shared unchecked records → canonical
 operations → checked publication → prepared inputs → reference execution.
 
 Both independent Lab 1 vectors pass, including signed Int32 overflow. Each run

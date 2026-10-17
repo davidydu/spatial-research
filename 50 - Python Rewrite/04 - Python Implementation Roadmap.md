@@ -4,7 +4,7 @@ title: "Python Spatial implementation roadmap for review"
 scope: "Proposed full roadmap; bounded initial implementation authorized 2026-10-04"
 project: spatial-python
 date: 2026-09-30
-updated: 2026-10-07
+updated: 2026-10-17
 status: proposed
 ---
 
@@ -17,6 +17,55 @@ This is the proposed full implementation sequence following [[03 - Managed Resea
 The intended result is a Python language frontend, Python semantic compiler, and Python reference simulator, followed by a reusable HLS backend. Each slice must handle a family of composed programs and explain invalid cases. A handwritten recognizer for one complete application does not complete a slice.
 
 The implementation contract will combine the reviewed programming-model recommendation, numeric/effect/protocol rules, compiler architecture, host workflow, and HLS studies. A later change to an adopted contract needs a dated decision and migration cases. Team capability is assumed adequate; the order below follows semantic dependencies and feedback value rather than scarce language expertise.
+
+## Current execution direction — 17 October 2026
+
+David confirmed that language support comes before HLS, and that the three EE109
+labs should guide the progression toward general student programs. This supersedes
+the earlier option below to start an S1-only HLS path while language features are
+still being added. The labs are coverage anchors; support must extend to different
+programs that compose the same constructs. This instruction does not claim professor
+approval of every proposed detail or change the frozen initial language contract.
+
+| Course anchor | Language families to exercise | Current reference status and direction |
+|---|---|---|
+| Lab 1: scalar I/O, tiled DRAM/SRAM, FIFO, Reduce/Fold | Typed ports; ordered loads/stores; loops; reusable helpers; mutable registers; queues; scalar accumulation | The tiled DRAM/SRAM example executes, with independent helper/branch/alias compositions. Full Lab 1 coverage still requires Reg, FIFO and reduction/fold semantics. |
+| Lab 2: MemReduce/MemFold, FSM, LUT, blocked outer-product GEMM | Memory contributions and accumulation; state transitions; read-only tables; multidimensional tiles and tails; fractional fixed-point arithmetic | Existing views, loops and helpers provide foundations. The named controller/storage families and the course's fixed-point profile remain later language work. |
+| Lab 3: Sobel convolution | LineBuffer publication, RegFile shifts, LUT coefficients, nested reductions, borders/reset/initialization | Build on the earlier memory/control/numeric families, then execute complete window and convolution programs with independent full-output checks. |
+
+The inventories are [[PY-R012 - Lab1 Syntax and Host Mapping]],
+[[PY-R013 - Controllers Reductions and Lab2 Mapping]] and
+[[PY-R014 - Convolution Windows and Lab3 Mapping]]. The pinned course index lists
+three labs; David corrected the earlier “Lab 1 through Lab 4” wording to Labs 1–3.
+Tutorial holes and designed completions remain labeled in those studies.
+
+Choose the smallest complete language increment that advances this progression:
+
+1. Finish the current composed-memory path: borrowed helper results and named view
+   locals next, followed by remaining initial-contract language and acceptance work.
+   Returned views support modular tile/window code; they are not required by the
+   already executed tiled-scale example.
+2. Expand toward Lab 1's registers, queues and scalar reductions/folds, then Lab 2's
+   memory reductions, FSM/LUT and fixed-point tiled arithmetic, and Lab 3's windows.
+   Follow shared semantic dependencies; do not require every exercise in one lab
+   to finish before implementing a prerequisite used by another. Retain the wider
+   adopted language families and explicit remaining coverage in the roadmap.
+3. For each increment, name its course pattern, reusable language rule and runnable
+   source examples. Check changed shapes, tails, helper boundaries, branch paths,
+   aliases and faults, then a fresh independent composition. Avoid both application
+   recognizers and unrelated verifier expansion. Implement the checks necessary
+   for the constructs being admitted through the existing shared path.
+
+An ordinary helper may return a view of surviving caller storage, but cannot
+return its own dying SRAM. Lab 2's mapper-local tile contributions need the separate
+reduction-owned contribution lifetime already designed in R013; borrowed helper
+returns do not establish that support.
+
+Complete and audit the planned language/reference feature coverage before starting
+S6/S7 implementation. “Language coverage” means the explicit Spatial rewrite
+contracts and ledger, not arbitrary Python execution. Keep HLS infrastructure off;
+request it only after that milestone and once generated source and a testbench are
+ready for vendor validation. Language tests confer no hardware evidence.
 
 ## Concrete design inputs, 2026-10-01
 
@@ -55,7 +104,7 @@ Slices describe integration milestones, not isolated teams building disconnected
 | `REP-S5` | Before communicating-task support is claimed or that family enters planning | Parent token enters a group once; child domains, joins and cancellation retain their obligations and ownership under checking/editing |
 | `REP-S6(scope)` | Before S7 emits the named supported subset | PlanRecords correspondence, requirement/provenance transfer and failed publication; Python plan execution, deterministic artifacts and negative/mutant cases for that scope |
 
-S6 for S1's ordered subset and its S7 route do not wait for S5; their support claims exclude communicating families. Later family expansion must supply its applicable gate before entering that route. There is no single global point called “deep commitment” that postpones the early discriminator until S7. The slice completion record names each applicable gate, fixture IDs, independent expected outcomes and execution evidence. It rejects missing evidence and any claim that all representation gates passed when `REP-S5` or a required scoped plan gate remains pending.
+The architecture permits a scoped S6/S7 route for S1 independently of S5, but David's 17 October sequencing instruction defers that route until planned language/reference support is complete. Every family must still supply its applicable gate before entering target planning. There is no single global point called “deep commitment” that postpones the early discriminator until S7. The slice completion record names each applicable gate, fixture IDs, independent expected outcomes and execution evidence. It rejects missing evidence and any claim that all representation gates passed when `REP-S5` or a required scoped plan gate remains pending.
 
 `REP-EDIT` checks the candidate-editing mechanism early, without requiring a production general-purpose inliner/unroller. Compile-time duplication gives owned region/op/allocation-site records fresh IDs and lineage while borrowed resources retain their backing identity. Runtime activation paths and generations remain runtime identity components; the rewrite records their correspondence. Distinct activations must not share lifetime/state merely because an operation/site ID or numeric generation is equal. Full optimization and design-space search remain S9 work.
 
@@ -63,7 +112,7 @@ S6 for S1's ordered subset and its S7 route do not wait for S5; their support cl
 
 S0 precedes a trusted vertical path. S1 establishes the common mechanism used by S2–S5. Numeric work and protocol work can then proceed independently within their assigned interfaces. S2's pure arithmetic tests can precede S4, while its consuming-contribution tests depend on S4. S5 depends on local state primitives and the adopted advanced protocols.
 
-S6 can begin for the checked S1 subset while S2–S5 expand the language. S7 follows that bounded S6 plan; it need not wait for every advanced simulator feature. S8 advances family by family only after the corresponding semantic and implementation-plan contracts exist. S9 may optimize completed slices early, but broader search must never hide a missing semantic path. This allows early hardware feedback without redefining the whole language around the first hardware example.
+Current execution completes planned language/reference coverage before S6/S7. The earlier option of overlapping an S1 target path with S2–S5 language development is deferred by the 17 October direction above. S8 still advances family by family only after the corresponding semantic and implementation-plan contracts exist. S9 may optimize completed slices early when measurements justify it, but broader search must never hide a missing semantic path.
 
 Keep ownership by module/feature and give reviewers a different scope from their authored code. Agree on versioned node/diagnostic/profile interfaces before parallel writers edit dependent modules. Integration changes are reviewed against the shared contract, not accepted because two subagents happen to agree.
 
