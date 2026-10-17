@@ -85,8 +85,11 @@ and Rust presentations are historical evidence.
 
 ## Current checkpoint and next task
 
-Current executed checkpoint: **`spatial-py@813718f`**, verified on 17 October
-with **1019 source and 1019 isolated installed-wheel tests**, CPython 3.14.5.
+Current executed checkpoint: **`spatial-py@316cb7c`**, verified on 17 October
+with **1079 source and 1079 isolated installed-wheel tests**, CPython 3.14.5.
+The latest addition is compile-time constants and scalar aliases; next are
+Meta parameters and finite static expansion.
+
 The actual Lab 1 tiled DRAM/SRAM source completes both independent output vectors through shared
 normalization, checked publication, strict host preparation and the generic
 reference runner. Seven demands are proved and four enforced by ordered guards.
@@ -160,10 +163,33 @@ Pure tokenless forwarding still rejects when its entry checks cannot be proved;
 ordered helpers retain the existing runtime checks. This is a documented boundary,
 not a claim that all helper compositions or the initial compiler are complete.
 
-Next: complete the initial contract's compile-time parameters/constants,
-closed type aliases and finite `static`/`static_range` expansion. Pin their design
-and independent examples before implementation, then combine them with the
-existing memory/helper path. True resumable budgets, artifact agreement, verified
+**Compile-time constants and type aliases now work in executable programs.**
+Module constants may refer to later constants; local constants follow lexical
+scope. Nested helpers can use them for memory sizes, signatures and calculations
+without extra runtime arguments. Closed Int/Index/Bool/Unit aliases also support
+conditional type selection. A tiled example combines these features with
+captured memory and returned views; its ordinary output is `[1,3,6,11,19,32]`,
+and a separate signed-overflow vector also passes.
+
+See the [source](https://github.com/davidydu/spatial-py/blob/316cb7c/examples/kernels/constant_tiles.py),
+[runnable demo](https://github.com/davidydu/spatial-py/blob/316cb7c/examples/run_constants_reference.py),
+[recorded results](https://github.com/davidydu/spatial-py/blob/316cb7c/docs/evidence/constants-reference-output.json),
+[execution evidence](https://github.com/davidydu/spatial-py/blob/316cb7c/docs/evidence/task-05f-constants.md),
+[review](https://github.com/davidydu/spatial-py/blob/316cb7c/docs/reviews/2026-10-17-constants.md) and
+[fresh composition](https://github.com/davidydu/spatial-py/blob/316cb7c/docs/evidence/task-05f-constants-acceptance-third.md).
+Independent specification and quality reviews passed after scope and source/common
+parity repairs. An earlier composition used a possibly failing conversion in a
+pure helper; its annotation-only repair is retained as regression. A second
+case required a test-observer correction and is also regression evidence; a
+third independent author supplied fresh acceptance. **1079 source tests and
+1079 isolated-wheel tests pass** on unchanged frozen files. The existing canonical verifier and runtime were not expanded.
+
+Next: Meta[Size/Integer/Bool] parameters and finite `static`/`static_range`
+expansion. Reuse the closed constant evaluator and pin specialization inputs,
+helper instances and fresh expansion ownership before implementation. Static
+copies must preserve local-memory cleanup. Constants and scalar aliases are now
+implemented; parameter specialization and static expansion remain unfinished.
+True resumable budgets, artifact agreement, verified
 editing and final whole-goal acceptance remain required. Current private
 resource-limit results have no continuation. HLS tools are not needed yet.
 
