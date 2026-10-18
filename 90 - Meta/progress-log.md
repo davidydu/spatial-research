@@ -9,6 +9,14 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-17 — Scoped blocks execute with local memory lifetimes
+
+- Checkpoint `spatial-py@22b74b8` (behavior `023952c`, freeze `3fbbdf0`) adds `with sequential_region():` through shared source/common/canonical checking and execution. One child runs once, captures lexical values/helpers and releases local memory before parent continuation. Internal results preserve valid scalar/Unit/borrowed values; local scratch cannot escape.
+- The [source](https://github.com/davidydu/spatial-py/blob/22b74b8/examples/kernels/scoped_tiles.py), [runner](https://github.com/davidydu/spatial-py/blob/22b74b8/examples/run_regions_reference.py) and [recorded outputs](https://github.com/davidydu/spatial-py/blob/22b74b8/docs/evidence/ordered-regions-reference-output.json) turn `[1,2,3,4,5]` into `[3,4,5,6,7]` with three fresh scratch scopes, including a partial tail. A signed-overflow case also passes. Host inputs and cleanup order match their prewritten expectations.
+- [Independent specification/quality reviews](https://github.com/davidydu/spatial-py/blob/22b74b8/docs/reviews/2026-10-17-ordered-regions.md) and parent replay cover nested scopes, captures, aliases, internal result forwarding, retained templates and cleanup at resource limits. A malformed-IF diagnostic regression was repaired before freeze; fixture-only diagnostic corrections are recorded separately. No new proof subsystem or lab-specific compiler path was added.
+- [Fresh post-freeze composition](https://github.com/davidydu/spatial-py/blob/22b74b8/docs/evidence/task-05i-ordered-regions-acceptance.md) passed without repair. **1185 source / 1185 isolated-wheel tests pass**, in 140.647s and 140.357s. Frozen manifests, copied tests and all 70 packaged modules match. [Evidence](https://github.com/davidydu/spatial-py/blob/22b74b8/docs/evidence/task-05i-ordered-regions.md) records the exact boundaries.
+- Next: finite static branching/iteration with fresh declarations and preserved local memory lifetimes. Initial-goal obligations and Labs 1–3 families remain open; HLS is not needed. Updated [[80 - Initial Compiler Goal]] and [[project-handoff]]; compiler shared state records publication after live verification.
+
 ## 2026-10-17 — Helpers specialize for each compile-time configuration
 
 - Checkpoint `spatial-py@c94d1b0` (behavior `e46ffe7`, freeze `c86f3bd`) adds per-call Meta[Size/Integer/Bool] through shared source/common normalization. Distinct settings create concrete helpers; repeated settings reuse them. Explicit calls, original formal identities and written runtime-argument order remain intact. Nested helpers capture settings, runtime values, memory and callees.

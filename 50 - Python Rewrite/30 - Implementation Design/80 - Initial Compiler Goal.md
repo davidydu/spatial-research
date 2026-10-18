@@ -46,32 +46,33 @@ No FPGA resource, timing, RTL or hardware-support claim follows from local simul
 
 The implementation lives in the separate `spatial-py` repository. Its active plan is `docs/plans/2026-10-04-initial-reference.md`; its support ledger and task evidence distinguish completed foundations from the full goal. Historical Scala/Rust repositories remain evidence and are not modified to supply a Python result.
 
-Current execution checkpoint: **`spatial-py@c94d1b0`**, verified on 17 October
-with **1156 source tests and 1156 isolated installed-wheel tests**, CPython 3.14.5.
-The latest addition is per-call helper specialization. Next: owned regions and
-finite static expansion.
+Current execution checkpoint: **`spatial-py@22b74b8`**, verified on 17 October
+with **1185 source tests and 1185 isolated installed-wheel tests**, CPython 3.14.5.
+The latest addition is scoped ordered execution. Finite static expansion is next.
 
-**One helper can now use different compile-time settings within one program.**
-`Meta[Size]`, `Meta[Integer]` and `Meta[Bool]` configure helper dimensions, local
-memory and computation. The shared normalizer creates a concrete helper for each
-lexical template and distinct settings; repeated settings reuse it. Calls remain
-explicit. Runtime arguments still evaluate once in written order, and nested
-helpers can capture settings, values and borrowed memory.
+**A Python block can now own temporary memory with a clear lifetime.**
+`with sequential_region():` runs its child once and releases scratch before the
+parent continues. Nested helpers retain captured settings, values and shared
+memory. The same mechanism supports internal scalar/Unit/borrowed results without
+letting local scratch escape. Source returns inside contexts remain forbidden.
+This supplies the scope boundary needed by later compile-time branches and loops.
 
-The [tile helper source](https://github.com/davidydu/spatial-py/blob/c94d1b0/examples/kernels/specialized_tiles.py) and
-[runner](https://github.com/davidydu/spatial-py/blob/c94d1b0/examples/run_helper_meta_reference.py) call one transform with
-tile sizes two and three. Input `[3,5,8,13,21]` produces `[1,3,6,11,19]` and
-`[-2,0,3,8,16]` in the same program. A second case checks signed overflow.
-Both cases preserve host inputs and clean up each temporary allocation.
-See [recorded outputs](https://github.com/davidydu/spatial-py/blob/c94d1b0/docs/evidence/helper-meta-reference-output.json),
-[evidence](https://github.com/davidydu/spatial-py/blob/c94d1b0/docs/evidence/task-05h-helper-meta.md),
-[reviews](https://github.com/davidydu/spatial-py/blob/c94d1b0/docs/reviews/2026-10-17-helper-meta.md) and the
-[fresh composition](https://github.com/davidydu/spatial-py/blob/c94d1b0/docs/evidence/task-05h-helper-meta-acceptance-third.md).
-Independent specification/quality review and parent review passed. Frozen files
-and all 70 packaged compiler modules match through source and installed-wheel
-verification. Existing symbolic slice-equality and pure-tokenless-check limits
-remain documented. This is reference execution; static expansion, full lab
-coverage and HLS remain unfinished.
+The [scoped tile source](https://github.com/davidydu/spatial-py/blob/22b74b8/examples/kernels/scoped_tiles.py) and
+[runner](https://github.com/davidydu/spatial-py/blob/22b74b8/examples/run_regions_reference.py) transform `[1,2,3,4,5]` into
+`[3,4,5,6,7]`, including a partial final tile. There are three fresh scratch
+allocations and three cleanups. A second case checks signed overflow. Host inputs
+remain unchanged. See [recorded outputs](https://github.com/davidydu/spatial-py/blob/22b74b8/docs/evidence/ordered-regions-reference-output.json),
+[evidence](https://github.com/davidydu/spatial-py/blob/22b74b8/docs/evidence/task-05i-ordered-regions.md),
+[reviews](https://github.com/davidydu/spatial-py/blob/22b74b8/docs/reviews/2026-10-17-ordered-regions.md) and the
+[fresh composition](https://github.com/davidydu/spatial-py/blob/22b74b8/docs/evidence/task-05i-ordered-regions-acceptance.md).
+
+Independent source/common/canonical cases cover scope, aliases, nested helpers,
+faults and resource cleanup. Specification and quality reviews passed, followed by
+parent review and replay. The fresh composition passed on frozen production
+without repair. All 70 packaged modules and both file manifests match through
+source and installed-wheel verification. Existing symbolic slice-equality and
+pure-tokenless-check limits remain documented. This is reference execution;
+static expansion, full lab coverage and HLS remain unfinished.
 
 **The Lab 1 tiled DRAM/SRAM example now produces the expected output
 through the Python compiler.** Lab 1's Reg, FIFO and Reduce/Fold families remain
@@ -180,8 +181,8 @@ case required a test-observer correction and is also regression evidence; a
 third independent author supplied fresh acceptance. **1079 source tests and
 1079 isolated-wheel tests pass** on unchanged frozen files. The existing canonical verifier and runtime were not expanded.
 
-Next: ordered REGION execution and ownership, then finite `static`/`static_range`
-expansion. Preserve fresh declaration identities, lexical capture remapping,
+Next: finite `if static(...)` / `static_range(...)` expansion using the existing
+scoped REGION execution path. Preserve fresh declaration identities, lexical capture remapping,
 result/borrow ownership and cleanup at each local-memory scope exit. Static
 copies must not extend SRAM lifetime to function exit. Validate retained source
 and helper recursion before elimination, and charge generated records and integer
