@@ -9,6 +9,14 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-18 — Compile-time branches and loops execute through fresh scopes
+
+- Checkpoint `spatial-py@641dadb` (behavior `4d94de3`, freeze `91a6714`) adds finite `if static(...)` and signed `static_range(...)` through shared source/common normalization. Generated scopes preserve helper captures, result ownership and scratch cleanup; runtime loops/conditions continue to use the same interpreter.
+- The [source](https://github.com/davidydu/spatial-py/blob/641dadb/examples/kernels/static_neighbors.py), [runner](https://github.com/davidydu/spatial-py/blob/641dadb/examples/run_static_reference.py) and [recorded outputs](https://github.com/davidydu/spatial-py/blob/641dadb/docs/evidence/static-expansion-reference-output.json) turn `[1,2,3,4,5]` into `[4,8,12,16,14]` with a doubled center, or `[3,6,9,12,9]` otherwise. A signed-overflow vector and all 20/20/12 scratch lifetimes match independent expectations. Host buffers remain unchanged.
+- [Independent reviews](https://github.com/davidydu/spatial-py/blob/641dadb/docs/reviews/2026-10-18-static-expansion.md) and parent replay cover signed/empty domains, retained validation, helper identity/capture hygiene, borrowed results and expansion limits. A retained operator-grammar gap was reproduced, regression-tested and repaired. Test fixture/observer corrections are recorded separately. No canonical verifier or runtime change was needed.
+- [Fresh post-freeze composition](https://github.com/davidydu/spatial-py/blob/641dadb/docs/evidence/task-05j-static-expansion-acceptance.md) passed without repair. **1219 source / 1219 isolated-wheel tests pass**, in 147.899s and 147.782s. Frozen manifests, copied tests and all 72 packaged modules match. [Evidence](https://github.com/davidydu/spatial-py/blob/641dadb/docs/evidence/task-05j-static-expansion.md) owns exact scope and remaining obligations.
+- Next: close memory/view type aliases with fresh allocation lifetime at each use, then public capture/template and original acceptance work before broader Lab 1 families. HLS is not needed. Updated [[80 - Initial Compiler Goal]] and [[project-handoff]]; compiler shared state records publication after live verification.
+
 ## 2026-10-17 — Scoped blocks execute with local memory lifetimes
 
 - Checkpoint `spatial-py@22b74b8` (behavior `023952c`, freeze `3fbbdf0`) adds `with sequential_region():` through shared source/common/canonical checking and execution. One child runs once, captures lexical values/helpers and releases local memory before parent continuation. Internal results preserve valid scalar/Unit/borrowed values; local scratch cannot escape.

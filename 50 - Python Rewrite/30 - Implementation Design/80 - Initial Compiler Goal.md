@@ -46,33 +46,34 @@ No FPGA resource, timing, RTL or hardware-support claim follows from local simul
 
 The implementation lives in the separate `spatial-py` repository. Its active plan is `docs/plans/2026-10-04-initial-reference.md`; its support ledger and task evidence distinguish completed foundations from the full goal. Historical Scala/Rust repositories remain evidence and are not modified to supply a Python result.
 
-Current execution checkpoint: **`spatial-py@22b74b8`**, verified on 17 October
-with **1185 source tests and 1185 isolated installed-wheel tests**, CPython 3.14.5.
-The latest addition is scoped ordered execution. Finite static expansion is next.
+Current execution checkpoint: **`spatial-py@641dadb`**, verified on 18 October
+with **1219 source tests and 1219 isolated installed-wheel tests**, CPython 3.14.5.
+The latest addition is finite compile-time branches and loops.
 
-**A Python block can now own temporary memory with a clear lifetime.**
-`with sequential_region():` runs its child once and releases scratch before the
-parent continues. Nested helpers retain captured settings, values and shared
-memory. The same mechanism supports internal scalar/Unit/borrowed results without
-letting local scratch escape. Source returns inside contexts remain forbidden.
-This supplies the scope boundary needed by later compile-time branches and loops.
+**Compile-time settings can now choose a program's structure.**
+`if static(meta_bool):` selects one branch. `static_range(...)` generates a finite
+sequence of fresh scopes, including signed steps and empty ranges. Each copy owns
+its local declarations, helpers and temporary memory. These forms compose with
+runtime loops, conditions, shared views and per-call helper settings through the
+existing common compiler path. The canonical verifier and interpreter are unchanged.
 
-The [scoped tile source](https://github.com/davidydu/spatial-py/blob/22b74b8/examples/kernels/scoped_tiles.py) and
-[runner](https://github.com/davidydu/spatial-py/blob/22b74b8/examples/run_regions_reference.py) transform `[1,2,3,4,5]` into
-`[3,4,5,6,7]`, including a partial final tile. There are three fresh scratch
-allocations and three cleanups. A second case checks signed overflow. Host inputs
-remain unchanged. See [recorded outputs](https://github.com/davidydu/spatial-py/blob/22b74b8/docs/evidence/ordered-regions-reference-output.json),
-[evidence](https://github.com/davidydu/spatial-py/blob/22b74b8/docs/evidence/task-05i-ordered-regions.md),
-[reviews](https://github.com/davidydu/spatial-py/blob/22b74b8/docs/reviews/2026-10-17-ordered-regions.md) and the
-[fresh composition](https://github.com/davidydu/spatial-py/blob/22b74b8/docs/evidence/task-05i-ordered-regions-acceptance.md).
+The [neighbor-sum source](https://github.com/davidydu/spatial-py/blob/641dadb/examples/kernels/static_neighbors.py) and
+[runner](https://github.com/davidydu/spatial-py/blob/641dadb/examples/run_static_reference.py) transform `[1,2,3,4,5]` into
+`[4,8,12,16,14]` with a doubled center, or `[3,6,9,12,9]` otherwise. A signed
+overflow vector also passes. The three cases allocate and release 20, 20 and 12
+scratch scopes in their prewritten order; host buffers remain unchanged. See
+[recorded outputs](https://github.com/davidydu/spatial-py/blob/641dadb/docs/evidence/static-expansion-reference-output.json),
+[evidence](https://github.com/davidydu/spatial-py/blob/641dadb/docs/evidence/task-05j-static-expansion.md),
+[reviews](https://github.com/davidydu/spatial-py/blob/641dadb/docs/reviews/2026-10-18-static-expansion.md) and the
+[fresh composition](https://github.com/davidydu/spatial-py/blob/641dadb/docs/evidence/task-05j-static-expansion-acceptance.md).
 
-Independent source/common/canonical cases cover scope, aliases, nested helpers,
-faults and resource cleanup. Specification and quality reviews passed, followed by
-parent review and replay. The fresh composition passed on frozen production
-without repair. All 70 packaged modules and both file manifests match through
-source and installed-wheel verification. Existing symbolic slice-equality and
-pure-tokenless-check limits remain documented. This is reference execution;
-static expansion, full lab coverage and HLS remain unfinished.
+Both discarded arms and zero-trip bodies retain syntax, binding, ownership and
+recursion checks. Their arithmetic and dependent runtime semantics stay deferred.
+Independent reviews and parent replay covered identities, captures, result ownership
+and finite expansion limits. Review caught and repaired malformed common operator
+forms hidden by elimination. A fresh post-freeze program passed unchanged. All
+72 packaged modules and both manifests match through source/wheel verification.
+This is reference execution; full initial-goal, lab and HLS coverage remain open.
 
 **The Lab 1 tiled DRAM/SRAM example now produces the expected output
 through the Python compiler.** Lab 1's Reg, FIFO and Reduce/Fold families remain
@@ -181,13 +182,12 @@ case required a test-observer correction and is also regression evidence; a
 third independent author supplied fresh acceptance. **1079 source tests and
 1079 isolated-wheel tests pass** on unchanged frozen files. The existing canonical verifier and runtime were not expanded.
 
-Next: finite `if static(...)` / `static_range(...)` expansion using the existing
-scoped REGION execution path. Preserve fresh declaration identities, lexical capture remapping,
-result/borrow ownership and cleanup at each local-memory scope exit. Static
-copies must not extend SRAM lifetime to function exit. Validate retained source
-and helper recursion before elimination, and charge generated records and integer
-growth before allocation. Pin exact one-/two-bound static_range syntax and its
-protected Integer binder before implementation.
+Next: closed aliases for the already admitted memory/view types. Pin concrete
+metadata dimensions, chaining/conditional selection and captures, then execute a
+static tile loop using the same alias in several scopes. Allocation lifetimes must
+belong to each declaration using an alias. This closes an initial-contract grammar
+gap before broader Reg/FIFO/reduction families; public capture/bundle/Template APIs
+and the original acceptance mechanisms remain required.
 
 True resumable budgets, artifact agreement, verified
 editing and final whole-goal acceptance remain required. Current private
