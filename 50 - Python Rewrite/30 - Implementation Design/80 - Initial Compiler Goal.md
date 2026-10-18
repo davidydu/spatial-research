@@ -46,10 +46,33 @@ No FPGA resource, timing, RTL or hardware-support claim follows from local simul
 
 The implementation lives in the separate `spatial-py` repository. Its active plan is `docs/plans/2026-10-04-initial-reference.md`; its support ledger and task evidence distinguish completed foundations from the full goal. Historical Scala/Rust repositories remain evidence and are not modified to supply a Python result.
 
-Current execution checkpoint: **`spatial-py@316cb7c`**, verified on 17 October
-with **1079 tests from source and 1079 from an isolated installed wheel** on
-CPython 3.14.5. The latest addition is compile-time constants and scalar type
-aliases, used for memory sizes, loop bounds and nested helper definitions.
+Current execution checkpoint: **`spatial-py@2e9af7b`**, verified on 17 October
+with **1117 tests from source and 1117 from an isolated installed wheel** on
+CPython 3.14.5. The latest addition is kernel compile-time parameters: one source
+can use different dimensions, tile capacities, integer settings and Bool choices.
+
+**One kernel source can now be configured before execution.**
+`Meta[Size]`, `Meta[Integer]` and `Meta[Bool]` control dimensions, tile capacities,
+offsets and choices. Every retained kernel receives its own exact typed settings;
+runtime inputs and outputs keep their own positions. Nested ordinary helpers
+can capture these settings without extra runtime arguments. Source and directly
+built common/canonical records share checking and execution.
+
+The [configurable tile source](https://github.com/davidydu/spatial-py/blob/2e9af7b/examples/kernels/configurable_tiles.py)
+and [runner](https://github.com/davidydu/spatial-py/blob/2e9af7b/examples/run_kernel_meta_reference.py) execute three settings:
+`[1,3,6,11,19]`, an unchanged disabled-adjustment vector, and a signed-overflow
+vector. Partial final tiles and local-memory cleanup work in each configuration.
+See [recorded results](https://github.com/davidydu/spatial-py/blob/2e9af7b/docs/evidence/kernel-meta-reference-output.json),
+[execution evidence](https://github.com/davidydu/spatial-py/blob/2e9af7b/docs/evidence/task-05g-kernel-meta.md),
+[reviews](https://github.com/davidydu/spatial-py/blob/2e9af7b/docs/reviews/2026-10-17-kernel-meta.md) and
+[fresh composition](https://github.com/davidydu/spatial-py/blob/2e9af7b/docs/evidence/task-05g-kernel-meta-acceptance.md).
+Independent specification/quality review and parent review passed; frozen files
+remained unchanged through both complete test routes. An existing
+symbolic named-slice equality limitation remains documented; this checkpoint
+does not add a broader shape solver.
+
+Kernel Meta binding is implemented. Helper Meta specialization and static
+expansion remain unfinished. HLS is not needed yet.
 
 **The Lab 1 tiled DRAM/SRAM example now produces the expected output
 through the Python compiler.** Lab 1's Reg, FIFO and Reduce/Fold families remain
@@ -158,11 +181,14 @@ case required a test-observer correction and is also regression evidence; a
 third independent author supplied fresh acceptance. **1079 source tests and
 1079 isolated-wheel tests pass** on unchanged frozen files. The existing canonical verifier and runtime were not expanded.
 
-Next: Meta[Size/Integer/Bool] parameters and finite `static`/`static_range`
-expansion. Reuse the closed constant evaluator and pin specialization inputs,
-helper instances and fresh expansion ownership before implementation. Static
-copies must preserve local-memory cleanup. Constants and scalar aliases are now
-implemented; parameter specialization and static expansion remain unfinished.
+Next: helper Meta specialization, with a separate checked helper instance for
+each distinct compile-time binding and explicit CALLs retained. Never substitute
+one global helper binding or mandatory inlining. Then complete ordered REGION
+ownership and finite `static`/`static_range` expansion with fresh identities,
+lexical capture remapping and cleanup for each local-memory allocation. Validate
+retained source and helper recursion before static elimination; charge generated
+records and integer growth before allocation.
+
 True resumable budgets, artifact agreement, verified
 editing and final whole-goal acceptance remain required. Current private
 resource-limit results have no continuation. HLS tools are not needed yet.

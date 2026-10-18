@@ -9,6 +9,14 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-17 — Configurable kernels execute with compile-time parameters
+
+- Checkpoint `spatial-py@2e9af7b` (behavior `8d10fff`) adds kernel Meta[Size/Integer/Bool] through the shared source/common/canonical checking path. Every retained kernel is explicitly bound; canonical identities remain stable while runtime argument slots omit compile-time formals. Nested ordinary helpers capture settings without runtime metadata arguments.
+- The [source](https://github.com/davidydu/spatial-py/blob/2e9af7b/examples/kernels/configurable_tiles.py), [runner](https://github.com/davidydu/spatial-py/blob/2e9af7b/examples/run_kernel_meta_reference.py) and [recorded output](https://github.com/davidydu/spatial-py/blob/2e9af7b/docs/evidence/kernel-meta-reference-output.json) show one tiled program under three configurations, including partial final tiles, disabled adjustment and signed Int32 overflow. All literal outputs and host immutability checks pass.
+- [Independent reviews](https://github.com/davidydu/spatial-py/blob/2e9af7b/docs/reviews/2026-10-17-kernel-meta.md) and parent review passed. An existing unproved dynamic named-slice equality was reproduced on pristine baseline and retained as an explicit boundary; this did not add a larger shape solver. Ordinary unchecked capture ownership remains normalization's responsibility.
+- [Fresh composition](https://github.com/davidydu/spatial-py/blob/2e9af7b/docs/evidence/task-05g-kernel-meta-acceptance.md) and **1117 source / 1117 isolated-wheel tests pass**, in 131.156s and 131.495s. Frozen manifests and all 67 packaged modules match. [Evidence](https://github.com/davidydu/spatial-py/blob/2e9af7b/docs/evidence/task-05g-kernel-meta.md) separates this intermediate checkpoint from full compiler acceptance.
+- Next: per-call helper Meta specialization, then ordered REGION ownership and finite static expansion. All remaining initial-goal obligations and Labs 1–3 families stay open. HLS is not needed. Updated [[80 - Initial Compiler Goal]] and [[project-handoff]]; compiler shared state records publication after live verification.
+
 ## 2026-10-17 — Compile-time constants and closed aliases execute
 
 - Checkpoint `spatial-py@316cb7c` (behavior `961782a`, production freeze `9d90d52`) adds module/local Const[Size/Integer/Bool/Type], forward acyclic dependencies, exact bounded meta arithmetic, scalar aliases including conditional selection, and explicit metadata captures without runtime arguments. Source and independently built common records use the same checker.
