@@ -9,6 +9,11 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-18 — Corrected alias scope before implementation
+
+- Independent contract review found that the proposed memory/view-alias next step contradicted the pinned value-only Const[Type] rule. The parent verified the explicit resource/port exclusions in research baseline `db30739` and the existing rejection tests; all 21 common-constant tests pass unchanged.
+- Compiler [correction and source API plan](https://github.com/davidydu/spatial-py/blob/1585268/docs/plans/2026-10-18-public-source.md) records the revised task: public SourceUnit/CaptureBundle/capture/Template/specialize through the existing source/common path. One core-only module first; real linking and full public runtime retain separate obligations. No production behavior changed in this checkpoint. Historical next-step suggestions below are superseded.
+
 ## 2026-10-18 — Compile-time branches and loops execute through fresh scopes
 
 - Checkpoint `spatial-py@641dadb` (behavior `4d94de3`, freeze `91a6714`) adds finite `if static(...)` and signed `static_range(...)` through shared source/common normalization. Generated scopes preserve helper captures, result ownership and scratch cleanup; runtime loops/conditions continue to use the same interpreter.

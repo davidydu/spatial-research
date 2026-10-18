@@ -208,12 +208,18 @@ case required a test-observer correction and is also regression evidence; a
 third independent author supplied fresh acceptance. **1079 source tests and
 1079 isolated-wheel tests pass** on unchanged frozen files. The existing canonical verifier and runtime were not expanded.
 
-Next: closed aliases for the already admitted memory/view types. Pin concrete
-metadata dimensions, chaining/conditional selection and captures, then execute a
-static tile loop using the same alias in several scopes. Allocation lifetimes must
-belong to each declaration using an alias. This closes an initial-contract grammar
-gap before broader Reg/FIFO/reduction families; public capture/bundle/Template APIs
-and the original acceptance mechanisms remain required.
+Next: public source capture and specialization from the original implementation
+plan. Freeze a SourceUnit/CaptureBundle, capture an immutable Template without
+metadata values, then specialize it through the existing common compiler path.
+The first increment supports one core-only source module; dependency linking and
+full public execution remain separate work.
+
+**18 October scope correction:** the previous memory/view-alias recommendation
+misread the pinned contract. [[10 - Source Checker and IR Blueprint#Type-valued source constants]]
+explicitly limits Const[Type] to value descriptors and excludes memory resources
+and ports. Existing rejection behavior is correct. The
+[review and correction](https://github.com/davidydu/spatial-py/blob/1585268/docs/reviews/2026-10-18-alias-scope-correction.md)
+records the evidence; no memory-alias language extension is being implemented.
 
 True resumable budgets, artifact agreement, verified
 editing and final whole-goal acceptance remain required. Current private
@@ -224,7 +230,7 @@ David authorized continued implementation; no new approval is pending.
 David asked to be notified when the HLS instance is needed. Complete planned
 language/reference support first and keep the instance stopped. Notify him once the scoped target plan, generated HLS source
 and testbench are ready for vendor simulation/synthesis; record the installed
-toolchain, target device and clock then. The next memory/view alias increment does
+toolchain, target device and clock then. The public source workflow increment does
 not need HLS.
 
 The compiler's tracked
