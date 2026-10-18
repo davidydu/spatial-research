@@ -9,6 +9,14 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-17 — Helpers specialize for each compile-time configuration
+
+- Checkpoint `spatial-py@c94d1b0` (behavior `e46ffe7`, freeze `c86f3bd`) adds per-call Meta[Size/Integer/Bool] through shared source/common normalization. Distinct settings create concrete helpers; repeated settings reuse them. Explicit calls, original formal identities and written runtime-argument order remain intact. Nested helpers capture settings, runtime values, memory and callees.
+- The [source](https://github.com/davidydu/spatial-py/blob/c94d1b0/examples/kernels/specialized_tiles.py), [runner](https://github.com/davidydu/spatial-py/blob/c94d1b0/examples/run_helper_meta_reference.py) and [recorded outputs](https://github.com/davidydu/spatial-py/blob/c94d1b0/docs/evidence/helper-meta-reference-output.json) use one helper with tile sizes two and three. Input `[3,5,8,13,21]` produces `[1,3,6,11,19]` and `[-2,0,3,8,16]`; a second case checks signed overflow. Host inputs and local cleanup match expectations.
+- [Independent reviews](https://github.com/davidydu/spatial-py/blob/c94d1b0/docs/reviews/2026-10-17-helper-meta.md) and parent replay caught and repaired retained-template layout/stage checks, nested returning branches, generic ancestor calls and nested borrowed-memory capture ownership. No lab-name dispatch or blanket type-table pruning was added.
+- [Fresh post-freeze composition](https://github.com/davidydu/spatial-py/blob/c94d1b0/docs/evidence/task-05h-helper-meta-acceptance-third.md) and **1156 source / 1156 isolated-wheel tests pass**, in 136.337s and 136.344s. All 70 packaged modules and frozen manifests match. [Evidence](https://github.com/davidydu/spatial-py/blob/c94d1b0/docs/evidence/task-05h-helper-meta.md) records exact scope and independently specified outputs/effects.
+- Next: ordered REGION ownership/execution, then finite static expansion. Remaining initial-goal obligations and Labs 1–3 families stay open. HLS is not needed. Updated [[80 - Initial Compiler Goal]] and [[project-handoff]]; compiler state records publication after live verification.
+
 ## 2026-10-17 — Configurable kernels execute with compile-time parameters
 
 - Checkpoint `spatial-py@2e9af7b` (behavior `8d10fff`) adds kernel Meta[Size/Integer/Bool] through the shared source/common/canonical checking path. Every retained kernel is explicitly bound; canonical identities remain stable while runtime argument slots omit compile-time formals. Nested ordinary helpers capture settings without runtime metadata arguments.

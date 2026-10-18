@@ -85,33 +85,32 @@ and Rust presentations are historical evidence.
 
 ## Current checkpoint and next task
 
-Current executed checkpoint: **`spatial-py@2e9af7b`**, verified on 17 October
-with **1117 source and 1117 isolated installed-wheel tests**, CPython 3.14.5.
-The latest addition is kernel compile-time parameters. Next are per-call helper
-Meta specialization and finite static expansion.
+Current executed checkpoint: **`spatial-py@c94d1b0`**, verified on 17 October
+with **1156 source tests and 1156 isolated installed-wheel tests**, CPython 3.14.5.
+The latest addition is per-call helper specialization. Next: owned regions and
+finite static expansion.
 
-**One kernel source can now be configured before execution.**
-`Meta[Size]`, `Meta[Integer]` and `Meta[Bool]` control dimensions, tile capacities,
-offsets and choices. Every retained kernel receives its own exact typed settings;
-runtime inputs and outputs keep their own positions. Nested ordinary helpers
-can capture these settings without extra runtime arguments. Source and directly
-built common/canonical records share checking and execution.
+**One helper can now use different compile-time settings within one program.**
+`Meta[Size]`, `Meta[Integer]` and `Meta[Bool]` configure helper dimensions, local
+memory and computation. The shared normalizer creates a concrete helper for each
+lexical template and distinct settings; repeated settings reuse it. Calls remain
+explicit. Runtime arguments still evaluate once in written order, and nested
+helpers can capture settings, values and borrowed memory.
 
-The [configurable tile source](https://github.com/davidydu/spatial-py/blob/2e9af7b/examples/kernels/configurable_tiles.py)
-and [runner](https://github.com/davidydu/spatial-py/blob/2e9af7b/examples/run_kernel_meta_reference.py) execute three settings:
-`[1,3,6,11,19]`, an unchanged disabled-adjustment vector, and a signed-overflow
-vector. Partial final tiles and local-memory cleanup work in each configuration.
-See [recorded results](https://github.com/davidydu/spatial-py/blob/2e9af7b/docs/evidence/kernel-meta-reference-output.json),
-[execution evidence](https://github.com/davidydu/spatial-py/blob/2e9af7b/docs/evidence/task-05g-kernel-meta.md),
-[reviews](https://github.com/davidydu/spatial-py/blob/2e9af7b/docs/reviews/2026-10-17-kernel-meta.md) and
-[fresh composition](https://github.com/davidydu/spatial-py/blob/2e9af7b/docs/evidence/task-05g-kernel-meta-acceptance.md).
-Independent specification/quality review and parent review passed; frozen files
-remained unchanged through both complete test routes. An existing
-symbolic named-slice equality limitation remains documented; this checkpoint
-does not add a broader shape solver.
-
-Kernel Meta binding is implemented. Helper Meta specialization and static
-expansion remain unfinished. HLS is not needed yet.
+The [tile helper source](https://github.com/davidydu/spatial-py/blob/c94d1b0/examples/kernels/specialized_tiles.py) and
+[runner](https://github.com/davidydu/spatial-py/blob/c94d1b0/examples/run_helper_meta_reference.py) call one transform with
+tile sizes two and three. Input `[3,5,8,13,21]` produces `[1,3,6,11,19]` and
+`[-2,0,3,8,16]` in the same program. A second case checks signed overflow.
+Both cases preserve host inputs and clean up each temporary allocation.
+See [recorded outputs](https://github.com/davidydu/spatial-py/blob/c94d1b0/docs/evidence/helper-meta-reference-output.json),
+[evidence](https://github.com/davidydu/spatial-py/blob/c94d1b0/docs/evidence/task-05h-helper-meta.md),
+[reviews](https://github.com/davidydu/spatial-py/blob/c94d1b0/docs/reviews/2026-10-17-helper-meta.md) and the
+[fresh composition](https://github.com/davidydu/spatial-py/blob/c94d1b0/docs/evidence/task-05h-helper-meta-acceptance-third.md).
+Independent specification/quality review and parent review passed. Frozen files
+and all 70 packaged compiler modules match through source and installed-wheel
+verification. Existing symbolic slice-equality and pure-tokenless-check limits
+remain documented. This is reference execution; static expansion, full lab
+coverage and HLS remain unfinished.
 
 The actual Lab 1 tiled DRAM/SRAM source completes both independent output vectors through shared
 normalization, checked publication, strict host preparation and the generic
@@ -207,13 +206,13 @@ case required a test-observer correction and is also regression evidence; a
 third independent author supplied fresh acceptance. **1079 source tests and
 1079 isolated-wheel tests pass** on unchanged frozen files. The existing canonical verifier and runtime were not expanded.
 
-Next: helper Meta specialization, with a separate checked helper instance for
-each distinct compile-time binding and explicit CALLs retained. Never substitute
-one global helper binding or mandatory inlining. Then complete ordered REGION
-ownership and finite `static`/`static_range` expansion with fresh identities,
-lexical capture remapping and cleanup for each local-memory allocation. Validate
-retained source and helper recursion before static elimination; charge generated
-records and integer growth before allocation.
+Next: ordered REGION execution and ownership, then finite `static`/`static_range`
+expansion. Preserve fresh declaration identities, lexical capture remapping,
+result/borrow ownership and cleanup at each local-memory scope exit. Static
+copies must not extend SRAM lifetime to function exit. Validate retained source
+and helper recursion before elimination, and charge generated records and integer
+growth before allocation. Pin exact one-/two-bound static_range syntax and its
+protected Integer binder before implementation.
 
 True resumable budgets, artifact agreement, verified
 editing and final whole-goal acceptance remain required. Current private
