@@ -46,34 +46,40 @@ No FPGA resource, timing, RTL or hardware-support claim follows from local simul
 
 The implementation lives in the separate `spatial-py` repository. Its active plan is `docs/plans/2026-10-04-initial-reference.md`; its support ledger and task evidence distinguish completed foundations from the full goal. Historical Scala/Rust repositories remain evidence and are not modified to supply a Python result.
 
-Current execution checkpoint: **`spatial-py@641dadb`**, verified on 18 October
-with **1219 source tests and 1219 isolated installed-wheel tests**, CPython 3.14.5.
-The latest addition is finite compile-time branches and loops.
+Current execution checkpoint: **`spatial-py@8152d4e`**, verified on 18 October
+with **1244 source tests and 1244 isolated installed-wheel tests**, CPython 3.14.5.
 
-**Compile-time settings can now choose a program's structure.**
-`if static(meta_bool):` selects one branch. `static_range(...)` generates a finite
-sequence of fresh scopes, including signed steps and empty ranges. Each copy owns
-its local declarations, helpers and temporary memory. These forms compose with
-runtime loops, conditions, shared views and per-call helper settings through the
-existing common compiler path. The canonical verifier and interpreter are unchanged.
+**A Python program can now be captured once and specialized for different settings.**
+The public workflow is SourceUnit → CaptureBundle → capture → immutable Template
+→ specialize. Capture validates retained syntax and bindings without requiring
+compile-time values. Specialization rederives the same source and produces the
+ordinary unchecked records used by the existing checker. It does not execute
+Python source or let a template bypass checking.
 
-The [neighbor-sum source](https://github.com/davidydu/spatial-py/blob/641dadb/examples/kernels/static_neighbors.py) and
-[runner](https://github.com/davidydu/spatial-py/blob/641dadb/examples/run_static_reference.py) transform `[1,2,3,4,5]` into
-`[4,8,12,16,14]` with a doubled center, or `[3,6,9,12,9]` otherwise. A signed
-overflow vector also passes. The three cases allocate and release 20, 20 and 12
-scratch scopes in their prewritten order; host buffers remain unchanged. See
-[recorded outputs](https://github.com/davidydu/spatial-py/blob/641dadb/docs/evidence/static-expansion-reference-output.json),
-[evidence](https://github.com/davidydu/spatial-py/blob/641dadb/docs/evidence/task-05j-static-expansion.md),
-[reviews](https://github.com/davidydu/spatial-py/blob/641dadb/docs/reviews/2026-10-18-static-expansion.md) and the
-[fresh composition](https://github.com/davidydu/spatial-py/blob/641dadb/docs/evidence/task-05j-static-expansion-acceptance.md).
+The [public workflow example](https://github.com/davidydu/spatial-py/blob/8152d4e/examples/run_public_source.py) specializes
+one [source program](https://github.com/davidydu/spatial-py/blob/8152d4e/examples/kernels/public_source.py) twice:
+`[3,7,11]` with bias `-2` produces `[1,5,9]`; `[3,7]` with bias `4` produces
+`[7,11]`. The runs allocate and release 3/2 fresh scratch scopes. Both literal
+outputs, ordered effects and unchanged host buffers are checked. See
+[recorded outputs](https://github.com/davidydu/spatial-py/blob/8152d4e/docs/evidence/public-source-reference-output.json),
+[evidence](https://github.com/davidydu/spatial-py/blob/8152d4e/docs/evidence/task-03c-public-source.md),
+[review](https://github.com/davidydu/spatial-py/blob/8152d4e/docs/reviews/2026-10-18-public-source.md) and the
+[fresh composition](https://github.com/davidydu/spatial-py/blob/8152d4e/docs/evidence/task-03c-public-source-acceptance-second.md).
 
-Both discarded arms and zero-trip bodies retain syntax, binding, ownership and
-recursion checks. Their arithmetic and dependent runtime semantics stay deferred.
-Independent reviews and parent replay covered identities, captures, result ownership
-and finite expansion limits. Review caught and repaired malformed common operator
-forms hidden by elimination. A fresh post-freeze program passed unchanged. All
-72 packaged modules and both manifests match through source/wheel verification.
-This is reference execution; full initial-goal, lab and HLS coverage remain open.
+Capture and specialization are public; checking, preparation and simulation in
+this demo still use the private reference bridge. One core-only module is
+supported. Larger dependency bundles reject explicitly after aggregate source
+admission. The installed prelude is a frozen registration manifest, not a proof
+of compiler correctness. The existing checker and runtime are unchanged.
+
+Independent specification and quality reviews and parent replay passed. Review
+repairs preserve legacy metadata-error order and expected Unicode/resource-limit
+diagnostics. A separate fresh composition followed an observer-only correction in the first
+case; that earlier case remains regression evidence. Complete source
+and wheel suites pass in 151.331s and 151.417s; all
+74 packaged modules and both manifests match. These timings are verification
+observations, not performance benchmarks. Full initial-goal, lab and HLS coverage
+remain open.
 
 **The Lab 1 tiled DRAM/SRAM example now produces the expected output
 through the Python compiler.** Lab 1's Reg, FIFO and Reduce/Fold families remain
@@ -182,11 +188,12 @@ case required a test-observer correction and is also regression evidence; a
 third independent author supplied fresh acceptance. **1079 source tests and
 1079 isolated-wheel tests pass** on unchanged frozen files. The existing canonical verifier and runtime were not expanded.
 
-Next: public source capture and specialization from the original implementation
-plan. Freeze a SourceUnit/CaptureBundle, capture an immutable Template without
-metadata values, then specialize it through the existing common compiler path.
-The first increment supports one core-only source module; dependency linking and
-full public execution remain separate work.
+Next: expose public checking and input preparation using the existing shared
+checker and host preparation. Keep the execution bridge private until simulation
+supports validated continuations and cumulative budgets without replaying effects.
+Dependency linking and the remaining original acceptance obligations stay open;
+then continue reusable Lab 1 register/queue/reduction families and Labs 2–3.
+No new verifier framework or HLS instance is needed for this increment.
 
 **18 October scope correction:** the previous memory/view-alias recommendation
 misread the pinned contract. [[10 - Source Checker and IR Blueprint#Type-valued source constants]]

@@ -9,6 +9,14 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-18 — Public capture and specialization reuse frozen source
+
+- Checkpoint `spatial-py@8152d4e` (behavior `da6c722`, freeze `06060a0`) exposes SourceUnit/CaptureBundle/core_prelude/capture/Template/specialize for one core-only module. Capture needs no metadata values; specialization rederives source correspondence and enters the existing shared checker. Templates have no checked authority.
+- The [source](https://github.com/davidydu/spatial-py/blob/8152d4e/examples/kernels/public_source.py), [runner](https://github.com/davidydu/spatial-py/blob/8152d4e/examples/run_public_source.py) and [recorded outputs](https://github.com/davidydu/spatial-py/blob/8152d4e/docs/evidence/public-source-reference-output.json) produce `[1,5,9]` and `[7,11]` under two settings, with 3/2 fresh scratch lifetimes and unchanged host buffers. Public source acquisition still uses a private checker/preparation/execution bridge in the demo.
+- [Independent reviews](https://github.com/davidydu/spatial-py/blob/8152d4e/docs/reviews/2026-10-18-public-source.md) and parent replay verify exact inputs, staging, installed-prelude checks, retained validation and legacy record correspondence. Three regression groups repair metadata-error order, Unicode content diagnostics and witness-resource exhaustion. No checker/runtime or resource-alias change.
+- [Fresh composition](https://github.com/davidydu/spatial-py/blob/8152d4e/docs/evidence/task-03c-public-source-acceptance-second.md) was pinned after the production freeze; an earlier observer-only repair remains separate regression evidence. **1244 source / 1244 isolated-wheel tests pass**, in 151.331s and 151.417s. Both manifests, copied tests and all 74 packaged modules match. [Evidence](https://github.com/davidydu/spatial-py/blob/8152d4e/docs/evidence/task-03c-public-source.md) records scope and remaining gates.
+- Next: public check/prepare through existing machinery, then genuine cumulative resumption before public simulate. Dependency linking and original acceptance work remain; Labs 1–3 guide further reusable language support. HLS is not needed. Updated [[80 - Initial Compiler Goal]] and [[project-handoff]]; compiler shared state records publication after live verification.
+
 ## 2026-10-18 — Corrected alias scope before implementation
 
 - Independent contract review found that the proposed memory/view-alias next step contradicted the pinned value-only Const[Type] rule. The parent verified the explicit resource/port exclusions in research baseline `db30739` and the existing rejection tests; all 21 common-constant tests pass unchanged.
