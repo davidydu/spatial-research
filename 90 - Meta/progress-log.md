@@ -9,6 +9,12 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-19 — Saved work and workspace closeout
+
+- Audited all three repositories against their GitHub branch heads. Implementation, research and site work were already committed and clean. Compiler [closeout `b04fdc3`](https://github.com/davidydu/spatial-py/blob/b04fdc3/docs/reviews/2026-10-19-workspace-closeout.md) records the exact state, saved evidence and restart checklist; corrected stale pending-work wording without changing compiler behavior.
+- Rechecked all 75 production-manifest files and 268 execution-manifest files; hashes match the accepted checkpoint. Removed 78 ignored compiler package-build files. The 25 focused public-source tests pass in 2.471s, and the demo output matches its tracked JSON exactly. The prior 1244-test source/wheel acceptance remains the full-suite evidence; it was not rerun for this documentation-only change.
+- Preserved historical evidence, review probes, environments, site preview and source assets. Independent handoff audit found no blocking gap. Updated [[project-handoff]]; next remains public check/prepare, then genuine cumulative resumption before public simulate. No HLS instance is needed.
+
 ## 2026-10-18 — Public capture and specialization reuse frozen source
 
 - Checkpoint `spatial-py@8152d4e` (behavior `da6c722`, freeze `06060a0`) exposes SourceUnit/CaptureBundle/core_prelude/capture/Template/specialize for one core-only module. Capture needs no metadata values; specialization rederives source correspondence and enters the existing shared checker. Templates have no checked authority.

@@ -1,7 +1,7 @@
 ---
 type: runbook
 project: spatial-python
-date: 2026-10-18
+date: 2026-10-19
 status: active
 ---
 
@@ -84,6 +84,14 @@ and Rust presentations are historical evidence.
   Interactive illustrations are not executions of the compiler.
 
 ## Current checkpoint and next task
+
+**19 October closeout:** all implementation work to date is committed. The
+[workspace closeout](https://github.com/davidydu/spatial-py/blob/b04fdc3/docs/reviews/2026-10-19-workspace-closeout.md)
+records the repository audit, cleanup and restart checklist. All frozen code/test
+hashes still match the accepted checkpoint; 25 focused tests and the saved demo
+output were rechecked after removing generated package files. Compiler behavior
+is unchanged. Continue from the compiler's `PROJECT_STATE.md`; the next task
+remains public checking and input preparation.
 
 Current execution checkpoint: **`spatial-py@8152d4e`**, verified on 18 October
 with **1244 source tests and 1244 isolated installed-wheel tests**, CPython 3.14.5.
