@@ -87,7 +87,18 @@ and Rust presentations are historical evidence.
 
 ## Current checkpoint and next task
 
-**21 October scaling discussion — latest direction:**
+**21 October generated C++ — latest implementation:**
+[[2026-10-21-generated-cpp-checkpoint]] records David's subsequent request to
+start target work, prioritizing C++ functional correctness before hardware
+simulation. The mapping audit and direct structured backend are implemented at
+production freeze `348d15a`. Lab 1 and a helper/partial-tile program compile and
+run natively against independent expectations. Read the linked compiler evidence
+and `PROJECT_STATE.md` for acceptance results and exact next steps. Prepare a
+scoped vendor project/testbench next; do not reopen the full-language prerequisite.
+The first native ABI rejects aliased external ports; local aliases retain their
+snapshot behavior. This is not yet a checked target plan or vendor evidence.
+
+**21 October scaling discussion — preceding direction:**
 [[2026-10-21-hls-feasibility-checkpoint]] records David's agreement and the source
 review. Keep the frontend, immutable typed records, checker and reference engine.
 Before further broad language expansion, audit hardware mapping and cost for the
@@ -118,7 +129,7 @@ was unchanged. At that closeout, the next task was public checking and input
 preparation. Use the 21 October discussion above and the compiler's
 `PROJECT_STATE.md` for the current order.
 
-Current execution checkpoint: **`spatial-py@8152d4e`**, verified on 18 October
+Previous public-source execution checkpoint: **`spatial-py@8152d4e`**, verified on 18 October
 with **1244 source tests and 1244 isolated installed-wheel tests**, CPython 3.14.5.
 
 **A Python program can now be captured once and specialized for different settings.**

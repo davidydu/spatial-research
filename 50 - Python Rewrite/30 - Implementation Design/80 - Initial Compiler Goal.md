@@ -46,7 +46,13 @@ No FPGA resource, timing, RTL or hardware-support claim follows from local simul
 
 The implementation lives in the separate `spatial-py` repository. Its active plan is `docs/plans/2026-10-04-initial-reference.md`; its support ledger and task evidence distinguish completed foundations from the full goal. Historical Scala/Rust repositories remain evidence and are not modified to supply a Python result.
 
-Current execution checkpoint: **`spatial-py@8152d4e`**, verified on 18 October
+**Latest separate target checkpoint — 21 October:**
+[[2026-10-21-generated-cpp-checkpoint]] records the first direct native C++ backend
+at production freeze `348d15a`. Lab 1 tiled memory and helper/partial-tile programs
+match independent expected outputs. This starts the authorized target track;
+it does not complete the reference obligations above or establish vendor HLS/RTL.
+
+Previous public-source execution checkpoint: **`spatial-py@8152d4e`**, verified on 18 October
 with **1244 source tests and 1244 isolated installed-wheel tests**, CPython 3.14.5.
 
 **A Python program can now be captured once and specialized for different settings.**

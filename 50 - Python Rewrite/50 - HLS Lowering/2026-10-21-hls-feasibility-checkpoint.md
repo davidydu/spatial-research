@@ -8,6 +8,10 @@ status: direction-agreed
 
 # HLS feasibility checkpoint — 21 October 2026
 
+**Subsequent implementation:** David then asked us to start the backend.
+[[2026-10-21-generated-cpp-checkpoint]] records generated native C++ and its checks.
+This discussion note preserves the evidence available before that implementation.
+
 ## Agreed direction
 
 David agreed with the scaling review: **keep the Python compiler foundation, but bring a small hardware feasibility check forward.** HLS remains the ultimate target. We should not finish every language feature before learning whether the supported programs map to useful hardware.

@@ -9,6 +9,13 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-21 — First generated C++ backend
+
+- David asked to start target work now, prioritizing C++ functional correctness before hardware simulation. [[2026-10-21-generated-cpp-checkpoint]] records the bounded mapping audit, direct operation-based emitter, native runner and exact limitations. Production `348d15a` is pushed; the Python semantic core remains unchanged.
+- The Lab 1 ordinary/overflow vectors and a helper/partial-tile program now run as generated native C++, separately matching independent expected results in C++ and Python reference execution. Saved kernel source, native reporting testbenches, output records and revision/origin metadata are in the compiler repository.
+- Independent specification/quality review and parent review fixed an inclusive numeric-guard boundary, added artifact provenance binding and repaired isolated-wheel fixture instructions. The fresh post-freeze composition passed its first three-case run without compiler changes: reversed nested aliases, overlapping copy, descending loops, captured helpers, wrapping arithmetic and a late bounds fault with ten prior cells preserved. Full integration results and publication are recorded with compiler acceptance.
+- Next target work is a scoped vendor project and self-checking testbench, pinned tool/device/clock/interfaces, then vendor C simulation, synthesis and C/RTL checks. Native execution establishes no hardware throughput or resource result. The HLS instance remains stopped; full language support and the original reference acceptance gates remain open.
+
 ## 2026-10-21 — HLS scaling discussion and revised sequence
 
 - David agreed to preserve the Python compiler foundation and bring a bounded hardware feasibility check forward. [[2026-10-21-hls-feasibility-checkpoint]] records the reasoning, existing static SRAM bounds, unresolved hardware costs and validation limits. It supersedes the 17 October full-language-before-HLS sequence without changing language semantics, acceptance obligations or professor approval status.

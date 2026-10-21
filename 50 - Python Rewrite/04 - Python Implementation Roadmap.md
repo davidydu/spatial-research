@@ -22,9 +22,13 @@ The implementation contract will combine the reviewed programming-model recommen
 
 David agreed to keep the Python compiler foundation and bring a bounded HLS
 feasibility check forward. [[2026-10-21-hls-feasibility-checkpoint]] owns the
-discussion, evidence limits and next research task. Review the hardware mapping
-and cost of the current tiled-memory program plus a harder composition, then
-define a small general lowering experiment. This supersedes the 17 October
+discussion and evidence limits. He then authorized starting the backend, with
+functional C++ correctness before hardware simulation. The mapping audit and
+first direct emitter are recorded in [[2026-10-21-generated-cpp-checkpoint]]:
+the existing Lab 1 program and a harder helper/partial-tile program now execute
+as generated native C++. The next target step is a scoped vendor project and
+self-checking testbench, followed by vendor C simulation, synthesis and C/RTL
+checks. This supersedes the 17 October
 instruction to finish all planned language/reference support before any HLS work.
 
 The three EE109 labs still guide progression toward general student programs.
@@ -44,8 +48,8 @@ The inventories are [[PY-R012 - Lab1 Syntax and Host Mapping]],
 three labs; David corrected the earlier “Lab 1 through Lab 4” wording to Labs 1–3.
 Tutorial holes and designed completions remain labeled in those studies.
 
-After the hardware-mapping review, continue small complete language increments
-alongside the scoped feasibility experiment, following the audit's dependencies:
+After the initial mapping audit and native C++ experiment, continue small complete
+language increments alongside target validation, following the audit's dependencies:
 
 1. Finish the current composed-memory path: public check/prepare, then genuine
    cumulative resumption before public simulate, and the remaining initial-contract
