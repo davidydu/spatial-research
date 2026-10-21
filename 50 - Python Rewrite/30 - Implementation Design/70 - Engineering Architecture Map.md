@@ -5,8 +5,8 @@ project: spatial-python
 date: 2026-10-03
 status: proposed
 adoption_status: proposed
-implementation_status: foundations-in-progress
-updated: 2026-10-07
+implementation_status: partial
+updated: 2026-10-21
 ---
 
 # Python Spatial engineering architecture map
@@ -43,7 +43,11 @@ The directory labels on the canvas are proposed module responsibilities from [[4
 
 ## Current implementation checkpoint
 
-The map describes the proposed architecture, not completed components. As of 7 October, the initial implementation has committed records, numeric rules and several checking stages, with 236 passing component tests at `f8a993b`. The full verifier, memory rules, source-to-simulation workflow and unfamiliar-composition acceptance are still ahead. [[80 - Initial Compiler Goal]] records the evidence and remaining work. The [[2026-10-01-python-professor-presentation-outline|professor presentation]] embeds this map with section navigation and zoom.
+The map describes the full proposed architecture; only part is implemented. As of 21 October, actual source runs through shared checking, preparation and reference execution for an admitted memory subset. The tiled-scale part of Lab 1 completes ordinary and Int32-overflow cases. Public capture and specialization reuse one frozen source template across settings; checking, preparation and execution still use the private bridge. One core module with empty dependencies is supported.
+
+The accepted 18 October checkpoint `8152d4e` passed **1,244 source tests and 1,244 isolated installed-wheel tests**. On 21 October, both demonstrations and the unchanged fresh composition were replayed, and all production/execution manifest hashes matched. The complete suites were not rerun that day. [[2026-10-21-python-progress-presentation|The dated presentation notes]] hold the bounded replay details; [[80 - Initial Compiler Goal]] owns the remaining acceptance work. The current seven-slide presentation embeds this map with section navigation and zoom.
+
+The next implementation step is public checking and input preparation, followed by validated cumulative resumption before public simulation. The map's artifacts, verified editing, resumable execution and target machinery remain broader design obligations. Its colors and directory labels are not a completion chart.
 
 ## Start with the first complete path
 
@@ -51,7 +55,7 @@ The first implementation target is S0→S1: scalar ports and tiled SRAM/DRAM pro
 
 Then add ordered FIFO and scalar reductions/folds; Lab 2 memory reductions, FSMs and LUTs; exact fixed-point GEMM; and Lab 3 line history and windows. The diagram groups features by the lab patterns they enable. The roadmap owns stage dependencies and acceptance gates. Lab 3 must keep the current guide and older public fixture profiles distinct, including signed gradients, row publication and warm-up behavior.
 
-A scoped S6→S7 hardware track can start for accepted S1 programs while later language families grow. The lab subset does not need all floating-point/math profiles or communicating tasks before that work begins. The complete rewrite still retains those later capabilities.
+The current sequence completes planned language/reference support before scoped HLS work. Keep the HLS instance stopped until a target program, generated code and a testbench are ready for vendor simulation/synthesis. [[04 - Python Implementation Roadmap]] owns this sequence and supersedes the earlier option to start an S1-only hardware track alongside language expansion. Later full-language capabilities retain their own roadmap gates.
 
 ## Documents behind the drawing
 

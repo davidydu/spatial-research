@@ -9,6 +9,13 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-21 — Professor meeting: working Python reference progress
+
+- Rebuilt the seven-slide Python web presentation around the working source-to-reference path, shared architecture, Lab 1 tiled memory, reusable features, independent composition evidence and Labs 1–3 implementation sequence. The existing Excalidraw explorer remains available on slide 2. Slide 3 displays actual recorded outputs, with ordinary/Int32-overflow selection.
+- [[2026-10-21-python-progress-presentation]] contains the ten-minute verbal script, evidence links and dated replay record. Updated [[05 - Python Professor Brief]], [[00 - Python Rewrite Index]] and [[70 - Engineering Architecture Map]]; marked the October 7 outline historical. The HLS sequence consistently follows planned language/reference support.
+- Bounded replay at `spatial-py@0c79140`, CPython 3.14.5: both Lab 1 cases, both public-source specializations and the unchanged accepted composition (three scenarios) pass. All 75 production and 268 execution manifest entries match. Full 1,244-test source/wheel results remain dated October 18. Only Lab 1 semantic-revision metadata differs from its historical JSON; that record is preserved.
+- Compiler implementation is unchanged. Next remains public check/prepare, followed by genuine resumption before public simulation. Parent review confirmed slide claims and saved outputs; seven desktop slides fit without overflow, all narrow-screen slides have no horizontal overflow, and notes, source links, result selection, keyboard navigation and map controls work. The complete site build passes (571 Markdown inputs, 1,235 emitted files). Research is published before the site deployment; the site checkpoint records final publication verification.
+
 ## 2026-10-19 — Saved work and workspace closeout
 
 - Audited all three repositories against their GitHub branch heads. Implementation, research and site work were already committed and clean. Compiler [closeout `b04fdc3`](https://github.com/davidydu/spatial-py/blob/b04fdc3/docs/reviews/2026-10-19-workspace-closeout.md) records the exact state, saved evidence and restart checklist; corrected stale pending-work wording without changing compiler behavior.

@@ -3,11 +3,14 @@ type: moc
 title: "Python Spatial research"
 project: spatial-python
 date_started: 2026-09-30
+updated: 2026-10-21
 ---
 
 Research before implementation: establish what Spatial programs mean in Python, decide how the compiler represents and checks them, then study HLS lowering.
 
-**Current phase:** the full-language architecture and [[07 - Python Implementation Readiness Audit|implementation-readiness review]] are published research checkpoints. The new [[PY-E002 - Spatial to Python Syntax Atlas|course syntax atlas]] makes the proposal concrete against the professor's examples; [[60 - Course Syntax and Compiler Trace]] closes source-signature details and traces the examples through the design. Pure Python is the agreed direction. The proposed architecture uses captured kernels, Python-owned semantics and simulation, immutable compiler-owned Python program/plan records, and a checked HLS backend. xDSL is now an optional derived adapter under the measured comparison in [[PY-R017 - Compiler Representation Comparison]]. [[D-28]] remains proposed for professor review. No Python compiler implementation is claimed.
+**Current phase — 21 October:** a pure Python compiler now checks and executes an admitted memory-program subset. The Lab 1 tiled-scale example and public capture-once/specialize-twice example were replayed today. The accepted 18 October checkpoint passed **1,244 tests from source and 1,244 from an isolated installed wheel**; today's checks were a bounded replay, not a repeat of those complete suites. [[80 - Initial Compiler Goal]] owns implementation status; [[2026-10-21-python-progress-presentation|the dated presentation notes]] record today's outputs, composition replay and unchanged file manifests. Public checking/preparation and real resumption remain next, followed by reusable Labs 1–3 language families. HLS follows planned language/reference support and separate vendor validation.
+
+The full-language architecture and [[07 - Python Implementation Readiness Audit|implementation-readiness review]] remain research checkpoints. [[PY-E002 - Spatial to Python Syntax Atlas|The course syntax atlas]] and [[60 - Course Syntax and Compiler Trace]] connect that proposal to the professor's examples. The full design uses captured kernels, Python-owned semantics and simulation, immutable program/plan records, and a checked HLS backend. xDSL is an optional derived adapter under [[PY-R017 - Compiler Representation Comparison]]. [[D-28]] remains proposed for professor review; current reference execution does not establish the complete design or hardware support.
 
 ## Read first
 
@@ -15,7 +18,7 @@ Research before implementation: establish what Spatial programs mean in Python, 
 
 **Latest refinement:** [[11 - Design Refinement Iterations]] records the Codex/Fable repair, challenge and verification rounds. [[PY-R015 - Numeric Status Repair and Independent Oracles]] repairs the confirmed underflow rule; [[PY-R016 - Source and Host Workflow Refinement]] completes the source/host proposal; [[PY-R017 - Compiler Representation Comparison]] supports the new immutable-record recommendation; [[PY-R018 - Protocol Policy Refinement]] makes the remaining policy boundaries explicit. Earlier [[09 - Fable Design Review|findings]] and [[10 - Fable Reconciled Feedback|external feedback]] remain dated evidence.
 
-<a href="presentation/python/index.html" data-router-ignore target="_blank" rel="noopener noreferrer">Open Spatial in Python — seven-slide presentation</a> · [[2026-10-01-python-professor-presentation-outline|Ten-minute outline and full speaker notes]]. The presentation explains the proposed program and compiler path; it is not an implementation demonstration.
+<a href="https://davidydu.github.io/spatial-research-site/presentation/python/" data-router-ignore target="_blank" rel="noopener noreferrer">Open Spatial in Python — seven-slide presentation</a> · [[2026-10-21-python-progress-presentation|Ten-minute outline, speaker notes and dated evidence]]. The talk covers the working reference path, reusable features, remaining public workflow and language expansion. Interactive illustrations are explanatory; linked output records come from actual compiler runs.
 
 1. [[D-27|Direction and authority]] — what the professor and David have settled.
 2. [[05 - Python Professor Brief|Professor brief]] — the proposal, progress, main tradeoff, and approval boundary.

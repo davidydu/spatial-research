@@ -1,7 +1,7 @@
 ---
 type: runbook
 project: spatial-python
-date: 2026-10-19
+date: 2026-10-21
 status: active
 ---
 
@@ -21,7 +21,7 @@ directory is required.
 3. For research, start at [[00 - Python Rewrite Index]] and the relevant study;
    keep decisions in the existing D-number register.
 4. For presentation work, read [[05 - Python Professor Brief]],
-   [[2026-10-01-python-professor-presentation-outline]] and
+   [[2026-10-21-python-progress-presentation]] and
    [[70 - Engineering Architecture Map]]. Verify progress against current
    compiler evidence before updating slides.
 
@@ -84,6 +84,18 @@ and Rust presentations are historical evidence.
   Interactive illustrations are not executions of the compiler.
 
 ## Current checkpoint and next task
+
+**21 October meeting refresh:** [[2026-10-21-python-progress-presentation]] owns
+the seven-slide story, full verbal scripts and bounded verification record. The
+site deck leads with working reference execution, includes the existing full
+Excalidraw map, and displays recorded ordinary/overflow Lab 1 results. The
+professor brief, Python index and architecture page now reflect the current
+implementation. Both demonstrations and the accepted independent composition
+passed today at compiler HEAD `0c79140`; all 75 production and 268 execution
+manifest entries match. The complete 1,244-per-route suites remain dated
+18 October. No compiler changes were made; public checking/preparation is still
+the next implementation task. The Lab 1 historical record differs only in its
+semantic-revision metadata; fresh records preserve today's value.
 
 **19 October closeout:** all implementation work to date is committed. The
 [workspace closeout](https://github.com/davidydu/spatial-py/blob/b04fdc3/docs/reviews/2026-10-19-workspace-closeout.md)

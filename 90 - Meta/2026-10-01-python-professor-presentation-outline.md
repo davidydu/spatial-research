@@ -4,11 +4,13 @@ title: "Python Spatial — professor presentation and script"
 project: spatial-python
 date: 2026-10-01
 updated: 2026-10-07
-status: meeting-ready
+status: historical
 scope: "Six slides on the Python system, feasibility, implementation plan and next milestones"
 ---
 
 # Python Spatial: system, feasibility and implementation plan
+
+> Historical outline from 7 October. Use [[2026-10-21-python-progress-presentation|the 21 October progress presentation and speaker notes]] for the current meeting. The presentation URL below now serves that updated deck.
 
 [Open the presentation](https://davidydu.github.io/spatial-research-site/presentation/python/). Six slides, about ten minutes before discussion. Press **N** for the current script, **E** for its sources, and the arrow keys to move. Slide 3 embeds the Excalidraw overview; **Explore engineering map** opens section navigation, zoom, panning and the editable source.
 
