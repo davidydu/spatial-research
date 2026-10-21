@@ -9,6 +9,15 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-21 — Scalar state and shifts pass local target checks
+
+- [[2026-10-21-scalar-target-checkpoint]] records production `1e55eb8f5a20c11c1cd4a17010b6fa6cd4332e99`, pushed on `work/initial-reference`. Only four backend modules changed: scalar Int32 Out/InOut cells through generated C++ and a depth-one vendor interface, plus canonical signed Index shift counts. The language checker and reference semantics are unchanged.
+- Eleven development projects and 28 cases separately match independent expected data, initialization and status in reference execution, native C++ and locally compiled exact wrappers/testbenches with `-O2`, `-DNDEBUG` and UBSan. The original rejected shift program and original oracles are retained as regression evidence.
+- A new independent directional-follower composition, authored after the production freeze, passed its first four-case execution unchanged. This is separate from the repaired shift regression and brings the prepared bundle to 12 projects and 32 cases. The complete source and isolated-wheel suites each pass 1,329 tests; all 110 production files, 287 execution files and 80 installed modules match their manifests. Exact results and 133 saved artifact files belong to the compiler evidence.
+- No new vendor C simulation, synthesis or RTL execution occurred for this extension. The previous four-kernel/nine-case result remains the separate vendor evidence. Saved-report inspection identifies guard/copy preflight and snapshot loops for measurement; local source/storage counts do not establish hardware cost or a speedup.
+- The saved bundle is ready. Next: ask David before reusing the stopped host, run the vendor stages, and use scaling evidence to choose one general scheduling or storage improvement. Preserve initialization, aliases, fault order and committed writes. The initial reference goal, Reg, FIFO, Reduce/Fold, public check/prepare, real resumption, checked target planning and board integration remain incomplete.
+- Updated the Python index, implementation roadmap, initial-goal page and shared handoff to point to this local checkpoint. Earlier dated implementation and hardware evidence remain intact; research/site publication is a separate closeout step.
+
 ## 2026-10-21 — Python-generated hardware passes RTL simulation
 
 - After validation and confirmation that the artifacts were pushed, David reported stopping the HLS instance. Ask him before restarting or using it again; prepare the next vendor bundle locally first. The completed pipeline evidence and saved results remain unchanged.

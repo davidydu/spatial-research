@@ -27,10 +27,22 @@ functional C++ correctness before hardware simulation. The mapping audit and
 first direct emitter are recorded in [[2026-10-21-generated-cpp-checkpoint]]:
 the existing Lab 1 program and a harder helper/partial-tile program now execute
 as generated native C++. The subsequent [[2026-10-21-vitis-rtl-checkpoint]] records four kernels and
-nine cases passing vendor C simulation, synthesis and RTL co-simulation. Next:
-close the exposed shift-count target gap, then use measured costs to choose
-banking/pipelining work while keeping memory and fault checks. This supersedes the 17 October
-instruction to finish all planned language/reference support before any HLS work.
+nine cases passing vendor C simulation, synthesis and RTL co-simulation. This
+supersedes the 17 October instruction to finish all planned language/reference
+support before any HLS work.
+
+The latest [[2026-10-21-scalar-target-checkpoint]] adds scalar Int32 Out/InOut
+cells and signed Index shift counts through generated C++ and a depth-one vendor
+interface. Eleven development projects (28 cases) and a separate fresh
+directional-follower project (four cases) pass locally against independent
+expectations. The original rejected shift program is now a regression, not fresh
+acceptance. Only four backend modules changed; the language semantics are unchanged.
+
+The saved 12-project/32-case bundle is ready; both complete source and installed-package
+suites pass 1,329 tests. Next, ask David before reusing the stopped HLS host. Run vendor C simulation, synthesis and RTL co-simulation,
+then use the size/tile measurements to select one general storage or scheduling
+improvement while preserving memory and fault behavior. The scalar/shift extension
+has no new vendor result; the earlier four-kernel evidence remains separate.
 
 The three EE109 labs still guide progression toward general student programs.
 They are coverage anchors; support must extend to other programs that compose
@@ -39,7 +51,7 @@ every proposed detail or change the frozen initial language contract.
 
 | Course anchor | Language families to exercise | Current reference status and direction |
 |---|---|---|
-| Lab 1: scalar I/O, tiled DRAM/SRAM, FIFO, Reduce/Fold | Typed ports; ordered loads/stores; loops; reusable helpers; mutable registers; queues; scalar accumulation | The tiled DRAM/SRAM example executes, with independent helper/branch/alias compositions. Full Lab 1 coverage still requires Reg, FIFO and reduction/fold semantics. |
+| Lab 1: scalar I/O, tiled DRAM/SRAM, FIFO, Reduce/Fold | Typed ports; ordered loads/stores; loops; reusable helpers; mutable registers; queues; scalar accumulation | Tiled DRAM/SRAM and scalar-cell accumulation execute, including local C++ checks with helpers, branches and faults. Sequential scalar accumulation does not complete Reg, FIFO or Reduce/Fold semantics. |
 | Lab 2: MemReduce/MemFold, FSM, LUT, blocked outer-product GEMM | Memory contributions and accumulation; state transitions; read-only tables; multidimensional tiles and tails; fractional fixed-point arithmetic | Existing views, loops and helpers provide foundations. The named controller/storage families and the course's fixed-point profile remain later language work. |
 | Lab 3: Sobel convolution | LineBuffer publication, RegFile shifts, LUT coefficients, nested reductions, borders/reset/initialization | Build on the earlier memory/control/numeric families, then execute complete window and convolution programs with independent full-output checks. |
 
@@ -73,10 +85,10 @@ reduction-owned contribution lifetime already designed in R013; borrowed helper
 returns do not establish that support.
 
 Full language/reference coverage remains required for the rewrite, but is no longer
-a prerequisite for a bounded S6/S7 feasibility experiment. Scope that experiment
-after the mapping audit and retain its applicable gates. Keep HLS infrastructure
-off until the scoped target plan, generated source and testbench are ready for
-vendor validation; notify David then. Language tests confer no hardware evidence.
+a prerequisite for the bounded S6/S7 feasibility work. The current direct backend
+does not complete checked target planning or REP-S6. Keep the stopped HLS host off
+while preparing generated source and testbenches locally; ask David before reuse.
+Local execution confers no new hardware evidence or board-integration support.
 
 ## Concrete design inputs, 2026-10-01
 
@@ -123,7 +135,7 @@ The architecture permits a scoped S6/S7 route for S1 independently of S5. The 21
 
 S0 precedes a trusted vertical path. S1 establishes the common mechanism used by S2–S5. Numeric work and protocol work can then proceed independently within their assigned interfaces. S2's pure arithmetic tests can precede S4, while its consuming-contribution tests depend on S4. S5 depends on local state primitives and the adopted advanced protocols.
 
-Current execution first reviews hardware mapping, then defines a bounded lowering experiment before all language families are complete. The audit determines its prerequisites and how it fits with the remaining public workflow and language work. S8 still advances family by family only after the corresponding semantic and implementation-plan contracts exist. S9 may optimize completed slices early when measurements justify it, but broader search must never hide a missing semantic path.
+Current execution takes the locally validated scalar/shift extension through vendor stages, then uses scaling evidence to select one general storage or scheduling improvement. This continues the bounded lowering experiment alongside the remaining public workflow and language work. S8 still advances family by family only after the corresponding semantic and implementation-plan contracts exist. S9 may optimize completed slices early when measurements justify it, but broader search must never hide a missing semantic path.
 
 Keep ownership by module/feature and give reviewers a different scope from their authored code. Agree on versioned node/diagnostic/profile interfaces before parallel writers edit dependent modules. Integration changes are reviewed against the shared contract, not accepted because two subagents happen to agree.
 

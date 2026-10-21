@@ -87,18 +87,43 @@ and Rust presentations are historical evidence.
 
 ## Current checkpoint and next task
 
-**21 October vendor HLS — latest implementation:**
+**21 October scalar state and shifts — latest local implementation:**
+[[2026-10-21-scalar-target-checkpoint]] records production
+`1e55eb8f5a20c11c1cd4a17010b6fa6cd4332e99`, pushed on `work/initial-reference`.
+Only four backend modules changed: scalar Int32 Out/InOut cells now reach
+generated C++ and the depth-one vendor interface, and Int shifts accept canonical
+signed Index counts. The original rejected shift source and expectations now
+pass as regression evidence; they are not a fresh acceptance program.
+
+Eleven development projects and 28 cases separately match independent expected
+results in reference execution, native C++ and the exact saved wrapper/testbench
+compiled locally with `-O2`, `-DNDEBUG` and UBSan. A separate directional-follower
+composition, authored after freeze, passed its first four-case execution unchanged.
+The prepared total is **12 projects and 32 cases**. Both complete source and
+isolated-wheel suites pass **1,329 tests**. All 110 production files, 287 execution
+files and 80 installed modules match their manifests. Compiler `PROJECT_STATE.md`
+and the linked evidence own exact acceptance records and 133 saved artifact files.
+
+There is **no new vendor execution, synthesis or RTL result** for this extension.
+The saved bundle is ready. Ask David before restarting or using the stopped
+HLS host. After authorization, run vendor C simulation, synthesis and RTL
+co-simulation; use the size/tile measurements to select one general storage or
+scheduling improvement. Keep fault order, initialization, aliases and earlier
+writes intact. Reg, Reduce/Fold, public check/prepare, real resumption, the full
+initial goal, checked target planning and board/AXI integration remain open.
+
+**21 October vendor HLS — preceding hardware checkpoint:**
 [[2026-10-21-vitis-rtl-checkpoint]] records four Python-generated kernels and nine
 cases passing native C++, Vitis C simulation, synthesis and Verilog RTL
 co-simulation. Production freeze `da4d35f` adds a thin data/mask/status interface
 and self-checking testbench; the semantic core and C++ emitter are unchanged.
 The fresh pair-ordering program passed without repair. The first independent
-candidate exposed unsupported normalized Int/Index shift counts and remains a
-negative regression. Read compiler `PROJECT_STATE.md` and linked evidence for
+candidate exposed unsupported normalized Int/Index shift counts and was retained
+as negative evidence for that freeze. Read compiler `PROJECT_STATE.md` and linked evidence for
 full-suite counts, exact settings, reports, acceptance and publication.
 
-Next target increment: general shift-count lowering, then use measured costs to
-choose banking/pipelining work while retaining end-to-end fault/memory checks.
+At that checkpoint, the next target increment was general shift-count lowering,
+followed by measured banking/pipelining work with end-to-end fault/memory checks.
 The IP profile is sequential; board/AXI integration, routed timing and full REP-S6
 remain open. The original reference/public-workflow obligations are unchanged.
 David subsequently reported stopping the HLS instance. **Ask him before restarting
@@ -293,7 +318,8 @@ records the evidence; no memory-alias language extension is being implemented.
 
 True resumable budgets, artifact agreement, verified
 editing and final whole-goal acceptance remain required. Current private
-resource-limit results have no continuation. HLS tools are not needed yet.
+resource-limit results have no continuation. Those reference obligations do not
+require HLS tools.
 
 David authorized continued local implementation. Ask before HLS reuse.
 

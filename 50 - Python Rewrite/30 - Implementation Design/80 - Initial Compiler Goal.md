@@ -38,7 +38,7 @@ Handlers for language operations, control and storage are expected. Dispatch bas
 
 ## Infrastructure
 
-The reference milestone runs locally on the pinned CPython baseline and standard-library semantic core. The [[2026-10-21-hls-feasibility-checkpoint|21 October discussion]] keeps this goal intact while bringing hardware-mapping research and a bounded HLS experiment forward. It supersedes the 17 October full-language-before-HLS sequence; [[04 - Python Implementation Roadmap]] owns the revised order and Labs 1–3 progression. David subsequently supplied the running HLS host and authorized vendor execution. [[2026-10-21-vitis-rtl-checkpoint]] records the bounded result, pinned tool/part/clock and remaining limits. Connection and lifecycle details remain private.
+The reference milestone runs locally on the pinned CPython baseline and standard-library semantic core. The [[2026-10-21-hls-feasibility-checkpoint|21 October discussion]] keeps this goal intact while bringing hardware-mapping research and a bounded HLS experiment forward. It supersedes the 17 October full-language-before-HLS sequence; [[04 - Python Implementation Roadmap]] owns the revised order and Labs 1–3 progression. David subsequently supplied the running HLS host and authorized vendor execution. [[2026-10-21-vitis-rtl-checkpoint]] records the bounded result, pinned tool/part/clock and remaining limits. He then stopped the host; ask before restarting or reusing it. Prepare the next saved bundle locally first. Connection and lifecycle details remain private.
 
 No FPGA resource, timing, RTL or hardware-support claim follows from local simulation.
 
@@ -46,7 +46,28 @@ No FPGA resource, timing, RTL or hardware-support claim follows from local simul
 
 The implementation lives in the separate `spatial-py` repository. Its active plan is `docs/plans/2026-10-04-initial-reference.md`; its support ledger and task evidence distinguish completed foundations from the full goal. Historical Scala/Rust repositories remain evidence and are not modified to supply a Python result.
 
-**Latest separate target checkpoint — 21 October:**
+**Latest local target checkpoint — 21 October:**
+[[2026-10-21-scalar-target-checkpoint]] records production
+[`1e55eb8`](https://github.com/davidydu/spatial-py/commit/1e55eb8f5a20c11c1cd4a17010b6fa6cd4332e99),
+pushed on `work/initial-reference`. Four backend modules add scalar Int32 Out/InOut
+cells through generated C++ and a depth-one vendor interface, plus canonical
+signed Index shift counts. The checker and reference semantics are unchanged.
+Eleven development projects with 28 cases independently agree in reference,
+native C++ and exact wrappers compiled locally with `-O2`, `-DNDEBUG` and UBSan.
+The original rejected shift source and expectations are retained as regression.
+A separate directional-follower composition, authored after freeze, passed its
+first four-case execution unchanged, bringing the prepared bundle to 12 projects
+and 32 cases. Both complete source and isolated-package suites pass **1,329 tests**.
+The compiler evidence owns the detailed acceptance and suite results.
+
+No new vendor C simulation, synthesis or RTL run is claimed for this extension.
+The saved bundle is ready. Ask David before host reuse, then measure vendor
+behavior and scaling before choosing one general scheduling or storage change.
+Sequential scalar accumulation does not complete Reg or Reduce/Fold. Public
+check/prepare, real resumption, the original acceptance gates, checked target
+planning and board integration remain unfinished.
+
+**Preceding vendor checkpoint — 21 October:**
 [[2026-10-21-vitis-rtl-checkpoint]] records four programs and nine cases passing
 native C++, vendor C simulation, synthesis and RTL co-simulation at production
 freeze `da4d35f`. The new interface/testbench preserves the existing semantic core
