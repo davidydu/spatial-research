@@ -101,8 +101,9 @@ Next target increment: general shift-count lowering, then use measured costs to
 choose banking/pipelining work while retaining end-to-end fault/memory checks.
 The IP profile is sequential; board/AXI integration, routed timing and full REP-S6
 remain open. The original reference/public-workflow obligations are unchanged.
-The HLS host remains running after validation; private connection/lifecycle
-information stays in the ignored infrastructure note. Refresh state before use.
+David subsequently reported stopping the HLS instance. **Ask him before restarting
+or using it again.** Prepare the next vendor test bundle locally first. Private
+connection/lifecycle information stays in the ignored infrastructure note.
 
 
 **21 October generated C++ — preceding implementation:**
@@ -294,19 +295,19 @@ True resumable budgets, artifact agreement, verified
 editing and final whole-goal acceptance remain required. Current private
 resource-limit results have no continuation. HLS tools are not needed yet.
 
-David authorized continued implementation; no new approval is pending.
+David authorized continued local implementation. Ask before HLS reuse.
 
-David asked to be notified when the HLS instance is needed. Keep the instance
-stopped during the mapping audit and experiment preparation. Notify him once the scoped target plan, generated HLS source
-and testbench are ready for vendor simulation/synthesis; record the installed
-toolchain, target device and clock then. The public source workflow increment does
-not need HLS.
+David stopped the instance after the 21 October vendor validation and asked to be
+consulted when it is needed again. Keep it stopped while preparing the next
+increment locally. Ask once the generated source and self-checking testbench are
+ready for vendor simulation/synthesis; confirm the installed toolchain, target
+device and clock on the next authorized run. Public workflow work does not need HLS.
 
 The compiler's tracked
 [PROJECT_STATE.md](https://github.com/davidydu/spatial-py/blob/work/initial-reference/PROJECT_STATE.md)
 owns the exact active task, reproduction commands and latest deployment record.
 Follow its [execution plan](https://github.com/davidydu/spatial-py/blob/work/initial-reference/docs/plans/2026-10-13-reference-execution.md).
-No new approval is pending. Check the worktree before editing because another
+Local continuation is authorized; ask before HLS reuse. Check the worktree before editing because another
 harness may have advanced beyond this publication. [[80 - Initial Compiler Goal]]
 is the published big-picture status; older diagrams and slides can lag actual
 compiler evidence.
