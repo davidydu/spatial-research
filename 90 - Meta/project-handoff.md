@@ -87,7 +87,25 @@ and Rust presentations are historical evidence.
 
 ## Current checkpoint and next task
 
-**21 October generated C++ — latest implementation:**
+**21 October vendor HLS — latest implementation:**
+[[2026-10-21-vitis-rtl-checkpoint]] records four Python-generated kernels and nine
+cases passing native C++, Vitis C simulation, synthesis and Verilog RTL
+co-simulation. Production freeze `da4d35f` adds a thin data/mask/status interface
+and self-checking testbench; the semantic core and C++ emitter are unchanged.
+The fresh pair-ordering program passed without repair. The first independent
+candidate exposed unsupported normalized Int/Index shift counts and remains a
+negative regression. Read compiler `PROJECT_STATE.md` and linked evidence for
+full-suite counts, exact settings, reports, acceptance and publication.
+
+Next target increment: general shift-count lowering, then use measured costs to
+choose banking/pipelining work while retaining end-to-end fault/memory checks.
+The IP profile is sequential; board/AXI integration, routed timing and full REP-S6
+remain open. The original reference/public-workflow obligations are unchanged.
+The HLS host remains running after validation; private connection/lifecycle
+information stays in the ignored infrastructure note. Refresh state before use.
+
+
+**21 October generated C++ — preceding implementation:**
 [[2026-10-21-generated-cpp-checkpoint]] records David's subsequent request to
 start target work, prioritizing C++ functional correctness before hardware
 simulation. The mapping audit and direct structured backend are implemented at

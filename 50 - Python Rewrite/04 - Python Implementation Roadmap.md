@@ -26,9 +26,10 @@ discussion and evidence limits. He then authorized starting the backend, with
 functional C++ correctness before hardware simulation. The mapping audit and
 first direct emitter are recorded in [[2026-10-21-generated-cpp-checkpoint]]:
 the existing Lab 1 program and a harder helper/partial-tile program now execute
-as generated native C++. The next target step is a scoped vendor project and
-self-checking testbench, followed by vendor C simulation, synthesis and C/RTL
-checks. This supersedes the 17 October
+as generated native C++. The subsequent [[2026-10-21-vitis-rtl-checkpoint]] records four kernels and
+nine cases passing vendor C simulation, synthesis and RTL co-simulation. Next:
+close the exposed shift-count target gap, then use measured costs to choose
+banking/pipelining work while keeping memory and fault checks. This supersedes the 17 October
 instruction to finish all planned language/reference support before any HLS work.
 
 The three EE109 labs still guide progression toward general student programs.

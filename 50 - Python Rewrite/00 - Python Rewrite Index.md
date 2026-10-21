@@ -10,7 +10,7 @@ Research before implementation: establish what Spatial programs mean in Python, 
 
 **Current phase — 21 October:** a pure Python compiler now checks and executes an admitted memory-program subset. The Lab 1 tiled-scale example and public capture-once/specialize-twice example were replayed today. The accepted 18 October checkpoint passed **1,244 tests from source and 1,244 from an isolated installed wheel**; today's checks were a bounded replay, not a repeat of those complete suites. [[80 - Initial Compiler Goal]] owns implementation status; [[2026-10-21-python-progress-presentation|the dated presentation notes]] record today's outputs, composition replay and unchanged file manifests.
 
-**Latest implementation:** [[2026-10-21-generated-cpp-checkpoint]] records the subsequent backend work. The Python compiler now generates direct C++ for a bounded memory-program family; the Lab 1 and helper/partial-tile demos match independent expected results in native execution. This follows [[2026-10-21-hls-feasibility-checkpoint|the scaling discussion]] and David's request to prioritize C++ correctness before hardware simulation. Vendor HLS/RTL validation remains next target evidence. Public checking/preparation, real resumption and reusable Labs 1–3 language support remain pending.
+**Latest implementation:** [[2026-10-21-vitis-rtl-checkpoint]] records four generated kernels and nine cases passing native C++, Vitis C simulation, synthesis and Verilog RTL co-simulation. A fresh program passed after the compiler freeze; an earlier rejected shift composition remains negative evidence. The Python semantic core and C++ emitter needed no change. This is a bounded sequential IP profile, with measured reports and explicit target gaps. Public checking/preparation, real resumption and wider Labs 1–3 support remain pending.
 
 The full-language architecture and [[07 - Python Implementation Readiness Audit|implementation-readiness review]] remain research checkpoints. [[PY-E002 - Spatial to Python Syntax Atlas|The course syntax atlas]] and [[60 - Course Syntax and Compiler Trace]] connect that proposal to the professor's examples. The full design uses captured kernels, Python-owned semantics and simulation, immutable program/plan records, and a checked HLS backend. xDSL is an optional derived adapter under [[PY-R017 - Compiler Representation Comparison]]. [[D-28]] remains proposed for professor review; current reference execution does not establish the complete design or hardware support.
 
@@ -62,6 +62,8 @@ For “what would Python look like?”, start with [[PY-E002 - Spatial to Python
 These distill the studies for review. Document review, design adoption, and implemented support have separate status fields.
 
 ## HLS studies
+
+- [[2026-10-21-vitis-rtl-checkpoint]] — generated hardware, nine independent checks, measured baseline and remaining gaps.
 
 - [[2026-10-21-generated-cpp-checkpoint]] — executable generated C++, reviewed boundaries, saved examples and next vendor steps.
 - [[2026-10-21-hls-feasibility-checkpoint]] — agreed sequence change, current foundations, hardware risks and next audit.

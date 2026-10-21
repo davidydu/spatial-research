@@ -8,6 +8,8 @@ status: native-validation
 
 # Python Spatial now generates executable C++
 
+**Later on 21 October:** [[2026-10-21-vitis-rtl-checkpoint]] records subsequent vendor C simulation, synthesis and RTL validation. The native-only record below retains its original scope.
+
 **The first C++ backend is working for a bounded family of memory programs.**
 The Python compiler checks the source, then generates ordinary C++ arrays,
 loops, branches and arithmetic. That generated code compiles and runs locally.

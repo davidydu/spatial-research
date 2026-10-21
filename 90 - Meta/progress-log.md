@@ -9,6 +9,13 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-21 — Python-generated hardware passes RTL simulation
+
+- David supplied the running HLS host and authorized vendor execution. [[2026-10-21-vitis-rtl-checkpoint]] records four kernels and nine cases passing native C++, Vitis C simulation, synthesis and Verilog RTL co-simulation. Seven cases complete; two expected faults preserve the specified memory state. Production freeze `da4d35f` adds the interface/testbench adapter without changing the semantic core or C++ emitter.
+- Independent specification/quality review and parent review checked interfaces, literal oracles, provenance and false-pass rejection. Fixed observer fault-owner selection and clock serialization/admission before freeze. The first post-freeze composition hit the explicit Int/Index shift-count target restriction and remains negative evidence. A different independently authored InOut pair-ordering program passed its first native run and all vendor stages without repair.
+- Saved exact bundles, source hashes, tool versions, logs, reports and generated Verilog. Vitis 2025.1 HLS6135595 / vitis-run6137779, Z020, 10 ns clock / 2.7 ns uncertainty. Hardware latency and HLS area estimates are separate from functional agreement; external memory, board integration, routed timing, optimized throughput and full REP-S6 remain outside the claim. Compiler state records source/wheel checks and publication.
+- Next: general shift-count lowering, then measured memory/scheduling improvements with the same end-to-end checks. Public workflow and the original reference acceptance remain open. The host remains running after validation; private connection details are not published.
+
 ## 2026-10-21 — First generated C++ backend
 
 - David asked to start target work now, prioritizing C++ functional correctness before hardware simulation. [[2026-10-21-generated-cpp-checkpoint]] records the bounded mapping audit, direct operation-based emitter, native runner and exact limitations. Production `348d15a` is pushed; the Python semantic core remains unchanged.

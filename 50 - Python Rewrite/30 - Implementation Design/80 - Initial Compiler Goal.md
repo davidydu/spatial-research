@@ -38,7 +38,7 @@ Handlers for language operations, control and storage are expected. Dispatch bas
 
 ## Infrastructure
 
-The reference milestone runs locally on the pinned CPython baseline and standard-library semantic core. The [[2026-10-21-hls-feasibility-checkpoint|21 October discussion]] keeps this goal intact while bringing hardware-mapping research and a bounded HLS experiment forward. It supersedes the 17 October full-language-before-HLS sequence; [[04 - Python Implementation Roadmap]] owns the revised order and Labs 1–3 progression. Keep the HLS instance stopped during the audit and experiment preparation. Notify David when scoped S6/S7 work has an eligible plan, generated HLS source and a testbench ready for vendor simulation or synthesis. Record the actual installed toolchain, device, clock and dependency versions before using vendor results as evidence.
+The reference milestone runs locally on the pinned CPython baseline and standard-library semantic core. The [[2026-10-21-hls-feasibility-checkpoint|21 October discussion]] keeps this goal intact while bringing hardware-mapping research and a bounded HLS experiment forward. It supersedes the 17 October full-language-before-HLS sequence; [[04 - Python Implementation Roadmap]] owns the revised order and Labs 1–3 progression. David subsequently supplied the running HLS host and authorized vendor execution. [[2026-10-21-vitis-rtl-checkpoint]] records the bounded result, pinned tool/part/clock and remaining limits. Connection and lifecycle details remain private.
 
 No FPGA resource, timing, RTL or hardware-support claim follows from local simulation.
 
@@ -47,10 +47,11 @@ No FPGA resource, timing, RTL or hardware-support claim follows from local simul
 The implementation lives in the separate `spatial-py` repository. Its active plan is `docs/plans/2026-10-04-initial-reference.md`; its support ledger and task evidence distinguish completed foundations from the full goal. Historical Scala/Rust repositories remain evidence and are not modified to supply a Python result.
 
 **Latest separate target checkpoint — 21 October:**
-[[2026-10-21-generated-cpp-checkpoint]] records the first direct native C++ backend
-at production freeze `348d15a`. Lab 1 tiled memory and helper/partial-tile programs
-match independent expected outputs. This starts the authorized target track;
-it does not complete the reference obligations above or establish vendor HLS/RTL.
+[[2026-10-21-vitis-rtl-checkpoint]] records four programs and nine cases passing
+native C++, vendor C simulation, synthesis and RTL co-simulation at production
+freeze `da4d35f`. The new interface/testbench preserves the existing semantic core
+and C++ emitter. This follows [[2026-10-21-generated-cpp-checkpoint]] and does not
+complete the reference obligations above, full target coverage or board integration.
 
 Previous public-source execution checkpoint: **`spatial-py@8152d4e`**, verified on 18 October
 with **1244 source tests and 1244 isolated installed-wheel tests**, CPython 3.14.5.
