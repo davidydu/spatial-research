@@ -49,13 +49,15 @@ and Rust presentations are historical evidence.
 - The professor requested a pure Python rewrite: first explain what Python
   Spatial looks like, then lower it toward HLS. HLS is the agreed eventual
   target; the current reference milestone does not require vendor tools.
-- On 17 October David confirmed language/reference coverage before HLS, guided
-  by EE109 Labs 1–3 while supporting varied student programs. He corrected an
+- On 21 October David agreed to keep the Python compiler core, review hardware
+  mapping now, and bring a small general HLS feasibility experiment forward.
+  [[2026-10-21-hls-feasibility-checkpoint]] supersedes the 17 October instruction
+  to finish all planned language/reference support before HLS. EE109 Labs 1–3
+  still guide reusable language coverage and varied student programs. He corrected an
   initial mention of Lab 4: there are three labs. Use their memory/control/numeric
   patterns to choose small executable increments and require cross-feature
   compositions. Avoid both lab-specific compiler paths and unrelated verifier
-  expansion. [[04 - Python Implementation Roadmap]] owns this progression and
-  supersedes its earlier option for an S1-only HLS path alongside language work.
+  expansion. [[04 - Python Implementation Roadmap]] owns the revised progression.
 - Assume a capable team and capable coding agents. Earlier Rust arguments based
   on maintenance skill or type safety are not grounds to reopen that direction.
 - David authorized the initial implementation on 4 October. [[D-27]] owns the
@@ -85,6 +87,16 @@ and Rust presentations are historical evidence.
 
 ## Current checkpoint and next task
 
+**21 October scaling discussion — latest direction:**
+[[2026-10-21-hls-feasibility-checkpoint]] records David's agreement and the source
+review. Keep the frontend, immutable typed records, checker and reference engine.
+Before further broad language expansion, audit hardware mapping and cost for the
+existing tiled-memory example and a harder composition, then define an early,
+operation-based lowering experiment. Correct reference results do not yet establish
+synthesizability or useful hardware performance. Public check/prepare, resumption
+and the original acceptance obligations remain pending. This documentation
+checkpoint adds no compiler behavior and does not start the HLS instance.
+
 **21 October meeting refresh:** [[2026-10-21-python-progress-presentation]] owns
 the seven-slide story, full verbal scripts and bounded verification record. The
 site deck leads with working reference execution, includes the existing full
@@ -93,8 +105,8 @@ professor brief, Python index and architecture page now reflect the current
 implementation. Both demonstrations and the accepted independent composition
 passed today at compiler HEAD `0c79140`; all 75 production and 268 execution
 manifest entries match. The complete 1,244-per-route suites remain dated
-18 October. No compiler changes were made; public checking/preparation is still
-the next implementation task. The Lab 1 historical record differs only in its
+18 October. No compiler changes were made; public checking/preparation was the
+next task before the scaling discussion above. The Lab 1 historical record differs only in its
 semantic-revision metadata; fresh records preserve today's value.
 
 **19 October closeout:** all implementation work to date is committed. The
@@ -102,8 +114,9 @@ semantic-revision metadata; fresh records preserve today's value.
 records the repository audit, cleanup and restart checklist. All frozen code/test
 hashes still match the accepted checkpoint; 25 focused tests and the saved demo
 output were rechecked after removing generated package files. Compiler behavior
-is unchanged. Continue from the compiler's `PROJECT_STATE.md`; the next task
-remains public checking and input preparation.
+was unchanged. At that closeout, the next task was public checking and input
+preparation. Use the 21 October discussion above and the compiler's
+`PROJECT_STATE.md` for the current order.
 
 Current execution checkpoint: **`spatial-py@8152d4e`**, verified on 18 October
 with **1244 source tests and 1244 isolated installed-wheel tests**, CPython 3.14.5.
@@ -234,7 +247,7 @@ case required a test-observer correction and is also regression evidence; a
 third independent author supplied fresh acceptance. **1079 source tests and
 1079 isolated-wheel tests pass** on unchanged frozen files. The existing canonical verifier and runtime were not expanded.
 
-Next: expose public checking and input preparation using the existing shared
+Pending language work after the hardware-mapping review: expose public checking and input preparation using the existing shared
 checker and host preparation. Keep the execution bridge private until simulation
 supports validated continuations and cumulative budgets without replaying effects.
 Dependency linking and the remaining original acceptance obligations stay open;
@@ -254,8 +267,8 @@ resource-limit results have no continuation. HLS tools are not needed yet.
 
 David authorized continued implementation; no new approval is pending.
 
-David asked to be notified when the HLS instance is needed. Complete planned
-language/reference support first and keep the instance stopped. Notify him once the scoped target plan, generated HLS source
+David asked to be notified when the HLS instance is needed. Keep the instance
+stopped during the mapping audit and experiment preparation. Notify him once the scoped target plan, generated HLS source
 and testbench are ready for vendor simulation/synthesis; record the installed
 toolchain, target device and clock then. The public source workflow increment does
 not need HLS.

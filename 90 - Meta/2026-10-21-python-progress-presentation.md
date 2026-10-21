@@ -9,6 +9,12 @@ scope: "Seven slides on working reference execution, reusable features and the n
 
 # Python Spatial: working reference, broader Spatial next
 
+**Later discussion, 21 October:** [[2026-10-21-hls-feasibility-checkpoint]] revises
+the next-work sequence: hardware-mapping research now, then a bounded HLS
+feasibility experiment before all language families are complete. The slides and
+script below preserve the earlier briefing; the checkpoint and roadmap own the
+current direction. The recorded execution evidence is unchanged.
+
 [Open the presentation](https://davidydu.github.io/spatial-research-site/presentation/python/) · [[05 - Python Professor Brief|Short professor brief]] · [[80 - Initial Compiler Goal|Current implementation evidence]].
 
 Seven slides, about ten minutes before discussion. The professor already knows Spatial. Lead with what now runs, how the pieces connect, and what comes next. Keep source code and detailed compiler internals for questions. These notes supersede the meeting status and sequence in [[2026-10-01-python-professor-presentation-outline|the earlier presentation]]; preserve that dated outline as history.

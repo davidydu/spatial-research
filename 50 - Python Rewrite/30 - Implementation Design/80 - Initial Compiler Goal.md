@@ -38,7 +38,7 @@ Handlers for language operations, control and storage are expected. Dispatch bas
 
 ## Infrastructure
 
-The reference milestone runs locally on the pinned CPython baseline and standard-library semantic core. On 17 October David confirmed that planned language/reference support should be completed before HLS work, with EE109 Labs 1–3 guiding the progression toward general student programs. [[04 - Python Implementation Roadmap#Current execution direction — 17 October 2026]] records the course families and ordering. The stopped HLS instance is not needed. Request it after the language milestone, once scoped S6/S7 work has an eligible plan, generated HLS source and a testbench ready for vendor simulation or synthesis. Record the actual installed toolchain, device, clock and dependency versions before using vendor results as evidence.
+The reference milestone runs locally on the pinned CPython baseline and standard-library semantic core. The [[2026-10-21-hls-feasibility-checkpoint|21 October discussion]] keeps this goal intact while bringing hardware-mapping research and a bounded HLS experiment forward. It supersedes the 17 October full-language-before-HLS sequence; [[04 - Python Implementation Roadmap]] owns the revised order and Labs 1–3 progression. Keep the HLS instance stopped during the audit and experiment preparation. Notify David when scoped S6/S7 work has an eligible plan, generated HLS source and a testbench ready for vendor simulation or synthesis. Record the actual installed toolchain, device, clock and dependency versions before using vendor results as evidence.
 
 No FPGA resource, timing, RTL or hardware-support claim follows from local simulation.
 
@@ -188,7 +188,8 @@ case required a test-observer correction and is also regression evidence; a
 third independent author supplied fresh acceptance. **1079 source tests and
 1079 isolated-wheel tests pass** on unchanged frozen files. The existing canonical verifier and runtime were not expanded.
 
-Next: expose public checking and input preparation using the existing shared
+Next research task: the [[2026-10-21-hls-feasibility-checkpoint|hardware-mapping and cost audit]].
+Pending language work: expose public checking and input preparation using the existing shared
 checker and host preparation. Keep the execution bridge private until simulation
 supports validated continuations and cumulative budgets without replaying effects.
 Dependency linking and the remaining original acceptance obligations stay open;

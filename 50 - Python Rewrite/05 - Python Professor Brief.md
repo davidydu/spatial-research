@@ -37,15 +37,17 @@ Independent literal expectations check outputs and ordered effects. A fresh comp
 
 The accepted **18 October** checkpoint passed **1,244 tests from source and 1,244 from an isolated installed wheel**. Today's bounded replay checked the two demonstrations, the fresh composition and both frozen file manifests; it did not rerun the complete suites. All 75 production entries and 268 execution entries still match. The [[2026-10-21-python-progress-presentation#Verification record — 21 October 2026|dated verification record]] separates these observations and records the Lab 1 revision-metadata difference. Test counts do not establish full Spatial support or useful-workload performance.
 
-## Next: public workflow, broader language, then HLS
+## Next: hardware feasibility and continued language work
+
+The subsequent [[2026-10-21-hls-feasibility-checkpoint|21 October scaling discussion]] brings hardware feedback forward: keep the Python core, audit the mapping and cost of the tiled-memory example plus a harder composition, then define a small general lowering experiment. This revises the earlier plan to finish all language support before HLS.
 
 Expose public checking and input preparation through the existing implementation. Add real validated resumption with cumulative budgets before exposing public simulation. Current private resource-limit results have no continuation. Dependency linking, artifacts, verified editing and the remaining initial-goal acceptance work stay open.
 
 Then expand reusable language families using the [[04 - Python Implementation Roadmap|Labs 1–3 sequence]]: **Lab 1 Reg/FIFO/Reduce/Fold → Lab 2 memory reductions/FSM/LUT/fixed-point tiles → Lab 3 line/shift buffers and convolution**. Keep each increment executable and require new feature combinations.
 
-HLS follows planned language/reference support. Keep the instance stopped until a scoped target program, generated code and a testbench are ready for vendor validation. Current results establish reference behavior; hardware results need their own evidence.
+Keep the HLS instance stopped until a scoped target plan, generated code and a testbench are ready for vendor validation. The bounded feasibility check can precede full language coverage. Current results establish reference behavior; hardware correctness, resource use and throughput need their own evidence.
 
-**Takeaway:** a working reference path now connects the compiler components. Finish its public workflow and broaden Spatial coverage next.
+A working reference path now connects the compiler components. The next research task tests how well that foundation supports hardware; the public workflow and broader language coverage remain required work.
 
 ## Useful links
 

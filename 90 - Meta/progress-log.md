@@ -9,6 +9,12 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-21 — HLS scaling discussion and revised sequence
+
+- David agreed to preserve the Python compiler foundation and bring a bounded hardware feasibility check forward. [[2026-10-21-hls-feasibility-checkpoint]] records the reasoning, existing static SRAM bounds, unresolved hardware costs and validation limits. It supersedes the 17 October full-language-before-HLS sequence without changing language semantics, acceptance obligations or professor approval status.
+- Next research: map the tiled-memory example and a harder composition to finite storage, arithmetic, dependencies and interfaces; then define a general lowering experiment with correctness and resource/throughput criteria. Public workflow and Labs 1–3 language work remain pending. No backend or HLS instance was started.
+- Updated the roadmap, D-28 refinement, index, goal, professor brief, architecture page and shared handoff, plus compiler `CONTEXT.md` and `PROJECT_STATE.md`. The dated meeting presentation remains a record of the earlier briefing. Documentation verification and publication are recorded in the compiler's shared state; no new compiler test result is claimed.
+
 ## 2026-10-21 — Professor meeting: working Python reference progress
 
 - Rebuilt the seven-slide Python web presentation around the working source-to-reference path, shared architecture, Lab 1 tiled memory, reusable features, independent composition evidence and Labs 1–3 implementation sequence. The existing Excalidraw explorer remains available on slide 2. Slide 3 displays actual recorded outputs, with ordinary/Int32-overflow selection.

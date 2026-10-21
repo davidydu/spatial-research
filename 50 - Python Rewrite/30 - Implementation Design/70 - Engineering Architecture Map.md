@@ -47,7 +47,7 @@ The map describes the full proposed architecture; only part is implemented. As o
 
 The accepted 18 October checkpoint `8152d4e` passed **1,244 source tests and 1,244 isolated installed-wheel tests**. On 21 October, both demonstrations and the unchanged fresh composition were replayed, and all production/execution manifest hashes matched. The complete suites were not rerun that day. [[2026-10-21-python-progress-presentation|The dated presentation notes]] hold the bounded replay details; [[80 - Initial Compiler Goal]] owns the remaining acceptance work. The current seven-slide presentation embeds this map with section navigation and zoom.
 
-The next implementation step is public checking and input preparation, followed by validated cumulative resumption before public simulation. The map's artifacts, verified editing, resumable execution and target machinery remain broader design obligations. Its colors and directory labels are not a completion chart.
+The next research task is the [[2026-10-21-hls-feasibility-checkpoint|hardware-mapping and cost audit]]. Pending language work includes public checking and input preparation, followed by validated cumulative resumption before public simulation. The map's artifacts, verified editing, resumable execution and target machinery remain broader design obligations. Its colors and directory labels are not a completion chart.
 
 ## Start with the first complete path
 
@@ -55,7 +55,7 @@ The first implementation target is S0→S1: scalar ports and tiled SRAM/DRAM pro
 
 Then add ordered FIFO and scalar reductions/folds; Lab 2 memory reductions, FSMs and LUTs; exact fixed-point GEMM; and Lab 3 line history and windows. The diagram groups features by the lab patterns they enable. The roadmap owns stage dependencies and acceptance gates. Lab 3 must keep the current guide and older public fixture profiles distinct, including signed gradients, row publication and warm-up behavior.
 
-The current sequence completes planned language/reference support before scoped HLS work. Keep the HLS instance stopped until a target program, generated code and a testbench are ready for vendor simulation/synthesis. [[04 - Python Implementation Roadmap]] owns this sequence and supersedes the earlier option to start an S1-only hardware track alongside language expansion. Later full-language capabilities retain their own roadmap gates.
+The 21 October discussion brings a bounded HLS feasibility experiment forward after a hardware-mapping audit, before every language family is complete. Keep the HLS instance stopped until a scoped target plan, generated code and a testbench are ready for vendor simulation/synthesis. [[04 - Python Implementation Roadmap]] owns the revised sequence; later full-language capabilities retain their own roadmap gates.
 
 ## Documents behind the drawing
 

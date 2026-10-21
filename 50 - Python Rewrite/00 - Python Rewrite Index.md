@@ -8,7 +8,9 @@ updated: 2026-10-21
 
 Research before implementation: establish what Spatial programs mean in Python, decide how the compiler represents and checks them, then study HLS lowering.
 
-**Current phase — 21 October:** a pure Python compiler now checks and executes an admitted memory-program subset. The Lab 1 tiled-scale example and public capture-once/specialize-twice example were replayed today. The accepted 18 October checkpoint passed **1,244 tests from source and 1,244 from an isolated installed wheel**; today's checks were a bounded replay, not a repeat of those complete suites. [[80 - Initial Compiler Goal]] owns implementation status; [[2026-10-21-python-progress-presentation|the dated presentation notes]] record today's outputs, composition replay and unchanged file manifests. Public checking/preparation and real resumption remain next, followed by reusable Labs 1–3 language families. HLS follows planned language/reference support and separate vendor validation.
+**Current phase — 21 October:** a pure Python compiler now checks and executes an admitted memory-program subset. The Lab 1 tiled-scale example and public capture-once/specialize-twice example were replayed today. The accepted 18 October checkpoint passed **1,244 tests from source and 1,244 from an isolated installed wheel**; today's checks were a bounded replay, not a repeat of those complete suites. [[80 - Initial Compiler Goal]] owns implementation status; [[2026-10-21-python-progress-presentation|the dated presentation notes]] record today's outputs, composition replay and unchanged file manifests.
+
+**Latest direction:** [[2026-10-21-hls-feasibility-checkpoint]] records the subsequent scaling discussion. Keep the Python core; review hardware mapping and cost next, then define a small general HLS experiment before every language family is complete. Public checking/preparation, real resumption and reusable Labs 1–3 language support remain pending. Hardware validation remains separate evidence.
 
 The full-language architecture and [[07 - Python Implementation Readiness Audit|implementation-readiness review]] remain research checkpoints. [[PY-E002 - Spatial to Python Syntax Atlas|The course syntax atlas]] and [[60 - Course Syntax and Compiler Trace]] connect that proposal to the professor's examples. The full design uses captured kernels, Python-owned semantics and simulation, immutable program/plan records, and a checked HLS backend. xDSL is an optional derived adapter under [[PY-R017 - Compiler Representation Comparison]]. [[D-28]] remains proposed for professor review; current reference execution does not establish the complete design or hardware support.
 
@@ -61,6 +63,7 @@ These distill the studies for review. Document review, design adoption, and impl
 
 ## HLS studies
 
+- [[2026-10-21-hls-feasibility-checkpoint]] — agreed sequence change, current foundations, hardware risks and next audit.
 - [[PY-R009 - HLS Boundary and Control Lowering]] — compiler/vendor responsibilities, control routes, faults, ABI, and evidence levels.
 - [[PY-R010 - Memory Scheduling and Design Space Exploration]] — physical memory, transfers, banking, scheduling, and legal tuning.
 - [[PY-R011 - Numeric Lowering and Intrinsic Profiles]] — numeric profiles, random/math operations, and vendor primitive compatibility.
