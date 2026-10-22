@@ -9,6 +9,15 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-22 — Professor meeting: one Python-to-RTL starting point
+
+- David asked to pause compiler and HLS work before the professor meeting. The saved scalar/shift batch remains ready, but implementation and vendor execution must wait until he asks to resume; permission before restarting or using the stopped HLS host remains required.
+- The presentation target is a ten-minute, seven-slide follow-up to the professor's fully Python request: direction, architecture, one existing Lab 1 pipeline result, reusable compiler rules, evidence boundaries and lessons, next steps, and records for discussion. [[2026-10-22-python-pipeline-presentation]] owns the new notes; the October 21 reference-only notes remain historical.
+- Updated [[05 - Python Professor Brief]], [[70 - Engineering Architecture Map]] and [[project-handoff]] around Python Spatial source → Python compiler → generated C++ → vendor HLS → RTL. Python owns the frontend, checker, reference engine and C++ generator; C++ is target output and there is no Rust core. The full checked hardware planner on the preserved architecture map is still unimplemented.
+- The main existing result is Lab 1 tiled scale: 32 Int32 values, two tiles of 16, scale 2, input `0…31` producing `0,2,…,62`, plus overflow. The 21 October vendor freeze `da4d35f` / acceptance `0ac7c00` records independent reference/native agreement and passing Vitis C simulation, synthesis and Verilog RTL co-simulation. This is sequential experimental IP, not board execution, final AXI integration, optimized parallel performance or full Lab 1 coverage.
+- The newer scalar/shift checkpoint remains distinct: production `1e55eb8`, acceptance `25a0e61`, code/evidence checkpoint `4273ff4` (pause recorded in `96ad7fb`), 12 projects/32 cases locally validated and vendor execution pending. The 1,329 source and 1,329 isolated-wheel test results remain dated October 21. No new compiler or HLS verification is claimed for meeting preparation.
+- Next after the meeting and a resume request: validate the saved batch with vendor tools, measure size/tile behavior, then choose one general storage or scheduling improvement while continuing reusable Labs 1–3 coverage. Public workflow, real resumption, full compiler acceptance and board/performance work remain open. The refreshed deck and matching verbal script passed parent review and independent evidence review. All seven slides fit desktop layouts; phone layouts have no horizontal overflow. Notes, sources, ordinary/overflow selection and all Excalidraw section/zoom controls work. Final build and publication evidence is recorded in the compiler project-state closeout.
+
 ## 2026-10-21 — Scalar state and shifts pass local target checks
 
 - [[2026-10-21-scalar-target-checkpoint]] records production `1e55eb8f5a20c11c1cd4a17010b6fa6cd4332e99`, pushed on `work/initial-reference`. Only four backend modules changed: scalar Int32 Out/InOut cells through generated C++ and a depth-one vendor interface, plus canonical signed Index shift counts. The language checker and reference semantics are unchanged.

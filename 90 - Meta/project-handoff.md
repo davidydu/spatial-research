@@ -1,7 +1,7 @@
 ---
 type: runbook
 project: spatial-python
-date: 2026-10-21
+date: 2026-10-22
 status: active
 ---
 
@@ -13,6 +13,21 @@ decisions, plans and evidence remain in their owning documents; this is the map
 and restart route. No private memory service, old agent session or temporary
 directory is required.
 
+**22 October meeting pause — current instruction:** David asked to pause compiler
+and HLS work before the professor meeting. Work now concerns the presentation and
+research navigation. [[2026-10-22-python-pipeline-presentation]] owns the new
+ten-minute, seven-slide story: follow up on the professor's fully Python request,
+explain the architecture, and use the existing Lab 1 tiled-scale result as one
+initial success through Python, generated C++, HLS and RTL simulation.
+
+The saved scalar/shift batch is ready, but **do not resume compiler work or vendor
+execution until David asks**. The HLS instance remains stopped; the separate
+requirement to ask before restarting or using it remains in force. Earlier next
+steps below are saved continuation context, not an instruction to resume during
+meeting preparation. The seven-slide deck and matching script have been reviewed
+against saved evidence, including desktop/phone layout and interactive controls.
+The compiler project-state publication record holds the final deployment result.
+
 ## Read only what the next task needs
 
 1. Read [[workflow]] and [[80 - Initial Compiler Goal]] for the current route.
@@ -21,9 +36,10 @@ directory is required.
 3. For research, start at [[00 - Python Rewrite Index]] and the relevant study;
    keep decisions in the existing D-number register.
 4. For presentation work, read [[05 - Python Professor Brief]],
-   [[2026-10-21-python-progress-presentation]] and
+   [[2026-10-22-python-pipeline-presentation]] and
    [[70 - Engineering Architecture Map]]. Verify progress against current
-   compiler evidence before updating slides.
+   compiler evidence before updating slides. Keep
+   [[2026-10-21-python-progress-presentation]] as the earlier reference-only record.
 
 ## Repository map
 
@@ -46,9 +62,11 @@ and Rust presentations are historical evidence.
 
 ## Decisions and user preferences from the conversation
 
-- The professor requested a pure Python rewrite: first explain what Python
-  Spatial looks like, then lower it toward HLS. HLS is the agreed eventual
-  target; the current reference milestone does not require vendor tools.
+- The professor requested a fully Python compiler after the earlier Python
+  frontend/Rust-core proposal. Python owns the frontend, checker, reference
+  engine and C++ generator. Generated C++ is target output, vendor HLS is external,
+  and there is no Rust compiler core. One bounded hardware path now works;
+  the full compiler and checked target planner remain unfinished.
 - On 21 October David agreed to keep the Python compiler core, review hardware
   mapping now, and bring a small general HLS feasibility experiment forward.
   [[2026-10-21-hls-feasibility-checkpoint]] supersedes the 17 October instruction
@@ -80,6 +98,11 @@ and Rust presentations are historical evidence.
   and links. The main talk is about ten minutes. Explain what Python Spatial is,
   why the plan is feasible, implementation steps and next evidence. The professor
   already knows Spatial; avoid long program walkthroughs or re-arguing HLS.
+- For the October 22 meeting, center one existing Lab 1 success through the
+  complete experimental pipeline. Keep the four-kernel result as supporting
+  context and the newer local scalar/shift extension separate from vendor
+  evidence. Use a simple verbal explanation, then limitations and next steps;
+  test internals and full source walkthroughs belong in linked records.
 - Use plain, verbal scripts and explanatory slide text. The requested visual
   direction is restrained, inspired by Thinking Machines Lab. The Excalidraw map
   should support both overview and detail; render and inspect visual changes.
@@ -90,6 +113,8 @@ and Rust presentations are historical evidence.
 **21 October scalar state and shifts — latest local implementation:**
 [[2026-10-21-scalar-target-checkpoint]] records production
 `1e55eb8f5a20c11c1cd4a17010b6fa6cd4332e99`, pushed on `work/initial-reference`.
+Acceptance is `25a0e61`; code/evidence checkpoint `4273ff4` is unchanged.
+Documentation-only commit `96ad7fb` records the meeting pause.
 Only four backend modules changed: scalar Int32 Out/InOut cells now reach
 generated C++ and the depth-one vendor interface, and Int shifts accept canonical
 signed Index counts. The original rejected shift source and expectations now
@@ -105,8 +130,9 @@ files and 80 installed modules match their manifests. Compiler `PROJECT_STATE.md
 and the linked evidence own exact acceptance records and 133 saved artifact files.
 
 There is **no new vendor execution, synthesis or RTL result** for this extension.
-The saved bundle is ready. Ask David before restarting or using the stopped
-HLS host. After authorization, run vendor C simulation, synthesis and RTL
+The saved bundle is ready. Wait for David to resume compiler/HLS work after the
+meeting, and ask before restarting or using the stopped HLS host. After that
+authorization, run vendor C simulation, synthesis and RTL
 co-simulation; use the size/tile measurements to select one general storage or
 scheduling improvement. Keep fault order, initialization, aliases and earlier
 writes intact. Reg, Reduce/Fold, public check/prepare, real resumption, the full
@@ -117,6 +143,11 @@ initial goal, checked target planning and board/AXI integration remain open.
 cases passing native C++, Vitis C simulation, synthesis and Verilog RTL
 co-simulation. Production freeze `da4d35f` adds a thin data/mask/status interface
 and self-checking testbench; the semantic core and C++ emitter are unchanged.
+Acceptance is recorded at `0ac7c00`. The meeting's main example is the Lab 1
+tiled-scale program: 32 Int32 values, two tiles of 16, scale 2, input `0…31`
+producing `0,2,…,62`, plus a separate overflow case. Python reference execution
+and native C++ separately matched independent expected results before vendor
+validation. This older pass does not cover the newer scalar/shift extension.
 The fresh pair-ordering program passed without repair. The first independent
 candidate exposed unsupported normalized Int/Index shift counts and was retained
 as negative evidence for that freeze. Read compiler `PROJECT_STATE.md` and linked evidence for
@@ -152,7 +183,7 @@ synthesizability or useful hardware performance. Public check/prepare, resumptio
 and the original acceptance obligations remain pending. This documentation
 checkpoint adds no compiler behavior and does not start the HLS instance.
 
-**21 October meeting refresh:** [[2026-10-21-python-progress-presentation]] owns
+**21 October meeting refresh — historical:** [[2026-10-21-python-progress-presentation]] owns
 the seven-slide story, full verbal scripts and bounded verification record. The
 site deck leads with working reference execution, includes the existing full
 Excalidraw map, and displays recorded ordinary/overflow Lab 1 results. The
@@ -302,7 +333,7 @@ case required a test-observer correction and is also regression evidence; a
 third independent author supplied fresh acceptance. **1079 source tests and
 1079 isolated-wheel tests pass** on unchanged frozen files. The existing canonical verifier and runtime were not expanded.
 
-Pending language work after the hardware-mapping review: expose public checking and input preparation using the existing shared
+Pending language work after the meeting and target checkpoint: expose public checking and input preparation using the existing shared
 checker and host preparation. Keep the execution bridge private until simulation
 supports validated continuations and cumulative budgets without replaying effects.
 Dependency linking and the remaining original acceptance obligations stay open;
@@ -321,19 +352,21 @@ editing and final whole-goal acceptance remain required. Current private
 resource-limit results have no continuation. Those reference obligations do not
 require HLS tools.
 
-David authorized continued local implementation. Ask before HLS reuse.
+Continued local implementation was authorized before the October 22 meeting
+pause. That pause is now the current instruction; wait for David to resume work.
+Ask separately before HLS reuse.
 
 David stopped the instance after the 21 October vendor validation and asked to be
-consulted when it is needed again. Keep it stopped while preparing the next
-increment locally. Ask once the generated source and self-checking testbench are
-ready for vendor simulation/synthesis; confirm the installed toolchain, target
+consulted when it is needed again. The next generated source and self-checking
+testbench are saved; keep the host stopped during the meeting pause. When David
+resumes the work, ask before vendor simulation/synthesis; confirm the installed toolchain, target
 device and clock on the next authorized run. Public workflow work does not need HLS.
 
 The compiler's tracked
 [PROJECT_STATE.md](https://github.com/davidydu/spatial-py/blob/work/initial-reference/PROJECT_STATE.md)
 owns the exact active task, reproduction commands and latest deployment record.
 Follow its [execution plan](https://github.com/davidydu/spatial-py/blob/work/initial-reference/docs/plans/2026-10-13-reference-execution.md).
-Local continuation is authorized; ask before HLS reuse. Check the worktree before editing because another
+Local continuation is paused for the meeting; ask before HLS reuse. Check the worktree before editing because another
 harness may have advanced beyond this publication. [[80 - Initial Compiler Goal]]
 is the published big-picture status; older diagrams and slides can lag actual
 compiler evidence.
@@ -346,6 +379,12 @@ lives in the site's `presentation/python/` directory. The deck at `/presentation
 is the historical Rust-era proposal. The editable diagram and original exports
 live under `50 - Python Rewrite/30 - Implementation Design/assets/`; the site
 has presentation copies. Keep copies consistent when changing the map.
+
+The October 22 presentation and [[2026-10-22-python-pipeline-presentation|speaker notes]]
+follow seven steps: direction, architecture, one Lab 1 pipeline result,
+reusable compiler rules, evidence boundaries and lessons, next steps, then records
+and discussion. The full map remains a proposed design. Presentation changes do
+not require compiler replays or a new HLS run during the pause.
 
 From the site repository, build against the actual research checkout:
 

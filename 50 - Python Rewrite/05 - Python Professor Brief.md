@@ -3,51 +3,47 @@ type: reference
 title: "Python Spatial — professor discussion brief"
 project: spatial-python
 date: 2026-10-01
-updated: 2026-10-21
-verified: 2026-10-21
+updated: 2026-10-22
+verified: 2026-10-22
 ---
 
-<a href="https://davidydu.github.io/spatial-research-site/presentation/python/" data-router-ignore target="_blank" rel="noopener noreferrer">Open the seven-slide presentation</a> · [[2026-10-21-python-progress-presentation|Ten-minute speaker notes and dated evidence]].
+<a href="https://davidydu.github.io/spatial-research-site/presentation/python/" data-router-ignore target="_blank" rel="noopener noreferrer">Open the seven-slide presentation</a> · [[2026-10-22-python-pipeline-presentation|October 22 speaker notes and evidence]].
 
-**Python Spatial now runs small memory programs through a Python compiler and reference engine.** Actual source reaches checking, input preparation and execution for the supported subset. HLS remains the eventual hardware destination.
+**The Python rewrite now takes one existing Lab 1 example through the complete experimental path to simulated RTL.** This is the starting point for the next discussion with the professor, who asked for a fully Python compiler after the earlier Python-frontend/Rust-core proposal.
 
-The talk leads with this concrete progress, explains how the system connects, and closes with the public workflow and language families still to build. The professor knows Spatial; detailed syntax and source code can stay in the linked evidence.
+The ten-minute talk follows seven steps: direction, architecture, one Lab 1 result, reusable compiler rules, what the evidence tells us, next work, and records for discussion. Compiler and HLS work are paused for this meeting.
 
-## One program model connects the system
+## Python owns the compiler
 
-Captured source → specialization → shared checking → prepared reference execution. Python implements the compiler; explicit Spatial rules define arithmetic, storage, views, control and the order of effects. Captured bodies, decorators and annotations are read as source data, not executed during acquisition.
+**Python Spatial program → Python compiler → generated C++ → vendor HLS → RTL.**
 
-The [[70 - Engineering Architecture Map|embedded architecture]] shows how this path fits into the proposed full system, including future artifacts, transformations and HLS planning. The drawing includes unimplemented capabilities. [[80 - Initial Compiler Goal]] owns current support and acceptance status.
+The frontend, checker, reference engine and C++ generator are implemented in Python. There is no Rust compiler core. C++ is the generated target program; the external HLS tool turns that program into hardware. The Python reference engine provides a separate way to check what the program means.
 
-## A concrete memory example works
+The [[70 - Engineering Architecture Map|full architecture map]] explains how these pieces fit into the proposed system. Its checked hardware planner, transformations, artifacts and resumable execution remain broader design work. The current hardware route is a direct, sequential C++ experiment.
 
-The tiled-scale part of Lab 1 processes **32 values in two tiles of 16**, loading DRAM into SRAM, multiplying and storing the result. With inputs `0…31` and scale `2`, it produces `0,2,…,62`. An independent Int32-overflow vector also passes. Checking proves seven demands and enforces four with runtime guards.
+## One Lab 1 example clears the pipeline
 
-Both cases were rerun on **21 October 2026**, with outputs and effect counts matching their saved expectations. This is reference execution of the tiled-memory example. Reg, FIFO and Reduce/Fold coverage for the rest of Lab 1 remains open. See the [source and runner](https://github.com/davidydu/spatial-py/blob/8152d4e/examples/run_lab1_reference.py#L22-L55) and [fresh output](https://davidydu.github.io/spatial-research-site/presentation/python/assets/lab1-reference-fresh-output.json).
+The tiled-scale example loads **32 Int32 values in two tiles of 16**, multiplies them, and stores the result. With input `0…31` and scale `2`, the expected output is **`0,2,…,62`**. A second case checks Int32 overflow.
 
-## Reusable features now compose
+On **21 October**, both the Python reference run and generated native C++ matched independent expected results. The saved vendor project then passed **Vitis C simulation, synthesis and Verilog RTL co-simulation**. The [[2026-10-21-vitis-rtl-checkpoint|hardware checkpoint]] records production `da4d35f`; [accepted evidence at `0ac7c00`](https://github.com/davidydu/spatial-py/blob/0ac7c00/docs/evidence/task-06b-vitis.md) preserves the results and reproduction details.
 
-The working path includes memory views and transfers; ordinary branches and loops; helpers and lexical captures; borrowed memory results; constants and compile-time parameters; and ordered scopes with finite static expansion. Their [support ledger](https://github.com/davidydu/spatial-py/blob/8152d4e/docs/support-ledger.md#L30-L151) links positive, negative and composition evidence.
+This shows that the implemented Python foundation can carry a real tiled-memory program into hardware and preserve its tested behavior. It is an initial result: the sequential IP used Vitis 2025.1, a Z020 target and a 10 ns clock. It has not run on an FPGA board, has no final AXI integration, and does not establish optimized parallel performance or full Lab 1 coverage.
 
-The latest public API captures one source template and specializes it repeatedly. The [example](https://github.com/davidydu/spatial-py/blob/8152d4e/examples/run_public_source.py#L19-L67) produces **`[1,5,9]`** and **`[7,11]`** from two settings, with **3 / 2 fresh scratch lifetimes** and unchanged host buffers. Today's replay exactly matches its [saved output](https://github.com/davidydu/spatial-py/blob/8152d4e/docs/evidence/public-source-reference-output.json). Public capture/specialization supports one core module with empty dependencies; checking, preparation and execution still use the private bridge.
+## The compiler rules are reusable
 
-## Evidence beyond the final answer
+The example uses general rules for memory, transfers, loops, arithmetic and checking. The compiler does not recognize a lab name or substitute a hand-written solution. Helpers, branches, views and compile-time settings compose through shared compiler machinery; supported target programs use the same C++ generator.
 
-Independent literal expectations check outputs and ordered effects. A fresh composition authored after the production freeze combines static expansion, a nested helper, a mutable cell, scratch SRAM and a runtime branch. It produces **`60 / 0 / -9`**, matching all **`26 / 26 / 2`** ordered events. The unchanged test passed again on 21 October. See the [pin and composition evidence](https://github.com/davidydu/spatial-py/blob/8152d4e/docs/evidence/task-03c-public-source-acceptance-second.md#L15-L79).
+The wider vendor checkpoint covers four kernels and nine cases, including a separately authored program accepted after the implementation was frozen. This supports the generality claim within the admitted subset. The reference engine still supports more than the hardware route, and the full compiler remains unfinished.
 
-The accepted **18 October** checkpoint passed **1,244 tests from source and 1,244 from an isolated installed wheel**. Today's bounded replay checked the two demonstrations, the fresh composition and both frozen file manifests; it did not rerun the complete suites. All 75 production entries and 268 execution entries still match. The [[2026-10-21-python-progress-presentation#Verification record — 21 October 2026|dated verification record]] separates these observations and records the Lab 1 revision-metadata difference. Test counts do not establish full Spatial support or useful-workload performance.
+The [[2026-10-21-scalar-target-checkpoint|newer scalar-state and shift extension]] is a separate local checkpoint. Its prepared batch has **12 projects and 32 cases**, but vendor execution is pending. The earlier RTL pass does not validate this newer implementation.
 
-## Next: hardware feasibility and continued language work
+## After the meeting
 
-The subsequent [[2026-10-21-hls-feasibility-checkpoint|21 October scaling discussion]] brings hardware feedback forward: keep the Python core, audit the mapping and cost of the tiled-memory example plus a harder composition, then define a small general lowering experiment. This revises the earlier plan to finish all language support before HLS.
+When David asks to resume, the next target step is to run the saved scalar/shift batch through HLS, with permission before restarting or using the stopped host. Then compare size and tile measurements to choose one general storage or scheduling improvement.
 
-Expose public checking and input preparation through the existing implementation. Add real validated resumption with cumulative budgets before exposing public simulation. Current private resource-limit results have no continuation. Dependency linking, artifacts, verified editing and the remaining initial-goal acceptance work stay open.
+Continue the [[04 - Python Implementation Roadmap|Labs 1–3 progression]]: finish reusable Lab 1 register, queue and reduction families, then Lab 2 memory reductions and fixed-point tiles, then Lab 3 windows and convolution. Public checking and preparation, real simulation resumption and the original [[80 - Initial Compiler Goal|initial compiler acceptance]] remain required. Board integration and measured performance need their own evidence.
 
-Then expand reusable language families using the [[04 - Python Implementation Roadmap|Labs 1–3 sequence]]: **Lab 1 Reg/FIFO/Reduce/Fold → Lab 2 memory reductions/FSM/LUT/fixed-point tiles → Lab 3 line/shift buffers and convolution**. Keep each increment executable and require new feature combinations.
-
-Keep the HLS instance stopped until a scoped target plan, generated code and a testbench are ready for vendor validation. The bounded feasibility check can precede full language coverage. Current results establish reference behavior; hardware correctness, resource use and throughput need their own evidence.
-
-A working reference path now connects the compiler components. The next research task tests how well that foundation supports hardware; the public workflow and broader language coverage remain required work.
+The meeting question is how to prioritize broader language coverage and measured hardware improvements from this working starting point. The [[2026-10-21-python-progress-presentation|October 21 reference-only briefing]] remains a dated record of the earlier state.
 
 ## Useful links
 
