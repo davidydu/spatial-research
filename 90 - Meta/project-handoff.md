@@ -42,6 +42,15 @@ implemented. Existing internal native/HLS tools are linked. This documentation
 direction does not resume implementation or vendor execution, remove reference
 conformance obligations, or freeze a new public API spelling.
 
+**Documentation ownership clarification:** David wants the student guide developed
+alongside the language in this same vault for now. Every user-visible feature
+checkpoint should update its explanation, syntax, example, functional test and
+support status. Keep one editable source. Later, move or export the curated
+student documentation into a docs-only public presentation, with student
+navigation and no research handoffs or historical design material. Do not create
+a separate docs repository/site yet. The existing research site is already public;
+this organizational choice does not change visibility or promise private drafts.
+
 ## Read only what the next task needs
 
 1. Read [[workflow]] and [[80 - Initial Compiler Goal]] for the current route.

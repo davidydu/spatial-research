@@ -10,6 +10,11 @@ files carry shared context across Codex, Claude Code and other harnesses.
 
 - New Python research belongs in `50 - Python Rewrite/`; decisions stay in the
   existing D-number register. Preserve original Scala and historical Rust evidence.
+- Maintain student documentation in `50 - Python Rewrite/70 - Student Guide/`
+  alongside each language/testing feature: syntax, meaning, example, functional
+  test and current support status. Keep one editable vault copy now. A separate,
+  curated student-only documentation publication comes later; do not start a
+  second docs repository or site as part of routine language work.
 - Read files directly; verify source claims and keep research, implementation,
   reference execution and hardware evidence distinct.
 - Use bounded independent agents where available; the integrating agent reviews

@@ -44,7 +44,9 @@ Software test runtime is not hardware latency. A request such as `par=4` does no
 
 ## How this guide will grow
 
-We are maintaining these pages alongside the implementation, rather than waiting for the full compiler. As public interfaces become available, replace the marked sketches with examples exercised against the supported release. Keep the advanced testing route visible from the beginner tutorial so projects can grow beyond supplied lab cases.
+Maintain the student guide here in the shared research vault as the language develops. For each user-visible language or testing feature, update its syntax, meaning, example, functional test and support status in the same checkpoint. As public interfaces become available, replace the marked sketches with examples exercised against the supported release. Keep the advanced testing route visible from the beginner tutorial so projects can grow beyond supplied lab cases.
+
+Later, prepare a separate student-facing documentation publication containing the language guide, tutorials, API reference and testing instructions. Research deliberations, implementation handoffs and historical plans stay in the research collection. Until that separation, keep one editable copy of the guide in this vault; a second documentation repository or site is not needed yet. The existing research site already publishes this preview, so keeping it in the vault does not make it private. The later student release will present only the curated documentation and will need its own navigation and link checks.
 
 This guide owns student workflows and examples. [[10 - Python Language Contract|Language contracts]] describe meaning, the support ledger records implemented behavior, and [[00 - Python Rewrite Index|research notes]] explain design choices. Link those records instead of maintaining a second language specification here.
 
