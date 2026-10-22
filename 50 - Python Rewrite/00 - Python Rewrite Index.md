@@ -10,11 +10,11 @@ Research before implementation: establish what Spatial programs mean in Python, 
 
 **For students:** [[00 - Python Spatial Student Guide|Student guide preview]] starts with [[10 - Testing a Spatial Program|functional software tests]] and [[20 - Testing Your Own Project|custom final-project tests]]. The agreed student default is generated C++ execution from ordinary Python tests; the Python reference interpreter remains an internal verification tool. Public test helpers are planned and clearly marked.
 
-**Current phase — 21 October:** a pure Python compiler checks and executes an admitted memory-program subset and generates C++ through a general backend. [[80 - Initial Compiler Goal]] owns the unfinished initial goal and public-workflow obligations.
+**Current phase — 22 October:** a pure Python compiler checks and executes an admitted memory-program subset and generates C++ through a general backend. The saved scalar/shift batch now passes vendor C simulation, synthesis and RTL co-simulation. [[80 - Initial Compiler Goal]] owns the unfinished initial goal and public-workflow obligations.
 
-**Latest local checkpoint:** [[2026-10-21-scalar-target-checkpoint]] adds scalar Int32 Out/InOut cells and signed Index shift counts to generated C++ and the prepared depth-one vendor interface. Eleven development projects with 28 cases match independent expectations through reference execution, native C++ and locally compiled exact wrappers. A separate four-case directional-follower composition, authored after freeze, passed its first execution unchanged: the prepared total is 12 projects and 32 cases. The formerly rejected shift source and its original expectations now pass as regression evidence.
+**Latest hardware checkpoint:** [[2026-10-22-scalar-vitis-checkpoint]] records **12 projects and 32 cases** passing all three vendor stages at unchanged production `1e55eb8`: 27 normal completions and five expected faults. The batch includes scalar state, shifts, dot products, ordered updates, tiled maps and the independent directional-follower composition. Vitis preserved the checked logical behavior, but ignored the requested depth-one memory interfaces and chose scalar protocols. The next bounded step is an explicit scalar interface policy checked against synthesis reports and the artifact manifest, followed by a matched cost study before optimization.
 
-The full source and isolated-package suites each pass **1,329 tests**. The new scalar/shift programs have **no new synthesis or RTL result**. [[2026-10-21-vitis-rtl-checkpoint]] remains the earlier four-kernel, nine-case vendor evidence. The saved bundle is ready; ask David before reusing the stopped host, then run vendor stages and use scaling measurements to choose one general storage or scheduling improvement. Reg, Reduce/Fold, public check/prepare, real resumption and board integration remain open.
+[[2026-10-21-scalar-target-checkpoint]] owns the earlier local reference/native/wrapper agreement and **1,329 tests per source and isolated-package route**; the full suites were not rerun for this vendor-only checkpoint. [[2026-10-21-vitis-rtl-checkpoint]] remains the separate earlier four-kernel, nine-case hardware evidence. Reg, Reduce/Fold, public check/prepare, real resumption, full checked target planning and board integration remain open. The sequential measurements do not establish optimized parallelism or routed timing.
 
 **Reference replay earlier on 21 October:** the Lab 1 tiled-scale example and public capture-once/specialize-twice example were replayed. The accepted 18 October checkpoint passed **1,244 tests from source and 1,244 from an isolated installed wheel**; the meeting checks were a bounded replay of that checkpoint. [[2026-10-21-python-progress-presentation|The dated presentation notes]] preserve its outputs, composition replay and unchanged file manifests.
 
@@ -69,6 +69,7 @@ These distill the studies for review. Document review, design adoption, and impl
 
 ## HLS studies
 
+- [[2026-10-22-scalar-vitis-checkpoint]] — 12 projects and 32 cases through HLS/RTL, measured scaling and the scalar interface mismatch to resolve next.
 - [[2026-10-21-scalar-target-checkpoint]] — locally validated scalar state and shifts, prepared scaling cases and next vendor measurements.
 - [[2026-10-21-vitis-rtl-checkpoint]] — generated hardware, nine independent checks, measured baseline and remaining gaps.
 - [[2026-10-21-generated-cpp-checkpoint]] — executable generated C++, reviewed boundaries, saved examples and next vendor steps.
@@ -94,7 +95,7 @@ These distill the studies for review. Document review, design adoption, and impl
 
 [[03 - Independent Architecture Review|Architecture review]] · [[04 - Independent Numeric Review|Numeric review]] · [[05 - Independent Protocol and HLS Review|Protocol/HLS review]] · [[06 - Python Research Completion Audit|Requirement-by-requirement audit]]
 
-**Specification status:** proposed full contracts; the bounded initial implementation has its own authorized contract. **HLS status:** a bounded Python-generated vendor checkpoint is recorded; the newer scalar/shift extension is locally validated and awaits vendor execution. Full checked target planning and wider hardware support remain open. Create new topic pages for substantive work, and link evidence rather than copying status claims between pages.
+**Specification status:** proposed full contracts; the bounded initial implementation has its own authorized contract. **HLS status:** the original memory and newer scalar/shift batches have separate bounded vendor checkpoints. The scalar interface policy and manifest need to match the generated hardware before broader integration. Full checked target planning and wider hardware support remain open. Create new topic pages for substantive work, and link evidence rather than copying status claims between pages.
 
 ## How the earlier work fits
 

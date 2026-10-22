@@ -13,18 +13,29 @@ decisions, plans and evidence remain in their owning documents; this is the map
 and restart route. No private memory service, old agent session or temporary
 directory is required.
 
-**22 October meeting pause — current instruction:** David asked to pause compiler
-and HLS work before the professor meeting. Work now concerns the presentation and
-research navigation. [[2026-10-22-python-pipeline-presentation]] owns the new
+**22 October completed vendor batch — current checkpoint:** David supplied the
+running HLS host and authorized the prepared scalar/shift batch after the earlier
+meeting pause. [[2026-10-22-scalar-vitis-checkpoint]] records all 12 unchanged
+projects and 32 independently specified cases passing C simulation, synthesis and
+Verilog RTL co-simulation. Production remains `1e55eb8`; no language or student
+API increment was made. The compiler's
+`docs/evidence/task-06d-scalar-vendor.md` owns the exact evidence and limitations.
+The next bounded implementation step is to make scalar interface policy explicit
+and check the generated interfaces against the manifest: Vitis ignored the
+depth-one `ap_memory` requests. Then complete a matched cost study before choosing
+an optimization. Read the current checkpoint below and compiler `PROJECT_STATE.md`.
+
+**Earlier 22 October meeting pause:** David asked to pause compiler
+and HLS work before the professor meeting. At that point work concerned the
+presentation and research navigation. [[2026-10-22-python-pipeline-presentation]] owns the
 ten-minute, seven-slide story: follow up on the professor's fully Python request,
 explain the architecture, and use the existing Lab 1 tiled-scale result as one
 initial success through Python, generated C++, HLS and RTL simulation.
 
-The saved scalar/shift batch is ready, but **do not resume compiler work or vendor
-execution until David asks**. The HLS instance remains stopped; the separate
-requirement to ask before restarting or using it remains in force. Earlier next
-steps below are saved continuation context, not an instruction to resume during
-meeting preparation. The seven-slide deck and matching script have been reviewed
+The saved scalar/shift batch was ready, with compiler work and vendor execution
+paused until David asked. His later host instruction authorized the completed
+batch above; it did not authorize instance lifecycle changes or a new language
+increment. The seven-slide deck and matching script have been reviewed
 against saved evidence, including desktop/phone layout and interactive controls.
 The compiler project-state publication record holds the final deployment result.
 
@@ -133,7 +144,38 @@ and Rust presentations are historical evidence.
 
 ## Current checkpoint and next task
 
-**21 October scalar state and shifts — latest local implementation:**
+**22 October scalar/shift vendor run — latest hardware evidence:**
+[[2026-10-22-scalar-vitis-checkpoint]] records all 12 projects and 32 cases through
+Vitis C simulation, synthesis and Verilog RTL co-simulation: 27 successful
+completions and five expected faults, with RTL post-checks of data, initialization,
+status and fault owner. The same frozen sources and expected values were used.
+All 110 production files, 287 execution files, 133 original inputs and 133 staged
+inputs match; all 680 downloaded evidence files were hash-verified. The repository
+retains 668 of those vendor files byte-for-byte. Twelve redundant simulator logs
+with private infrastructure headers are omitted and recorded by hash; the raw
+archive stays private. No compiler behavior changed, and no full-suite rerun is
+claimed for this vendor-only checkpoint.
+
+**Restart task:** define and verify scalar interface policy before broader IP
+integration. Vitis warning HLS 207-5572 rejects the requested depth-one
+`ap_memory` protocol. In `scalar-sum`, scalar InOut uses `ap_ovld` and scalar Out
+uses `ap_vld`. In the fresh composition, Out result data uses `ap_vld` but its
+read/written initialization mask uses `ap_ovld`. Logical behavior passed; the
+manifest's requested physical interface did not. Check actual report mappings
+for data and initialization separately, including fault/incomplete-output cases.
+Invocations are explicitly seeded; no automatic state feedback between calls is
+established. Preserve the existing evidence unchanged.
+
+Then use the saved size/tile variants for a matched cost study before selecting
+one general storage or scheduling change. At map length 32, tile capacity 4
+takes 581 RTL cycles and capacity 16 takes 767; fewer tiles do not establish a
+faster schedule. Keep fault-path timing separate, distinguish transaction
+interval from loop II, and exclude external port memories from claims about the
+reported resource totals. The profile remains sequential; board/AXI integration,
+routed timing and optimized parallelism remain open. Instance lifecycle changes
+still require David's instruction; do not infer shutdown from completed jobs.
+
+**21 October scalar state and shifts — preceding local implementation:**
 [[2026-10-21-scalar-target-checkpoint]] records production
 `1e55eb8f5a20c11c1cd4a17010b6fa6cd4332e99`, pushed on `work/initial-reference`.
 Acceptance is `25a0e61`; code/evidence checkpoint `4273ff4` is unchanged.
@@ -152,14 +194,11 @@ isolated-wheel suites pass **1,329 tests**. All 110 production files, 287 execut
 files and 80 installed modules match their manifests. Compiler `PROJECT_STATE.md`
 and the linked evidence own exact acceptance records and 133 saved artifact files.
 
-There is **no new vendor execution, synthesis or RTL result** for this extension.
-The saved bundle is ready. Wait for David to resume compiler/HLS work after the
-meeting, and ask before restarting or using the stopped HLS host. After that
-authorization, run vendor C simulation, synthesis and RTL
-co-simulation; use the size/tile measurements to select one general storage or
-scheduling improvement. Keep fault order, initialization, aliases and earlier
-writes intact. Reg, Reduce/Fold, public check/prepare, real resumption, the full
-initial goal, checked target planning and board/AXI integration remain open.
+At that checkpoint the vendor stages were pending; the completed 22 October run
+above adds those results. Keep fault order, initialization, aliases and earlier
+writes intact in the next increment. Reg, Reduce/Fold, public check/prepare, real
+resumption, the full initial goal, checked target planning and board/AXI
+integration remain open.
 
 **21 October vendor HLS — preceding hardware checkpoint:**
 [[2026-10-21-vitis-rtl-checkpoint]] records four Python-generated kernels and nine
@@ -180,9 +219,9 @@ At that checkpoint, the next target increment was general shift-count lowering,
 followed by measured banking/pipelining work with end-to-end fault/memory checks.
 The IP profile is sequential; board/AXI integration, routed timing and full REP-S6
 remain open. The original reference/public-workflow obligations are unchanged.
-David subsequently reported stopping the HLS instance. **Ask him before restarting
-or using it again.** Prepare the next vendor test bundle locally first. Private
-connection/lifecycle information stays in the ignored infrastructure note.
+David subsequently reported stopping the HLS instance; the 22 October host
+instruction later authorized the saved scalar batch. Private connection/lifecycle
+information stays in the ignored infrastructure note.
 
 
 **21 October generated C++ — preceding implementation:**

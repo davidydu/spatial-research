@@ -6,6 +6,9 @@ date: 2026-10-21
 status: local-validation
 ---
 
+> [!note] Subsequent result — 22 October
+> [[2026-10-22-scalar-vitis-checkpoint]] records this unchanged batch passing vendor C simulation, synthesis and RTL co-simulation: 12 projects, 32 cases. It also corrects the prepared-interface assumption below: Vitis ignored depth-one `ap_memory` requests and generated scalar protocols. The logical behavior passed; explicit scalar interface policy and report-to-manifest checks remain the next bounded task. This page preserves the earlier local checkpoint.
+
 Python Spatial now generates C++ for programs that carry a scalar value across
 loop iterations and return scalar results. Seeded sums, tiled dot products and
 order-sensitive updates use the same compiler rules. Integer shifts also work

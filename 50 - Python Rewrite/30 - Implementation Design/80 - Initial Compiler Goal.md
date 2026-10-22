@@ -38,7 +38,7 @@ Handlers for language operations, control and storage are expected. Dispatch bas
 
 ## Infrastructure
 
-The reference milestone runs locally on the pinned CPython baseline and standard-library semantic core. The [[2026-10-21-hls-feasibility-checkpoint|21 October discussion]] keeps this goal intact while bringing hardware-mapping research and a bounded HLS experiment forward. It supersedes the 17 October full-language-before-HLS sequence; [[04 - Python Implementation Roadmap]] owns the revised order and Labs 1–3 progression. David subsequently supplied the running HLS host and authorized vendor execution. [[2026-10-21-vitis-rtl-checkpoint]] records the bounded result, pinned tool/part/clock and remaining limits. He then stopped the host; ask before restarting or reusing it. Prepare the next saved bundle locally first. Connection and lifecycle details remain private.
+The reference milestone runs locally on the pinned CPython baseline and standard-library semantic core. The [[2026-10-21-hls-feasibility-checkpoint|21 October discussion]] keeps this goal intact while bringing hardware-mapping research and a bounded HLS experiment forward. It supersedes the 17 October full-language-before-HLS sequence; [[04 - Python Implementation Roadmap]] owns the revised order and Labs 1–3 progression. David supplied the running HLS host for the first vendor checkpoint, then stopped it. On 22 October he supplied the running host again and authorized the prepared scalar/shift batch. [[2026-10-22-scalar-vitis-checkpoint]] records the completed bounded validation. Instance lifecycle changes require his instruction; connection details remain private.
 
 No FPGA resource, timing, RTL or hardware-support claim follows from local simulation.
 
@@ -51,11 +51,29 @@ Advanced students must be able to supply their own inputs, golden calculations,
 assertions and reusable HLS cases. A convenient public wrapper and case export
 remain pending; the Python reference engine and original conformance obligations
 remain part of compiler development. This is a documented delivery requirement,
-not a new implementation or hardware result. The meeting pause remains in force.
+not a new implementation or hardware result. The later authorized vendor batch
+below supersedes the meeting's host-use pause for that bounded validation only.
 
 The implementation lives in the separate `spatial-py` repository. Its active plan is `docs/plans/2026-10-04-initial-reference.md`; its support ledger and task evidence distinguish completed foundations from the full goal. Historical Scala/Rust repositories remain evidence and are not modified to supply a Python result.
 
-**Latest local target checkpoint — 21 October:**
+**Latest hardware checkpoint — 22 October:**
+[[2026-10-22-scalar-vitis-checkpoint]] records all **12 saved projects and 32
+independently specified cases** passing Vitis C simulation, synthesis and Verilog
+RTL co-simulation at unchanged production `1e55eb8`. There are 27 normal
+completions and five expected faults. Exact sources, testbenches, reports and
+generated RTL are preserved, with input and downloaded-evidence hashes checked.
+The full compiler suites were not rerun for this vendor-only checkpoint.
+
+The scalar values and initialization state behave correctly, but Vitis ignored
+the requested depth-one `ap_memory` directives and generated scalar protocols.
+The next bounded implementation task is an explicit scalar interface policy and
+report-to-manifest check before broader integration. Use the saved size/tile
+measurements for a matched cost study before selecting one general scheduling or
+storage change. This result does not complete Reg, Reduce/Fold, public
+check/prepare, real resumption, the original acceptance gates, checked target
+planning, board integration or optimized parallel hardware.
+
+**Preceding local target checkpoint — 21 October:**
 [[2026-10-21-scalar-target-checkpoint]] records production
 [`1e55eb8`](https://github.com/davidydu/spatial-py/commit/1e55eb8f5a20c11c1cd4a17010b6fa6cd4332e99),
 pushed on `work/initial-reference`. Four backend modules add scalar Int32 Out/InOut
@@ -69,12 +87,9 @@ first four-case execution unchanged, bringing the prepared bundle to 12 projects
 and 32 cases. Both complete source and isolated-package suites pass **1,329 tests**.
 The compiler evidence owns the detailed acceptance and suite results.
 
-No new vendor C simulation, synthesis or RTL run is claimed for this extension.
-The saved bundle is ready. Ask David before host reuse, then measure vendor
-behavior and scaling before choosing one general scheduling or storage change.
-Sequential scalar accumulation does not complete Reg or Reduce/Fold. Public
-check/prepare, real resumption, the original acceptance gates, checked target
-planning and board integration remain unfinished.
+At that local checkpoint the vendor stages were pending. The 22 October result
+above adds that evidence without changing compiler behavior or its saved cases.
+Sequential scalar accumulation does not complete Reg or Reduce/Fold.
 
 **Preceding vendor checkpoint — 21 October:**
 [[2026-10-21-vitis-rtl-checkpoint]] records four programs and nine cases passing
