@@ -28,6 +28,20 @@ meeting preparation. The seven-slide deck and matching script have been reviewed
 against saved evidence, including desktop/phone layout and interactive controls.
 The compiler project-state publication record holds the final deployment result.
 
+**22 October student testing direction:** David prefers generated C++ software
+execution as the normal student-facing backend, with the Python reference engine
+used internally for language/compiler verification. He approved the lab-style
+model of inputs, independent expected answers and self-checking tests, and asked
+to expose custom testing for open-ended final projects. Documentation now starts
+at [[00 - Python Spatial Student Guide]], with basic and advanced guides. Ordinary
+Python test functions, generators and custom assertions stay outside captured
+kernel syntax. Reusable concrete cases can feed generated C++ testbenches for
+Vitis and RTL; arbitrary Python tests are not translated into hardware. Public
+wrappers, compile-once execution and convenient case export are planned, not
+implemented. Existing internal native/HLS tools are linked. This documentation
+direction does not resume implementation or vendor execution, remove reference
+conformance obligations, or freeze a new public API spelling.
+
 ## Read only what the next task needs
 
 1. Read [[workflow]] and [[80 - Initial Compiler Goal]] for the current route.

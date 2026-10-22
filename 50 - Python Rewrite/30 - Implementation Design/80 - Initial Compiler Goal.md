@@ -44,6 +44,15 @@ No FPGA resource, timing, RTL or hardware-support claim follows from local simul
 
 ## Implementation and evidence
 
+**Student testing direction — 22 October:** [[00 - Python Spatial Student Guide]]
+starts the student documentation now. The intended normal execution backend is
+generated C++, driven by ordinary Python tests with independent expected results.
+Advanced students must be able to supply their own inputs, golden calculations,
+assertions and reusable HLS cases. A convenient public wrapper and case export
+remain pending; the Python reference engine and original conformance obligations
+remain part of compiler development. This is a documented delivery requirement,
+not a new implementation or hardware result. The meeting pause remains in force.
+
 The implementation lives in the separate `spatial-py` repository. Its active plan is `docs/plans/2026-10-04-initial-reference.md`; its support ledger and task evidence distinguish completed foundations from the full goal. Historical Scala/Rust repositories remain evidence and are not modified to supply a Python result.
 
 **Latest local target checkpoint — 21 October:**

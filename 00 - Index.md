@@ -11,6 +11,7 @@ Source-grounded research and an implementation-level specification of the Spatia
 ## Current direction
 
 - [[00 - Python Rewrite Index|Python Spatial research]] — current entry point for examples, research, decisions, and validation.
+- [[00 - Python Spatial Student Guide|Student guide preview]] — software tests, independent expected results, and custom tests for final projects; current tools and planned public interfaces are labeled separately.
 - [[01 - Python Research Plan|Research plan]] — programming model, semantics, compiler design, then HLS research and implementation planning.
 - [[D-27|Pure Python direction]] — accepted direction and its limits; [[D-28|detailed architecture proposed for review]].
 

@@ -3,10 +3,12 @@ type: moc
 title: "Python Spatial research"
 project: spatial-python
 date_started: 2026-09-30
-updated: 2026-10-21
+updated: 2026-10-22
 ---
 
 Research before implementation: establish what Spatial programs mean in Python, decide how the compiler represents and checks them, then study HLS lowering.
+
+**For students:** [[00 - Python Spatial Student Guide|Student guide preview]] starts with [[10 - Testing a Spatial Program|functional software tests]] and [[20 - Testing Your Own Project|custom final-project tests]]. The agreed student default is generated C++ execution from ordinary Python tests; the Python reference interpreter remains an internal verification tool. Public test helpers are planned and clearly marked.
 
 **Current phase — 21 October:** a pure Python compiler checks and executes an admitted memory-program subset and generates C++ through a general backend. [[80 - Initial Compiler Goal]] owns the unfinished initial goal and public-workflow obligations.
 
@@ -24,7 +26,7 @@ The full-language architecture and [[07 - Python Implementation Readiness Audit|
 
 **Latest refinement:** [[11 - Design Refinement Iterations]] records the Codex/Fable repair, challenge and verification rounds. [[PY-R015 - Numeric Status Repair and Independent Oracles]] repairs the confirmed underflow rule; [[PY-R016 - Source and Host Workflow Refinement]] completes the source/host proposal; [[PY-R017 - Compiler Representation Comparison]] supports the new immutable-record recommendation; [[PY-R018 - Protocol Policy Refinement]] makes the remaining policy boundaries explicit. Earlier [[09 - Fable Design Review|findings]] and [[10 - Fable Reconciled Feedback|external feedback]] remain dated evidence.
 
-<a href="https://davidydu.github.io/spatial-research-site/presentation/python/" data-router-ignore target="_blank" rel="noopener noreferrer">Open Spatial in Python — seven-slide presentation</a> · [[2026-10-21-python-progress-presentation|Ten-minute outline, speaker notes and dated evidence]]. The talk covers the working reference path, reusable features, remaining public workflow and language expansion. Interactive illustrations are explanatory; linked output records come from actual compiler runs.
+<a href="https://davidydu.github.io/spatial-research-site/presentation/python/" data-router-ignore target="_blank" rel="noopener noreferrer">Open Spatial in Python — seven-slide presentation</a> · [[2026-10-22-python-pipeline-presentation|Ten-minute outline, speaker notes and dated evidence]]. The talk covers the fully Python compiler and one existing Lab 1 result through generated C++, HLS and RTL simulation. Interactive illustrations are explanatory; linked output records come from actual compiler runs.
 
 1. [[D-27|Direction and authority]] — what the professor and David have settled.
 2. [[05 - Python Professor Brief|Professor brief]] — the proposal, progress, main tradeoff, and approval boundary.
@@ -86,6 +88,7 @@ These distill the studies for review. Document review, design adoption, and impl
 | `40 - Specification/` | Proposed Python language/compiler contracts for review, then adopted contracts with explicit authority |
 | `50 - HLS Lowering/` | Mapping the checked Python program to hardware plans, HLS, and target validation |
 | `60 - Validation/` | How claims will be checked; later, reproducible results and their limits |
+| `70 - Student Guide/` | Student tutorials and testing examples, including open-ended projects; distinguish runnable tools from planned public interfaces |
 
 [[00 - Python Validation Plan|Validation plan]] · [[01 - Python Coverage Ledger|Full-scope coverage ledger]] · [[02 - Python Research Review Log|Source checks and reviews]]
 

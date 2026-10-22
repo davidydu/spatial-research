@@ -40,6 +40,17 @@ No module retrieves a global current compiler, interpreter or target. A compilat
 
 ## Public workflow and failures
 
+**Student delivery refinement — 22 October 2026:** David selected generated C++
+software execution as the normal student workflow, exposed through ordinary
+Python tests and host code. [[00 - Python Spatial Student Guide]] and
+[[20 - Testing Your Own Project]] document the preview. Support custom inputs,
+independent gold calculations, assertions and concrete-case export for HLS/RTL;
+keep arbitrary host callbacks outside captured programs and the compiler core.
+The Python reference engine remains an internal conformance path. This refines
+the intended user experience, not the API signatures or reference obligations
+below. Current internal runners are available; a public native test wrapper,
+compile-once runtime input path and case-export convenience interface are pending.
+
 The following names are the proposed host API. [[PY-R016 - Source and Host Workflow Refinement]] records the alternatives and the 2026-10-03 constructor/output refinement; [[PY-R012 - Lab1 Syntax and Host Mapping]] supplies the complete ordinary Python driver. Kernel syntax and its registered operations are defined in [[10 - Source Checker and IR Blueprint]]. Successful calls expose frozen data/program handles or immutable result records, never mutable IR objects. `capture`/`specialize` return their value directly and raise the public `DiagnosticError(diagnostics)` on expected source/specialization failure; they never return a partial value after that exception. This preserves the previously specified direct-return signatures. `check`/`prepare` keep their existing Ok/Error results. Uniform Result returns could simplify a later API revision, but are not silently substituted in this proposal.
 
 | Call | Input and result |

@@ -24,6 +24,7 @@ Every file has a frontmatter block. `type` is required; other fields depend on `
 | type | Used for | Required extra fields |
 |---|---|---|
 | `moc` | Top-level / folder-level indexes ([[00 - Index]]) | — |
+| `guide` | Student tutorials and project workflows; label planned interfaces explicitly | `title`, `project`, `updated`, `status` |
 | `design` | One-off design docs ([[2026-04-21-spatial-spec-design]]) | `status` |
 | `plan` | Research, validation, and execution plans | `status`, `scope`, `date` |
 | `runbook` | Operational session-start docs ([[workflow]]) | `load_priority` |
