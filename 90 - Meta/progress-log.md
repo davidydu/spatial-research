@@ -9,6 +9,12 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-22 — Explicit scalar interfaces, local checkpoint
+
+- [[2026-10-22-scalar-interface-checkpoint]] records the bounded correction prompted by the vendor reports. Production `72fd513` is committed and pushed. Explicit seeds, fresh local singleton storage and output-only snapshots preserve faults and independent invocations; no semantic core or C++ emitter changed.
+- Specification and quality reviews passed. The 14-project/40-case development batch preserves all twelve prior Python sources/kernels byte-for-byte and separates eight adapter-only cases. All 103 backend tests pass. A separate author then supplied six fresh cases that passed first run unchanged. The final 15-project/46-case batch is prepared; both source and isolated-wheel suites pass 1,351 tests.
+- Report correspondence remains distinct from vendor provenance and functional evidence. New synthesis/RTL remains pending host availability. Student syntax and the public API proposal are unchanged.
+
 ## 2026-10-22 — Scalar state and shifts pass vendor and RTL validation
 
 - David supplied the running host after the meeting pause and authorized the prepared batch. [[2026-10-22-scalar-vitis-checkpoint]] records all 12 projects and 32 independent cases passing Vitis C simulation, synthesis and Verilog RTL co-simulation: 27 normal completions and five expected faults. Production remains `1e55eb8`; sources, wrappers and expectations were unchanged. RTL post-checks preserve data, initialization, fault status/owner and prior writes.

@@ -42,6 +42,8 @@ The normal student execution path will run generated C++. Our separate Python re
 
 Software test runtime is not hardware latency. A request such as `par=4` does not make a native test a measurement of four hardware lanes. [[2026-10-21-vitis-rtl-checkpoint|The existing hardware checkpoint]] records the limited programs already tested through RTL; newer local features have separate evidence.
 
+**Current backend update:** [[2026-10-22-scalar-interface-checkpoint|The experimental HLS wrapper]] now takes explicit scalar seeds and returns separate values and initialization flags. Student source syntax and the intended C++ testing workflow are unchanged. Local tests pass; this changed wrapper still needs fresh vendor/RTL validation.
+
 ## How this guide will grow
 
 Maintain the student guide here in the shared research vault as the language develops. For each user-visible language or testing feature, update its syntax, meaning, example, functional test and support status in the same checkpoint. As public interfaces become available, replace the marked sketches with examples exercised against the supported release. Keep the advanced testing route visible from the beginner tutorial so projects can grow beyond supplied lab cases.

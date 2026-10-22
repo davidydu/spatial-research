@@ -56,6 +56,8 @@ below supersedes the meeting's host-use pause for that bounded validation only.
 
 The implementation lives in the separate `spatial-py` repository. Its active plan is `docs/plans/2026-10-04-initial-reference.md`; its support ledger and task evidence distinguish completed foundations from the full goal. Historical Scala/Rust repositories remain evidence and are not modified to supply a Python result.
 
+**Latest local target increment — 22 October:** [[2026-10-22-scalar-interface-checkpoint]] records explicit singleton seeds, fresh wrapper-local storage and output-only snapshots, with a bounded synthesis-report correspondence reader. Production `72fd513` leaves the semantic core and C++ generator unchanged. The new vendor run remains pending.
+
 **Latest hardware checkpoint — 22 October:**
 [[2026-10-22-scalar-vitis-checkpoint]] records all **12 saved projects and 32
 independently specified cases** passing Vitis C simulation, synthesis and Verilog
@@ -66,8 +68,9 @@ The full compiler suites were not rerun for this vendor-only checkpoint.
 
 The scalar values and initialization state behave correctly, but Vitis ignored
 the requested depth-one `ap_memory` directives and generated scalar protocols.
-The next bounded implementation task is an explicit scalar interface policy and
-report-to-manifest check before broader integration. Use the saved size/tile
+The subsequent local increment implements an explicit scalar interface policy
+and report-to-manifest reader; validating its new wrapper through HLS/RTL is the
+next target step before broader integration. Use the saved size/tile
 measurements for a matched cost study before selecting one general scheduling or
 storage change. This result does not complete Reg, Reduce/Fold, public
 check/prepare, real resumption, the original acceptance gates, checked target

@@ -13,16 +13,19 @@ decisions, plans and evidence remain in their owning documents; this is the map
 and restart route. No private memory service, old agent session or temporary
 directory is required.
 
-**22 October completed vendor batch — current checkpoint:** David supplied the
+**22 October scalar interface correction — current local checkpoint:**
+[[2026-10-22-scalar-interface-checkpoint]] records production `72fd513`, explicit seeds and output-only snapshots, and a small report correspondence reader. Both complete source and isolated-wheel suites pass 1,351 tests. The prepared batch has 15 projects/46 cases, including a fresh six-case composition that passed without repair. The previous hardware result below belongs to unchanged old wrappers. Resume from compiler `PROJECT_STATE.md` and `docs/plans/2026-10-22-scalar-interface.md`; new synthesis and RTL validation require host availability.
+
+**22 October completed vendor batch — latest hardware evidence:** David supplied the
 running HLS host and authorized the prepared scalar/shift batch after the earlier
 meeting pause. [[2026-10-22-scalar-vitis-checkpoint]] records all 12 unchanged
 projects and 32 independently specified cases passing C simulation, synthesis and
 Verilog RTL co-simulation. Production remains `1e55eb8`; no language or student
 API increment was made. The compiler's
 `docs/evidence/task-06d-scalar-vendor.md` owns the exact evidence and limitations.
-The next bounded implementation step is to make scalar interface policy explicit
-and check the generated interfaces against the manifest: Vitis ignored the
-depth-one `ap_memory` requests. Then complete a matched cost study before choosing
+The subsequent local correction makes scalar interface policy explicit; actual
+report correspondence for its new wrapper remains pending. Vitis ignored the
+old depth-one `ap_memory` requests. Then complete a matched cost study before choosing
 an optimization. Read the current checkpoint below and compiler `PROJECT_STATE.md`.
 
 **Earlier 22 October meeting pause:** David asked to pause compiler
@@ -156,8 +159,9 @@ with private infrastructure headers are omitted and recorded by hash; the raw
 archive stays private. No compiler behavior changed, and no full-suite rerun is
 claimed for this vendor-only checkpoint.
 
-**Restart task:** define and verify scalar interface policy before broader IP
-integration. Vitis warning HLS 207-5572 rejects the requested depth-one
+**Restart task:** validate the new explicit scalar wrapper with fresh Vitis
+reports and RTL before broader IP integration. The local policy and reader are
+implemented; see [[2026-10-22-scalar-interface-checkpoint]]. The reason for this correction remains: Vitis warning HLS 207-5572 rejects the requested depth-one
 `ap_memory` protocol. In `scalar-sum`, scalar InOut uses `ap_ovld` and scalar Out
 uses `ap_vld`. In the fresh composition, Out result data uses `ap_vld` but its
 read/written initialization mask uses `ap_ovld`. Logical behavior passed; the

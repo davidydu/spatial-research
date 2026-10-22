@@ -12,13 +12,15 @@ Research before implementation: establish what Spatial programs mean in Python, 
 
 **Current phase — 22 October:** a pure Python compiler checks and executes an admitted memory-program subset and generates C++ through a general backend. The saved scalar/shift batch now passes vendor C simulation, synthesis and RTL co-simulation. [[80 - Initial Compiler Goal]] owns the unfinished initial goal and public-workflow obligations.
 
-**Latest hardware checkpoint:** [[2026-10-22-scalar-vitis-checkpoint]] records **12 projects and 32 cases** passing all three vendor stages at unchanged production `1e55eb8`: 27 normal completions and five expected faults. The batch includes scalar state, shifts, dot products, ordered updates, tiled maps and the independent directional-follower composition. Vitis preserved the checked logical behavior, but ignored the requested depth-one memory interfaces and chose scalar protocols. The next bounded step is an explicit scalar interface policy checked against synthesis reports and the artifact manifest, followed by a matched cost study before optimization.
+**Latest hardware checkpoint:** [[2026-10-22-scalar-vitis-checkpoint]] records **12 projects and 32 cases** passing all three vendor stages at unchanged production `1e55eb8`: 27 normal completions and five expected faults. The batch includes scalar state, shifts, dot products, ordered updates, tiled maps and the independent directional-follower composition. Vitis preserved the checked logical behavior, but ignored the requested depth-one memory interfaces and chose scalar protocols. The subsequent local correction makes that policy explicit; validating the new wrapper against fresh synthesis reports is next, followed by a matched cost study before optimization.
 
 [[2026-10-21-scalar-target-checkpoint]] owns the earlier local reference/native/wrapper agreement and **1,329 tests per source and isolated-package route**; the full suites were not rerun for this vendor-only checkpoint. [[2026-10-21-vitis-rtl-checkpoint]] remains the separate earlier four-kernel, nine-case hardware evidence. Reg, Reduce/Fold, public check/prepare, real resumption, full checked target planning and board integration remain open. The sequential measurements do not establish optimized parallelism or routed timing.
 
 **Reference replay earlier on 21 October:** the Lab 1 tiled-scale example and public capture-once/specialize-twice example were replayed. The accepted 18 October checkpoint passed **1,244 tests from source and 1,244 from an isolated installed wheel**; the meeting checks were a bounded replay of that checkpoint. [[2026-10-21-python-progress-presentation|The dated presentation notes]] preserve its outputs, composition replay and unchanged file manifests.
 
 The full-language architecture and [[07 - Python Implementation Readiness Audit|implementation-readiness review]] remain research checkpoints. [[PY-E002 - Spatial to Python Syntax Atlas|The course syntax atlas]] and [[60 - Course Syntax and Compiler Trace]] connect that proposal to the professor's examples. The full design uses captured kernels, Python-owned semantics and simulation, immutable program/plan records, and a checked HLS backend. xDSL is an optional derived adapter under [[PY-R017 - Compiler Representation Comparison]]. [[D-28]] remains proposed for professor review; current reference execution does not establish the complete design or hardware support.
+
+**Latest local change:** [[2026-10-22-scalar-interface-checkpoint]] replaces inferred singleton ports with explicit seeds and separate output snapshots. The semantic core and C++ kernels are unchanged. Fresh synthesis/RTL evidence is pending.
 
 ## Read first
 
@@ -68,6 +70,8 @@ For “what would Python look like?”, start with [[PY-E002 - Spatial to Python
 These distill the studies for review. Document review, design adoption, and implemented support have separate status fields.
 
 ## HLS studies
+
+- [[2026-10-22-scalar-interface-checkpoint]] — explicit singleton transport, local regression and report-checking evidence; fresh vendor validation pending.
 
 - [[2026-10-22-scalar-vitis-checkpoint]] — 12 projects and 32 cases through HLS/RTL, measured scaling and the scalar interface mismatch to resolve next.
 - [[2026-10-21-scalar-target-checkpoint]] — locally validated scalar state and shifts, prepared scaling cases and next vendor measurements.
