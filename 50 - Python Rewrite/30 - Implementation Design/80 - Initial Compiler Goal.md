@@ -67,7 +67,9 @@ See [[04 - Python Implementation Roadmap]].
 
 **Latest local target increment — 22 October:** [[2026-10-22-scalar-interface-checkpoint]] records explicit singleton seeds, fresh wrapper-local storage and output-only snapshots, with a bounded synthesis-report correspondence reader. Production `72fd513` leaves the semantic core and C++ generator unchanged. The new vendor run remains pending.
 
-**Latest hardware checkpoint — 22 October:**
+**Latest hardware checkpoint — 27 October:** [[2026-10-27-scalar-interface-vitis-checkpoint]]: the frozen 15-project/46-case interface batch passes Vitis C simulation, synthesis and RTL co-simulation with explicit `ap_none` seeds and `ap_vld` results, and every scalar result write is confirmed in RTL data.
+
+**Previous hardware checkpoint — 22 October:**
 [[2026-10-22-scalar-vitis-checkpoint]] records all **12 saved projects and 32
 independently specified cases** passing Vitis C simulation, synthesis and Verilog
 RTL co-simulation at unchanged production `1e55eb8`. There are 27 normal

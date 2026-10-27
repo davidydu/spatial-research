@@ -3,8 +3,11 @@ type: implementation-checkpoint
 title: "Explicit scalar interfaces: local validation"
 project: spatial-python
 date: 2026-10-22
-status: locally-validated-vendor-pending
+status: locally-validated-vendor-validated
 ---
+
+> [!success] Vendor validated on 27 October
+> All 15 projects / 46 cases passed Vitis C simulation, synthesis and RTL co-simulation: [[2026-10-27-scalar-interface-vitis-checkpoint]].
 
 # Explicit scalar interfaces: local validation
 

@@ -680,7 +680,7 @@ validation roster through EC2/Vitis at source commit `a30ec96`.
 
 Evidence:
 - Remote host: `[ec2-host — see private/ec2-lane.md]`
-  (`ip-172-31-37-7`)
+  (`[internal host — see private/ec2-lane.md]`)
 - Remote run directory:
   `/home/ubuntu/spatial-rs-runs/raw-ingress-retire-35-a30ec96/spatial-rs`
 - Durable evidence:
@@ -708,7 +708,7 @@ validation roster through EC2/Vitis at source commit `d521a0f`.
 
 Evidence:
 - Remote host: `[ec2-host — see private/ec2-lane.md]`
-  (`ip-172-31-37-7`)
+  (`[internal host — see private/ec2-lane.md]`)
 - Remote run directory:
   `/home/ubuntu/spatial-rs-runs/scheduled-row-col-k-tail-35-d521a0f/spatial-rs`
 - Durable evidence:
@@ -743,7 +743,7 @@ validation roster through EC2/Vitis at source commit `2087625`.
 
 Evidence:
 - Remote host: `[ec2-host — see private/ec2-lane.md]`
-  (`ip-172-31-37-7`)
+  (`[internal host — see private/ec2-lane.md]`)
 - Remote run directory:
   `/home/ubuntu/spatial-rs-runs/row-col-k-tail-34-2087625/spatial-rs`
 - Durable evidence:
@@ -1608,7 +1608,7 @@ source commit `a16401b9c1699d8f92d7ec0a93b04ae608d90617` on
 
 Evidence:
 - Remote host: `[ec2-host — see private/ec2-lane.md]`
-  (`ip-172-31-37-7`)
+  (`[internal host — see private/ec2-lane.md]`)
 - Remote run directory:
   `/home/ubuntu/spatial-rs-runs/block-comments-a16401b/spatial-rs`
 - Command:

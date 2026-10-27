@@ -29,7 +29,9 @@ professor's response to the 22 October meeting is still to be recorded.
 **22 October scalar interface correction — preceding local checkpoint:**
 [[2026-10-22-scalar-interface-checkpoint]] records production `72fd513`, explicit seeds and output-only snapshots, and a small report correspondence reader. Both complete source and isolated-wheel suites pass 1,351 tests. The prepared batch has 15 projects/46 cases, including a fresh six-case composition that passed without repair. The previous hardware result below belongs to unchanged old wrappers. Resume from compiler `PROJECT_STATE.md` and `docs/plans/2026-10-22-scalar-interface.md`; new synthesis and RTL validation require host availability.
 
-**22 October completed vendor batch — latest hardware evidence:** David supplied the
+**27 October vendor checkpoint — latest hardware evidence:** [[2026-10-27-scalar-interface-vitis-checkpoint]]. The corrected scalar-interface batch passes all nine pre-registered rules on its third run. The first run failed one rule on two zero-latency fixtures, the rule was corrected with David's approval, and the second run had a staging-path error. All three runs are kept, and their hardware outputs are byte-identical.
+
+**22 October completed vendor batch — earlier hardware evidence:** David supplied the
 running HLS host and authorized the prepared scalar/shift batch after the earlier
 meeting pause. [[2026-10-22-scalar-vitis-checkpoint]] records all 12 unchanged
 projects and 32 independently specified cases passing C simulation, synthesis and

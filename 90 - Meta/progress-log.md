@@ -11,6 +11,7 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ## 2026-10-27 — Public workflow (E1) complete; E2 plan adopted
 
+- After David's restart notice, the frozen 15-project/46-case scalar-interface batch passed Vitis C simulation, synthesis and RTL co-simulation: [[2026-10-27-scalar-interface-vitis-checkpoint]]. Run 1 failed the pre-registered progress rule on two zero-latency adapter fixtures; David approved correcting it and rerunning; run 2 failed provenance after a staging-path mistake; run 3 passed all nine rules. Outputs are byte-identical across the runs; an independent evidence review found the claims supported with caveats, now disclosed.
 - E1, the first S1-exit increment, is complete at compiler `a46f806`: public `check`/`prepare` with `Ok`/`Error` results and an experimental compile-once native handle. Specification and quality reviews were resolved; four integration defects were fixed test-first; a separate author's black-box acceptance tests passed on their first run; full source and isolated-wheel suites passed. [Evidence](https://github.com/davidydu/spatial-py/blob/a46f8068788bc7a39f4ed7f1877ce7009a28cecc/docs/evidence/e1-public-workflow.md).
 - Student guide page 10 now describes this public path in "What exists today".
 - The E2 design review (SpatialJSON-v1 and unchecked import) approved with changes, all adopted. It found that record construction is quadratic in nesting depth, recorded for E3 and E5.
@@ -2074,7 +2075,7 @@ open risks to carry into B2/Stage C, not defects in the shipped slices. Related:
 - Ran the selected-kernel Vitis lane for the known over-resource-budget
   `MatrixTileMemFoldOuterKInPlacePar4x16FixPt32x32x32` canary on
   `[ec2-host — see private/ec2-lane.md]`
-  (`ip-172-31-37-7`) with Cargo 1.75.0 and Vitis 2025.1.
+  (`[internal host — see private/ec2-lane.md]`) with Cargo 1.75.0 and Vitis 2025.1.
 - Remote run directory:
   `/home/ubuntu/spatial-rs-runs/2026-07-05-selected-par4x16-6d461260`.
 - Command:
@@ -2111,7 +2112,7 @@ open risks to carry into B2/Stage C, not defects in the shipped slices. Related:
 - Ran the new selected-kernel Vitis lane for
   `MatrixTileMemFoldOuterKInPlaceFixPt32x32x32` on
   `[ec2-host — see private/ec2-lane.md]`
-  (`ip-172-31-37-7`) with Cargo 1.75.0 and Vitis 2025.1.
+  (`[internal host — see private/ec2-lane.md]`) with Cargo 1.75.0 and Vitis 2025.1.
 - Remote run directory:
   `/home/ubuntu/spatial-rs-runs/2026-07-05-selected-kernel-38ade9d2`.
 - Command:
@@ -2183,7 +2184,7 @@ open risks to carry into B2/Stage C, not defects in the shipped slices. Related:
 - Ran a one-kernel EC2/Vitis 2025.1 proof for
   `MatrixTileMemFoldTailFixPt5x7x5` on
   `[ec2-host — see private/ec2-lane.md]`
-  (`ip-172-31-37-7`) with Cargo 1.75.0 and
+  (`[internal host — see private/ec2-lane.md]`) with Cargo 1.75.0 and
   `/tools/Xilinx/2025.1/Vitis/settings64.sh`.
 - Command:
   `cd /home/ubuntu/spatial-rs-runs/2026-07-05-fixpt-tail-oneoff/oneoff && cargo run --offline -- --mode both --out /home/ubuntu/spatial-rs-runs/2026-07-05-fixpt-tail-oneoff/vitis-oneoff`.
@@ -2995,7 +2996,7 @@ open risks to carry into B2/Stage C, not defects in the shipped slices. Related:
   to 37 programs.
 - EC2/Vitis proof:
   host `[ec2-host — see private/ec2-lane.md]`
-  (`ip-172-31-37-7`), Vitis 2025.1, Rust/Cargo 1.75.0, target
+  (`[internal host — see private/ec2-lane.md]`), Vitis 2025.1, Rust/Cargo 1.75.0, target
   `xc7z020-clg400-1`, 10 ns clock target.
 - Remote run directory:
   `/home/ubuntu/spatial-rs-runs/2026-07-04-current-head-a62eb274/repo`.
@@ -3111,7 +3112,7 @@ Checkpoint:
 
 EC2/Vitis proof:
 - Host: `[ec2-host — see private/ec2-lane.md]`
-  (`ip-172-31-37-7`).
+  (`[internal host — see private/ec2-lane.md]`).
 - Toolchain: `/tools/Xilinx/2025.1/Vitis/settings64.sh`, Vitis runner
   `vitis-run v2025.1`, HLS build `2025.1 6135595`, Rust/Cargo 1.75.0,
   target `xc7z020-clg400-1`, 10 ns clock target.
@@ -4454,7 +4455,7 @@ Boundary:
 - Ran the full 35-program EE109 validation roster on EC2/Vitis for
   `/Users/david/Documents/David_code/spatial-rs` (`David/HLS-spatial`) at clean
   source commit `cc86ab5d2f62a335bd189fb7b1916990efc51ff2`. EC2 host
-  `[ec2-host — see private/ec2-lane.md]` / `ip-172-31-37-7` ran
+  `[ec2-host — see private/ec2-lane.md]` / `[internal host — see private/ec2-lane.md]` ran
   Vitis 2025.1 with `/tools/Xilinx/2025.1/Vitis/settings64.sh`; all 35 kernels
   reported `returncode=0`, `csim=true`, and `csynth=true`. Imported evidence is
   in
@@ -5259,7 +5260,7 @@ Rust repo branch: `/Users/david/Documents/David_code/spatial-rs` on
 Vendor-HLS checkpoint completed:
 - Rust commit under test: `7a16a23` — `Add rank-2 tiled int scale feature`.
 - EC2 host: `[ec2-host — see private/ec2-lane.md]`
-  (`ip-172-31-37-7`), using Vitis/Vivado 2025.1 through
+  (`[internal host — see private/ec2-lane.md]`), using Vitis/Vivado 2025.1 through
   `vitis-run --mode hls --tcl`.
 - The current instance exposes `vitis-run`, not a standalone `vitis_hls`
   binary. This matches the repo runner and the prior smoke-check boundary.
@@ -6472,7 +6473,7 @@ Checkpoint:
   `2087625`, which adds only a Rust 1.75 compatibility shim over the previous
   canary commit `fa33d55`.
 - EC2 host `[ec2-host — see private/ec2-lane.md]`
-  (`ip-172-31-37-7`) ran Vitis 2025.1 from
+  (`[internal host — see private/ec2-lane.md]`) ran Vitis 2025.1 from
   `/home/ubuntu/spatial-rs-runs/row-col-k-tail-34-2087625/spatial-rs`.
 - Command:
   `cargo run --manifest-path /home/ubuntu/spatial-rs-runs/row-col-k-tail-34-2087625/spatial-rs/Cargo.toml -p ee109-examples --locked --bin run-vitis-validation -- --execute --mode both --out /home/ubuntu/spatial-rs-runs/row-col-k-tail-34-2087625/spatial-rs/target/vitis-validation-row-col-k-tail-34-2087625`
