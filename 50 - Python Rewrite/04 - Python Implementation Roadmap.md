@@ -29,7 +29,7 @@ for students, artifact import with full re-verification, the builder effect
 ledger, `REP-S1`, `REP-EDIT`, a derived execution program, cumulative resumption
 and a fresh unseen composition. Labs families and optimizations follow it.
 
-Progress: E1 completed on 27 October; the compiler's `PROJECT_STATE.md` is the current status.
+Progress: E1 and E2 completed on 27 October; the compiler's `PROJECT_STATE.md` is the current status.
 
 The next hardware milestone is an AWS F2 profile matching the course flow, with
 loop pipelining enabled and achieved II reported. It replaces the Z020 size/tile

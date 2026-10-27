@@ -63,7 +63,7 @@ re-verification, builder parity (`REP-S1`), verified editing (`REP-EDIT`), a
 derived execution program, resumable simulation and the final unseen composition.
 See [[04 - Python Implementation Roadmap]].
 
-**Progress — 27 October:** the public workflow increment (E1) is complete: `check` and `prepare` return `Ok`/`Error`, and an experimental native handle compiles a checked kernel once and runs it many times. Canonical artifact import (E2) is next. See [[10 - Testing a Spatial Program#What exists today]].
+**Progress — 27 October:** the public workflow increment (E1) is complete: `check` and `prepare` return `Ok`/`Error`, and an experimental native handle compiles a checked kernel once and runs it many times. Canonical artifact export and import (E2) is complete; the programmatic builder (E3) is next. See [[10 - Testing a Spatial Program#What exists today]].
 
 **Latest local target increment — 22 October:** [[2026-10-22-scalar-interface-checkpoint]] records explicit singleton seeds, fresh wrapper-local storage and output-only snapshots, with a bounded synthesis-report correspondence reader. Production `72fd513` leaves the semantic core and C++ generator unchanged. The new vendor run remains pending.
 

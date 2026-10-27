@@ -9,8 +9,9 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
-## 2026-10-27 — Public workflow (E1) complete; E2 plan adopted
+## 2026-10-27 — Public workflow (E1) complete; E2 complete; vendor batch passed
 
+- E2, canonical SpatialJSON-v1 export and import of unchecked programs, is complete at compiler `7fa4603`. Design, specification and quality reviews were resolved; quality fixes cut import peak memory for a 16 MiB input from about 900 MiB to 120-200 MiB. A fresh 15-test holdout passed on its first run, and full source and installed-wheel suites passed. [Evidence](https://github.com/davidydu/spatial-py/blob/7fa4603f2ca8452ae7c20755fd54009ac2e03a55/docs/evidence/e2-spatialjson.md).
 - After David's restart notice, the frozen 15-project/46-case scalar-interface batch passed Vitis C simulation, synthesis and RTL co-simulation: [[2026-10-27-scalar-interface-vitis-checkpoint]]. Run 1 failed the pre-registered progress rule on two zero-latency adapter fixtures; David approved correcting it and rerunning; run 2 failed provenance after a staging-path mistake; run 3 passed all nine rules. Outputs are byte-identical across the runs; an independent evidence review found the claims supported with caveats, now disclosed.
 - E1, the first S1-exit increment, is complete at compiler `a46f806`: public `check`/`prepare` with `Ok`/`Error` results and an experimental compile-once native handle. Specification and quality reviews were resolved; four integration defects were fixed test-first; a separate author's black-box acceptance tests passed on their first run; full source and isolated-wheel suites passed. [Evidence](https://github.com/davidydu/spatial-py/blob/a46f8068788bc7a39f4ed7f1877ce7009a28cecc/docs/evidence/e1-public-workflow.md).
 - Student guide page 10 now describes this public path in "What exists today".
