@@ -9,6 +9,13 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-27 — Public workflow (E1) complete; E2 plan adopted
+
+- E1, the first S1-exit increment, is complete at compiler `a46f806`: public `check`/`prepare` with `Ok`/`Error` results and an experimental compile-once native handle. Specification and quality reviews were resolved; four integration defects were fixed test-first; a separate author's black-box acceptance tests passed on their first run; full source and isolated-wheel suites passed. [Evidence](https://github.com/davidydu/spatial-py/blob/a46f8068788bc7a39f4ed7f1877ce7009a28cecc/docs/evidence/e1-public-workflow.md).
+- Student guide page 10 now describes this public path in "What exists today".
+- The E2 design review (SpatialJSON-v1 and unchecked import) approved with changes, all adopted. It found that record construction is quadratic in nesting depth, recorded for E3 and E5.
+- The HLS host remains stopped pending David's restart notice; no SSH, vendor tool or site deployment ran.
+
 ## 2026-10-26 — Direction review, S1-exit decision and vendor tooling
 
 - David asked whether the research suffices to start and finish the compiler, and for a plan review. The parent assessment and an independent review agreed: sufficient to start and for Lab 1–3 language semantics; not yet for the hardware half (no implemented plan layer, the course's AWS F2 platform not yet targeted, scheduling unvalidated) or realistic reference-execution sizes (about 7 ms per element). The working sequence skipped the roadmap's S1-exit gates. David approved the recommendations; [[04 - Python Implementation Roadmap]] records the new order.

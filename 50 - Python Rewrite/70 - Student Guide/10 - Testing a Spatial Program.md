@@ -2,7 +2,7 @@
 type: guide
 title: "Testing a Spatial program"
 project: spatial-python
-updated: 2026-10-22
+updated: 2026-10-27
 status: preview
 ---
 
@@ -11,7 +11,7 @@ status: preview
 A functional test supplies inputs, runs the accelerator, and checks its outputs against an independently specified answer. The accelerator runs as generated C++; the surrounding test can be ordinary Python.
 
 > [!important] Planned student interface
-> The `cpp_kernel` fixture below represents a project or course helper that compiles a chosen kernel and runs its generated C++. This fixture and its `.run(...)` convenience interface are not shipped. The example demonstrates the intended workflow, not an available public Spatial API. See [[#What exists today]] for the current developer path.
+> The `cpp_kernel` fixture below represents a project or course helper that compiles a chosen kernel and runs its generated C++. It is not shipped as a test fixture. A developer example now provides the same `.run(...)` call over an experimental public native handle; see [[#What exists today]].
 
 ## Write a test with a known answer
 
@@ -50,9 +50,9 @@ Run checks against the generated kernel actually selected for HLS. When a source
 
 The compiler repository currently requires collaborator access. The pinned source links below are developer evidence; GitHub may show a 404 when you are not signed in with access. Public readers can use [[80 - Initial Compiler Goal|implementation progress]] and [[2026-10-21-generated-cpp-checkpoint|the native C++ checkpoint]]. This preview is not a public installation guide.
 
-The [developer native example](https://github.com/davidydu/spatial-py/blob/9be9b9056b1c0b7af021a0e478ae9218dbfb1c7b/examples/run_cpp_reference.py#L30-L74) compiles captured source, runs generated C++, and checks independent expected values. It also runs the Python reference interpreter as a separate compiler-development check. It uses internal compiler interfaces, rather than the student fixture above.
+A public workflow exists as a developer preview. `spatial.check` and `spatial.prepare` return `Ok` or `Error`, and the experimental `spatial.compile_native` compiles a checked kernel once into a native handle that runs many times with different inputs. A run reports the outcome, the outputs only on completion, and every memory's contents and initialization. It never falls back to the compiler's Python reference interpreter.
 
-The [native runner](https://github.com/davidydu/spatial-py/blob/9be9b9056b1c0b7af021a0e478ae9218dbfb1c7b/src/spatial/backends/cpp_run.py#L126-L178) returns completion/fault information and output buffers. It currently embeds each case's inputs in a temporary testbench and recompiles on each invocation. Compiling once and supplying different runtime inputs remains planned.
+The [public native example](https://github.com/davidydu/spatial-py/blob/a46f8068788bc7a39f4ed7f1877ce7009a28cecc/examples/run_public_native.py) checks Lab 1, compiles it once and runs every case against independent expected values. Its [`plain_bindings` adapter](https://github.com/davidydu/spatial-py/blob/a46f8068788bc7a39f4ed7f1877ce7009a28cecc/examples/run_public_native.py#L25-L59) provides the `cpp_kernel.run(src=..., scale=...)` call shown above from the handle's port list; the compiler's own interface takes typed input records. The [E1 evidence](https://github.com/davidydu/spatial-py/blob/a46f8068788bc7a39f4ed7f1877ce7009a28cecc/docs/evidence/e1-public-workflow.md) lists its checks and limits.
 
 The [HLS bundle generator](https://github.com/davidydu/spatial-py/blob/9be9b9056b1c0b7af021a0e478ae9218dbfb1c7b/src/spatial/backends/vitis.py#L179-L215) already accepts explicit expectations and generates a C++ testbench that returns failure on a mismatch. Public case export and a convenient student test launcher remain to be implemented. These pages add no new compiler or hardware capability.
 
