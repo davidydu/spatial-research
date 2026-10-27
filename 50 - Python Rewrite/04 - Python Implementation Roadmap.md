@@ -18,7 +18,25 @@ The intended result is a Python language frontend, Python semantic compiler, and
 
 The implementation contract will combine the reviewed programming-model recommendation, numeric/effect/protocol rules, compiler architecture, host workflow, and HLS studies. A later change to an adopted contract needs a dated decision and migration cases. Team capability is assumed adequate; the order below follows semantic dependencies and feedback value rather than scarce language expertise.
 
-## Current execution direction — 21 October 2026
+## Current execution direction — 26 October 2026
+
+A direction review found the research sufficient to start and to implement the
+Lab 1–3 language semantics, but not yet to finish the hardware half, and found
+that the working sequence skipped this roadmap's own S1-exit gates. David
+approved its recommendations. After the corrected scalar-interface vendor batch,
+the next milestone closes the S1 exit: public check/prepare with native execution
+for students, artifact import with full re-verification, the builder effect
+ledger, `REP-S1`, `REP-EDIT`, a derived execution program, cumulative resumption
+and a fresh unseen composition. Labs families and optimizations follow it.
+
+The next hardware milestone is an AWS F2 profile matching the course flow, with
+loop pipelining enabled and achieved II reported. It replaces the Z020 size/tile
+cost study and "select one optimization" step below. Thin PlanRecords for the S1
+subset precede any check elision, so the first elision is a checked plan
+transform. Professor adoption of [[D-28]] remains pending. The compiler's
+`PROJECT_STATE.md` and its direction review own the exact evidence.
+
+## Execution direction — 21 October 2026 (superseded next steps)
 
 David agreed to keep the Python compiler foundation and bring a bounded HLS
 feasibility check forward. [[2026-10-21-hls-feasibility-checkpoint]] owns the

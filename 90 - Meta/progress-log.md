@@ -9,6 +9,13 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-26 — Direction review, S1-exit decision and vendor tooling
+
+- David asked whether the research suffices to start and finish the compiler, and for a plan review. The parent assessment and an independent review agreed: sufficient to start and for Lab 1–3 language semantics; not yet for the hardware half (no implemented plan layer, the course's AWS F2 platform not yet targeted, scheduling unvalidated) or realistic reference-execution sizes (about 7 ms per element). The working sequence skipped the roadmap's S1-exit gates. David approved the recommendations; [[04 - Python Implementation Roadmap]] records the new order.
+- Compiler-side records: direction review, S1-exit milestone and first-increment design (public check/prepare plus compile-once native execution), and a private AWS F2 profile study with open questions for David. No compiler behavior, test or frozen input changed.
+- Prepared reusable Vitis batch tooling for the frozen 15-project/46-case interface batch with nine acceptance rules fixed before the run. An independent plan review found that the testbench post-check cannot detect a missing singleton result write (22 October `late-fault` shows an empty RTL transaction); the new rule checks each RTL write against the oracle. A second independent review tightened provenance, leak patterns and project binding; calibration against the saved 22 October outputs passes 28 of 28 expectations. The documented 22 October replay had broken at HEAD because it hashed the working tree; it now checks the recorded revisions.
+- The HLS host remains stopped pending David's restart notice; no SSH, vendor tool or site deployment ran. Per the approved process change, the site is redeployed at milestone boundaries.
+
 ## 2026-10-22 — Explicit scalar interfaces, local checkpoint
 
 - [[2026-10-22-scalar-interface-checkpoint]] records the bounded correction prompted by the vendor reports. Production `72fd513` is committed and pushed. Explicit seeds, fresh local singleton storage and output-only snapshots preserve faults and independent invocations; no semantic core or C++ emitter changed.

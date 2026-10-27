@@ -13,7 +13,18 @@ decisions, plans and evidence remain in their owning documents; this is the map
 and restart route. No private memory service, old agent session or temporary
 directory is required.
 
-**22 October scalar interface correction — current local checkpoint:**
+**26 October direction decision — current plan:** a direction review found the
+research sufficient to start and to implement Lab 1–3 language semantics, but
+not yet to finish the hardware half. David approved its recommendations: after
+the corrected scalar-interface vendor batch, close the roadmap's S1 exit before
+any Labs family or optimization; the next hardware milestone is an AWS F2 profile
+with loop pipelining enabled; thin PlanRecords precede any check elision. The
+vendor tooling and its acceptance rules are prepared and calibrated against the
+22 October outputs; the host stays stopped until David's restart notice. The
+compiler's `PROJECT_STATE.md` is the single current status; read it first. The
+professor's response to the 22 October meeting is still to be recorded.
+
+**22 October scalar interface correction — preceding local checkpoint:**
 [[2026-10-22-scalar-interface-checkpoint]] records production `72fd513`, explicit seeds and output-only snapshots, and a small report correspondence reader. Both complete source and isolated-wheel suites pass 1,351 tests. The prepared batch has 15 projects/46 cases, including a fresh six-case composition that passed without repair. The previous hardware result below belongs to unchanged old wrappers. Resume from compiler `PROJECT_STATE.md` and `docs/plans/2026-10-22-scalar-interface.md`; new synthesis and RTL validation require host availability.
 
 **22 October completed vendor batch — latest hardware evidence:** David supplied the

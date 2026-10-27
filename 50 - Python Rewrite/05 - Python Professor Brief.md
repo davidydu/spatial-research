@@ -35,13 +35,13 @@ The example uses general rules for memory, transfers, loops, arithmetic and chec
 
 The wider vendor checkpoint covers four kernels and nine cases, including a separately authored program accepted after the implementation was frozen. This supports the generality claim within the admitted subset. The reference engine still supports more than the hardware route, and the full compiler remains unfinished.
 
-The [[2026-10-21-scalar-target-checkpoint|newer scalar-state and shift extension]] is a separate local checkpoint. Its prepared batch has **12 projects and 32 cases**, but vendor execution is pending. The earlier RTL pass does not validate this newer implementation.
+The [[2026-10-21-scalar-target-checkpoint|newer scalar-state and shift extension]] then passed the same vendor stages on 22 October: **12 projects and 32 cases** ([[2026-10-22-scalar-vitis-checkpoint]]). That run showed Vitis ignoring the requested one-element memory interfaces. The [[2026-10-22-scalar-interface-checkpoint|explicit interface correction]] passes locally and awaits its own vendor run.
 
-## After the meeting
+## Next steps — 26 October
 
-When David asks to resume, the next target step is to run the saved scalar/shift batch through HLS, with permission before restarting or using the stopped host. Then compare size and tile measurements to choose one general storage or scheduling improvement.
+After the corrected interface batch runs, the next milestone finishes the first slice's acceptance work: public checking and preparation, native execution for students, saved-program import with full rechecking, verified program editing with rollback, faster reference execution, resumable simulation and a fresh unseen program. New lab language families follow that milestone.
 
-Continue the [[04 - Python Implementation Roadmap|Labs 1–3 progression]]: finish reusable Lab 1 register, queue and reduction families, then Lab 2 memory reductions and fixed-point tiles, then Lab 3 windows and convolution. Public checking and preparation, real simulation resumption and the original [[80 - Initial Compiler Goal|initial compiler acceptance]] remain required. Board integration and measured performance need their own evidence.
+The next hardware step targets the course's AWS F2 flow with loop pipelining enabled, so measurements can answer the labs' cycle and initiation-interval questions. Removing any safety check waits for a verified hardware-plan layer. The [[04 - Python Implementation Roadmap|roadmap]] records this order; board integration and measured performance still need their own evidence.
 
 The meeting question is how to prioritize broader language coverage and measured hardware improvements from this working starting point. The [[2026-10-21-python-progress-presentation|October 21 reference-only briefing]] remains a dated record of the earlier state.
 

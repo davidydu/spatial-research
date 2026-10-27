@@ -56,6 +56,13 @@ below supersedes the meeting's host-use pause for that bounded validation only.
 
 The implementation lives in the separate `spatial-py` repository. Its active plan is `docs/plans/2026-10-04-initial-reference.md`; its support ledger and task evidence distinguish completed foundations from the full goal. Historical Scala/Rust repositories remain evidence and are not modified to supply a Python result.
 
+**Plan — 26 October:** David approved closing this goal's remaining gates as the
+next milestone, after the corrected interface vendor batch and before new lab
+families or optimizations: public workflow, artifact import with full
+re-verification, builder parity (`REP-S1`), verified editing (`REP-EDIT`), a
+derived execution program, resumable simulation and the final unseen composition.
+See [[04 - Python Implementation Roadmap]].
+
 **Latest local target increment — 22 October:** [[2026-10-22-scalar-interface-checkpoint]] records explicit singleton seeds, fresh wrapper-local storage and output-only snapshots, with a bounded synthesis-report correspondence reader. Production `72fd513` leaves the semantic core and C++ generator unchanged. The new vendor run remains pending.
 
 **Latest hardware checkpoint — 22 October:**
