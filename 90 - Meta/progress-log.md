@@ -9,6 +9,10 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-10-28 — Revised order approved
+
+- David asked why lab programs and compiler construction were not proceeding together. Three independent read-only studies covered lab needs, foundation rationale and course constraints. He approved: E3 (trimmed builder) → E4 → E7 → E5, then Lab 1–3 features; E6 and E8 after the labs; AWS F2 in parallel. Course use is about six months away, and weekly visible progress is the priority. The professor mentioned F2 at the 22 October meeting. Compiler decision record: docs/reviews/2026-10-28-ordering-decision.md.
+
 ## 2026-10-27 — Public workflow (E1) complete; E2 complete; vendor batch passed
 
 - E2, canonical SpatialJSON-v1 export and import of unchecked programs, is complete at compiler `7fa4603`. Design, specification and quality reviews were resolved; quality fixes cut import peak memory for a 16 MiB input from about 900 MiB to 120-200 MiB. A fresh 15-test holdout passed on its first run, and full source and installed-wheel suites passed. [Evidence](https://github.com/davidydu/spatial-py/blob/7fa4603f2ca8452ae7c20755fd54009ac2e03a55/docs/evidence/e2-spatialjson.md).

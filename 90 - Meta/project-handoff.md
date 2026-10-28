@@ -26,6 +26,8 @@ professor's response to the 22 October meeting is still to be recorded.
 
 **27 October progress:** E1 (public check/prepare and an experimental compile-once native handle) and E2 (canonical SpatialJSON-v1 export and import) are complete, and the vendor batch passed ([[2026-10-27-scalar-interface-vitis-checkpoint]]). E3, the builder with its pending-effect ledger, is next.
 
+**28 October order:** David approved E3 (trimmed builder) → E4 → E7 → E5, then Lab 1–3 features, with E6 and E8 after the labs and AWS F2 in parallel. He is arranging an F2 instance; the professor mentioned F2 at the 22 October meeting. The course uses Python Spatial in about six months, and each week should show the professor visible progress.
+
 **22 October scalar interface correction — preceding local checkpoint:**
 [[2026-10-22-scalar-interface-checkpoint]] records production `72fd513`, explicit seeds and output-only snapshots, and a small report correspondence reader. Both complete source and isolated-wheel suites pass 1,351 tests. The prepared batch has 15 projects/46 cases, including a fresh six-case composition that passed without repair. The previous hardware result below belongs to unchanged old wrappers. Resume from compiler `PROJECT_STATE.md` and `docs/plans/2026-10-22-scalar-interface.md`; new synthesis and RTL validation require host availability.
 

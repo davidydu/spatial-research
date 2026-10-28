@@ -41,6 +41,8 @@ The [[2026-10-21-scalar-target-checkpoint|newer scalar-state and shift extension
 
 After the corrected interface batch runs, the next milestone finishes the first slice's acceptance work: public checking and preparation, native execution for students, saved-program import with full rechecking, verified program editing with rollback, faster reference execution, resumable simulation and a fresh unseen program. New lab language families follow that milestone.
 
+**Revised 28 October:** the two representation safety checks (builder/source/import agreement and safe program editing) and fast simulation come first; then Lab 1–3 features, each tested with the original lab programs; resumable simulation and the final audit follow the labs. The AWS F2 course flow, which the professor raised last week, runs in parallel. Students and TAs are expected to use Python Spatial in about six months.
+
 The next hardware step targets the course's AWS F2 flow with loop pipelining enabled, so measurements can answer the labs' cycle and initiation-interval questions. Removing any safety check waits for a verified hardware-plan layer. The [[04 - Python Implementation Roadmap|roadmap]] records this order; board integration and measured performance still need their own evidence.
 
 The meeting question is how to prioritize broader language coverage and measured hardware improvements from this working starting point. The [[2026-10-21-python-progress-presentation|October 21 reference-only briefing]] remains a dated record of the earlier state.

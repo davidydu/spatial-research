@@ -29,7 +29,7 @@ for students, artifact import with full re-verification, the builder effect
 ledger, `REP-S1`, `REP-EDIT`, a derived execution program, cumulative resumption
 and a fresh unseen composition. Labs families and optimizations follow it.
 
-Progress: E1 and E2 completed on 27 October; the compiler's `PROJECT_STATE.md` is the current status.
+Progress: E1 and E2 completed on 27 October. On 28 October David approved a revised order: E3, E4, E7 and E5 first, then the Lab 1–3 features, with E6 and E8 after the labs and the AWS F2 profile in parallel; students and TAs use Python Spatial in about six months. The compiler's `PROJECT_STATE.md` is the current status.
 
 The next hardware milestone is an AWS F2 profile matching the course flow, with
 loop pipelining enabled and achieved II reported. It replaces the Z020 size/tile
