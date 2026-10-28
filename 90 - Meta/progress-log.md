@@ -11,6 +11,7 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ## 2026-10-28 — Revised order approved
 
+- Meeting preparation: [[2026-10-28-weekly-update]] now also covers the two checkpoints, next week's work and the refined F2 question. Slides for the meeting were prepared separately; they are not on the site.
 - End of day: two reviewed checkpoints committed (compiler `f5578c6`, not yet frozen). E3 builds programs through a Python API, matching source semantics on a generated operator table, with 117 tests; all 12 quality-review mutants are killed. F2-1 Phase A generates the AWS F2 `vadd` bundle for Lab 1 with an unchanged kernel, passing all 16 cases natively with pipelining off and on. Next: re-reviews and freezes, the E3 holdout and suites, then the F2 device check and synthesis on the HLS host.
 - David asked why lab programs and compiler construction were not proceeding together. Three independent read-only studies covered lab needs, foundation rationale and course constraints. He approved: E3 (trimmed builder) → E4 → E7 → E5, then Lab 1–3 features; E6 and E8 after the labs; AWS F2 in parallel. Course use is about six months away, and weekly visible progress is the priority. The professor mentioned F2 at the 22 October meeting. Compiler decision record: docs/reviews/2026-10-28-ordering-decision.md.
 
