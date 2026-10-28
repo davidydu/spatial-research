@@ -7,6 +7,8 @@ updated: 2026-10-22
 verified: 2026-10-22
 ---
 
+**Latest:** [[2026-10-28-weekly-update|Weekly update — 28 October]].
+
 <a href="https://davidydu.github.io/spatial-research-site/presentation/python/" data-router-ignore target="_blank" rel="noopener noreferrer">Open the seven-slide presentation</a> · [[2026-10-22-python-pipeline-presentation|October 22 speaker notes and evidence]].
 
 **The Python rewrite now takes one existing Lab 1 example through the complete experimental path to simulated RTL.** This is the starting point for the next discussion with the professor, who asked for a fully Python compiler after the earlier Python-frontend/Rust-core proposal.
