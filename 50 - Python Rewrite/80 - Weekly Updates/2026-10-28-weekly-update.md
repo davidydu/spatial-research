@@ -30,9 +30,9 @@ with spatial.compile_native(checked.value).value as kernel:
 
 **2. Saving and loading programs** (E2). A program can be saved as a canonical
 file and loaded back. A loaded program is never trusted: it is fully checked
-again, so a forged file cannot pass. Fifteen independent tests passed on their
-first run. Review fixes cut the worst-case memory for a large file from about
-900 MB to 120–200 MB.
+again, so no file can skip a check, and an edited file loads as a new program
+with a new identity. Fifteen independent tests passed on their first run. Review
+fixes cut the worst-case memory for a large file from about 900 MB to 120–200 MB.
 
 **3. Hardware: the corrected scalar interfaces work** ([[2026-10-27-scalar-interface-vitis-checkpoint]]).
 - All 15 projects (46 test cases, including 12 intentional faults) pass Vitis C
