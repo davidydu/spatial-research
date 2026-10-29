@@ -55,8 +55,9 @@ tests now catch all of them.
 
 **5. The first AWS F2 bundle for Lab 1** (F2 step 1). The compiler generates the
 course-style `vadd` top level around our unchanged kernel: `kernel.cpp` is
-byte-identical to the verified Z020 build. All 16 Lab 1 cases pass native checks,
-with pipelining off and on. 42 tests pass, and all 12 planted bugs are caught.
+byte-identical to the verified Z020 build. All 16 cases from five projects (four
+from Lab 1) pass native checks, with pipelining off and on. 42 tests pass, and
+all 12 planted bugs are caught.
 
 Both are committed but not yet frozen, so their 159 new tests have so far run
 from source only.
