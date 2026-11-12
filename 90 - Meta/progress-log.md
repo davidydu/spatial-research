@@ -9,8 +9,11 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
-## 2026-11-11 — Labs start now; X2a complete; Lab 1 from Python Spatial through the F2 shell simulation and FPGA build
+## 2026-11-11 — Labs start now; X2a complete; Lab 1 from Python Spatial runs on the AWS F2 FPGA
 
+- On the FPGA (compiler `b891c8b`, late on 11 November): both designs ran on the chip and passed, six runs each with a fresh image load. The course's handwritten Lab 1 took 58 to 62 compute cycles and Lab 1 compiled from Python Spatial 256 to 354 (typically 260); each host test fails against the other design's image, so a pass is not vacuous. David registered the images through AWS CloudShell, and the instance was shut down afterwards at his request.
+- Correction to the Vitis line below: under 2025.2 the original failing design still deadlocks; only the reduced reproducer changed, to one wrong output word. The single-exit variant of the failing design passes under both releases.
+- The Lab 1 FIFO plan and the rebuilt single-exit loop plan are drafted on their own branches, each with two independent reviews in progress.
 - David's decisions on 11 November, after a direction review: lab features start now (FIFO, then Reg, then Reduce and Fold), with the single-exit loop change beside them; the full routine applies only to changes in language meaning, the checker or generated code, internal tooling gets a lighter one, and publication is weekly; the course date is April 2027; the class's next iteration should use the newest AWS image. The record is the compiler's `docs/reviews/2026-11-11-ordering-decision.md`.
 - X2a (later shape formals in the builder) is complete and merged at compiler `6e14060`: a builder program can declare a shape formal after the memories it sizes, REP-S1 covers 4 of the 17 corpus kernels, a separate author's holdout passed 8 of 8 on its single run, and both full suites passed 2,406 tests at `be576ed`.
 - First FPGA experiment (compiler `ae93993`), on an f2.6xlarge with the newest AWS image (Vivado and Vitis 2025.2): Lab 1's tiled scale compiled from Python Spatial and the course's handwritten HLS for the same lab part both pass simulation against the F2 shell (294 and 77 compute cycles) and both build for the FPGA with timing met (slack +0.308 ns and +0.106 ns). The run on the chip waits for AWS credentials on the instance. The class's pinned AWS kit sets up cleanly on this image. See [[2026-11-11-weekly-update]].

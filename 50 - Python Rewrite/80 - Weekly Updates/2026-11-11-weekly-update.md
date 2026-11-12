@@ -6,7 +6,7 @@ date: 2026-11-11
 ---
 
 **Two weeks in one update: a Lab 1 program written in Python Spatial now goes through the class's own AWS F2
-flow. It passes simulation against the F2 shell and builds for the FPGA with timing met. The compiler's core
+flow and runs correctly on the FPGA itself. The compiler's core
 safety checks and fast simulation are finished, and along the way we found and isolated a bug in Vitis HLS.**
 
 ## What's new
@@ -21,10 +21,12 @@ beside it, on the same machine.
 | HLS to RTL | Passed | Passed |
 | Simulation against the F2 shell | Passed, 77 compute cycles | Passed, 294 compute cycles |
 | FPGA build | Timing met, slack +0.106 ns | Timing met, slack +0.308 ns |
-| Run on the chip | next | next |
+| Run on the FPGA, six runs each | Passed, 58 to 62 compute cycles | Passed, 256 to 354 compute cycles (typically 260) |
 
-- The Python Spatial design returned the right 32 values and a clean status on its first simulation.
-- It takes about 3.8 times as many cycles. Most of that is memory traffic, not computing: the design makes six
+- The Python Spatial design returned the right 32 values and a clean status on its first simulation, and again in
+  every run on the chip.
+- It takes about four to five times as many cycles (3.8 times in simulation, about 4.5 times on the chip). Most
+  of that is memory traffic, not computing: the design makes six
   memory transfers (data and "initialized" flags, in for both arrays and out for the result) where the
   handwritten one reads one array and writes one. The synthesis report puts the computation itself at about 45
   cycles. Nothing has been tuned yet.
@@ -33,10 +35,12 @@ beside it, on the same machine.
 **2. A Vitis HLS bug, found and reduced to about 40 lines.** A pipelined loop that can exit early, contains a
 division, and is followed by more code is compiled wrongly:
 - under Vitis HLS 2025.1 the hardware simulation never finishes;
-- under 2025.2 it finishes with one wrong output word, and only the test bench notices.
+- under 2025.2 the same design still never finishes, and the reduced 40-line example finishes with one wrong output
+  word that only the test bench notices.
 
-The C simulation is correct in both. Rewriting the loop with a single exit avoids it, and our compiler will emit
-every loop that way. A report for AMD is prepared.
+The C simulation is correct in both. Rewriting the loop with a single exit avoids it under both releases, and our
+compiler will emit every loop that way. A report for AMD is prepared. (Corrected 12 November: this item first
+described the 2025.2 behaviour from the reduced example alone.)
 
 **3. Lab 1 on the F2 chip, synthesized** (3 November, before the device flow). With pipelining on, Lab 1 takes
 131 cycles instead of 1,249, and the estimated clock is 2.19 ns against a 3 ns target. Five of six test projects
@@ -60,13 +64,12 @@ checked by a fresh test set written separately, after its code was frozen.
 
 - **Lab features start now:** FIFO first, then Reg, then Reduce and Fold. Lab 2 and Lab 3 features follow.
 - **Target:** students and TAs use Python Spatial in April 2027.
-- **Hardware in parallel:** run on the chip itself, then emit single-exit loops, then cut the memory traffic.
+- **Hardware in parallel:** emit single-exit loops, then cut the memory traffic.
 
 ## Next week
 
-- Run Lab 1 on the FPGA itself and report the on-chip cycle counts beside the handwritten version's.
 - Emit single-exit loops, and re-run the hardware tests under both Vitis releases.
-- Start Lab 1's FIFO.
+- Start Lab 1's FIFO. Its design is drafted and under independent review.
 
 ## Questions
 
@@ -75,7 +78,7 @@ checked by a fresh test set written separately, after its code was frozen.
    start-register match and no separate scalar ports). Should generated designs drop into the unmodified course wrapper, or may the wrapper be
    generated?
 3. Python Spatial checks every memory access and tracks which elements are initialized, which costs cycles today
-   (294 against 77). How much of the labs' speed and parallelism must the generated hardware show in the first
+   (about 260 cycles against 58 on the chip). How much of the labs' speed and parallelism must the generated hardware show in the first
    release?
 4. May the next iteration of the class use the newest AWS image (Vivado and Vitis 2025.2)? The course's Lab 1 flow
    ran on it unchanged.
