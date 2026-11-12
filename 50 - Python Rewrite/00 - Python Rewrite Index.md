@@ -71,6 +71,8 @@ These distill the studies for review. Document review, design adoption, and impl
 
 ## HLS studies
 
+- [[2026-11-12-first-fpga-run-study]] — the first run on the FPGA: Lab 1 from Python Spatial on the AWS F2 chip beside the staff's handwritten HLS, where the cycles go, and problems with possible solutions.
+
 - [[2026-10-22-scalar-interface-checkpoint]] — explicit singleton transport, local regression and report-checking evidence; fresh vendor validation pending.
 
 - [[2026-10-22-scalar-vitis-checkpoint]] — 12 projects and 32 cases through HLS/RTL, measured scaling and the scalar interface mismatch to resolve next.

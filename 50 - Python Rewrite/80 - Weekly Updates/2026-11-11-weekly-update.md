@@ -14,22 +14,26 @@ safety checks and fast simulation are finished, and along the way we found and i
 **1. Python Spatial on the class's FPGA flow.** We took Lab 1's tiled scale (32 elements times 5), compiled it
 from Python Spatial, and ran it through the same `make` steps students use, on an F2 instance with the newest AWS
 image (Vivado and Vitis 2025.2). For comparison we ran the course's own handwritten HLS for the same lab part
-beside it, on the same machine.
+beside it, on the same machine. That handwritten HLS is the staff's hand translation of the Spatial exercise, the
+version the class runs on the chip. It is not output of the original Spatial compiler, which the course only
+simulates. The full case, with where the cycles go and what would close the gap, is in
+[[2026-11-12-first-fpga-run-study|the first-run study]] (added 12 November).
 
 | Step | Course's handwritten HLS | Compiled from Python Spatial |
 |---|---|---|
 | HLS to RTL | Passed | Passed |
 | Simulation against the F2 shell | Passed, 77 compute cycles | Passed, 294 compute cycles |
-| FPGA build | Timing met, slack +0.106 ns | Timing met, slack +0.308 ns |
-| Run on the FPGA, six runs each | Passed, 58 to 62 compute cycles | Passed, 256 to 354 compute cycles (typically 260) |
+| FPGA build | Timing met (whole image, slack +0.106 ns) | Timing met (whole image, slack +0.308 ns) |
+| Run on the FPGA, six runs each | Passed, 58 to 62 compute cycles | Passed, 256 to 354 compute cycles (four runs at 256 to 260, two near 350) |
 
 - The Python Spatial design returned the right 32 values and a clean status on its first simulation, and again in
   every run on the chip.
 - It takes about four to five times as many cycles (3.8 times in simulation, about 4.5 times on the chip). Most
   of that is memory traffic, not computing: the design makes six
   memory transfers (data and "initialized" flags, in for both arrays and out for the result) where the
-  handwritten one reads one array and writes one. The synthesis report puts the computation itself at about 45
-  cycles. Nothing has been tuned yet.
+  handwritten one reads one array and writes one. Both designs multiply sixteen numbers at once. In the synthesis
+  estimate the kernel takes 45 cycles: 7 for the multiplication and 34 for a final check that every output was
+  written. Nothing has been tuned yet.
 - The course's Lab 1 runs unchanged on the newest image through simulation and build, so the class could move to it.
 
 **2. A Vitis HLS bug, found and reduced to about 40 lines.** A pipelined loop that can exit early, contains a
@@ -78,7 +82,8 @@ checked by a fresh test set written separately, after its code was frozen.
    start-register match and no separate scalar ports). Should generated designs drop into the unmodified course wrapper, or may the wrapper be
    generated?
 3. Python Spatial checks every memory access and tracks which elements are initialized, which costs cycles today
-   (about 260 cycles against 58 on the chip). How much of the labs' speed and parallelism must the generated hardware show in the first
-   release?
+   (about 260 cycles on the chip, against 58 for the staff's handwritten HLS). We take the handwritten HLS on the
+   chip as the target and today's count as our baseline; the [[2026-11-12-first-fpga-run-study|study]] estimates
+   what closing the gap takes. Is that the right target, and how much of it must the first release reach?
 4. May the next iteration of the class use the newest AWS image (Vivado and Vitis 2025.2)? The course's Lab 1 flow
    ran on it unchanged.
