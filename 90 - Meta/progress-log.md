@@ -9,6 +9,13 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-11-12 — Two reviewed plans; the single-exit loop change implemented and reviewed locally, provisional
+
+- The single-exit loop plan (F2-1b) was rebuilt from the handoff with its measurements re-run, re-reviewed twice and revised; it has nine decisions for David. The Lab 1 FIFO plan was written, design-reviewed twice, re-reviewed and revised; its first slice needs nine answers from David before its contract text is written. Both are in the compiler at `733ffe3` under `docs/plans/`.
+- F2-1b's local work is done provisionally on the compiler branch `work/f2-1b` (`5a71177`), under the recommended answers: the emitter gives every loop a single exit; 289 corpus cases give native reports equal to the previous emitter's, word for word; 53 hand-derived cases from a blind oracle hold on both emitters; the hardware kit calibrates 257 of 257 with every saved verdict reproducing; two specification reviews and two quality reviews found no defect in the emitter or the kit and several test gaps, all closed; both full suites pass 2,483 tests. Nothing is frozen or merged, and no hardware run has happened.
+- Diagnosis under Vitis HLS 2025.2 on the F2 instance: five of the six earlier F2 test projects pass co-simulation, the failing design still deadlocks, and its single-exit variant passes.
+- Not published separately: this block goes out with the next weekly publication.
+
 ## 2026-11-11 — Labs start now; X2a complete; Lab 1 from Python Spatial runs on the AWS F2 FPGA
 
 - On the FPGA (compiler `b891c8b`, late on 11 November): both designs ran on the chip and passed, six runs each with a fresh image load. The course's handwritten Lab 1 took 58 to 62 compute cycles and Lab 1 compiled from Python Spatial 256 to 354 (typically 260); each host test fails against the other design's image, so a pass is not vacuous. David registered the images through AWS CloudShell, and the instance was shut down afterwards at his request.
