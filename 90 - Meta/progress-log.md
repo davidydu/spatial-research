@@ -9,6 +9,14 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-11-11 — Labs start now; X2a complete; Lab 1 from Python Spatial through the F2 shell simulation and FPGA build
+
+- David's decisions on 11 November, after a direction review: lab features start now (FIFO, then Reg, then Reduce and Fold), with the single-exit loop change beside them; the full routine applies only to changes in language meaning, the checker or generated code, internal tooling gets a lighter one, and publication is weekly; the course date is April 2027; the class's next iteration should use the newest AWS image. The record is the compiler's `docs/reviews/2026-11-11-ordering-decision.md`.
+- X2a (later shape formals in the builder) is complete and merged at compiler `6e14060`: a builder program can declare a shape formal after the memories it sizes, REP-S1 covers 4 of the 17 corpus kernels, a separate author's holdout passed 8 of 8 on its single run, and both full suites passed 2,406 tests at `be576ed`.
+- First FPGA experiment (compiler `ae93993`), on an f2.6xlarge with the newest AWS image (Vivado and Vitis 2025.2): Lab 1's tiled scale compiled from Python Spatial and the course's handwritten HLS for the same lab part both pass simulation against the F2 shell (294 and 77 compute cycles) and both build for the FPGA with timing met (slack +0.308 ns and +0.106 ns). The run on the chip waits for AWS credentials on the instance. The class's pinned AWS kit sets up cleanly on this image. See [[2026-11-11-weekly-update]].
+- The Vitis HLS loop defect is still present in 2025.2: the reproducer no longer hangs and instead returns one wrong output word. The single-exit emitter change is needed under either release, and the prepared AMD report now names both.
+- The 3 November session's unsaved plan for the single-exit change was lost when the Mac rebooted. Its design survived in a handoff, which is now committed, and the plan is being rebuilt. Plans and reviews are committed as soon as they exist.
+
 ## 2026-11-03 — David's answers; F2 on the VU47P (one co-simulation hang); X4 applied; X2 split and planned
 
 - David approved every recommendation on 3 November: builder increment (b) for X2, the step charge table and the declared lab-size allowances as they stand, a dated clarification of the static-rejection boundary, the small fix for the label-length budget (X4), a fresh E7 holdout, E8 owning the audit findings, and R017's representation comparison after X2. He then split X2 into X2a (shape formals declared after the memories they size) and X2b (nested helpers with captures), each with its own freeze and fresh holdout, and supplied the HLS host for F2 Phase B.
