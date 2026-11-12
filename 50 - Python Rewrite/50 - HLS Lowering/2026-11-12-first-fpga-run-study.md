@@ -33,14 +33,18 @@ The course's Lab 1 has two halves, and the comparison only makes sense with both
 
 | Version of Lab 1's DRAM and SRAM part | Who wrote it | Where it runs | Cycles |
 |---|---|---|---|
-| Original Spatial (Scala) | Students, from the staff example | Simulation only; it never reaches the F2 chip | 556 "total cycles", recorded in David's Spring 2026 lab file from Spatial's own tools |
+| Original Spatial (Scala) | Students, from the staff example | Simulation only; it never reaches the F2 chip | 556 simulated cycles, from original Spatial's Scala simulation (David's Spring 2026 run) |
 | Handwritten Vitis HLS C++ | Course staff, converting the Spatial exercise by hand (the file starts from a Xilinx example) | The F2 chip | 58 to 62 (this experiment) |
 | Python Spatial | Compiled by this project | The F2 chip | 256 to 354, median 260 (this experiment) |
 
 - The course handout for the FPGA half says: "all the Spatial exercises have already been converted to C/C++ HLS
   for you". That hand translation is our control. **The 58 is not original Spatial's performance.**
-- The 556 was counted by different tools in a different way, and we have not checked how. It cannot be set beside
-  the two FPGA counts.
+- **The 556 is an estimate, not a measurement.** Original Spatial's Scala simulator adds up a modelled delay for
+  each step of the program: 238 cycles for the two loads from off-chip memory, 54 for the multiplications, 242 for
+  the two stores, and 22 of control overhead. No real memory or chip is involved, and a note in the course
+  handout's source says cycle accuracy needs the other (VCS) simulation. It also multiplies one element per cycle,
+  where both FPGA designs multiply sixteen at once. So it cannot be set beside the two FPGA counts. It does agree
+  with them on one point: memory transfers are most of the time (480 of the 556 cycles).
 - The handwritten count on the chip is not a constant either: David's Spring 2026 submission recorded 105 cycles
   for the same example, on the class instance under the 2024.1 tools. Its simulation count barely moved (78 then,
   77 now).
