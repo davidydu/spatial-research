@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 308" width="760" height="308" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<title id="t">Where the cycles go in one run</title>
+<desc id="d">Python Spatial: four copy-in memory transfers (about 144 cycles), the kernel (45 cycles: 7 for the multiplication, 34 for the output-completion check), two copy-out transfers (about 71). Handwritten HLS: one pipeline of 58 cycles.</desc>
+<rect x="0.5" y="0.5" width="759" height="307" rx="8" fill="#fcfcfb" stroke="rgba(11,11,11,0.10)"/>
+<text x="24.0" y="34.0" font-size="15" fill="#0b0b0b" font-weight="600" text-anchor="start">Where the cycles go in one run</text>
+<text x="24.0" y="54.0" font-size="12" fill="#52514e" font-weight="400" text-anchor="start">Median run on the FPGA. The split inside Python Spatial is an estimate from the synthesis report and a rough memory model.</text>
+<line x1="170.0" x2="170.0" y1="134" y2="262" stroke="#c3c2b7" stroke-width="1"/>
+<text x="170.0" y="278" font-size="11" fill="#898781" text-anchor="middle" style="font-variant-numeric: tabular-nums">0</text>
+<line x1="270.0" x2="270.0" y1="134" y2="262" stroke="#e1e0d9" stroke-width="1"/>
+<text x="270.0" y="278" font-size="11" fill="#898781" text-anchor="middle" style="font-variant-numeric: tabular-nums">50</text>
+<line x1="370.0" x2="370.0" y1="134" y2="262" stroke="#e1e0d9" stroke-width="1"/>
+<text x="370.0" y="278" font-size="11" fill="#898781" text-anchor="middle" style="font-variant-numeric: tabular-nums">100</text>
+<line x1="470.0" x2="470.0" y1="134" y2="262" stroke="#e1e0d9" stroke-width="1"/>
+<text x="470.0" y="278" font-size="11" fill="#898781" text-anchor="middle" style="font-variant-numeric: tabular-nums">150</text>
+<line x1="570.0" x2="570.0" y1="134" y2="262" stroke="#e1e0d9" stroke-width="1"/>
+<text x="570.0" y="278" font-size="11" fill="#898781" text-anchor="middle" style="font-variant-numeric: tabular-nums">200</text>
+<line x1="670.0" x2="670.0" y1="134" y2="262" stroke="#e1e0d9" stroke-width="1"/>
+<text x="670.0" y="278" font-size="11" fill="#898781" text-anchor="middle" style="font-variant-numeric: tabular-nums">250</text>
+<text x="730.0" y="296.0" font-size="11" fill="#898781" font-weight="400" text-anchor="end">Cycles from start to done</text>
+<rect x="170" y="75" width="10" height="10" rx="2" fill="#2a78d6"/><text x="186.0" y="84.0" font-size="11" fill="#52514e" font-weight="400" text-anchor="start">Memory transfer: data</text>
+<rect x="330" y="75" width="10" height="10" rx="2" fill="#86b6ef"/><text x="346.0" y="84.0" font-size="11" fill="#52514e" font-weight="400" text-anchor="start">Memory transfer: "initialized" flags only</text>
+<rect x="590" y="75" width="10" height="10" rx="2" fill="#104281"/><text x="606.0" y="84.0" font-size="11" fill="#52514e" font-weight="400" text-anchor="start">Kernel</text>
+<path d="M171.0,142.0 H241.7 V166.0 H171.0 Z" fill="#2a78d6"><title>src data: about 36 cycles</title></path>
+<text x="206.3" y="158.0" font-size="11" fill="#ffffff" font-weight="500" text-anchor="middle">src data</text>
+<path d="M243.7,142.0 H314.3 V166.0 H243.7 Z" fill="#86b6ef"><title>src flags: about 36 cycles</title></path>
+<text x="279.0" y="158.0" font-size="11" fill="#0b0b0b" font-weight="500" text-anchor="middle">src flags</text>
+<path d="M316.3,142.0 H385.0 V166.0 H316.3 Z" fill="#2a78d6"><title>dst data: about 35 cycles</title></path>
+<text x="350.7" y="158.0" font-size="11" fill="#ffffff" font-weight="500" text-anchor="middle">dst data</text>
+<path d="M387.0,142.0 H457.7 V166.0 H387.0 Z" fill="#86b6ef"><title>dst flags: about 36 cycles</title></path>
+<text x="422.3" y="158.0" font-size="11" fill="#0b0b0b" font-weight="500" text-anchor="middle">dst flags</text>
+<path d="M459.7,142.0 H479.7 V166.0 H459.7 Z" fill="#104281"><title>multiply and control: about 11 cycles</title></path>
+<path d="M481.7,142.0 H547.7 V166.0 H481.7 Z" fill="#104281"><title>check: about 34 cycles</title></path>
+<text x="514.7" y="158.0" font-size="11" fill="#ffffff" font-weight="500" text-anchor="middle">check</text>
+<path d="M549.7,142.0 H618.3 V166.0 H549.7 Z" fill="#2a78d6"><title>dst data: about 35 cycles</title></path>
+<text x="584.0" y="158.0" font-size="11" fill="#ffffff" font-weight="500" text-anchor="middle">dst data</text>
+<path d="M620.3,142.0 H685.0 A4,4 0 0 1 689.0,146.0 V162.0 A4,4 0 0 1 685.0,166.0 H620.3 Z" fill="#86b6ef"><title>dst flags: about 35 cycles</title></path>
+<text x="654.7" y="158.0" font-size="11" fill="#0b0b0b" font-weight="500" text-anchor="middle">dst flags</text>
+<text x="698.0" y="158.5" font-size="12" fill="#0b0b0b" font-weight="600" text-anchor="start">260</text>
+<path d="M171.0,137 V132 H457.7 V137" fill="none" stroke="#898781" stroke-width="1"/><text x="314.3" y="127.0" font-size="11" fill="#52514e" font-weight="400" text-anchor="middle" paint-order="stroke" stroke="#fcfcfb" stroke-width="4" stroke-linejoin="round">Copy in: four transfers, about 144 cycles</text>
+<path d="M459.7,137 V132 H547.7 V137" fill="none" stroke="#898781" stroke-width="1"/><text x="503.7" y="127.0" font-size="11" fill="#52514e" font-weight="400" text-anchor="middle" paint-order="stroke" stroke="#fcfcfb" stroke-width="4" stroke-linejoin="round">Kernel: 45</text>
+<path d="M549.7,137 V132 H689.0 V137" fill="none" stroke="#898781" stroke-width="1"/><text x="619.3" y="127.0" font-size="11" fill="#52514e" font-weight="400" text-anchor="middle" paint-order="stroke" stroke="#fcfcfb" stroke-width="4" stroke-linejoin="round">Copy out: about 71</text>
+<path d="M469.7,168 V180" stroke="#898781" stroke-width="1"/>
+<path d="M514.7,168 V180" stroke="#898781" stroke-width="1"/>
+<text x="473.7" y="193.0" font-size="11" fill="#52514e" font-weight="400" text-anchor="end" paint-order="stroke" stroke="#fcfcfb" stroke-width="4" stroke-linejoin="round">the multiplication: 7 cycles</text>
+<text x="508.7" y="193.0" font-size="11" fill="#52514e" font-weight="400" text-anchor="start" paint-order="stroke" stroke="#fcfcfb" stroke-width="4" stroke-linejoin="round">check that every output was written: 34</text>
+<text x="24.0" y="152.0" font-size="13" fill="#0b0b0b" font-weight="600" text-anchor="start">Python Spatial</text>
+<text x="24.0" y="168.0" font-size="11" fill="#52514e" font-weight="400" text-anchor="start">six memory transfers</text>
+<path d="M171.0,222.0 H282.0 A4,4 0 0 1 286.0,226.0 V242.0 A4,4 0 0 1 282.0,246.0 H171.0 Z" fill="#eb6834"><title>Handwritten HLS: 58 cycles</title></path>
+<text x="228.0" y="238.0" font-size="11" fill="#ffffff" font-weight="500" text-anchor="middle">one pipeline</text>
+<text x="294.0" y="238.5" font-size="12" text-anchor="start"><tspan fill="#0b0b0b" font-weight="600">58</tspan><tspan fill="#52514e" font-weight="400" dx="6">read, multiply and write overlap</tspan></text>
+<text x="24.0" y="232.0" font-size="13" fill="#0b0b0b" font-weight="600" text-anchor="start">Handwritten HLS</text>
+<text x="24.0" y="248.0" font-size="11" fill="#52514e" font-weight="400" text-anchor="start">two memory transfers</text>
+</svg>

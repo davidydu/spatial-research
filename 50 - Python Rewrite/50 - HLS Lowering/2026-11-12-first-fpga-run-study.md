@@ -27,6 +27,10 @@ the handwritten design's speed.**
 - **Limits.** One program, one test case, a hand-adapted wrapper, no tuning. This is an experiment, not an
   acceptance claim.
 
+![Dot plot of compute cycles on the FPGA: handwritten HLS 58 to 62 cycles, Python Spatial 256 to 354 with a median of 260](<50 - Python Rewrite/50 - HLS Lowering/assets/2026-11-12-f2-runs.svg>)
+
+![Timeline of one run: Python Spatial makes four copy-in transfers, runs the kernel and makes two copy-out transfers in about 260 cycles; the handwritten design is one pipeline of 58 cycles](<50 - Python Rewrite/50 - HLS Lowering/assets/2026-11-12-f2-timeline.svg>)
+
 ## What was compared
 
 The course's Lab 1 has two halves, and the comparison only makes sense with both in view.
@@ -87,6 +91,8 @@ The top's control registers sit behind a 7-bit address: the addresses of `src`, 
 
 A design on the F2 instance has four pieces. Only the last is generated today.
 
+![Diagram of the four pieces: the host program on the instance CPU, and the AWS shell, the wrapper and the kernel on the FPGA, with off-chip memory attached to the wrapper](<50 - Python Rewrite/50 - HLS Lowering/assets/2026-11-12-f2-pieces.svg>)
+
 | Piece | What it does | Where it runs | In this experiment |
 |---|---|---|---|
 | Host program | Fills memory with the inputs, writes the control registers, writes "start", then reads the results back and checks them | The instance's CPU | Written by hand for this test |
@@ -109,6 +115,8 @@ original Spatial did. Not started.
   1.19.2: Ubuntu 24.04.1, Vivado and Vitis 2025.2.
 - **Kit:** `aws-fpga` at the class's pinned tag `v2.3.0`. It set up cleanly on the newer tools.
 - **Control:** the course's `Lab1Part2DramSramExample`, unchanged, run beside ours on the same machine.
+
+![Diagram of the flow: Python Spatial source, compiler and checker, generated C++, then gen_rtl, hw_sim, fpga_build, the AWS image and the run on the chip, each passed](<50 - Python Rewrite/50 - HLS Lowering/assets/2026-11-12-f2-flow.svg>)
 
 | Step (`make` target) | What it does | Handwritten HLS | Python Spatial |
 |---|---|---|---|
@@ -235,6 +243,8 @@ copies, and flags as one word per element).
 | 10 | **The evidence is thin.** One program; the control's synthesis report and both designs' final utilization were not saved | This page | Save them at the next instance start; add a second program when FIFO lands | An hour of instance time |
 
 ## Can it reach or pass the handwritten design?
+
+![Bar chart of the estimated path: 260 cycles today, then about 225, 155, 85 and 60 to 70, against 58 for the handwritten design](<50 - Python Rewrite/50 - HLS Lowering/assets/2026-11-12-f2-path.svg>)
 
 **Reach it: probably yes for this case.** Applying the solutions in order, with the rough model above (estimates to
 be measured, for the median run without a fault):

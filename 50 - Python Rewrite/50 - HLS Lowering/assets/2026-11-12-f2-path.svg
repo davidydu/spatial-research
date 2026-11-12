@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 304" width="760" height="304" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<title id="t">Estimated path to the handwritten design's speed</title>
+<desc id="d">Today 260 cycles (measured). Estimated after each change in turn: about 225, about 155, about 85, about 60 to 70. Handwritten HLS measured 58.</desc>
+<rect x="0.5" y="0.5" width="759" height="303" rx="8" fill="#fcfcfb" stroke="rgba(11,11,11,0.10)"/>
+<text x="24.0" y="34.0" font-size="15" fill="#0b0b0b" font-weight="600" text-anchor="start">Estimated path to the handwritten design's speed</text>
+<text x="24.0" y="54.0" font-size="12" fill="#52514e" font-weight="400" text-anchor="start">Lab 1 tiled scale. Only the first bar is measured; the others come from a rough model and are to be measured.</text>
+<line x1="270.0" x2="270.0" y1="100" y2="262" stroke="#c3c2b7" stroke-width="1"/>
+<text x="270.0" y="278" font-size="11" fill="#898781" text-anchor="middle" style="font-variant-numeric: tabular-nums">0</text>
+<line x1="346.8" x2="346.8" y1="100" y2="262" stroke="#e1e0d9" stroke-width="1"/>
+<text x="346.8" y="278" font-size="11" fill="#898781" text-anchor="middle" style="font-variant-numeric: tabular-nums">50</text>
+<line x1="423.6" x2="423.6" y1="100" y2="262" stroke="#e1e0d9" stroke-width="1"/>
+<text x="423.6" y="278" font-size="11" fill="#898781" text-anchor="middle" style="font-variant-numeric: tabular-nums">100</text>
+<line x1="500.4" x2="500.4" y1="100" y2="262" stroke="#e1e0d9" stroke-width="1"/>
+<text x="500.4" y="278" font-size="11" fill="#898781" text-anchor="middle" style="font-variant-numeric: tabular-nums">150</text>
+<line x1="577.1" x2="577.1" y1="100" y2="262" stroke="#e1e0d9" stroke-width="1"/>
+<text x="577.1" y="278" font-size="11" fill="#898781" text-anchor="middle" style="font-variant-numeric: tabular-nums">200</text>
+<line x1="653.9" x2="653.9" y1="100" y2="262" stroke="#e1e0d9" stroke-width="1"/>
+<text x="653.9" y="278" font-size="11" fill="#898781" text-anchor="middle" style="font-variant-numeric: tabular-nums">250</text>
+<text x="700.0" y="296.0" font-size="11" fill="#898781" font-weight="400" text-anchor="end">Compute cycles on the FPGA</text>
+<rect x="270" y="75" width="10" height="10" rx="2" fill="#2a78d6"/><text x="286.0" y="84.0" font-size="11" fill="#52514e" font-weight="400" text-anchor="start">Measured</text>
+<rect x="350" y="75" width="10" height="10" rx="2" fill="#86b6ef"/><text x="366.0" y="84.0" font-size="11" fill="#52514e" font-weight="400" text-anchor="start">Estimated</text>
+<line x1="436" x2="436" y1="74" y2="86" stroke="#eb6834" stroke-width="2"/><text x="446.0" y="84.0" font-size="11" fill="#52514e" font-weight="400" text-anchor="start">Handwritten HLS, measured: 58</text>
+<text x="24.0" y="124.5" font-size="12.5" fill="#0b0b0b" font-weight="600" text-anchor="start">Today</text>
+<path d="M270.0,112.0 H665.3 A4,4 0 0 1 669.3,116.0 V124.0 A4,4 0 0 1 665.3,128.0 H270.0 Z" fill="#2a78d6"><title>Today: 260 cycles</title></path>
+<text x="677.3" y="124.5" font-size="12" fill="#0b0b0b" font-weight="600" text-anchor="start" paint-order="stroke" stroke="#fcfcfb" stroke-width="4" stroke-linejoin="round">260</text>
+<text x="24.0" y="156.5" font-size="12.5" fill="#0b0b0b" font-weight="400" text-anchor="start">+ completion check in one step</text>
+<path d="M270.0,144.0 H611.5 A4,4 0 0 1 615.5,148.0 V156.0 A4,4 0 0 1 611.5,160.0 H270.0 Z" fill="#86b6ef"><title>+ completion check in one step: about 225 cycles</title></path>
+<text x="623.5" y="156.5" font-size="12" fill="#0b0b0b" font-weight="400" text-anchor="start" paint-order="stroke" stroke="#fcfcfb" stroke-width="4" stroke-linejoin="round">about 225</text>
+<text x="24.0" y="188.5" font-size="12.5" fill="#0b0b0b" font-weight="400" text-anchor="start">+ no read of dst</text>
+<path d="M270.0,176.0 H504.0 A4,4 0 0 1 508.0,180.0 V188.0 A4,4 0 0 1 504.0,192.0 H270.0 Z" fill="#86b6ef"><title>+ no read of dst: about 155 cycles</title></path>
+<text x="516.0" y="188.5" font-size="12" fill="#0b0b0b" font-weight="400" text-anchor="start" paint-order="stroke" stroke="#fcfcfb" stroke-width="4" stroke-linejoin="round">about 155</text>
+<text x="24.0" y="220.5" font-size="12.5" fill="#0b0b0b" font-weight="400" text-anchor="start">+ no flag transfers</text>
+<path d="M270.0,208.0 H396.5 A4,4 0 0 1 400.5,212.0 V220.0 A4,4 0 0 1 396.5,224.0 H270.0 Z" fill="#86b6ef"><title>+ no flag transfers: about 85 cycles</title></path>
+<text x="408.5" y="220.5" font-size="12" fill="#0b0b0b" font-weight="400" text-anchor="start" paint-order="stroke" stroke="#fcfcfb" stroke-width="4" stroke-linejoin="round">about 85</text>
+<text x="24.0" y="252.5" font-size="12.5" fill="#0b0b0b" font-weight="400" text-anchor="start">+ read and write inside the tile loop</text>
+<path d="M270.0,240.0 H365.8 A4,4 0 0 1 369.8,244.0 V252.0 A4,4 0 0 1 365.8,256.0 H270.0 Z" fill="#86b6ef"><title>+ read and write inside the tile loop: about 60 to 70 cycles</title></path>
+<text x="377.8" y="252.5" font-size="12" fill="#0b0b0b" font-weight="400" text-anchor="start" paint-order="stroke" stroke="#fcfcfb" stroke-width="4" stroke-linejoin="round">about 60 to 70</text>
+<line x1="359.1" x2="359.1" y1="100" y2="262" stroke="#fcfcfb" stroke-width="5"/>
+<line x1="359.1" x2="359.1" y1="100" y2="262" stroke="#eb6834" stroke-width="2"><title>Handwritten HLS: 58 cycles (measured)</title></line>
+</svg>

@@ -19,12 +19,16 @@ version the class runs on the chip. It is not output of the original Spatial com
 simulates. The full case, with where the cycles go and what would close the gap, is in
 [[2026-11-12-first-fpga-run-study|the first-run study]] (added 12 November).
 
+![Diagram of the flow: Python Spatial source, compiler and checker, generated C++, then gen_rtl, hw_sim, fpga_build, the AWS image and the run on the chip, each passed](<50 - Python Rewrite/50 - HLS Lowering/assets/2026-11-12-f2-flow.svg>)
+
 | Step | Course's handwritten HLS | Compiled from Python Spatial |
 |---|---|---|
 | HLS to RTL | Passed | Passed |
 | Simulation against the F2 shell | Passed, 77 compute cycles | Passed, 294 compute cycles |
 | FPGA build | Timing met (whole image, slack +0.106 ns) | Timing met (whole image, slack +0.308 ns) |
 | Run on the FPGA, six runs each | Passed, 58 to 62 compute cycles | Passed, 256 to 354 compute cycles (four runs at 256 to 260, two near 350) |
+
+![Dot plot of compute cycles on the FPGA: handwritten HLS 58 to 62 cycles, Python Spatial 256 to 354 with a median of 260](<50 - Python Rewrite/50 - HLS Lowering/assets/2026-11-12-f2-runs.svg>)
 
 - The Python Spatial design returned the right 32 values and a clean status on its first simulation, and again in
   every run on the chip.
@@ -36,11 +40,16 @@ simulates. The full case, with where the cycles go and what would close the gap,
   written. Nothing has been tuned yet.
 - The course's Lab 1 runs unchanged on the newest image through simulation and build, so the class could move to it.
 
+![Timeline of one run: Python Spatial makes four copy-in transfers, runs the kernel and makes two copy-out transfers in about 260 cycles; the handwritten design is one pipeline of 58 cycles](<50 - Python Rewrite/50 - HLS Lowering/assets/2026-11-12-f2-timeline.svg>)
+
 **2. A Vitis HLS bug, found and reduced to about 40 lines.** A pipelined loop that can exit early, contains a
 division, and is followed by more code is compiled wrongly:
-- under Vitis HLS 2025.1 the hardware simulation never finishes;
-- under 2025.2 the same design still never finishes, and the reduced 40-line example finishes with one wrong output
-  word that only the test bench notices.
+
+| Hardware simulation of | Vitis HLS 2025.1 | Vitis HLS 2025.2 |
+|---|---|---|
+| The design that exposed the bug | Never finishes | Never finishes |
+| The reduced 40-line example | Never finishes | Finishes with one wrong output word, which only the test bench notices |
+| The same loops rewritten with a single exit | Passes | Passes |
 
 The C simulation is correct in both. Rewriting the loop with a single exit avoids it under both releases, and our
 compiler will emit every loop that way. A report for AMD is prepared. (Corrected 12 November: this item first
@@ -65,6 +74,8 @@ to separately written references.
 checked by a fresh test set written separately, after its code was frozen.
 
 ## The plan
+
+![Diagram of the plan: lab features in order (Lab 1 DRAM and SRAM done, FIFO under way, Reg, Reduce and Fold, Lab 2 and Lab 3), hardware work in parallel, target April 2027](<50 - Python Rewrite/50 - HLS Lowering/assets/2026-11-12-plan.svg>)
 
 - **Lab features start now:** FIFO first, then Reg, then Reduce and Fold. Lab 2 and Lab 3 features follow.
 - **Target:** students and TAs use Python Spatial in April 2027.
