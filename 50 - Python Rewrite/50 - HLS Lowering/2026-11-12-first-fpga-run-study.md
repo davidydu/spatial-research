@@ -79,6 +79,26 @@ defines the 512-bit memory word.
 The top's control registers sit behind a 7-bit address: the addresses of `src`, its flags, `dst` and its flags
 (0x10, 0x1c, 0x30, 0x3c), `scale` (0x28), and the status with its valid bit (0x48, 0x50).
 
+## Which piece is which
+
+A design on the F2 instance has four pieces. Only the last is generated today.
+
+| Piece | What it does | Where it runs | In this experiment |
+|---|---|---|---|
+| Host program | Fills memory with the inputs, writes the control registers, writes "start", then reads the results back and checks them | The instance's CPU | Written by hand for this test |
+| Shell | AWS's fixed logic: the link to the CPU and the memory controller | The FPGA | AWS's, unchanged |
+| Wrapper (`design_top.sv`) | Glue between the shell and the kernel: passes register writes to the kernel, catches the "start" write, connects the kernel to memory, counts cycles | The FPGA | The course's file with three edits |
+| Kernel | The computation | The FPGA | Generated from Python Spatial |
+
+- In the course, staff write the host program, the wrapper and the kernel by hand for each lab part. The wrapper
+  names its kernel's ports and the host program holds its register addresses, so both differ between parts.
+- In original Spatial the compiler produced all of it from one source file: code inside `Accel` became hardware,
+  code outside it became the host program, and a library (Fringe) played the wrapper's role for each board.
+- The generated file named `wrapper.cpp` is part of the kernel. It is not the wrapper in this table.
+
+**Decision (David, 12 November):** the compiler should generate the wrapper and the host program for each design, as
+original Spatial did. Not started.
+
 ## The machine and the flow
 
 - **Machine:** an AWS f2.6xlarge (one VU47P FPGA, 24 vCPUs, 249 GB memory) with the newest AWS FPGA Developer image,
@@ -260,7 +280,10 @@ That is all.
 3. Plan problem 2 (the completion check). It is the cheapest change and changes no meaning.
 4. Bring problems 3 to 6 to David as one design decision: how arrays and flags cross between the host, off-chip
    memory and the kernel.
-5. Keep the lab features first (FIFO, then Reg). Performance work runs beside them and must not delay them.
+5. Plan the generated wrapper and host program (decided 12 November). The plan must settle the licence route: the
+   course's wrapper is under the Amazon Software License, so ours is either written from scratch against the kit's
+   headers or produced by edits on the build machine.
+6. Keep the lab features first (FIFO, then Reg). Hardware work runs beside them and must not delay them.
 
 ## Evidence
 

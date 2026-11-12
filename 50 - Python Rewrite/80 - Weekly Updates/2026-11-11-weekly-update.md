@@ -69,6 +69,10 @@ checked by a fresh test set written separately, after its code was frozen.
 - **Lab features start now:** FIFO first, then Reg, then Reduce and Fold. Lab 2 and Lab 3 features follow.
 - **Target:** students and TAs use Python Spatial in April 2027.
 - **Hardware in parallel:** emit single-exit loops, then cut the memory traffic.
+- **One source file, as in original Spatial** (decided 12 November): the compiler will also generate the hardware
+  wrapper (`design_top.sv`'s role) and the host program for each design, so students write only Python Spatial. In
+  this experiment both were adapted by hand: the course's wrapper needed three small edits to fit our design's
+  registers and ports.
 
 ## Next week
 
@@ -78,12 +82,9 @@ checked by a fresh test set written separately, after its code was frozen.
 ## Questions
 
 1. We plan to build FIFO first, then Reg, then Reduce and Fold. Is that the right order for Lab 1?
-2. Our generated design needs three small edits to the course's `design_top.sv` (a wider control address, a stricter
-   start-register match and no separate scalar ports). Should generated designs drop into the unmodified course wrapper, or may the wrapper be
-   generated?
-3. Python Spatial checks every memory access and tracks which elements are initialized, which costs cycles today
+2. Python Spatial checks every memory access and tracks which elements are initialized, which costs cycles today
    (about 260 cycles on the chip, against 58 for the staff's handwritten HLS). We take the handwritten HLS on the
    chip as the target and today's count as our baseline; the [[2026-11-12-first-fpga-run-study|study]] estimates
    what closing the gap takes. Is that the right target, and how much of it must the first release reach?
-4. May the next iteration of the class use the newest AWS image (Vivado and Vitis 2025.2)? The course's Lab 1 flow
+3. May the next iteration of the class use the newest AWS image (Vivado and Vitis 2025.2)? The course's Lab 1 flow
    ran on it unchanged.

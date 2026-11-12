@@ -16,6 +16,7 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 - Diagnosis under Vitis HLS 2025.2 on the F2 instance: five of the six earlier F2 test projects pass co-simulation, the failing design still deadlocks, and its single-exit variant passes.
 - David's decisions on 12 November: all recommended answers for F2-1b and for the FIFO's first slice are approved, with the work deferred until after his meeting with the professor; and performance is measured against the staff's handwritten HLS on the chip (the target), with today's count as the baseline.
 - New page, [[2026-11-12-first-fpga-run-study]]: the first FPGA run in full. The control is the staff's hand translation into HLS, not original Spatial output. Both designs are sixteen wide; ours is slower because it makes six memory transfers instead of two and checks output completion one flag per cycle. The page lists ten problems with possible solutions and gives a rough estimate of the path from about 260 cycles to between 60 and 70. None of that work is started.
+- David also decided on 12 November that the compiler should generate the hardware wrapper and the host program for each design, as original Spatial did, instead of fitting designs to the staff's hand-written files. The weekly update's question about it is replaced by a line in its plan. Not started.
 - Published on 12 November together with the study page.
 
 ## 2026-11-11 — Labs start now; X2a complete; Lab 1 from Python Spatial runs on the AWS F2 FPGA
