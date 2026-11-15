@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 284" width="760" height="284" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<title id="t">How many memory checks can be decided before the run</title>
+<desc id="d">Across 104 test programs, 1,318 of 1,662 possible memory failures were proved impossible, 97 are impossible when the host confirms the inputs are fully set, and 247 remain as hardware checks. For the three Lab 1 programs: 39 of 43 proved, 4 by the host fact, none left.</desc>
+<rect x="0.5" y="0.5" width="759" height="283" rx="8" fill="#fcfcfb" stroke="rgba(11,11,11,0.10)"/>
+<text x="24.0" y="34.0" font-size="15" fill="#0b0b0b" font-weight="600" text-anchor="start">How many memory checks can be decided before the run</text>
+<text x="24.0" y="54.0" font-size="12" fill="#52514e" font-weight="400" text-anchor="start">A throwaway prover over the checked program, 15 November. No wrong proof in 1,120 reference runs.</text>
+<rect x="24" y="71" width="10" height="10" rx="2" fill="#2a78d6"/>
+<text x="40.0" y="80.0" font-size="11" fill="#52514e" font-weight="400" text-anchor="start">Proved: cannot fail in any run</text>
+<rect x="232" y="71" width="10" height="10" rx="2" fill="#86b6ef"/>
+<text x="248.0" y="80.0" font-size="11" fill="#52514e" font-weight="400" text-anchor="start">Cannot fail once the host confirms the inputs are set</text>
+<rect x="562" y="71" width="10" height="10" rx="2" fill="#c3c2b7"/>
+<text x="578.0" y="80.0" font-size="11" fill="#52514e" font-weight="400" text-anchor="start">Left as a hardware check</text>
+<text x="24.0" y="116.0" font-size="13" fill="#0b0b0b" font-weight="600" text-anchor="start">All 104 test programs</text>
+<text x="24.0" y="132.0" font-size="11" fill="#52514e" font-weight="400" text-anchor="start">1,662 ways a memory access can fail</text>
+<rect x="232.0" y="104" width="398.7" height="26" rx="3" fill="#2a78d6"><title>Proved: cannot fail in any run: 1,318 of 1,662</title></rect>
+<text x="234.0" y="148.0" font-size="12" text-anchor="start" style="font-variant-numeric: tabular-nums"><tspan fill="#0b0b0b" font-weight="600">1,318</tspan><tspan fill="#52514e" font-weight="400" dx="6">79 %</tspan></text>
+<rect x="632.7" y="104" width="27.4" height="26" rx="3" fill="#86b6ef"><title>Cannot fail once the host confirms the inputs are set: 97 of 1,662</title></rect>
+<text x="646.4" y="148.0" font-size="12" text-anchor="middle" style="font-variant-numeric: tabular-nums"><tspan fill="#0b0b0b" font-weight="600">97</tspan><tspan fill="#52514e" font-weight="400" dx="6">6 %</tspan></text>
+<rect x="662.1" y="104" width="72.9" height="26" rx="3" fill="#c3c2b7"><title>Left as a hardware check: 247 of 1,662</title></rect>
+<text x="735.0" y="148.0" font-size="12" text-anchor="end" style="font-variant-numeric: tabular-nums"><tspan fill="#0b0b0b" font-weight="600">247</tspan><tspan fill="#52514e" font-weight="400" dx="6">15 %</tspan></text>
+<text x="24.0" y="210.0" font-size="13" fill="#0b0b0b" font-weight="600" text-anchor="start">The three Lab 1 programs</text>
+<text x="24.0" y="226.0" font-size="11" fill="#52514e" font-weight="400" text-anchor="start">43 ways a memory access can fail</text>
+<rect x="232.0" y="198" width="456.1" height="26" rx="3" fill="#2a78d6"><title>Proved: cannot fail in any run: 39 of 43</title></rect>
+<text x="234.0" y="242.0" font-size="12" text-anchor="start" style="font-variant-numeric: tabular-nums"><tspan fill="#0b0b0b" font-weight="600">39</tspan><tspan fill="#52514e" font-weight="400" dx="6">91 %</tspan></text>
+<rect x="690.1" y="198" width="44.9" height="26" rx="3" fill="#86b6ef"><title>Cannot fail once the host confirms the inputs are set: 4 of 43</title></rect>
+<text x="712.6" y="242.0" font-size="12" text-anchor="middle" style="font-variant-numeric: tabular-nums"><tspan fill="#0b0b0b" font-weight="600">4</tspan><tspan fill="#52514e" font-weight="400" dx="6">9 %</tspan></text>
+<text x="232.0" y="264.0" font-size="11" fill="#52514e" font-weight="400" text-anchor="start">No Lab 1 check is left for the hardware.</text>
+</svg>

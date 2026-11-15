@@ -9,6 +9,18 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-11-15 — Compiler efficiency: where the cycles go, a prototype at the staff's speed, and a wrapper fault on the chip
+
+- David's order on 15 November: make the compiler's generated hardware faster now, and let the findings shape later designs; one pull request per milestone in the compiler repository. Lab features pause at their checkpoints (FIFO status queries half built; Reg's contract and tests written).
+- Kit simulation, Lab 1 tiled scale, compute cycles at 32 / 256 / 1,024 elements: the staff's handwritten HLS 77 / 109 / 158; today's compiler output 294 / 1,198 / 3,910. At 1,024 elements more than half of today's time is the per-element loop that checks every output was written.
+- A throwaway prototype of the code generator emits faster designs when handed facts about the program: the final check folded into an existing copy loop 260 / 692 / 1,858 (no fact needed); checks proved away and unobservable transfers removed 87 / 147 / 289; one fused pipelined loop 75 / 108 / 155. A second throwaway prototype proves 1,318 of 1,662 possible memory failures impossible across 104 test programs (all of Lab 1's, given one fact the host can check), with no wrong proof in 1,120 reference runs.
+- The hardware performance plan and eleven standing hardware design rules were written, reviewed by two independent reviewers, revised, re-reviewed and revised again in the compiler repository. First slice: the folded check, which needs no proof and no interface change.
+- On the chip (15 November, back-to-back runs after one image load): every single-loop design returns wrong data after 7 to 53 runs, the course's own unmodified Lab 1 design included; today's staged compiler output did not in 300 runs. Pauses in the host program do not help. A host program that reads back each word before writing the next gave no wrong result (staff's design 400 of 400, fused design 398 of 400 with two host-program crashes, today's output 300 of 300). Offered cause, read from the course wrapper and not yet reproduced in simulation: its memory arbiter can hand the kernel a write acknowledgement that belongs to the host.
+- With host writes confirmed, chip counts equal simulation (80 against 77, 78 against 75, 301 against 294). Chip counts reported earlier (58 to 62, 60, 260) were taken under the course's host protocol and are each too low; they still compare designs fairly.
+- Correction: the variant described on 14 November as "every check kept at the staff's speed" keeps only the one check that can fail for Lab 1, plus the output-written check.
+- Earlier in the week: Lab 1 FIFO's first slice merged on 13 November (2,560 tests), Lab 1 Part 1 pinned as running with no new feature on 14 November (2,573 tests), and the two hand-edited designs built and run on the chip on 14 November.
+- New page: [[2026-11-15-weekly-update]], with questions for the professor ahead of the 16 November meeting.
+
 ## 2026-11-12 — Two reviewed plans; the single-exit loop change implemented and reviewed locally, provisional
 
 - The single-exit loop plan (F2-1b) was rebuilt from the handoff with its measurements re-run, re-reviewed twice and revised; it has nine decisions for David. The Lab 1 FIFO plan was written, design-reviewed twice, re-reviewed and revised; its first slice needs nine answers from David before its contract text is written. Both are in the compiler at `733ffe3` under `docs/plans/`.

@@ -32,6 +32,8 @@ professor's response to the 22 October meeting is still to be recorded.
 
 **11 November progress and order:** after a direction review David decided that lab features start now (FIFO, then Reg, then Reduce and Fold, with the single-exit loop change F2-1b beside them; the remaining builder work X2b and R017's comparison come before Reduce and Fold), that the full routine applies only to changes in language meaning, the checker or generated code while internal tooling gets a lighter one, that publication is weekly, and that the course date is April 2027. X2a is complete and merged at compiler `6e14060` (both suites 2,406 tests). David created an AWS F2 instance on the newest AWS image (Vivado and Vitis 2025.2; its name and addresses are only in the private note): Lab 1 compiled from Python Spatial and the course's handwritten version both pass simulation against the F2 shell, build with timing met and run correctly on the FPGA (the instance is stopped again); the Vitis loop defect is still present in 2025.2, where the failing design still deadlocks and the reduced reproducer returns a wrong word. The session scratch folder is wiped on reboot, so plans and reviews are committed as soon as they exist. The compiler's `PROJECT_STATE.md` ("Restart point — 11 November 2026") is the current status.
 
+**15 November progress and order:** David reversed the order for the next stretch: make the compiler's generated hardware faster now, and let the findings shape later designs. In the compiler repository, `main` is now the trunk and each milestone lands by pull request (no assistant attribution in commits or pull requests). The hardware performance plan and the standing hardware design rules are reviewed and merged there; its first slice (the output-written check folded into an existing copy loop) waits for David's answers to the plan's first two decisions. Measurements, the two throwaway prototypes and the chip finding (the course wrapper and host protocol, not a design, cause the wrong answers under repeated runs) are in [[2026-11-15-weekly-update]] and the compiler's `PROJECT_STATE.md`, which stays the single current status. FIFO status queries are paused half built; Reg's contract and tests are written.
+
 **28 October order:** David approved E3 (trimmed builder) → E4 → E7 → E5, then Lab 1–3 features, with E6 and E8 after the labs and AWS F2 in parallel. He is arranging an F2 instance; the professor mentioned F2 at the 22 October meeting. The course uses Python Spatial in about six months, and each week should show the professor visible progress.
 
 **22 October scalar interface correction — preceding local checkpoint:**
@@ -109,7 +111,7 @@ on another machine; do not make another harness depend on these absolute paths.
 | Responsibility | Repository / branch | Local checkout |
 |---|---|---|
 | Research, decisions, specifications, progress | [spatial-research](https://github.com/davidydu/spatial-research), `main` | `/Users/david/Documents/Spatial Research` |
-| Python compiler and test evidence | [spatial-py](https://github.com/davidydu/spatial-py/tree/work/initial-reference), `work/initial-reference` | `/Users/david/Documents/David_code/spatial-py/.worktrees/initial-reference` |
+| Python compiler and test evidence | [spatial-py](https://github.com/davidydu/spatial-py/tree/main), `work/initial-reference` | `/Users/david/Documents/David_code/spatial-py/.worktrees/initial-reference` |
 | Documentation build and presentation UI | [spatial-research-site](https://github.com/davidydu/spatial-research-site), `main` | `/Users/david/Documents/spatial-research-site` |
 | Original Scala source evidence | Local reference clone; see [[reference-clones]] | `/Users/david/Documents/David_code/spatial` |
 
@@ -452,9 +454,9 @@ resumes the work, ask before vendor simulation/synthesis; confirm the installed 
 device and clock on the next authorized run. Public workflow work does not need HLS.
 
 The compiler's tracked
-[PROJECT_STATE.md](https://github.com/davidydu/spatial-py/blob/work/initial-reference/PROJECT_STATE.md)
+[PROJECT_STATE.md](https://github.com/davidydu/spatial-py/blob/main/PROJECT_STATE.md)
 owns the exact active task, reproduction commands and latest deployment record.
-Follow its [execution plan](https://github.com/davidydu/spatial-py/blob/work/initial-reference/docs/plans/2026-10-13-reference-execution.md).
+Follow its [execution plan](https://github.com/davidydu/spatial-py/blob/main/docs/plans/2026-10-13-reference-execution.md).
 Local continuation is paused for the meeting; ask before HLS reuse. Check the worktree before editing because another
 harness may have advanced beyond this publication. [[80 - Initial Compiler Goal]]
 is the published big-picture status; older diagrams and slides can lag actual

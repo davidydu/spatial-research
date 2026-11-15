@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 424" width="760" height="424" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<title id="t">Compute cycles as the array grows</title>
+<desc id="d">At 32, 256 and 1,024 elements: today's compiler output takes 294, 1,198 and 3,910 cycles; the prototype with the completion check folded into the write-back 260, 692 and 1,858; the prototype with checks proved and staged copies 87, 147 and 289; the prototype's fused loop 75, 108 and 155; the staff's handwritten HLS 77, 109 and 158.</desc>
+<rect x="0.5" y="0.5" width="759" height="423" rx="8" fill="#fcfcfb" stroke="rgba(11,11,11,0.10)"/>
+<text x="24.0" y="34.0" font-size="15" fill="#0b0b0b" font-weight="600" text-anchor="start">Compute cycles as the array grows</text>
+<text x="24.0" y="54.0" font-size="12" fill="#52514e" font-weight="400" text-anchor="start">Lab 1 Part 2 (tiled scale) in the F2 kit simulation, 15 November. Both axes are logarithmic; lower is faster.</text>
+<line x1="56" x2="484" y1="372.0" y2="372.0" stroke="#c3c2b7" stroke-width="1"/>
+<text x="48" y="376.0" font-size="11" fill="#898781" text-anchor="end" style="font-variant-numeric: tabular-nums">50</text>
+<line x1="56" x2="484" y1="328.7" y2="328.7" stroke="#e1e0d9" stroke-width="1"/>
+<text x="48" y="332.7" font-size="11" fill="#898781" text-anchor="end" style="font-variant-numeric: tabular-nums">100</text>
+<line x1="56" x2="484" y1="285.3" y2="285.3" stroke="#e1e0d9" stroke-width="1"/>
+<text x="48" y="289.3" font-size="11" fill="#898781" text-anchor="end" style="font-variant-numeric: tabular-nums">200</text>
+<line x1="56" x2="484" y1="228.0" y2="228.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="48" y="232.0" font-size="11" fill="#898781" text-anchor="end" style="font-variant-numeric: tabular-nums">500</text>
+<line x1="56" x2="484" y1="184.7" y2="184.7" stroke="#e1e0d9" stroke-width="1"/>
+<text x="48" y="188.7" font-size="11" fill="#898781" text-anchor="end" style="font-variant-numeric: tabular-nums">1,000</text>
+<line x1="56" x2="484" y1="141.3" y2="141.3" stroke="#e1e0d9" stroke-width="1"/>
+<text x="48" y="145.3" font-size="11" fill="#898781" text-anchor="end" style="font-variant-numeric: tabular-nums">2,000</text>
+<line x1="56" x2="484" y1="84.0" y2="84.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="48" y="88.0" font-size="11" fill="#898781" text-anchor="end" style="font-variant-numeric: tabular-nums">5,000</text>
+<text x="118.0" y="390" font-size="11" fill="#898781" text-anchor="middle" style="font-variant-numeric: tabular-nums">32</text>
+<text x="329.2" y="390" font-size="11" fill="#898781" text-anchor="middle" style="font-variant-numeric: tabular-nums">256</text>
+<text x="470.0" y="390" font-size="11" fill="#898781" text-anchor="middle" style="font-variant-numeric: tabular-nums">1,024</text>
+<text x="294.0" y="410.0" font-size="11" fill="#898781" font-weight="400" text-anchor="middle">Elements in the array (16 per tile)</text>
+<text x="24.0" y="74.0" font-size="11" fill="#898781" font-weight="400" text-anchor="start">Compute cycles</text>
+<polyline points="118.0,261.2 329.2,173.4 470.0,99.4" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="118.0,268.9 329.2,207.7 470.0,145.9" fill="none" stroke="#1baf7a" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="118.0,337.4 329.2,304.6 470.0,262.3" fill="none" stroke="#1baf7a" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="118.0,345.0 329.2,323.3 470.0,300.0" fill="none" stroke="#eb6834" stroke-width="6" stroke-linejoin="round" stroke-linecap="round" stroke-opacity="0.55"/>
+<polyline points="118.0,346.6 329.2,323.8 470.0,301.2" fill="none" stroke="#1baf7a" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="118.0" cy="261.2" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"><title>Today's compiler output: 294 cycles at 32 elements</title></circle>
+<circle cx="329.2" cy="173.4" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"><title>Today's compiler output: 1,198 cycles at 256 elements</title></circle>
+<circle cx="470.0" cy="99.4" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"><title>Today's compiler output: 3,910 cycles at 1,024 elements</title></circle>
+<circle cx="118.0" cy="268.9" r="4" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"><title>Prototype 1: check folded into a copy: 260 cycles at 32 elements</title></circle>
+<circle cx="329.2" cy="207.7" r="4" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"><title>Prototype 1: check folded into a copy: 692 cycles at 256 elements</title></circle>
+<circle cx="470.0" cy="145.9" r="4" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"><title>Prototype 1: check folded into a copy: 1,858 cycles at 1,024 elements</title></circle>
+<circle cx="118.0" cy="337.4" r="4" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"><title>Prototype 2: checks proved away: 87 cycles at 32 elements</title></circle>
+<circle cx="329.2" cy="304.6" r="4" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"><title>Prototype 2: checks proved away: 147 cycles at 256 elements</title></circle>
+<circle cx="470.0" cy="262.3" r="4" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"><title>Prototype 2: checks proved away: 289 cycles at 1,024 elements</title></circle>
+<circle cx="118.0" cy="345.0" r="5.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"><title>Staff's handwritten HLS: 77 cycles at 32 elements</title></circle>
+<circle cx="329.2" cy="323.3" r="5.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"><title>Staff's handwritten HLS: 109 cycles at 256 elements</title></circle>
+<circle cx="470.0" cy="300.0" r="5.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"><title>Staff's handwritten HLS: 158 cycles at 1,024 elements</title></circle>
+<circle cx="118.0" cy="346.6" r="4" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"><title>Prototype 3: one fused loop: 75 cycles at 32 elements</title></circle>
+<circle cx="329.2" cy="323.8" r="4" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"><title>Prototype 3: one fused loop: 108 cycles at 256 elements</title></circle>
+<circle cx="470.0" cy="301.2" r="4" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"><title>Prototype 3: one fused loop: 155 cycles at 1,024 elements</title></circle>
+<rect x="496" y="94.4" width="10" height="10" rx="2" fill="#2a78d6"/>
+<text x="512.0" y="103.4" font-size="12" text-anchor="start" style="font-variant-numeric: tabular-nums"><tspan fill="#0b0b0b" font-weight="600">3,910</tspan><tspan fill="#52514e" font-weight="400" dx="6">Today's compiler output</tspan></text>
+<rect x="496" y="140.9" width="10" height="10" rx="2" fill="#1baf7a"/>
+<text x="512.0" y="149.9" font-size="12" text-anchor="start" style="font-variant-numeric: tabular-nums"><tspan fill="#0b0b0b" font-weight="600">1,858</tspan><tspan fill="#52514e" font-weight="400" dx="6">Prototype 1: check folded into a copy</tspan></text>
+<rect x="496" y="257.3" width="10" height="10" rx="2" fill="#1baf7a"/>
+<text x="512.0" y="266.3" font-size="12" text-anchor="start" style="font-variant-numeric: tabular-nums"><tspan fill="#0b0b0b" font-weight="600">289</tspan><tspan fill="#52514e" font-weight="400" dx="6">Prototype 2: checks proved away</tspan></text>
+<rect x="496" y="304.0" width="10" height="10" rx="2" fill="#eb6834"/>
+<text x="512.0" y="313.0" font-size="12" text-anchor="start" style="font-variant-numeric: tabular-nums"><tspan fill="#0b0b0b" font-weight="600">158</tspan><tspan fill="#52514e" font-weight="400" dx="6">Staff's handwritten HLS</tspan></text>
+<rect x="496" y="287.2" width="10" height="10" rx="2" fill="#1baf7a"/>
+<text x="512.0" y="296.2" font-size="12" text-anchor="start" style="font-variant-numeric: tabular-nums"><tspan fill="#0b0b0b" font-weight="600">155</tspan><tspan fill="#52514e" font-weight="400" dx="6">Prototype 3: one fused loop</tspan></text>
+<text x="107.0" y="260.2" font-size="11" fill="#52514e" font-weight="400" text-anchor="end" paint-order="stroke" stroke="#fcfcfb" stroke-width="4" stroke-linejoin="round">294</text>
+<text x="107.0" y="279.9" font-size="11" fill="#52514e" font-weight="400" text-anchor="end" paint-order="stroke" stroke="#fcfcfb" stroke-width="4" stroke-linejoin="round">260</text>
+<text x="107.0" y="336.4" font-size="11" fill="#52514e" font-weight="400" text-anchor="end" paint-order="stroke" stroke="#fcfcfb" stroke-width="4" stroke-linejoin="round">87</text>
+<text x="107.0" y="358.6" font-size="11" fill="#52514e" font-weight="400" text-anchor="end" paint-order="stroke" stroke="#fcfcfb" stroke-width="4" stroke-linejoin="round">75, 77</text>
+</svg>

@@ -11,6 +11,13 @@ Pacific time (12 November UTC). It is the project's first run on real hardware. 
 where the course's handwritten HLS takes about 58. This page records the case in full, shows where the cycles go, and sets out what it would take to reach
 the handwritten design's speed.**
 
+> **Note, 15 November.** The chip counts on this page (58 to 62 and about 260) were measured with the course's host
+> program, which starts the kernel without confirming its own memory writes. Run that way, every design reports
+> "done" about 15 cycles early for each of its write phases. With every host write confirmed, the staff's design
+> takes 80 cycles on the chip and ours 301, against 77 and 294 in simulation. The comparison between the two designs
+> stands; the simulation counts are the better absolute figures. See
+> [[2026-11-15-weekly-update|the 15 November update]], item 5.
+
 ## Summary
 
 - **What ran.** Lab 1's tiled scale (32 numbers, each multiplied by 5) was compiled from Python Spatial and taken
