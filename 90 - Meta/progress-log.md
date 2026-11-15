@@ -20,6 +20,7 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 - Correction: the variant described on 14 November as "every check kept at the staff's speed" keeps only the one check that can fail for Lab 1, plus the output-written check.
 - Earlier in the week: Lab 1 FIFO's first slice merged on 13 November (2,560 tests), Lab 1 Part 1 pinned as running with no new feature on 14 November (2,573 tests), and the two hand-edited designs built and run on the chip on 14 November.
 - New page: [[2026-11-15-weekly-update]], with questions for the professor ahead of the 16 November meeting.
+- Published 15 November: research checkpoint `50a41a1`, then [site deployment run 43758254685](https://github.com/davidydu/spatial-research-site/actions/runs/43758254685) succeeded. The local build's changed pages had 239 internal links with none broken; the live update, brief, study page and three figures returned HTTP 200 with the new text. Compiler side: the performance plan, design rules and evidence merged as pull request 2 (`ee13b94` on `main`).
 
 ## 2026-11-12 — Two reviewed plans; the single-exit loop change implemented and reviewed locally, provisional
 
