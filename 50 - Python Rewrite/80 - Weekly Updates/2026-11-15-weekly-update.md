@@ -13,6 +13,25 @@ and 1,858 cycles, where its output took 294, 1,198 and 3,910); the rest is not y
 design returns wrong data when its test is repeated without reloading the image, and why chip counts ran below
 simulation.**
 
+> [!note] Update, 16 November (afternoon): the plan below changed the same day
+> - **The larger cost is lost parallelism, not the checks.** The synthesis reports of the first fix show that the
+>   compiler states no parallelism: `par` is written out as a comment, so the vendor tool decides. At 256 and
+>   1,024 elements it runs the compute loop one element a cycle, 71 % of the cycles at 1,024. Every check is an
+>   early exit, which serializes the flag reads.
+> - **David's decision:** the FPGA route now follows the original Spatial compiler. There are no run-time checks or
+>   flags in hardware; faults are found in the reference simulators, which keep every check, as does the native
+>   route. `sequential`, `foreach` and `par` have Spatial's meaning.
+> - **The fair comparison.** The course's own Spatial for Lab 1 says `Sequential` and no `par`, so we wrote our own
+>   Spatial version of what the staff's HLS does (`foreach` over tiles, `par=16` inside). We ran it in the course's
+>   own unmodified flow.
+> - **The result.** Built by hand that way, it measured 75 / 77 / 156 cycles against the staff's 77 / 109 / 158.
+>   This is a prototype; the compiler change that generates it is in design review.
+> - **What is superseded.** The prover (prototype 2, item 4 below) is no longer on the path to speed, and questions
+>   1 and 2 below are replaced by the deck's questions.
+> - [Revised deck](https://davidydu.github.io/spatial-research-site/presentation/efficiency/) ·
+>   [[2026-11-16-compiler-efficiency-presentation|its script]] ·
+>   [decision record](https://github.com/davidydu/spatial-py/blob/docs/parallelism-first/docs/reviews/2026-11-16-spatial-style-fpga-decisions.md)
+
 ## What's new
 
 **1. The gap to handwritten HLS grows with the array.** Last week's comparison used 32 elements. We ran the same

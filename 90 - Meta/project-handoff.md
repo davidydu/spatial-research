@@ -475,8 +475,10 @@ has presentation copies. Keep copies consistent when changing the map.
 **Current deck (16 November 2026):** [compiler efficiency](https://davidydu.github.io/spatial-research-site/presentation/efficiency/),
 eight slides in the site's `presentation/efficiency/` directory, with
 [[2026-11-16-compiler-efficiency-presentation|its speaking script]]. It covers where the compiled hardware loses
-its cycles, the first fix now in the compiler (measured), the two prototypes, the course wrapper's bug, and the
-plan with four questions. Every number is a saved measurement in the compiler repository; refresh the deck only
+its cycles, the first fix now in the compiler (measured), the parallelism the compiler never states, the
+Spatial-style design that matches the staff's (prototype, in the course's own flow), the course wrapper's bug,
+and the plan with four questions. Revised the afternoon of 16 November, after David decided the FPGA route
+follows the original Spatial compiler: no run-time checks or flags in hardware, and Spatial's schedules. Every number is a saved measurement in the compiler repository; refresh the deck only
 from that evidence. The October deck below stays as the record of the first pipeline result.
 
 The October 22 presentation and [[2026-10-22-python-pipeline-presentation|speaker notes]]

@@ -9,6 +9,16 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-11-16 (afternoon) — Parallelism first; Spatial-style FPGA hardware decided; the deck revised
+
+- David questioned the prover-first plan ("can't we change the complier design to fix visible mistakes, such as not using spatial parallelisM?"). The first fix's own synthesis reports agree: `par` is emitted as a comment, the compute loop runs one element a cycle at 256 and 1,024 elements (71 % of the cycles at 1,024), and the early-exit checks serialize the flag reads. The plan was reordered (compiler repository, branch `docs/parallelism-first`, plan section 15), and a standing rule was added: state each loop's parallelism, and read the report's loop table before proposing a large mechanism.
+- Prototypes (hand edits, kit simulation, compute cycles at 32 / 256 / 1,024): checks as recorded values in the staged design 259 / 415 / 824; a streamed top with every check kept 165 / 278 / 737.
+- A review of the direction found the design unchanged. David then decided the FPGA route follows the original Spatial compiler: no run-time checks or flags in hardware, and Spatial's schedules. The research vault's spec notes were surveyed for Spatial's passes (schedules, unrolling, banking, transfers, the absence of run-time checks).
+- Lab 1 Part 2 is compared fairly. The course's own Spatial says `Sequential` and no `par`, so our own Spatial version (`foreach`, `par=16`) was written and run in the course's own unmodified flow, the staff's design re-run alone beside it. Hand-written: 75 / 77 / 156 fused and 80 / 114 / 161 as three concurrent stages, against the staff's 77 / 109 / 158.
+- Lessons: tops that rewind restart themselves in the course wrapper (design rule 8), and Spatial's double-buffered forms map poorly to Vitis for 16-word tiles. A correction: the first run of the course's `Sequential` source was flattened by Vitis, so it is not Spatial's schedule; it is to be re-measured.
+- The compiler slice (SS1, the Spatial-style FPGA route) is planned on branch `feat/f2-spatial-style`. Its design review came back "adopt with named changes" and is being taken into the plan. The F2 instance was started twice by request and stopped both times (stopped confirmed by AWS at 20:46 UTC).
+- The deck was revised for the meeting with Kunle: slides 5 and 6 replaced ("The compiler never states its parallelism", "Following the original Spatial compiler"), and slides 1, 3 and 8 updated. The script, the weekly update (a dated note) and the handoff were updated to match.
+
 ## 2026-11-16 — The first speed fix merged and measured; the wrapper fault confirmed on the chip; a deck for the meeting
 
 - David's order, the night of 15 November: merge the first slice, test its performance on the F2 instance, stop the instance afterwards, clean up, and prepare a presentation for the 16 November meeting.
