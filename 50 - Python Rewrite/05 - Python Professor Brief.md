@@ -9,7 +9,9 @@ verified: 2026-10-22
 
 **Latest:** [[2026-11-15-weekly-update|Weekly update — 15 November]], on compiler efficiency (earlier: [[2026-11-11-weekly-update|11 November]], [[2026-10-28-weekly-update|28 October]]). The first run on the FPGA in detail: [[2026-11-12-first-fpga-run-study|first-run study, 12 November]].
 
-<a href="https://davidydu.github.io/spatial-research-site/presentation/python/" data-router-ignore target="_blank" rel="noopener noreferrer">Open the seven-slide presentation</a> · [[2026-10-22-python-pipeline-presentation|October 22 speaker notes and evidence]].
+<a href="https://davidydu.github.io/spatial-research-site/presentation/efficiency/" data-router-ignore target="_blank" rel="noopener noreferrer">Open the 16 November presentation: compiler efficiency</a> · [[2026-11-16-compiler-efficiency-presentation|speaking script]].
+
+Earlier: <a href="https://davidydu.github.io/spatial-research-site/presentation/python/" data-router-ignore target="_blank" rel="noopener noreferrer">the seven-slide presentation of 22 October</a> · [[2026-10-22-python-pipeline-presentation|October 22 speaker notes and evidence]].
 
 **The Python rewrite now takes one existing Lab 1 example through the complete experimental path to simulated RTL.** This is the starting point for the next discussion with the professor, who asked for a fully Python compiler after the earlier Python-frontend/Rust-core proposal.
 

@@ -20,8 +20,9 @@ files carry shared context across Codex, Claude Code and other harnesses.
 - Use bounded independent agents where available; the integrating agent reviews
   their work. See the handoff for current model preferences, replacing old
   Codex-only or Fable-only operational notes.
-- The compiler is in a separate `spatial-py` implementation worktree. Read its
-  `AGENTS.md` and `PROJECT_STATE.md`; outer bootstrap `main` is not current code.
+- The compiler is the separate `spatial-py` repository. Since 15 November 2026 its
+  `main` is the trunk and holds the latest verified work; each milestone lands there
+  by pull request. Read its `AGENTS.md` and `PROJECT_STATE.md` first.
 - Keep context in shared tracked files. Record decisions, corrections, results,
   unresolved issues and next steps before stopping; private memory is supplementary.
 - Commit/push coherent checkpoints under the authorized `davidydu` identity.

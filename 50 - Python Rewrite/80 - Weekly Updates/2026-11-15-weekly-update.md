@@ -8,8 +8,8 @@ date: 2026-11-15
 **This week was about speed. We measured where the compiled design loses its cycles, and a prototype of the
 compiler now generates a Lab 1 design as fast as the staff's handwritten HLS: 75, 108 and 155 cycles at 32, 256 and
 1,024 elements, against 77, 109 and 158. A second prototype shows that every memory check in the Lab 1 programs
-can be decided before the run. The first step of the prototype is now implemented in the compiler itself; the rest
-is not yet. On the chip, we found that the course's own Lab 1
+can be decided before the run. The first step of the prototype is now in the compiler itself and measured (260, 692
+and 1,858 cycles, where its output took 294, 1,198 and 3,910); the rest is not yet. On the chip, we found that the course's own Lab 1
 design returns wrong data when its test is repeated without reloading the image, and why chip counts ran below
 simulation.**
 
@@ -71,8 +71,9 @@ prototype of the code generator now emits the same designs itself, at all three 
   wrapper decides it while it copies the flags back. It gives exactly the results it gave before: the generated
   hardware code, built on the Mac, matches both reference simulators on 116 hand-specified inputs and on two fresh
   test sets written after the code was frozen; 40 of 42 deliberately planted bugs are caught and the other two
-  cannot change any result; 2,640 automated tests pass. Its own cycle count on the F2 kit is still to be measured;
-  until then 260 / 692 / 1,858 is the prototype's number.
+  cannot change any result; 2,640 automated tests pass. **Measured on 16 November in the F2 kit simulation, on the
+  compiler's own output: 260 / 692 / 1,858 cycles**, every test passing, where it took 294 / 1,198 / 3,910. The
+  counts equal the prototype's.
 - One intermediate design (input flags skipped, checks still in hardware) passed at 32 elements and never
   finished at 256 and 1,024. We have not explained it. Its kernel is identical to a design that does finish, so the
   cause is in how the top level supplies the flags. No planned step generates that design.
@@ -108,6 +109,7 @@ we ran each design's test over and over after a single load.
 | Fused loop (hand-edited) | the same, with pauses added | 112 | 81 | 32 |
 | Second variant (flags in the data buffer) | the course's protocol | 519 | 472 | 26 |
 | Today's compiler output | the course's protocol | 300 | 0 | none |
+| Today's compiler output, 16 November | the course's protocol | 2,300 | 2 | 35 |
 | Staff's handwritten HLS | every write confirmed | 400 | 0 | none |
 | Fused loop (hand-edited) | every write confirmed | 400 | 0 | none |
 | Today's compiler output | every write confirmed | 300 | 0 | none |
@@ -116,10 +118,12 @@ we ran each design's test over and over after a single load.
 - **Every single-loop design fails this way, the course's own included.** The staff's handwritten design, wrapper
   and host program, byte-identical to the course repository, were correct for 48 runs and returned their first
   wrong data on run 53. No fault is reported, and from run 57 every run is wrong until the image is loaded again.
-  Today's compiler output, which uses the memory in separate steps, did not fail.
-- **Pauses in the host program do not help. Confirming each write does.** With one added line, the host program
-  reads back every word before it writes the next. In 1,400 runs of four designs that way, none returned a wrong
-  result.
+  Today's compiler output, which uses the memory in separate steps, did not fail that day. On 16 November it did,
+  twice in 2,300 runs, and recovered each time (below).
+- **Pauses between the program's phases do not help. Never having two writes in flight does.** With one added
+  line, the host program reads back every word before it writes the next. In 1,400 runs of four designs that way,
+  none returned a wrong result. A pause of 100 microseconds after every write, with nothing read back, does the
+  same (16 November): 600 runs of two designs, none wrong.
 - **What is wrong in the code** (added the same evening, after an independent analysis). The course's wrapper
   shares the memory between the host and the kernel through a small arbiter. It releases its write lock at the
   first acknowledgement without counting the writes still in flight, and it routes acknowledgements and write data
@@ -127,9 +131,24 @@ we ran each design's test over and over after a single load.
   this is wrong for ordinary traffic. A cycle-level model of those lines reproduces the kernel reporting "done"
   early and the exact layout of the first wrong outputs; both vanish, as on the chip, when the host confirms each
   write.
-- **What that does not explain.** Why the failure lasts until the image is reloaded, and why today's compiler
-  output never failed. So it is a definite bug with a strong but incomplete link to the failures. It has not yet
-  been reproduced in a hardware simulation, where the kit's test bench finishes each write before the next.
+- **Confirmed on the chip (16 November).** The AWS shell keeps its own error counters. After a fresh load and one
+  run of the course's unmodified test, the shell has recorded a host write that never received its
+  acknowledgement, at the last address the program wrote. With every write confirmed, it records none.
+- **Once it starts, only a reload clears it** (16 November). After the wrong results began we switched to the safe
+  host program without reloading: 150 runs of 150 were still wrong. In that state the shell records dozens of
+  timeouts a run and most host writes never reach the memory.
+- **It starts well before the test notices** (16 November). We read the shell's counters after every run of the
+  staff's unmodified design. Host writes began to go missing at run 5; the test kept passing until run 23. The test
+  writes the same inputs every run, so a lost write usually leaves the right value in place. So "first wrong on
+  run 53" above says when the damage became visible, not when it began, and a passing test alone does not show a
+  healthy run. From now on every chip run reads these counters.
+- **Our staged output is not immune** (16 November). In 2,000 further runs it returned two wrong results (runs 35
+  and 116), each showing the host's own last writes landing after the kernel's output, and it passed through one
+  stretch in which about 11,000 writes never reached the memory. Then it returned to normal by itself and ran
+  1,750 more runs cleanly. The single-loop designs never recover without a reload.
+- **What is still not explained.** Why our staged compiler output recovers without a reload and the single-loop
+  designs do not. The bug has also not yet been reproduced in a hardware simulation, where the kit's test bench
+  finishes each write before the next.
 - **It explains a puzzle from last week.** Every design took fewer cycles on the chip than in simulation. With
   every host write confirmed, the two agree:
 
@@ -164,8 +183,8 @@ plan is now checked against eleven written rules, each tied to a measurement. Th
 
 Speed work now runs beside the lab features instead of after them.
 
-1. **Prototype 1 into the real compiler.** Done on 15 November, with its measurement on the F2 kit still to come.
-   It needs no proof and no interface change; the prototype took 1,024 elements from 3,910 cycles to 1,858.
+1. **Prototype 1 into the real compiler.** Done on 15 November and measured on the 16th: 1,024 elements go from
+   3,910 cycles to 1,858. It needed no proof and no interface change.
 2. **Reproduce the chip failure in simulation.** Until the compiler generates its own wrapper, every chip run
    uses a host program that confirms its writes.
 3. **The prover as a real checker pass.** "Unknown" never counts as proved, and a program loaded from a file is

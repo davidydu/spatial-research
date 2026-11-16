@@ -111,16 +111,17 @@ on another machine; do not make another harness depend on these absolute paths.
 | Responsibility | Repository / branch | Local checkout |
 |---|---|---|
 | Research, decisions, specifications, progress | [spatial-research](https://github.com/davidydu/spatial-research), `main` | `/Users/david/Documents/Spatial Research` |
-| Python compiler and test evidence | [spatial-py](https://github.com/davidydu/spatial-py/tree/main), `work/initial-reference` | `/Users/david/Documents/David_code/spatial-py/.worktrees/initial-reference` |
+| Python compiler and test evidence | [spatial-py](https://github.com/davidydu/spatial-py/tree/main), `main` (milestone branches in `.worktrees/`) | `/Users/david/Documents/David_code/spatial-py` |
 | Documentation build and presentation UI | [spatial-research-site](https://github.com/davidydu/spatial-research-site), `main` | `/Users/david/Documents/spatial-research-site` |
 | Original Scala source evidence | Local reference clone; see [[reference-clones]] | `/Users/david/Documents/David_code/spatial` |
 
-**Checkout trap:** the outer `David_code/spatial-py` directory is bootstrap
-`main`, not the working compiler. Inspect Git status, branch and worktree list
-before edits. Use the existing implementation worktree, or check out
-`work/initial-reference` on a new machine. Do not merge or restart the compiler
-just because the bootstrap checkout has little code. Earlier `spatial-rs` work
-and Rust presentations are historical evidence.
+**Checkout (changed 15 November 2026):** the outer `David_code/spatial-py` directory
+shows `main`, which is now the trunk and holds the latest verified compiler; never
+commit there. Work happens on milestone branches in worktrees under `.worktrees/` and
+reaches `main` by pull request (the compiler's `AGENTS.md` has the conventions). The
+integration branch `work/initial-reference` is retired; `.worktrees/initial-reference`
+remains only as the home of the shared Python environment, a detached checkout of
+`main`. Earlier `spatial-rs` work and Rust presentations are historical evidence.
 
 ## Decisions and user preferences from the conversation
 
@@ -470,6 +471,13 @@ lives in the site's `presentation/python/` directory. The deck at `/presentation
 is the historical Rust-era proposal. The editable diagram and original exports
 live under `50 - Python Rewrite/30 - Implementation Design/assets/`; the site
 has presentation copies. Keep copies consistent when changing the map.
+
+**Current deck (16 November 2026):** [compiler efficiency](https://davidydu.github.io/spatial-research-site/presentation/efficiency/),
+eight slides in the site's `presentation/efficiency/` directory, with
+[[2026-11-16-compiler-efficiency-presentation|its speaking script]]. It covers where the compiled hardware loses
+its cycles, the first fix now in the compiler (measured), the two prototypes, the course wrapper's bug, and the
+plan with four questions. Every number is a saved measurement in the compiler repository; refresh the deck only
+from that evidence. The October deck below stays as the record of the first pipeline result.
 
 The October 22 presentation and [[2026-10-22-python-pipeline-presentation|speaker notes]]
 follow seven steps: direction, architecture, one Lab 1 pipeline result,

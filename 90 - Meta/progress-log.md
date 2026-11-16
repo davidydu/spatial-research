@@ -9,6 +9,16 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-11-16 — The first speed fix merged and measured; the wrapper fault confirmed on the chip; a deck for the meeting
+
+- David's order, the night of 15 November: merge the first slice, test its performance on the F2 instance, stop the instance afterwards, clean up, and prepare a presentation for the 16 November meeting.
+- Slice P1 (the output-written check folded into a copy loop the hardware already runs) merged into the compiler's `main` as pull request 4 after the full routine: separate test and code authors, 40 of 42 planted bugs caught (the other two cannot change a result), two fresh holdouts, 2,640 tests in both suites.
+- Measured in the F2 kit simulation on 16 November, the compiler's own output, compute cycles at 32 / 256 / 1,024 elements: 260 / 692 / 1,858, where it took 294 / 1,198 / 3,910; the staff's handwritten HLS, measured again in the same session, 77 / 109 / 158. The prototypes' 87 / 147 / 289 and 75 / 108 / 155 remain prototypes.
+- The course wrapper, on the chip (16 November). The AWS shell's own counters show a host write that never received its acknowledgement after one run of the course's unmodified test, and none when the host confirms its writes. After the wrong results start, the safe host program does not repair them: 150 of 150 runs wrong until a reload. A 100-microsecond pause after every host write, with nothing read back, gave 300 of 300 correct on each of two designs.
+- Two findings that change how the earlier run tables read. With the counters read after every run, the staff's design lost host writes from run 5 and its test passed until run 23, because the test writes the same data every run: a passing test is not a healthy run. And the staged compiler output is not immune: in 2,000 runs it returned two wrong results and passed through one stretch of about 11,000 lost writes, then returned to normal without a reload. Why it recovers and the single-loop designs do not is not explained. From now on every chip run reads the shell's counters.
+- All of it recorded in the compiler repository as pull request 5 (documents and evidence only); `main` is `84df662`. The instance was shut down from inside at 08:15 UTC.
+- New deck for the meeting: [compiler efficiency](https://davidydu.github.io/spatial-research-site/presentation/efficiency/), eight slides, with [[2026-11-16-compiler-efficiency-presentation|its speaking script]]. [[2026-11-15-weekly-update]] carries the measured numbers and the 16 November chip findings.
+
 ## 2026-11-15 — Compiler efficiency: where the cycles go, a prototype at the staff's speed, and a wrapper fault on the chip
 
 - David's order on 15 November: make the compiler's generated hardware faster now, and let the findings shape later designs; one pull request per milestone in the compiler repository. Lab features pause at their checkpoints (FIFO status queries half built; Reg's contract and tests written).
