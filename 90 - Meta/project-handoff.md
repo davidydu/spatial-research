@@ -472,7 +472,14 @@ is the historical Rust-era proposal. The editable diagram and original exports
 live under `50 - Python Rewrite/30 - Implementation Design/assets/`; the site
 has presentation copies. Keep copies consistent when changing the map.
 
-**Current deck (16 November 2026):** [compiler efficiency](https://davidydu.github.io/spatial-research-site/presentation/efficiency/),
+**Language deck (16 November 2026, evening):** [the language against EE 109](https://davidydu.github.io/spatial-research-site/presentation/language/),
+thirteen slides in the site's `presentation/language/` directory, with
+[[2026-11-16-language-presentation|its speaking script]] and the full table in
+[[PY-E003 - EE109 Feature Coverage]]. Every construct EE 109's lectures and Labs 1 to 3 use, its Python
+spelling, and its state (17 of 32 run; `Reg`, `par`'s hardware and `.buffer` designed; 12 next). Refresh its
+states from the compiler's support ledger as each slice merges.
+
+**Efficiency deck (16 November 2026):** [compiler efficiency](https://davidydu.github.io/spatial-research-site/presentation/efficiency/),
 eight slides in the site's `presentation/efficiency/` directory, with
 [[2026-11-16-compiler-efficiency-presentation|its speaking script]]. It covers where the compiled hardware loses
 its cycles, the first fix now in the compiler (measured), the parallelism the compiler never states, the

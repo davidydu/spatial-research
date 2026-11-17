@@ -45,7 +45,7 @@ The full-language architecture and [[07 - Python Implementation Readiness Audit|
 
 ## Foundation studies
 
-For “what would Python look like?”, start with [[PY-E002 - Spatial to Python Syntax Atlas]]. It links complete proposed programs and the exact original spellings:
+For “what of EE 109 runs today?”, see [[PY-E003 - EE109 Feature Coverage]]: every construct the lectures and Labs 1 to 3 use, its Python spelling and its state. For “what would Python look like?”, start with [[PY-E002 - Spatial to Python Syntax Atlas]]. It links complete proposed programs and the exact original spellings:
 
 - [[PY-R012 - Lab1 Syntax and Host Mapping]] — ports, registers, memories, queues, scalar reductions and host workflow.
 - [[PY-R013 - Controllers Reductions and Lab2 Mapping]] — control, memory reductions, FSMs and tiled GEMM.

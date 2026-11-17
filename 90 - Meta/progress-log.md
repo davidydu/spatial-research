@@ -9,6 +9,13 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-11-16 (evening) — A deck on the language against EE 109
+
+- The professor asked for a deck on the new language's features. Every Spatial construct EE 109's Spring 2026 lectures (1 to 7) and Labs 1 to 3 use was inventoried from the course slides and lab sources (read only; nothing copied). Part 2 of each lab is HLS and is not counted.
+- Result, recorded in [[PY-E003 - EE109 Feature Coverage]]: of the 32 constructs the labs' Spatial parts use, 17 run today (source, checker, both reference engines); 3 are designed (`Reg`, the hardware for `par`, `.buffer` as the compiler's job); 12 are next (reductions, memory folds, FSM, LUT, fixed point, the Lab 3 window memories, `Pipe`, `mux`, `abs`). Lab 1's registers, DRAM and SRAM, and FIFO parts run; its controllers part needs `Reg`, `Reduce` and `Fold`. Taught but used by no lab: streaming, structs, vectors, bit views, gather and scatter, floating point, `Parallel`.
+- New deck: [the language against EE 109](https://davidydu.github.io/spatial-research-site/presentation/language/), thirteen slides, with [[2026-11-16-language-presentation|its speaking script]]. It pairs Lab 1's tiled scale in both spellings, gives a table per area (host, types, memories, transfers, controllers, streaming), the hardware meaning of `par` with the measured and prototype cycles, the six deliberate differences, a lab-by-lab table, how a construct is delivered, and the plan with four questions (fixed-point rounding, schedule names, whether Lab 1 should teach `foreach` and `par`, and whether streaming is needed by April 2027).
+- Next: functional coverage resumes with the FIFO observations (slice A2a: the whole suite, reviews, freeze, holdout, pull request), then `Reg`, `Reduce` and `Fold`, then the Lab 2 and Lab 3 families.
+
 ## 2026-11-16 (afternoon) — Parallelism first; Spatial-style FPGA hardware decided; the deck revised
 
 - David questioned the prover-first plan ("can't we change the complier design to fix visible mistakes, such as not using spatial parallelisM?"). The first fix's own synthesis reports agree: `par` is emitted as a comment, the compute loop runs one element a cycle at 256 and 1,024 elements (71 % of the cycles at 1,024), and the early-exit checks serialize the flag reads. The plan was reordered (compiler repository, branch `docs/parallelism-first`, plan section 15), and a standing rule was added: state each loop's parallelism, and read the report's loop table before proposing a large mechanism.
