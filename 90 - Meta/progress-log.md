@@ -9,6 +9,14 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-11-16 (night) — FIFO observations merged; Reduce and Fold planned and reviewed
+
+- The language deck was published: research checkpoint `c94bb22` and site commit `d302ffe`, then [deployment run 44001747837](https://github.com/davidydu/spatial-research-site/actions/runs/44001747837) succeeded; the live deck, [[PY-E003 - EE109 Feature Coverage]] and [[2026-11-16-language-presentation|the script]] returned HTTP 200 with the new text, and the hosted parallelism slide matched the local capture.
+- FIFO slice A2a, the queue observations (`is_empty`, `is_full`, `occupancy`), merged into the compiler's `main` as pull request 8 (`2023872`) after the full routine: three independent reviews (no wrong behaviour found; 149 mutants, every plan mutant killed by its named test, every real survivor given a killing test in the fix round), a freeze, a separate author's holdout committed before its single run (15 of 15), and both full suites at 2,831 tests (source and an isolated wheel). The checker never treats an observation's value as a fact, so a queue check under `if q.is_full():` keeps its run-time check. Reference path only; the native and FPGA routes still refuse queue programs.
+- The deck's slide 5 and PY-E003 still show the observations as "in review"; they move to "runs" at the next weekly publication.
+- Reduce and Fold (Lab 1 Part 6) planned on the compiler's branch `work/lab1-reduce`: a reduction is an `Int` value over a nested helper body with a closed set of lawful combiners (add, mul, and, or, xor), represented as a loop that carries one `Int`. An independent design review: adopt with named changes (7 material, 13 minor, all accepted), among them a commit that would have broken an existing builder test and a backwards trace order in the oracle pack. Five decisions wait for David: where the result goes, whether the identity is required, the combiner set, `schedule="sequential"`, and whether the slice waits for X2b and R017.
+- Reg A1's start revision began: `main` (with A2a) merged into `work/lab1-reg`, both contract sections kept in rule order.
+
 ## 2026-11-16 (evening) — A deck on the language against EE 109
 
 - The professor asked for a deck on the new language's features. Every Spatial construct EE 109's Spring 2026 lectures (1 to 7) and Labs 1 to 3 use was inventoried from the course slides and lab sources (read only; nothing copied). Part 2 of each lab is HLS and is not counted.
