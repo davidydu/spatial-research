@@ -30,7 +30,7 @@ simulation.**
 >   1 and 2 below are replaced by the deck's questions.
 > - [Revised deck](https://davidydu.github.io/spatial-research-site/presentation/efficiency/) ·
 >   [[2026-11-16-compiler-efficiency-presentation|its script]] ·
->   [decision record](https://github.com/davidydu/spatial-py/blob/docs/parallelism-first/docs/reviews/2026-11-16-spatial-style-fpga-decisions.md)
+>   [decision record](https://github.com/davidydu/spatial-py/blob/main/docs/reviews/2026-11-16-spatial-style-fpga-decisions.md)
 
 ## What's new
 

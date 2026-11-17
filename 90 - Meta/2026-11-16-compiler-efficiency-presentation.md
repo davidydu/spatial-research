@@ -13,7 +13,7 @@ scope: "Eight slides on where the compiled hardware loses its cycles, the first 
 
 Eight slides, about eleven minutes before discussion, for the meeting of 16 November 2026. It answers the question from the last meeting: the compiled design was correct on the FPGA but several times slower than the staff's handwritten HLS. Every number on a slide is a saved measurement in the compiler repository; the deck's "Evidence" button lists the pages behind each slide.
 
-**Revised the afternoon of 16 November.** Slides 5 and 6 replace the morning's "prototype" and "proofs" slides. David decided that day that the FPGA route follows the original Spatial compiler: no run-time checks or flags in hardware, and Spatial's schedules ([decision record](https://github.com/davidydu/spatial-py/blob/docs/parallelism-first/docs/reviews/2026-11-16-spatial-style-fpga-decisions.md)). Slides 1, 3 and 8 changed to match.
+**Revised the afternoon of 16 November.** Slides 5 and 6 replace the morning's "prototype" and "proofs" slides. David decided that day that the FPGA route follows the original Spatial compiler: no run-time checks or flags in hardware, and Spatial's schedules ([decision record](https://github.com/davidydu/spatial-py/blob/main/docs/reviews/2026-11-16-spatial-style-fpga-decisions.md)). Slides 1, 3 and 8 changed to match.
 
 **What is real and what is a prototype.**
 - The first fix (slide 4) is in the compiler, merged after the full review routine. It was measured in the F2 kit simulation on 16 November: 260, 692 and 1,858 compute cycles at 32, 256 and 1,024 elements, where the compiler's output took 294, 1,198 and 3,910.
