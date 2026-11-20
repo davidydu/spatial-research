@@ -15,6 +15,9 @@ related:
 
 [Open the presentation](https://davidydu.github.io/spatial-research-site/presentation/language/) · [[PY-E003 - EE109 Feature Coverage|The full comparison]] · [[2026-11-16-compiler-efficiency-presentation|The efficiency deck]]
 
+> [!note] Updated 19 November 2026
+> The deck's states were refreshed on 19 November: the FIFO observations (merged 16 November) and `Reg` (merged 19 November) now run, so 18 of the 32 constructs run; `Reduce` and `Fold` are designed, with the spelling David chose on 19 November (`acc.value = fold(…, seed=acc.value, …)`); ten constructs are next. The deck's own speaker notes carry the new wording. This script keeps the words as written for 16 November.
+
 Thirteen slides, about sixteen minutes before discussion. The professor asked for a deck on the new language's features. It takes every Spatial construct that EE 109's Spring 2026 lectures (1 to 7) and Labs 1 to 3 use, gives its Python Spatial spelling, and says whether it runs, is designed, or comes next.
 
 **How to read the states.**

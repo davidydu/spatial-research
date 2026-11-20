@@ -3,9 +3,10 @@ type: reference
 title: "Spatial to Python: the course examples"
 project: spatial-python
 date: 2026-10-01
+updated: 2026-11-19
 status: proposed
-adoption_status: proposed
-implementation_status: not-implemented
+adoption_status: in-progress
+implementation_status: partial
 related:
   - "[[PY-R012 - Lab1 Syntax and Host Mapping]]"
   - "[[PY-R013 - Controllers Reductions and Lab2 Mapping]]"
@@ -17,9 +18,12 @@ related:
 
 **The proposed Python language keeps Spatial's memories, controllers and reductions visible.** A register becomes `Reg[Int]`, a local memory becomes `Sram[Int, 16]`, and a Spatial loop becomes `for i in foreach(0, 16):`. The compiler reads that source, checks its meaning and builds a program that the Python reference simulator can run. HLS lowering comes after that.
 
-These are proposed language spellings, not a working package. This atlas answers what a rewrite looks like using the [Digital Systems Design Lab](https://kelayamatoz.github.io/Digital-Systems-Design-Lab/) examples. The linked studies contain complete proposed kernels, source evidence, deliberate changes and compiler obligations. [[60 - Course Syntax and Compiler Trace]] fixes the shared signatures and follows the examples through the compiler.
+These began as proposed spellings on 1 October 2026; many now run in the compiler. [[PY-E003 - EE109 Feature Coverage]] gives each construct's current state, and the [[00 - Python Spatial Student Guide|student guide]] shows how to write and test the ones that run. This atlas answers what a rewrite looks like using the [Digital Systems Design Lab](https://kelayamatoz.github.io/Digital-Systems-Design-Lab/) examples. The linked studies contain complete proposed kernels, source evidence, deliberate changes and compiler obligations. [[60 - Course Syntax and Compiler Trace]] fixes the shared signatures and follows the examples through the compiler.
 
 ## Start with the familiar constructs
+
+> [!note] Updated 19 November 2026
+> Four rows now show the spelling the compiler adopted instead of the October proposal: the register (`r: Reg[Int] = 0`, which runs since Reg slice A1), the queue observations (which run since FIFO slice A2a), and `reduce` and `fold`, whose spelling David chose on 19 November: a reduction is a value you assign, its identity is required and checked, and it combines with one of five operations whose laws are proved once, not verified per program. The reductions are designed, not yet implemented. The other rows are unchanged.
 
 All Python in this table is **captured kernel source**, except rows explicitly marked host. Names come from a fixed Spatial prelude. An annotation declaring storage is a language operation; ordinary Python would not allocate that memory merely by seeing the annotation.
 
@@ -29,7 +33,7 @@ All Python in this table is **captured kernel source**, except rows explicitly m
 | `ArgIn[Int]` | Parameter `x: In[Int]` | Input value, fixed type; use `x` in the kernel |
 | `ArgOut[Int]` | Parameter `y: Out[Int]`; `y = expression` | Writable output port, checked before publishing complete outputs |
 | `HostIO[Int]` | Parameter `x: InOut[Int]` | Initialized readable and writable scalar port |
-| `Reg[Int](0)` | `r: Reg[Int] = reg(reset=0)` | Stateful register and explicit reset image |
+| `Reg[Int](0)` | `r: Reg[Int] = 0` | Stateful register with its starting value, fresh in each activation of its block |
 | `r.value`; `r := x`; `r :+= x` | `r.value`; `r.value = x`; `r.value += x` | Ordered read/write; augmented assignment reads once |
 | `val x = expression` | `x: Int = expression` | Immutable typed local value; no arbitrary Python object |
 | `type T = FixPt[TRUE,_24,_8]` | `Fix[True, 24, 8]` | Signed 32-bit fixed point: 24 integer/sign bits and 8 fractional bits |
@@ -40,7 +44,7 @@ All Python in this table is **captured kernel source**, except rows explicitly m
 | `tile load a(base::base+16)` | `load(tile, a[base:base+16])` | Destination first, checked shape, transfer then visibility |
 | `a(base::base+16) store tile` | `store(a[base:base+16], tile)` | Destination first here too |
 | `FIFO[Int](16)` | `q: Fifo[Int, 16]` | Bounded ordered queue |
-| `q.enq(x)`; `q.deq()`; `q.isEmpty` | `q.enq(x)`; `q.deq()`; `q.is_empty()` | State-changing actions and observed status; no implicit blocking |
+| `q.enq(x)`; `q.deq()`; `q.peek`; `q.isEmpty`, `q.isFull`, `q.numel` | `q.enq(x)`; `q.deq()`; `q.peek()`; `q.is_empty()`, `q.is_full()`, `q.occupancy()` | State-changing actions and observed status; no implicit blocking |
 | `FILO` / `LIFO` | `q: Lifo[Int, 16]`; `push` / `pop` | Stack order; old cheatsheet names/errors are recorded in R012 |
 | `Foreach(0 until N)` | `for i in foreach(0, N):` | Structural Index loop; preserves the controller |
 | `Sequential.Foreach(N by B)` | `for base in sequential(0, N, step=B):` | Each iteration completes before the next |
@@ -48,8 +52,8 @@ All Python in this table is **captured kernel source**, except rows explicitly m
 | `Pipe { ... }`; `Pipe.II(2)` | `with pipe():`; `with pipe(ii=2):` | Explicit region and requested initiation interval |
 | `if (c) a else b` | `a if c else b` or a statement `if` | Only the selected runtime branch performs effects |
 | `mux(c,a,b)` | `select(c, a, b)` on already evaluated values | Preserve operand effects before selecting; moving effectful operands into lazy branches is a deliberate semantic change |
-| `Reduce(0)(N by 1){...}{_+_}` | `reduce(0, N, identity=0, body=term, combine="add")` | Typed contribution helper, verified addition law, explicit identity |
-| `Fold(acc)(...){...}{...}` | `fold(0, N, accumulator=acc, body=term, combine=combine)` | Existing initialized accumulator is the seed; ordered fold is a deliberate redesign |
+| `Reduce(0)(N by 1){...}{_+_}` | `reduce(0, N, identity=0, body=term, combine="add")` | Typed contribution helper `(i: Index) -> Int`; one of five combining operations (`"add"`, `"mul"`, `"and"`, `"or"`, `"xor"`); identity required and checked to be the operation's neutral value |
+| `Fold(acc)(...){...}{...}` | `acc.value = fold(0, N, seed=acc.value, body=term, combine="add")` | A reduction is a value: the register is read once as the seed and written once after the last contribution |
 | `MemReduce(dst)(...){tile}{_+_}` | `mem_reduce(dst, 0, N, body=tile, combine="add")` | One memory contribution per map index, combined elementwise |
 | Returning mapper-local SRAM | `return contribute(tile)` with `Contribution[Sram[...]]` result | Explicit lifetime transfer into the memory reduction |
 | `MemFold(dst)(...){tile}{_+_}` | `mem_fold(dst, 0, N, body=tile, combine="add")` | Existing initialized destination cells supply seeds |

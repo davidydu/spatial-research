@@ -3,6 +3,7 @@ type: reference
 title: "EE 109's Spatial in Python Spatial: feature coverage"
 project: spatial-python
 date: 2026-11-16
+updated: 2026-11-19
 status: current
 adoption_status: in-progress
 implementation_status: partial
@@ -16,9 +17,11 @@ related:
 
 # EE 109's Spatial in Python Spatial: feature coverage
 
-**Of the 32 Spatial constructs the Spatial parts of Labs 1 to 3 use, 17 run today**: from Python source, through the checker, on both reference engines, which must agree. Three are designed (`Reg`, the hardware for `par`, and `.buffer`, which becomes the compiler's choice). Twelve are next, in lab order.
+**Of the 32 Spatial constructs the Spatial parts of Labs 1 to 3 use, 18 run today**: from Python source, through the checker, on both reference engines, which must agree. Four are designed (`Reduce`, `Fold`, the hardware for `par`, and `.buffer`, which becomes the compiler's choice). Ten are next, in lab order.
 
-This page is the reference behind the [language deck of 16 November 2026](https://davidydu.github.io/spatial-research-site/presentation/language/). It was taken from the Spring 2026 lecture slides (lectures 1 to 7) and the Lab 1 to 3 handouts and sources. Part 2 of each lab is HLS, not Spatial, and is not counted. Course code is referenced by name, never copied; the Spatial spellings below are the public API's. Python spellings marked *next* are the proposals of [[PY-E002 - Spatial to Python Syntax Atlas]].
+**Updated 19 November 2026.** `Reg` (slice A1, merged 19 November) and the FIFO observations (slice A2a, merged 16 November) now run. `Reduce` and `Fold` are designed: their plan is reviewed, and David chose their spelling on 19 November (a reduction is a value, its identity is required and checked, and it combines with one of five operations). The [[00 - Python Spatial Student Guide|student guide]] shows how to write and test each construct that runs.
+
+This page is the reference behind the [language deck of 16 November 2026](https://davidydu.github.io/spatial-research-site/presentation/language/). It was taken from the Spring 2026 lecture slides (lectures 1 to 7) and the Lab 1 to 3 handouts and sources. Part 2 of each lab is HLS, not Spatial, and is not counted. Course code is referenced by name, never copied; the Spatial spellings below are the public API's. Python spellings marked *next* are the proposals of [[PY-E002 - Spatial to Python Syntax Atlas]]; those marked *designed* are the reviewed plan's.
 
 States:
 - **runs**: source, checker and both reference engines, with tests on the compiler's `main`.
@@ -49,10 +52,10 @@ States:
 | 16 | FIFO `load` and `store` | 1.5 | `load(q, a[0:n])`, `store(a[0:n], q)` | runs |
 | 17 | `Int` | every lab | `Int`, exactly 32 bits, wrapping | runs |
 | 18 | `par` | 2.6, 3.1 | `foreach(…, par=P)`: accepted and recorded; the hardware that honors it is planned ([SS1](https://github.com/davidydu/spatial-py/blob/main/docs/plans/2026-11-16-f2-spatial-style.md)) | designed |
-| 19 | `Reg[Int](0)`, `:=`, `.value` | 1.6 onward | `acc: Reg[Int] = 0`; `acc.value = e`, `acc.value += e` | designed |
+| 19 | `Reg[Int](0)`, `:=`, `.value` | 1.6 onward | `acc: Reg[Int] = 0`; `acc.value = e`, `acc.value += e` | runs |
 | 20 | `SRAM(…).buffer` | 2.5 | none: results never depend on overlap, so buffering is the compiler's choice | designed |
-| 21 | `Reduce` | 1.6, 3.1 | `reduce(0, N, identity=0, body=term, combine="add")` | next |
-| 22 | `Fold` | 1.6 | `fold(0, N, accumulator=acc, body=term, combine=…)` | next |
+| 21 | `Reduce` | 1.6, 3.1 | `reduce(0, N, identity=0, body=term, combine="add")`; `acc.value = reduce(…)` keeps it in a register | designed |
+| 22 | `Fold` | 1.6 | `acc.value = fold(0, N, seed=acc.value, body=term, combine="add")` | designed |
 | 23 | `MemReduce` | 2.1 | `mem_reduce(dst, 0, N, body=tile, combine="add")` | next |
 | 24 | `MemFold` | 2.2, 2.5 | `mem_fold(dst, 0, N, body=tile, combine="add")` | next |
 | 25 | `FSM` | 2.3 | `fsm(start, test=…, action=…, next=…)`, three typed helpers | next |
@@ -64,7 +67,7 @@ States:
 | 31 | `mux(c, a, b)` | 3.1 | `select(c, a, b)` | next |
 | 32 | `abs` | 3.1 | `spatial.math.abs(x)` | next |
 
-**By lab part.** 1.3 (registers), 1.4 (DRAM and SRAM) and 1.5 (FIFO) run; 1.4's tiled scale also runs as native C++ and on the F2 FPGA. 1.6 (controllers) needs rows 19, 21 and 22. Lab 2 needs rows 23 to 27, and row 18 for its `par` study. Lab 3 needs rows 26 and 28 to 32 with row 21.
+**By lab part.** 1.3 (registers), 1.4 (DRAM and SRAM) and 1.5 (FIFO) run; 1.4's tiled scale also runs as native C++ and on the F2 FPGA. 1.6 (controllers) needs rows 21 and 22; written with loops and a register instead of the reductions, its sum already runs ([Reg evidence](https://github.com/davidydu/spatial-py/blob/main/docs/evidence/lab1-reg-a1.md)). Lab 2 needs rows 23 to 27, and row 18 for its `par` study. Lab 3 needs rows 26 and 28 to 32 with row 21.
 
 **The shapes already run.** The reference engines run a tiled GEMM with uneven edge tiles and a 3×3 window over a 2-D SRAM written with plain loops and SRAMs ([`tests/runtime/lab_sizes.py`](https://github.com/davidydu/spatial-py/blob/main/tests/runtime/lab_sizes.py)). What is missing is the constructs that let students write them the way the labs teach.
 
@@ -72,7 +75,7 @@ States:
 
 | Spatial (lectures) | Python Spatial | State |
 |---|---|---|
-| FIFO `numel`, and `isEmpty` / `isFull` in the API | `q.occupancy()`, `q.is_empty()`, `q.is_full()` | in review (slice A2a) |
+| FIFO `numel`, and `isEmpty` / `isFull` in the API | `q.occupancy()`, `q.is_empty()`, `q.is_full()` | runs (slice A2a) |
 | `HostIO` | `InOut[Int]` | runs |
 | `Parallel { … }` | `with parallel():` | next |
 | `Pipe(ii = 2)` | `with pipe(ii=2):` | next |
@@ -91,9 +94,10 @@ Not taught in the course: LIFO, `Switch`, tuples, breakpoints.
 4. **Transfers name the destination first** and check their whole range before moving anything.
 5. **Counters and data are different types.** `Index` is exact; data is `Int`; `embed(Int, i)` joins them.
 6. **Queue state is observed, never waited on.** Waiting belongs to streaming's channels.
+7. **A reduction is a value** (designed). `acc.value = reduce(…)` replaces `Reduce(acc)`, and `acc.value = fold(…, seed=acc.value, …)` replaces `Fold(acc)`. `reduce` must name its operation's identity (`identity=0` for add), checked; a starting value belongs in `fold(…, seed=…)`. Results never depend on `par`.
 
 ## Sources
 
 - The compiler's [support ledger](https://github.com/davidydu/spatial-py/blob/main/docs/support-ledger.md) and [lab language contract](https://github.com/davidydu/spatial-py/blob/main/docs/lab-language-contract.md).
-- Evidence: [Lab 1 Part 1](https://github.com/davidydu/spatial-py/blob/main/docs/evidence/lab1-reg-a0.md), [the FIFO, slice A1](https://github.com/davidydu/spatial-py/blob/main/docs/evidence/lab1-fifo-a1.md), [the Spatial-style hardware prototype](https://github.com/davidydu/spatial-py/blob/main/docs/evidence/hardware-performance-planning/spatial-style-2026-11-16/README.md).
+- Evidence: [Lab 1 Part 1](https://github.com/davidydu/spatial-py/blob/main/docs/evidence/lab1-reg-a0.md), [the FIFO, slice A1](https://github.com/davidydu/spatial-py/blob/main/docs/evidence/lab1-fifo-a1.md), [the FIFO observations, slice A2a](https://github.com/davidydu/spatial-py/blob/main/docs/evidence/lab1-fifo-a2a.md), [registers, slice A1](https://github.com/davidydu/spatial-py/blob/main/docs/evidence/lab1-reg-a1.md), [the Spatial-style hardware prototype](https://github.com/davidydu/spatial-py/blob/main/docs/evidence/hardware-performance-planning/spatial-style-2026-11-16/README.md).
 - [[PY-E002 - Spatial to Python Syntax Atlas]] for the proposed spellings and complete example programs.
