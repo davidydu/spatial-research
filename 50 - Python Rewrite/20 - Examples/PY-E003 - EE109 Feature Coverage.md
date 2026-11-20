@@ -67,7 +67,7 @@ States:
 | 31 | `mux(c, a, b)` | 3.1 | `select(c, a, b)` | next |
 | 32 | `abs` | 3.1 | `spatial.math.abs(x)` | next |
 
-**By lab part.** 1.3 (registers), 1.4 (DRAM and SRAM) and 1.5 (FIFO) run; 1.4's tiled scale also runs as native C++ and on the F2 FPGA. 1.6 (controllers) needs rows 21 and 22; written with loops and a register instead of the reductions, its sum already runs ([Reg evidence](https://github.com/davidydu/spatial-py/blob/main/docs/evidence/lab1-reg-a1.md)). Lab 2 needs rows 23 to 27, and row 18 for its `par` study. Lab 3 needs rows 26 and 28 to 32 with row 21.
+**By lab part.** 1.3 (registers), 1.4 (DRAM and SRAM) and 1.5 (FIFO) run; 1.4's tiled scale also runs as native C++; its F2 bundle passed the F2 kit's simulation (16 November) and ran on the F2 FPGA in experiments from 12 November, not yet an acceptance ([evidence](https://github.com/davidydu/spatial-py/blob/main/docs/evidence/f2-device-experiment/README.md)). 1.6 (controllers) needs rows 21 and 22; written with loops and a register instead of the reductions, its sum already runs ([Reg evidence](https://github.com/davidydu/spatial-py/blob/main/docs/evidence/lab1-reg-a1.md)). Lab 2 needs rows 23 to 27, and row 18 for its `par` study. Lab 3 needs rows 26 and 28 to 32 with row 21.
 
 **The shapes already run.** The reference engines run a tiled GEMM with uneven edge tiles and a 3×3 window over a 2-D SRAM written with plain loops and SRAMs ([`tests/runtime/lab_sizes.py`](https://github.com/davidydu/spatial-py/blob/main/tests/runtime/lab_sizes.py)). What is missing is the constructs that let students write them the way the labs teach.
 

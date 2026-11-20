@@ -2,7 +2,7 @@
 type: guide
 title: "Python Spatial student guide"
 project: spatial-python
-updated: 2026-10-22
+updated: 2026-11-19
 status: preview
 ---
 
@@ -11,7 +11,7 @@ status: preview
 Write an accelerator in Python Spatial, test its generated C++ on your computer, then check the generated hardware through HLS and RTL simulation.
 
 > [!important] Documentation preview
-> The compiler supports a growing subset of the language. Native C++ execution and generated HLS testbenches exist in developer tools. The simple student launcher, test fixtures and case-export interface described here are planned, not released. Check [[80 - Initial Compiler Goal|current implementation progress]] before choosing project features. The detailed [support ledger](https://github.com/davidydu/spatial-py/blob/work/initial-reference/docs/support-ledger.md) requires access to the private compiler repository.
+> The compiler supports a growing subset of the language. Native C++ execution and generated HLS testbenches exist in developer tools. The simple student launcher, test fixtures and case-export interface described here are planned, not released. Check [[80 - Initial Compiler Goal|current implementation progress]] before choosing project features. The detailed [support ledger](https://github.com/davidydu/spatial-py/blob/main/docs/support-ledger.md) requires access to the private compiler repository.
 
 ## Start here
 
@@ -19,6 +19,18 @@ Write an accelerator in Python Spatial, test its generated C++ on your computer,
 2. [[20 - Testing Your Own Project|Write tests for your final project]] — your own reference algorithm, input generators, assertions and reusable hardware test cases.
 3. [[PY-E002 - Spatial to Python Syntax Atlas|Explore the language design]] — how Spatial constructs map to Python. This atlas includes proposed features; it is not a list of implemented features.
 4. [[80 - Initial Compiler Goal|See implementation progress]] — current evidence, limits and next steps.
+
+## The language
+
+Each page gives the syntax beside EE 109's Spatial spelling, the meaning, complete examples, a functional test, which routes run it today, and the errors you are likely to meet. Every example on them was run against the compiler before publishing.
+
+| Page | What it covers | Runs today on |
+|---|---|---|
+| [[30 - Writing a Kernel]] | `@kernel` and its ports, `Meta[Size]`, `Int` and `Index`, SRAMs, loads and stores, loops, branches, helpers, faults | Both reference engines; native C++ for rank-1 memories |
+| [[40 - FIFOs]] | `Fifo[Int, n]`: `enq`, `deq`, `peek`, queue loads and stores, `is_empty()`, `is_full()`, `occupancy()` | Both reference engines |
+| [[41 - Registers]] | `acc: Reg[Int] = 0`: `.value` reads, writes and `+=` | Both reference engines |
+
+**Next: reductions.** `reduce` and `fold` (Lab 1's `Reduce` and `Fold`) are designed, not yet implemented. A reduction is a value you assign: `acc.value = reduce(0, N, identity=0, body=term, combine="add")`, or `acc.value = fold(0, N, seed=acc.value, body=term, combine="add")`, where `term` is a helper `(i: Index) -> Int`. The identity must be the operation's neutral value, and the operation is one of `"add"`, `"mul"`, `"and"`, `"or"` and `"xor"`. A page follows when they run; [[PY-E003 - EE109 Feature Coverage]] tracks every construct's state.
 
 ## Two kinds of Python code
 

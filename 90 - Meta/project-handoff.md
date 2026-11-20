@@ -476,8 +476,16 @@ has presentation copies. Keep copies consistent when changing the map.
 thirteen slides in the site's `presentation/language/` directory, with
 [[2026-11-16-language-presentation|its speaking script]] and the full table in
 [[PY-E003 - EE109 Feature Coverage]]. Every construct EE 109's lectures and Labs 1 to 3 use, its Python
-spelling, and its state (17 of 32 run; `Reg`, `par`'s hardware and `.buffer` designed; 12 next). Refresh its
-states from the compiler's support ledger as each slice merges.
+spelling, and its state (refreshed 19 November: 18 of 32 run; `Reduce`, `Fold`, `par`'s hardware and `.buffer`
+designed; 10 next). Refresh its states from the compiler's support ledger as each slice merges.
+
+**Student guide (19 November 2026):** the language pages [[30 - Writing a Kernel]], [[40 - FIFOs]] and
+[[41 - Registers]] in `50 - Python Rewrite/70 - Student Guide/`, linked from its index. Each gives syntax beside
+EE 109's spelling, meaning, examples, a functional test, routes and common errors; every example and error was run
+against the compiler's `main` (`f2ea92b`) by a check script (473 assertions), kept in the compiler repository at
+`docs/evidence/student-guide/` (on `work/lab1-reduce` until that slice merges). David asked on 19 November that the syntax docs on the site stay current: **every language slice's
+close-out adds or updates its guide page, PY-E003, PY-E002 and the deck, and publishes**, not only the weekly
+publication.
 
 **Efficiency deck (16 November 2026):** [compiler efficiency](https://davidydu.github.io/spatial-research-site/presentation/efficiency/),
 eight slides in the site's `presentation/efficiency/` directory, with
