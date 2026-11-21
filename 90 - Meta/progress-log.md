@@ -9,6 +9,13 @@ Append-only, newest-first within day blocks. One line per discrete action when p
 
 ---
 
+## 2026-11-21 — Reduce and Fold merged: all of Lab 1 runs
+
+- Reduce and Fold slice A1 (scalar reductions: `reduce(start, end, identity=e, body=h, combine=c)` and `fold(…, seed=x, …)`, combiners add, mul, and, or and xor; a register keeps the result as `acc.value = fold(…, seed=acc.value, …)`) merged into the compiler's `main` as pull request 10 (`5cff363`) after the full routine: contract rules 82 to 112 checked independently before code; a blind oracle and two blind charge derivations committed before any reduction code, each matching the engines on the first run; four test-first writers; three independent reviews (about 2,200 programs and 36,400 two-engine runs; no wrong result); the freeze `172c351`; a separate author's holdout, 16 of 16 on its single run; both full suites, 3,308 tests, from source and from an installed wheel.
+- With it, Lab 1 Part 6 (the demo and the Fold exercise) runs as the course writes it, so all four of Lab 1's Spatial parts run on the reference engines. Native C++ and the hardware routes refuse a reduction program (slices B and C).
+- The student guide gains [[42 - Reductions]]: syntax beside EE 109's, meaning, examples, a functional test, routes and seven measured errors. Re-checked with pages 30, 40 and 41 at `5cff363` (914 assertions; compiler pull request 11). [[41 - Registers]], the guide's index, [[PY-E003 - EE109 Feature Coverage]] (20 of 32 run), [[PY-E002 - Spatial to Python Syntax Atlas]] and the language deck updated; [[2026-11-16-language-presentation|the deck's script]] carries a dated note.
+- Next: the Lab 2 family (memory reductions, FSM, LUT, fixed point).
+
 ## 2026-11-19 — Reg merged; the student guide gains the language; Reduce and Fold's contract begins
 
 - Reg slice A1 (local registers: `acc: Reg[Int] = v`, with `.value` reads, writes and augmented writes) merged into the compiler's `main` as pull request 9 (`f2ea92b`) after the full routine: three independent reviews with mutants (none found a wrong result; every real survivor given a killing test), a freeze, a first holdout repaired into a regression after a defect in its own harness, a fresh second holdout (15 of 15 on its single run), and both full suites (3,051 tests from source and from an installed wheel; the register modules also under `SPATIAL_AGREE=1`). Reference path only: the native, F2 and Z020 routes refuse a register program.

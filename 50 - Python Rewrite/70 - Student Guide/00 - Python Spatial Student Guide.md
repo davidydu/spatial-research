@@ -2,7 +2,7 @@
 type: guide
 title: "Python Spatial student guide"
 project: spatial-python
-updated: 2026-11-19
+updated: 2026-11-21
 status: preview
 ---
 
@@ -29,8 +29,9 @@ Each page gives the syntax beside EE 109's Spatial spelling, the meaning, comple
 | [[30 - Writing a Kernel]] | `@kernel` and its ports, `Meta[Size]`, `Int` and `Index`, SRAMs, loads and stores, loops, branches, helpers, faults | Both reference engines; native C++ for rank-1 memories |
 | [[40 - FIFOs]] | `Fifo[Int, n]`: `enq`, `deq`, `peek`, queue loads and stores, `is_empty()`, `is_full()`, `occupancy()` | Both reference engines |
 | [[41 - Registers]] | `acc: Reg[Int] = 0`: `.value` reads, writes and `+=` | Both reference engines |
+| [[42 - Reductions]] | `reduce` and `fold` over a domain, with a helper body, one of five combining operations, `step`, `par` and `schedule` | Both reference engines |
 
-**Next: reductions.** `reduce` and `fold` (Lab 1's `Reduce` and `Fold`) are designed, not yet implemented. A reduction is a value you assign: `acc.value = reduce(0, N, identity=0, body=term, combine="add")`, or `acc.value = fold(0, N, seed=acc.value, body=term, combine="add")`, where `term` is a helper `(i: Index) -> Int`. The identity must be the operation's neutral value, and the operation is one of `"add"`, `"mul"`, `"and"`, `"or"` and `"xor"`. A page follows when they run; [[PY-E003 - EE109 Feature Coverage]] tracks every construct's state.
+**Next: Lab 2's constructs.** Memory reductions (`MemReduce`, `MemFold`), the state machine (`FSM`), lookup tables (`LUT`) and fixed point come next, in lab order. [[PY-E003 - EE109 Feature Coverage]] tracks every construct's state.
 
 ## Two kinds of Python code
 

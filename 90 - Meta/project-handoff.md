@@ -34,6 +34,8 @@ professor's response to the 22 October meeting is still to be recorded.
 
 **15 November progress and order:** David reversed the order for the next stretch: make the compiler's generated hardware faster now, and let the findings shape later designs. In the compiler repository, `main` is now the trunk and each milestone lands by pull request (no assistant attribution in commits or pull requests). The hardware performance plan and the standing hardware design rules are reviewed and merged there; its first slice (the output-written check folded into an existing copy loop) waits for David's answers to the plan's first two decisions. Measurements, the two throwaway prototypes and the chip finding (the course wrapper and host protocol, not a design, cause the wrong answers under repeated runs) are in [[2026-11-15-weekly-update]] and the compiler's `PROJECT_STATE.md`, which stays the single current status. FIFO status queries are paused half built; Reg's contract and tests are written.
 
+**21 November progress:** Reduce and Fold slice A1 (scalar reductions: `reduce(start, end, identity=e, body=h, combine=c)` and `fold(…, seed=x, …)`, with David's spelling `acc.value = fold(…, seed=acc.value, …)`) merged into the compiler's `main` as pull request 10 (`5cff363`) after the full routine: a blind oracle and two blind charge derivations, four test-first writers, three independent reviews (no wrong result), the freeze `172c351`, a separate author's holdout (16 of 16), and both full suites (3,308 tests). All four of Lab 1's Spatial parts now run on the reference path; native C++ and the hardware routes refuse reductions. The student guide gained [[42 - Reductions]], re-checked at `5cff363` (914 assertions, pull request 11). Next: the Lab 2 family (memory reductions, FSM, LUT, fixed point).
+
 **28 October order:** David approved E3 (trimmed builder) → E4 → E7 → E5, then Lab 1–3 features, with E6 and E8 after the labs and AWS F2 in parallel. He is arranging an F2 instance; the professor mentioned F2 at the 22 October meeting. The course uses Python Spatial in about six months, and each week should show the professor visible progress.
 
 **22 October scalar interface correction — preceding local checkpoint:**
@@ -476,14 +478,14 @@ has presentation copies. Keep copies consistent when changing the map.
 thirteen slides in the site's `presentation/language/` directory, with
 [[2026-11-16-language-presentation|its speaking script]] and the full table in
 [[PY-E003 - EE109 Feature Coverage]]. Every construct EE 109's lectures and Labs 1 to 3 use, its Python
-spelling, and its state (refreshed 19 November: 18 of 32 run; `Reduce`, `Fold`, `par`'s hardware and `.buffer`
-designed; 10 next). Refresh its states from the compiler's support ledger as each slice merges.
+spelling, and its state (refreshed 21 November: 20 of 32 run, with `Reduce` and `Fold`; `par`'s hardware and
+`.buffer` designed; 10 next). Refresh its states from the compiler's support ledger as each slice merges.
 
-**Student guide (19 November 2026):** the language pages [[30 - Writing a Kernel]], [[40 - FIFOs]] and
-[[41 - Registers]] in `50 - Python Rewrite/70 - Student Guide/`, linked from its index. Each gives syntax beside
-EE 109's spelling, meaning, examples, a functional test, routes and common errors; every example and error was run
-against the compiler's `main` (`f2ea92b`) by a check script (473 assertions), kept in the compiler repository at
-`docs/evidence/student-guide/` (on `work/lab1-reduce` until that slice merges). David asked on 19 November that the syntax docs on the site stay current: **every language slice's
+**Student guide (19 November 2026; 21 November):** the language pages [[30 - Writing a Kernel]], [[40 - FIFOs]],
+[[41 - Registers]] and [[42 - Reductions]] in `50 - Python Rewrite/70 - Student Guide/`, linked from its index. Each
+gives syntax beside EE 109's spelling, meaning, examples, a functional test, routes and common errors; every example
+and error was run against the compiler's `main` (`5cff363`) by a check script (914 assertions), kept in the compiler
+repository at `docs/evidence/student-guide/`. David asked on 19 November that the syntax docs on the site stay current: **every language slice's
 close-out adds or updates its guide page, PY-E003, PY-E002 and the deck, and publishes**, not only the weekly
 publication.
 

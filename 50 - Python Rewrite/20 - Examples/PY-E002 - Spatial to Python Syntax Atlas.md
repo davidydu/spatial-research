@@ -3,7 +3,7 @@ type: reference
 title: "Spatial to Python: the course examples"
 project: spatial-python
 date: 2026-10-01
-updated: 2026-11-19
+updated: 2026-11-21
 status: proposed
 adoption_status: in-progress
 implementation_status: partial
@@ -23,7 +23,7 @@ These began as proposed spellings on 1 October 2026; many now run in the compile
 ## Start with the familiar constructs
 
 > [!note] Updated 19 November 2026
-> Four rows now show the spelling the compiler adopted instead of the October proposal: the register (`r: Reg[Int] = 0`, which runs since Reg slice A1), the queue observations (which run since FIFO slice A2a), and `reduce` and `fold`, whose spelling David chose on 19 November: a reduction is a value you assign, its identity is required and checked, and it combines with one of five operations whose laws are proved once, not verified per program. The reductions are designed, not yet implemented. The other rows are unchanged.
+> Four rows now show the spelling the compiler adopted instead of the October proposal: the register (`r: Reg[Int] = 0`, which runs since Reg slice A1), the queue observations (which run since FIFO slice A2a), and `reduce` and `fold`, whose spelling David chose on 19 November: a reduction is a value you assign, its identity is required and checked, and it combines with one of five operations whose laws are proved once, not verified per program. Since 21 November the reductions run too (Reduce and Fold slice A1; [[42 - Reductions]]). The other rows are unchanged.
 
 All Python in this table is **captured kernel source**, except rows explicitly marked host. Names come from a fixed Spatial prelude. An annotation declaring storage is a language operation; ordinary Python would not allocate that memory merely by seeing the annotation.
 

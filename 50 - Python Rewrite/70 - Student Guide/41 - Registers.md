@@ -2,7 +2,7 @@
 type: guide
 title: "Registers"
 project: spatial-python
-updated: 2026-11-19
+updated: 2026-11-21
 status: preview
 ---
 
@@ -88,7 +88,7 @@ def largest(src: In[Dram[Int, 6]], floor: In[Int], best: Out[Int], where: Out[In
 
 With `src` = 4, −2, 9, 9, 3, 8 and `floor` = 0, both engines give `best` = 9 and `where` = 2.
 
-Lab 1 Part 6 ([handout, "Using Controllers"](https://github.com/kelayamatoz/Digital-Systems-Design-Lab/blob/b4896abffd19bcc3f319a49d7a919e1cf70d5221/lab1_part1_spatial.md#L449-L548)) sums an array with `Reduce` or `Fold` into a `Reg`. Python Spatial has no `Reduce` or `Fold` yet; they are planned next. Written with a register and two loops, like `tile_sums` above, Part 6's sum runs on both engines ([Reg A1 evidence](https://github.com/davidydu/spatial-py/blob/main/docs/evidence/lab1-reg-a1.md)).
+Lab 1 Part 6 ([handout, "Using Controllers"](https://github.com/kelayamatoz/Digital-Systems-Design-Lab/blob/b4896abffd19bcc3f319a49d7a919e1cf70d5221/lab1_part1_spatial.md#L449-L548)) sums an array with `Reduce` or `Fold` into a `Reg`. Written with a register and two loops, like `tile_sums` above, Part 6's sum runs on both engines ([Reg A1 evidence](https://github.com/davidydu/spatial-py/blob/main/docs/evidence/lab1-reg-a1.md)). Since Reduce and Fold slice A1 (21 November 2026) it can also be written as the course writes it, with `reduce` and `fold`: see [[42 - Reductions]].
 
 ## Functional test
 
@@ -170,6 +170,6 @@ Each was measured. All six are refused before anything runs.
 - Contract: [Reg slice A1, rules 51 to 81](https://github.com/davidydu/spatial-py/blob/main/docs/lab-language-contract.md#lab-1-reg-slice-a1-local-registers-14-november-2026), with the rejected-forms table of rule 75.
 - Evidence: [Reg A1](https://github.com/davidydu/spatial-py/blob/main/docs/evidence/lab1-reg-a1.md); [Lab 1 Part 1 ports](https://github.com/davidydu/spatial-py/blob/main/docs/evidence/lab1-reg-a0.md); [the Part 6 example](https://github.com/davidydu/spatial-py/blob/main/examples/run_lab1_reg_reference.py); [support ledger, lab features](https://github.com/davidydu/spatial-py/blob/main/docs/support-ledger.md#lab-language-features).
 - Course: Lab 1 Part 1, ArgIn and ArgOut ([handout, "Using Registers"](https://github.com/kelayamatoz/Digital-Systems-Design-Lab/blob/b4896abffd19bcc3f319a49d7a919e1cf70d5221/lab1_part1_spatial.md#L162-L288)).
-- Vault: [[00 - Python Spatial Student Guide]] · [[30 - Writing a Kernel]] · [[40 - FIFOs]] · [[PY-E003 - EE109 Feature Coverage]]
+- Vault: [[00 - Python Spatial Student Guide]] · [[30 - Writing a Kernel]] · [[40 - FIFOs]] · [[42 - Reductions]] · [[PY-E003 - EE109 Feature Coverage]]
 
 Back to: [[00 - Python Spatial Student Guide]]

@@ -18,6 +18,9 @@ related:
 > [!note] Updated 19 November 2026
 > The deck's states were refreshed on 19 November: the FIFO observations (merged 16 November) and `Reg` (merged 19 November) now run, so 18 of the 32 constructs run; `Reduce` and `Fold` are designed, with the spelling David chose on 19 November (`acc.value = fold(…, seed=acc.value, …)`); ten constructs are next. The deck's own speaker notes carry the new wording. This script keeps the words as written for 16 November.
 
+> [!note] Updated 21 November 2026
+> `Reduce` and `Fold` now run (merged 21 November as Reduce and Fold slice A1, with the spelling above), so 20 of the 32 constructs run and all four of Lab 1's Spatial parts work on the reference engines; native C++ and the hardware routes refuse reductions for now. The deck's plan slide marks Lab 1 complete; Lab 2's memory folds, FSM, LUT and fixed point are next. [[42 - Reductions]] is the student guide's page.
+
 Thirteen slides, about sixteen minutes before discussion. The professor asked for a deck on the new language's features. It takes every Spatial construct that EE 109's Spring 2026 lectures (1 to 7) and Labs 1 to 3 use, gives its Python Spatial spelling, and says whether it runs, is designed, or comes next.
 
 **How to read the states.**
